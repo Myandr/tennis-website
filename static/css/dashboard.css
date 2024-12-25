@@ -1,0 +1,122 @@
+.content {
+    padding: 40px 20px;
+    gap: 30px;
+    height: 700px;
+}
+
+.summary {
+    position: relative;
+    top: 100px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.summary p {
+    font-size: 1.2rem;
+    line-height: 3;
+    color: #555;
+}
+
+.summary p strong {
+    color: #000000;
+}
+
+.cta {
+    text-align: left;
+    margin-top: 30px;
+    padding-left: 20px;
+    position: relative;
+    top: 300px;
+}
+
+.h1 {
+    font-size: 64px;
+    text-align: left;
+    font-weight: bold;
+    line-height: 1.1;
+    margin-bottom: 30px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease forwards;
+}
+
+.button {
+padding: 8px 16px;
+background-color: #000;
+color: #fff;
+text-decoration: none;
+border-radius: 4px;
+display: inline-block;
+transition: transform 0.3s ease;
+margin: 5px 5px;
+box-shadow: -4px 4px 0px rgba(84, 199, 103, 0.7);
+}
+
+.button:active {
+transform: translate(-5px, 5px); /* Box 10px nach unten verschieben */
+box-shadow: 0px 0px 0px rgba(255, 255, 255, 0.7);
+}
+
+.delete-button {
+background-color: #4ade80;
+color: white;
+border: none;
+padding: 10px 20px;
+cursor: pointer;
+font-size: 16px;
+border-radius: 5px;
+position: relative;
+top: -20px;
+left: 5px;
+}
+
+.delete-button:hover {
+background-color: #216138;
+}
+
+
+
+
+
+
+
+/* Animationen */
+@keyframes slideInHeader {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .summary h1 {
+        font-size: 1.5rem;
+    }
+
+    .summary p {
+        font-size: 1rem;
+    }
+
+}
+
+@media (max-width: 340px) {
+    .btn {
+        display: none;
+    }
+
+
+}
