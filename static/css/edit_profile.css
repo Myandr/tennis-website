@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-container {
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    border-top: 4px solid #4ade80; /* Helles Grün */
+}
+
+h1 {
+    text-align: left;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+input, select, textarea, button {
+    margin-top: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #4ade80; /* Helles Grün beim Fokus */
+    box-shadow: 0 0 5px #4ade80;
+}
+
+textarea {
+    resize: none;
+}
+
+button {
+    background-color: #4ade80; /* Helles Grün */
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 15px 0;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #4ade80; /* Etwas dunkleres Grün beim Hover */
+    transform: scale(1.05); /* Leichte Vergrößerung */
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    border: 1px solid #4ade80;
+    background-color: #4ade80;
+    text-align: center;
+
+    border-radius: 10px;
+    padding: 10px;
+    position: relative;
+    transition: background-color 0.3s, transform 0.2s;
+    top: -5px;
+}
+
+a:hover {
+    background-color: #4ade80; /* Etwas dunkleres Grün beim Hover */
+    transform: scale(1.05); /* Leichte Vergrößerung */
+}
