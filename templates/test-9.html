@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/test-9.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=DM+Serif+Text:ital@0;1&family=Fugaz+One&display=swap" rel="stylesheet">
+    
+    <title>Hardter Tv Tennis</title>
+</head>
+<body>
+
+    <div class="loader" id="loader">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+
+    
+
+
+    <header class="header">
+        <a href="#home" class="logo"></a>
+        <nav class="nav">
+            <a href="#home">HOME</a>
+            <a href="#about">ÜBER UNS</a>
+            <a href="#services">ANGEBOTE</a>
+            <div class="name">Hardter Tv</div>
+            <a href="#work">TERMINE</a>
+            <a href="#team">TRAINER</a>
+            <a href="#contact">KONTAKT</a>
+        </nav>
+    
+        {% if logged_in %}
+        <a href="/dashboard" class="client-login">Account</a>
+    {% else %}
+        <a href="/login" class="client-login">Login</a>
+    {% endif %}
+    
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    
+        <div class="menu" id="menu">
+            <ul>
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#about">ÜBER UNS</a></li>
+                <li><a href="#services">ANGEBOTE</a></li>
+                <li><a href="#work">TERMINE</a></li>
+                <li><a href="#team">TRAINER</a></li>
+                <li><a href="#process">TRAINING</a></li>
+                <li><a href="#contact">KONTAKT</a></li>
+                {% if logged_in %}
+                    <li><a href="/dashboard">Account</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+    
+    
+    <main>
+        <section id="home" class="main-content">
+            <div class="text-content">
+                <h1 class="headline">FOR ALL.<br><em>TENNIS TV</em><br>TENNIS</h1>
+                <p class="subtext">LEIDENSCHAFT + SPORT + TEAM + STRATEGIE. KOMM MIT UNS AUF DEN PLATZ, LASS UNS SPIELEN UND GEMEINSAM GEWINNEN.</p>
+            </div>
+            <div class="cloud-illustration">
+                <img src="../static/images/Tennis-bro.svg" alt="Dekorative Wolken-Illustration">
+            </div>
+        </section>
+        
+
+        <section id="about" class="section">
+            <h2 class="section-title">Über uns</h2>
+            <div id="about-content">
+                {% for text in about_texts %}
+                    {% if text.type == "headline" %}
+                        <br><h3>{{ text.content }}</h3><br>
+                    {% else %}
+                        <p>{{ text.content }}</p>
+                    {% endif %}
+                    
+                    {% if is_admin %}
+                    <form action="/delete_about_text/{{ text.id }}" method="POST" style="display: inline;">
+                        <button class="delete" type="submit" onclick="return confirm('Möchten Sie diesen Text wirklich löschen?')">Löschen</button>
+                    </form>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% if is_admin %}
+            <div class="add-about-container">
+                <button id="toggle-about-form-button">+</button>
+            </div>
+            
+            <form class="about-form hidden" action="/add_about_text" method="POST">
+                <h3>Text hinzufügen</h3>
+                <label for="text-type">Texttyp:</label>
+                <select id="text-type" name="text_type" required>
+                    <option value="headline">Überschrift</option>
+                    <option value="normal">Normaler Text</option>
+                </select>
+                <br><br><label for="about-content">Textinhalt:</label>
+                <textarea id="about-content" name="about_content" rows="10" required></textarea>
+                <button type="submit">Hinzufügen</button>
+            </form>
+            {% endif %}
+        </section>
+        
+        
+        
+
+        <section id="services" class="section">
+            <h2 class="section-title">Unser Service</h2>
+            <div class="services-grid">
+                <div class="service-item">
+                    <div class="service-icon">🎾</div>
+                    <h3 class="service-title">Tennis Training</h3>
+                    <p>Experten-Coaching, das auf alle Leistungsniveaus zugeschnitten ist – von Anfängern bis zu fortgeschrittenen Spielern.</p>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🏆</div>
+                    <h3 class="service-title">Turniere</h3>
+                    <p>Nehmen Sie an lokalen und regionalen Turnieren teil und verbessern Sie Ihr Spiel.</p>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">💪</div>
+                    <h3 class="service-title">Fitness Training</h3>
+                    <p>Bleiben Sie in Topform mit unseren spezialisierten Fitnessprogrammen für Tennisspieler.</p>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">📅</div>
+                    <h3 class="service-title">Events</h3>
+                    <p>Treten Sie uns bei spannenden Tennisveranstaltungen und Gemeinschaftsveranstaltungen im Laufe des Jahres bei.</p>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="work" class="section">
+            <h2 class="section-title">Termine</h2>
+        
+            <!-- Tabelle der Termine -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Veranstaltung</th>
+                        <th>Uhrzeit</th>
+                        <th>Ort</th>
+                        {% if is_admin %}
+                        <th>Aktionen</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody id="termine-tabelle">
+                    {% for termin in termine %}
+                    <tr>
+                        <td>{{ termin.datum }}</td>
+                        <td>{{ termin.veranstaltung }}</td>
+                        <td>{{ termin.uhrzeit }}</td>
+                        <td>{{ termin.ort }}</td>
+                        {% if is_admin %}
+                        <td>
+                            <form action="/delete_termin/{{ termin.id }}" method="POST" style="display: inline;">
+                                <button class="delete" type="submit" onclick="return confirm('Möchten Sie diesen Termin wirklich löschen?')">Löschen</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">Änderungen vorbehalten. Bitte regelmäßig die Webseite überprüfen.</td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+        
+            <!-- Nur anzeigen, wenn der Benutzer Admin ist -->
+            {% if is_admin %}
+            <div class="add-button-container">
+                <button id="toggle-form-button">+</button>
+            </div>
+        
+            <!-- Formular zum Hinzufügen eines neuen Termins -->
+            <form class="termin-form hidden" action="/add_termin" method="POST">
+                <h3>Neuen Termin hinzufügen</h3>
+                <label for="datum">Datum:</label>
+                <input type="date" id="datum" name="datum" required>
+                <label for="veranstaltung">Veranstaltung:</label>
+                <input type="text" id="veranstaltung" name="veranstaltung" required>
+                <label for="uhrzeit">Uhrzeit:</label>
+                <input type="time" id="uhrzeit" name="uhrzeit" required>
+                <label for="ort">Ort:</label>
+                <input type="text" id="ort" name="ort" required>
+                <button type="submit">Hinzufügen</button>
+            </form>
+
+            {% endif %}
+        </section>
+        
+        
+        
+
+        <section id="team" class="section">
+            <h2 class="section-title">Unsere Coaches</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="../static/images/elementor-placeholder-image.webp" alt="Coach 1">
+                    <h3 class="team-name">John Doe</h3>
+                    <p class="team-role">Head Coach</p>
+                </div>
+                <div class="team-member">
+                    <img src="../static/images/elementor-placeholder-image.webp" alt="Coach 2">
+                    <h3 class="team-name">Jane Smith</h3>
+                    <p class="team-role">Senior Coach</p>
+                </div>
+                <div class="team-member">
+                    <img src="../static/images/elementor-placeholder-image.webp" alt="Coach 3">
+                    <h3 class="team-name">Mike Johnson</h3>
+                    <p class="team-role">Fitness Coach</p>
+                </div>
+                <div class="team-member">
+                    <img src="../static/images/elementor-placeholder-image.webp" alt="Coach 4">
+                    <h3 class="team-name">Anton Jansen</h3>
+                    <p class="team-role">Schüler</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="section testimonials">
+            <h2 class="section-title">Was unsere Mitglieder sagen</h2>
+            <div class="testimonial-slider">
+                <div class="testimonial-item">
+                    <p class="testimonial-text">"Der Tennis TV hat mein Tennis-Spiel auf ein neues Level gebracht. Das Coaching und die Trainingsmöglichkeiten sind erstklassig!"</p>
+                    <p class="testimonial-author">- Alex Müller, Mitglied und aktiver Spieler</p>
+                </div>
+                <div class="testimonial-item">
+                    <p class="testimonial-text">"Die Gemeinschaft im Verein ist einfach großartig. Ich habe viele neue Freunde gewonnen und die Turniere sind immer spannend!"</p>
+                    <p class="testimonial-author">- Julia Becker, Clubmitglied</p>
+                </div>
+                <div class="testimonial-item">
+                    <p class="testimonial-text">"Die Trainer beim Tennis TV sind sehr professionell und gehen auf jedes Niveau ein. Ich habe meine Technik deutlich verbessert!"</p>
+                    <p class="testimonial-author">- Michael Schulz, Tennisspieler</p>
+                </div>
+            </div>
+        </section>
+        
+        
+        <section id="process" class="section">
+            <h2 class="section-title">Unser Trainingsprozess</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <h3 class="step-title">Fähigkeitsbewertung</h3>
+                    <p>Wir beginnen mit einer Einschätzung Ihrer aktuellen Fähigkeiten und Ziele.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <h3 class="step-title">Individueller Trainingsplan</h3>
+                    <p>Unsere Trainer erstellen einen maßgeschneiderten Trainingsplan, der auf Ihre Bedürfnisse abgestimmt ist.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <h3 class="step-title">Trainingseinheiten auf dem Platz</h3>
+                    <p>Wir konzentrieren uns darauf, Ihre Technik und Strategie durch praxisorientiertes Training zu verbessern.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <h3 class="step-title">Spielpraxis</h3>
+                    <p>Wenden Sie Ihre Fähigkeiten in echten Spielsituationen an, mit Feedback von unseren Trainern.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">05</div>
+                    <h3 class="step-title">Turniervorbereitung</h3>
+                    <p>Wir bereiten Sie auf bevorstehende Turniere mit gezieltem Training und mentalen Strategien vor.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="awards" class="section">
+            <h2 class="section-title">Gallery</h2>
+
+            <div class="awards-logos">
+                {% for image in images %}
+                    <div class="image-container">
+                        <img src="{{ url_for('static', filename='uploads/' + image.filename) }}" alt="Uploaded Image" class="award-logo">
+            {% if is_admin %}
+
+                        <form action="{{ url_for('delete_image', image_id=image.id) }}" method="POST" class="delete-form">
+                            <button type="submit" class="delete">Delete</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% if is_admin %}
+
+            <div class="upload-section">
+                <form action="/upload_image" method="POST" enctype="multipart/form-data" class="upload-form">
+                    <label for="image" class="upload-label">Bild hochladen:</label>
+                    <input type="file" id="image" name="image" accept="image/*" class="upload-input" onchange="previewImage(event)">
+                    <div class="image-preview" id="imagePreview">
+                        <p>No image selected</p>
+                    </div>
+                    <button type="submit" class="upload-button">hochladen</button>
+                </form>
+            </div>
+            
+            {% endif %}
+        </section>
+        
+        
+
+        <section id="contact" class="section">
+            <h2 class="section-title">Schreibe uns direkt</h2>
+            <form class="contact-form" action="/send_email" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">Tennis TV</h3>
+                <p>Ihr Tennisverein für Sport, Spaß und Gemeinschaft – hier finden Sie alles rund um Tennis und Vereinsleben.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="fa fa-facebook-f"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+                    <a href="#" class="social-link" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Schnelle Links</h3>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">Über uns</a>
+                    <a href="#services">Trainingsangebote</a>
+                    <a href="#events">Veranstaltungen</a>
+                    <a href="#contact">Kontakt</a>
+                    <a href="#membership">Mitgliedschaft</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Kontakt</h3>
+                <p>Tennis TV Tennisverein<br>Tennis Str. 101<br>Viersen, Nordrhein-Westfalen<br><br></p>
+                <p>T: 02162 123456<br><br></p>
+                <p>E: info@tennistv.de</p>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Newsletter</h3>
+                <p>Bleiben Sie auf dem Laufenden mit unseren neuesten Nachrichten und Angeboten.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Ihre E-Mail-Adresse" class="newsletter-input" required>
+                    <button type="submit" class="newsletter-btn">Abonnieren</button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Tennis TV. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+    
+
+    <script src="../static/js/test-9.js"></script>
+</body>
+</html>
