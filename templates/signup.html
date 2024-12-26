@@ -9,8 +9,8 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-    flex-direction: column;
-    display: flex;
+            flex-direction: column;
+            display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -44,20 +44,20 @@
         }
 
         ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 10px 0;
-}
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
 
-li {
-    background-color: #f0fff4; /* Leicht grüner Hintergrund */
-    color: #000000; /* Dunkelgrüner Text */
-    border: 1px solid #4ade80;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 5px 0;
-    animation: slideIn 0.5s ease-in-out;
-}
+        li {
+            background-color: #f0fff4; /* Leicht grüner Hintergrund */
+            color: #000000; /* Dunkelgrüner Text */
+            border: 1px solid #4ade80;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            animation: slideIn 0.5s ease-in-out;
+        }
 
         input, select, textarea, button {
             margin-top: 5px;
@@ -171,6 +171,7 @@ li {
         <input class="button" type="submit" value="Sign Up">
     </form>
     <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+    <p>Zurück zum Start <a href="{{ url_for('home') }}">Klicke hier</a></p>
 </div>
 </body>
 </html>
