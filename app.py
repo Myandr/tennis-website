@@ -8,6 +8,7 @@ import string
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
+from flask_migrate import Migrate
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
@@ -31,6 +32,8 @@ serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
 db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
 
 
 #datebank
