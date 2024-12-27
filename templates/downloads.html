@@ -5,140 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formular Download</title>
     <style>
-        /* Allgemeines Styling */
+        /* Allgemeine Seiteinstellungen */
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            background-color: #f9f9f9;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            text-align: center;
-            background-color: #f9f9f9;
-            color: #333;
+            margin: 0;
         }
 
-        h1 {
-            font-size: 2rem;
+        /* Karten-Styling */
+        .card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #555;
+            text-align: center;
             margin-bottom: 20px;
         }
 
-        p {
-            font-size: 1rem;
-            margin-bottom: 30px;
-            padding: 0 10px;
+        /* Button-Bereich abtrennen */
+        .button-container {
+            margin-top: 20px;
+            width: 100%;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            display: flex;
+            justify-content: center;
         }
 
         /* Button Styling */
-      .cssbuttons-io-button {
-        text-decoration: none;
-            background: #000000;
-            color: white;
-            font-family: inherit;
-            padding: 0.35em;
-            padding-left: 1.2em;
-            font-size: 17px;
-            font-weight: 500;
-            border-radius: 0.9em;
+        .download-button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #28a745;
             border: none;
-            letter-spacing: 0.05em;
-            display: inline-flex;
-            align-items: center;
-            box-shadow: inset 0 0 1.6em -0.6em #ffffff;
-            overflow: hidden;
-            position: relative;
-            height: 2.8em;
-            padding-right: 3.3em;
+            border-radius: 5px;
             cursor: pointer;
-            margin-right: 20px;
+            transition: background-color 0.3s ease, transform 0.2s;
         }
 
-        .cssbuttons-io-button .icon {
-            background: white;
-            margin-left: 1em;
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 2.2em;
-            width: 2.2em;
-            border-radius: 0.7em;
-            box-shadow: 0.1em 0.1em 0.6em 0.2em rgba(255, 255, 255, 0.5);
-            right: 0.3em;
-            transition: all 0.3s;
+        .download-button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
         }
 
-        .cssbuttons-io-button:hover .icon {
-            width: calc(100% - 0.6em);
-        }
-
-        .cssbuttons-io-button .icon svg {
-            width: 1.1em;
-            transition: transform 0.3s;
-            color: #000000;
-        }
-
-        .cssbuttons-io-button:hover .icon svg {
-            transform: translateX(0.1em);
-        }
-
-        .cssbuttons-io-button:active .icon {
-            transform: scale(0.95);
+        .download-button:active {
+            transform: scale(1);
         }
 
         /* Responsiveness */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            p {
-                font-size: 0.9rem;
-            }
-
-            .button {
-                padding: 12px 20px;
-                font-size: 0.9rem;
-            }
-        }
-
         @media (max-width: 480px) {
-            h1 {
+            .card {
+                padding: 15px;
+            }
+
+            .card h1 {
                 font-size: 1.2rem;
             }
 
-            p {
+            .card p {
                 font-size: 0.8rem;
             }
 
-            .button {
-                padding: 10px 15px;
-                font-size: 0.8rem;
+            .download-button {
+                font-size: 0.9rem;
+                padding: 8px 15px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>Formular Download</h1>
-    <p>Klicken Sie auf den Button, um das Formular herunterzuladen. Die Datei ist als PDF verfügbar und kann auf jedem Gerät geöffnet werden.</p>
-    <a href="/download-form" class="cssbuttons-io-button">
-                        Download
-                        <div class="icon">
-                          <svg
-                            height="24"
-                            width="24"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M0 0h24v24H0z" fill="none"></path>
-                            <path
-                              d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                              fill="currentColor"
-                            ></path>
-                          </svg>
-                        </div>
-                      </a>
+    <div class="card">
+        <h1>Formular Download</h1>
+        <p>Bitte klicken Sie auf den Button, um das Formular herunterzuladen. Die Datei wird als PDF bereitgestellt.</p>
+        <div class="button-container">
+            <button class="download-button" onclick="window.location.href='/download-form'">
+                Formular herunterladen
+            </button>
+        </div>
+    </div>
 </body>
 </html>
