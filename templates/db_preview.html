@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,30 +8,153 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
+            text-align: left;
         }
         th {
             background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
         }
     </style>
 </head>
 <body>
     <h1>Datenbank Vorschau</h1>
+
+    <h2>Benutzer (User)</h2>
     <table>
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Name</th> <!-- Ersetze mit deinen Spaltennamen -->
+                <th>Name</th>
+                <th>Email</th>
+                <th>Telefon</th>
+                <th>Typ</th>
+                <th>Info</th>
+                <th>Rolle</th>
+                <th>Verifiziert</th>
             </tr>
         </thead>
         <tbody>
-            {% for row in data %}
+            {% for user in users %}
             <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.name }}</td> <!-- Ersetze mit deinen Attributen -->
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.tele }}</td>
+                <td>{{ user.typ }}</td>
+                <td>{{ user.info }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.is_verified }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Passwort Reset Tokens</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Token</th>
+                <th>Ablaufdatum</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for token in reset_tokens %}
+            <tr>
+                <td>{{ token.id }}</td>
+                <td>{{ token.user_id }}</td>
+                <td>{{ token.token }}</td>
+                <td>{{ token.expiration }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Termine</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Datum</th>
+                <th>Veranstaltung</th>
+                <th>Uhrzeit</th>
+                <th>Ort</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for termin in termine %}
+            <tr>
+                <td>{{ termin.id }}</td>
+                <td>{{ termin.datum }}</td>
+                <td>{{ termin.veranstaltung }}</td>
+                <td>{{ termin.uhrzeit }}</td>
+                <td>{{ termin.ort }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>About Texte</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Content</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for about_text in about_texts %}
+            <tr>
+                <td>{{ about_text.id }}</td>
+                <td>{{ about_text.content }}</td>
+                <td>{{ about_text.type }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Testimonials</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Text</th>
+                <th>Autor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for testimonial in testimonials %}
+            <tr>
+                <td>{{ testimonial.id }}</td>
+                <td>{{ testimonial.text }}</td>
+                <td>{{ testimonial.author }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Images</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Filename</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for image in images %}
+            <tr>
+                <td>{{ image.id }}</td>
+                <td>{{ image.filename }}</td>
             </tr>
             {% endfor %}
         </tbody>
