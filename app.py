@@ -514,6 +514,17 @@ def send_email():
         return f'Fehler beim Senden der E-Mail: {str(e)}'
 
 
+@app.route('/downloads')
+def downloads():
+    return render_template('downloads.html')
+
+@app.route('/download-form')
+def download_form():
+    file_path = 'static/files/formular.pdf'  # Pfad zur Datei
+    return send_file(file_path, as_attachment=True)
+
+
+
 DB_PASSWORD = "1234"  # Ersetze dies durch ein starkes Passwort
 
 @app.route('/db-preview', methods=['GET', 'POST'])
