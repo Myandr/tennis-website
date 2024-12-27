@@ -514,13 +514,20 @@ def send_email():
         return f'Fehler beim Senden der E-Mail: {str(e)}'
 
 
-@app.route('/db-preview', methods=['GET'])
+@app.route('/db-preview')
 def db_preview():
     try:
-        # Alle Daten aus der Tabelle abrufen
-        data = User.query.all()
-        # Daten in HTML-Format rendern
-        return render_template('db_preview.html', data=data)
+        # Alle Daten aus den Tabellen holen
+        users = User.query.all()
+        reset_tokens = PasswordResetToken.query.all()
+        termine = Termin.query.all()
+        about_texts = AboutText.query.all()
+        testimonials = Testimonial.query.all()
+        images = Image.query.all()
+        
+        # Alle Daten an das Template weitergeben
+        return render_template('db_preview.html', users=users, reset_tokens=reset_tokens,
+                               termine=termine, about_texts=about_texts, testimonials=testimonials, images=images)
     except Exception as e:
         return f"Fehler: {str(e)}"
 
