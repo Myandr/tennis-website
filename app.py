@@ -514,7 +514,15 @@ def send_email():
         return f'Fehler beim Senden der E-Mail: {str(e)}'
 
 
-
+@app.route('/db-preview', methods=['GET'])
+def db_preview():
+    try:
+        # Alle Daten aus der Tabelle abrufen
+        data = Users.query.all()
+        # Daten in HTML-Format rendern
+        return render_template('db_preview.html', data=data)
+    except Exception as e:
+        return f"Fehler: {str(e)}"
 
 @app.errorhandler(404)
 def page_not_found(e):
