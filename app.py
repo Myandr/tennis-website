@@ -520,7 +520,7 @@ def downloads():
 
 @app.route('/download-form')
 def download_form():
-    file_path = 'static/files/formular.pdf'  # Pfad zur Datei
+    file_path = 'static/IMG_0001.jpeg' # Pfad zur Datei
     return send_file(file_path, as_attachment=True)
 
 
