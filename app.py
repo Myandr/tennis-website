@@ -518,7 +518,7 @@ def send_email():
 def db_preview():
     try:
         # Alle Daten aus der Tabelle abrufen
-        data = Users.query.all()
+        data = User.query.all()
         # Daten in HTML-Format rendern
         return render_template('db_preview.html', data=data)
     except Exception as e:
