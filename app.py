@@ -558,7 +558,7 @@ def db_preview():
 def page_not_found(e):
     return render_template('404.html'), 404
 
-@app.route(/schule)
+@app.route('/schule')
 def schule():
     return render_template('schule.html')
 
