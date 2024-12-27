@@ -521,7 +521,14 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
-
+@app.route('/migrate')
+def run_migrations():
+    from flask_migrate import upgrade
+    try:
+        upgrade()
+        return "Migration erfolgreich!"
+    except Exception as e:
+        return f"Migration fehlgeschlagen: {str(e)}"
 
 
 if __name__ == '__main__':
