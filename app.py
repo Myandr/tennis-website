@@ -514,22 +514,34 @@ def send_email():
         return f'Fehler beim Senden der E-Mail: {str(e)}'
 
 
-@app.route('/db-preview')
+DB_PASSWORD = "1234"  # Ersetze dies durch ein starkes Passwort
+
+@app.route('/db-preview', methods=['GET', 'POST'])
 def db_preview():
-    try:
-        # Alle Daten aus den Tabellen holen
-        users = User.query.all()
-        reset_tokens = PasswordResetToken.query.all()
-        termine = Termin.query.all()
-        about_texts = AboutText.query.all()
-        testimonials = Testimonial.query.all()
-        images = Image.query.all()
-        
-        # Alle Daten an das Template weitergeben
-        return render_template('db_preview.html', users=users, reset_tokens=reset_tokens,
-                               termine=termine, about_texts=about_texts, testimonials=testimonials, images=images)
-    except Exception as e:
-        return f"Fehler: {str(e)}"
+    if request.method == 'POST':
+        # Prüfe, ob das eingegebene Passwort korrekt ist
+        if request.form['password'] == DB_PASSWORD:
+            # Daten aus der Datenbank holen und anzeigen
+            users = User.query.all()
+            reset_tokens = PasswordResetToken.query.all()
+            termine = Termin.query.all()
+            about_texts = AboutText.query.all()
+            testimonials = Testimonial.query.all()
+            images = Image.query.all()
+            return render_template('db_preview.html', users=users, reset_tokens=reset_tokens,
+                                   termine=termine, about_texts=about_texts, testimonials=testimonials, images=images)
+        else:
+            # Falsches Passwort
+            return "Falsches Passwort! Zugriff verweigert.", 403
+
+    # Zeige das Passwortformular an
+    return '''
+        <form method="POST">
+            <label for="password">Passwort:</label>
+            <input type="password" name="password" id="password" required>
+            <button type="submit">Anzeigen</button>
+        </form>
+    '''
 
 @app.errorhandler(404)
 def page_not_found(e):
