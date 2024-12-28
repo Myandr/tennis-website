@@ -64,7 +64,7 @@ appointments = [
     }
 ]
 
-@app.route('/')
+@app.route('/arzt')
 def index():
     return render_template('index.html')
 
