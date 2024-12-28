@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor's Appointment Calendar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Doctor's Appointment Calendar</h1>
+        <nav>
+            <button id="day-view">Day</button>
+            <button id="week-view">Week</button>
+            <button id="month-view">Month</button>
+        </nav>
+    </header>
+    <main>
+        <section id="calendar">
+            <!-- Calendar will be populated by JavaScript -->
+        </section>
+        <section id="appointment-form">
+            <h2>Add/Edit Appointment</h2>
+            <form id="appointment-details">
+                <input type="hidden" id="appointment-id">
+                <label for="patient-name">Patient Name:</label>
+                <input type="text" id="patient-name" required>
+                <label for="reason">Reason:</label>
+                <input type="text" id="reason" required>
+                <label for="contact">Contact:</label>
+                <input type="text" id="contact" required>
+                <label for="date">Date:</label>
+                <input type="date" id="date" required>
+                <label for="time">Time:</label>
+                <input type="time" id="time" required>
+                <label for="is-emergency">
+                    <input type="checkbox" id="is-emergency">
+                    Emergency
+                </label>
+                <label for="notes">Notes:</label>
+                <textarea id="notes"></textarea>
+                <button type="submit">Save Appointment</button>
+            </form>
+        </section>
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
