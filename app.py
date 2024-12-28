@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -34,6 +34,67 @@ serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
+
+
+from datetime import datetime, timedelta
+
+
+
+# Dummy data for demonstration
+appointments = [
+    {
+        "id": 1,
+        "patient_name": "John Doe",
+        "reason": "Check-up",
+        "contact": "john@example.com",
+        "date": "2023-06-15",
+        "time": "09:00",
+        "is_emergency": False,
+        "notes": "Annual check-up"
+    },
+    {
+        "id": 2,
+        "patient_name": "Jane Smith",
+        "reason": "Follow-up",
+        "contact": "jane@example.com",
+        "date": "2023-06-15",
+        "time": "10:00",
+        "is_emergency": False,
+        "notes": "Review test results"
+    }
+]
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/appointments', methods=['GET'])
+def get_appointments():
+    return jsonify(appointments)
+
+@app.route('/api/appointments', methods=['POST'])
+def add_appointment():
+    new_appointment = request.json
+    new_appointment['id'] = len(appointments) + 1
+    appointments.append(new_appointment)
+    return jsonify(new_appointment), 201
+
+@app.route('/api/appointments/<int:appointment_id>', methods=['PUT'])
+def update_appointment(appointment_id):
+    appointment = next((a for a in appointments if a['id'] == appointment_id), None)
+    if appointment:
+        appointment.update(request.json)
+        return jsonify(appointment)
+    return jsonify({"error": "Appointment not found"}), 404
+
+@app.route('/api/appointments/<int:appointment_id>', methods=['DELETE'])
+def delete_appointment(appointment_id):
+    global appointments
+    appointments = [a for a in appointments if a['id'] != appointment_id]
+    return '', 204
+
+
+
 
 
 #datebank
