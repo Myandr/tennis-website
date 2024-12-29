@@ -36,7 +36,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         
-        login {
+        .login {
             oberflow: scroll;
         }
 
@@ -107,34 +107,36 @@
         <h1>Datenbank Vorschau</h1>
 
         <h2>Benutzer (User)</h2>
-        <table class="login">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Telefon</th>
-                    <th>Typ</th>
-                    <th>Info</th>
-                    <th>Rolle</th>
-                    <th>Verifiziert</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.tele }}</td>
-                    <td>{{ user.typ }}</td>
-                    <td>{{ user.info }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>{{ user.is_verified }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="login">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Telefon</th>
+                        <th>Typ</th>
+                        <th>Info</th>
+                        <th>Rolle</th>
+                        <th>Verifiziert</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.tele }}</td>
+                        <td>{{ user.typ }}</td>
+                        <td>{{ user.info }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>{{ user.is_verified }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         <h2>Passwort Reset Tokens</h2>
         <table>
