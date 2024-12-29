@@ -546,9 +546,9 @@ def db_preview():
             return render_template('db_preview.html', users=users, reset_tokens=reset_tokens,
                                    termine=termine, about_texts=about_texts, testimonials=testimonials, images=images)
         else:
-            return render_template('password.html', error="Falsches Passwort! Versuche es erneut.")
+            return render_template('passwort.html', error="Falsches Passwort! Versuche es erneut.")
 
-    return render_template('password.html', error=None)
+    return render_template('passwort.html', error=None)
 
 @app.errorhandler(404)
 def page_not_found(e):
