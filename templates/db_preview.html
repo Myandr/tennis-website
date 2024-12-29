@@ -1,3 +1,4 @@
+[V0_FILE]html:file="index.html"
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -5,159 +6,236 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datenbank Vorschau</title>
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --text-color: #333;
+            --border-color: #bdc3c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
         }
+
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 1px solid var(--border-color);
+            padding: 12px;
             text-align: left;
         }
+
         th {
-            background-color: #f4f4f4;
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
         }
-        h2 {
-            color: #333;
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+            transition: background-color 0.3s ease;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                font-size: 0.8em;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .container {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Datenbank Vorschau</h1>
+    <div class="container">
+        <h1>Datenbank Vorschau</h1>
 
-    <h2>Benutzer (User)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Telefon</th>
-                <th>Typ</th>
-                <th>Info</th>
-                <th>Rolle</th>
-                <th>Verifiziert</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.tele }}</td>
-                <td>{{ user.typ }}</td>
-                <td>{{ user.info }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ user.is_verified }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>Benutzer (User)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Telefon</th>
+                    <th>Typ</th>
+                    <th>Info</th>
+                    <th>Rolle</th>
+                    <th>Verifiziert</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.tele }}</td>
+                    <td>{{ user.typ }}</td>
+                    <td>{{ user.info }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.is_verified }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>Passwort Reset Tokens</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>User ID</th>
-                <th>Token</th>
-                <th>Ablaufdatum</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for token in reset_tokens %}
-            <tr>
-                <td>{{ token.id }}</td>
-                <td>{{ token.user_id }}</td>
-                <td>{{ token.token }}</td>
-                <td>{{ token.expiration }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>Passwort Reset Tokens</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User ID</th>
+                    <th>Token</th>
+                    <th>Ablaufdatum</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for token in reset_tokens %}
+                <tr>
+                    <td>{{ token.id }}</td>
+                    <td>{{ token.user_id }}</td>
+                    <td>{{ token.token }}</td>
+                    <td>{{ token.expiration }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>Termine</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Datum</th>
-                <th>Veranstaltung</th>
-                <th>Uhrzeit</th>
-                <th>Ort</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for termin in termine %}
-            <tr>
-                <td>{{ termin.id }}</td>
-                <td>{{ termin.datum }}</td>
-                <td>{{ termin.veranstaltung }}</td>
-                <td>{{ termin.uhrzeit }}</td>
-                <td>{{ termin.ort }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>Termine</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Datum</th>
+                    <th>Veranstaltung</th>
+                    <th>Uhrzeit</th>
+                    <th>Ort</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for termin in termine %}
+                <tr>
+                    <td>{{ termin.id }}</td>
+                    <td>{{ termin.datum }}</td>
+                    <td>{{ termin.veranstaltung }}</td>
+                    <td>{{ termin.uhrzeit }}</td>
+                    <td>{{ termin.ort }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>About Texte</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Content</th>
-                <th>Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for about_text in about_texts %}
-            <tr>
-                <td>{{ about_text.id }}</td>
-                <td>{{ about_text.content }}</td>
-                <td>{{ about_text.type }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>About Texte</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Content</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for about_text in about_texts %}
+                <tr>
+                    <td>{{ about_text.id }}</td>
+                    <td>{{ about_text.content }}</td>
+                    <td>{{ about_text.type }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>Testimonials</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Text</th>
-                <th>Autor</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for testimonial in testimonials %}
-            <tr>
-                <td>{{ testimonial.id }}</td>
-                <td>{{ testimonial.text }}</td>
-                <td>{{ testimonial.author }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>Testimonials</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Text</th>
+                    <th>Autor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for testimonial in testimonials %}
+                <tr>
+                    <td>{{ testimonial.id }}</td>
+                    <td>{{ testimonial.text }}</td>
+                    <td>{{ testimonial.author }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>Images</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Filename</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for image in images %}
-            <tr>
-                <td>{{ image.id }}</td>
-                <td>{{ image.filename }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>Images</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Filename</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for image in images %}
+                <tr>
+                    <td>{{ image.id }}</td>
+                    <td>{{ image.filename }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
