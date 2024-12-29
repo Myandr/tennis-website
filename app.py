@@ -535,9 +535,8 @@ DB_PASSWORD = "1234"  # Ersetze dies durch ein starkes Passwort
 @app.route('/db-preview', methods=['GET', 'POST'])
 def db_preview():
     if request.method == 'POST':
-        # Prüfe, ob das eingegebene Passwort korrekt ist
         if request.form['password'] == DB_PASSWORD:
-            # Daten aus der Datenbank holen und anzeigen
+            # Daten aus der Datenbank holen
             users = User.query.all()
             reset_tokens = PasswordResetToken.query.all()
             termine = Termin.query.all()
@@ -547,17 +546,9 @@ def db_preview():
             return render_template('db_preview.html', users=users, reset_tokens=reset_tokens,
                                    termine=termine, about_texts=about_texts, testimonials=testimonials, images=images)
         else:
-            # Falsches Passwort
-            return "Falsches Passwort! Zugriff verweigert.", 403
+            return render_template('password.html', error="Falsches Passwort! Versuche es erneut.")
 
-    # Zeige das Passwortformular an
-    return '''
-        <form method="POST">
-            <label for="password">Passwort:</label>
-            <input type="password" name="password" id="password" required>
-            <button type="submit">Anzeigen</button>
-        </form>
-    '''
+    return render_template('password.html', error=None)
 
 @app.errorhandler(404)
 def page_not_found(e):
