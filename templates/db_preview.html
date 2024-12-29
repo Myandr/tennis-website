@@ -63,6 +63,20 @@
             background-color: #fff;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
         }
+        
+        .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    min-width: 600px; /* Ensure table doesn't shrink too much on small screens */
+}
 
         th, td {
             border: 1px solid var(--border-color);
@@ -107,7 +121,7 @@
         <h1>Datenbank Vorschau</h1>
 
         <h2>Benutzer (User)</h2>
-        <div class="login">
+        <div class="table-container">
             <table>
                 <thead>
                     <tr>
