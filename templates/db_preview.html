@@ -36,6 +36,10 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow-x: auto;
         }
+        
+        login {
+            oberflow-x: auto;
+        }
 
         h1 {
             color: var(--primary-color);
@@ -104,6 +108,7 @@
         <h1>Datenbank Vorschau</h1>
 
         <h2>Benutzer (User)</h2>
+        <div class="login">
         <table>
             <thead>
                 <tr>
@@ -132,6 +137,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
 
         <h2>Passwort Reset Tokens</h2>
         <table>
