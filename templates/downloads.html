@@ -3,58 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formular Download</title>
+    <title>Download Section</title>
     <style>
-        /* Allgemeine Seiteinstellungen */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --text-color: #333;
+            --hover-color: #2980b9;
+        }
+
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Karten-Styling */
-        .card {
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        .card h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
             text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 2.5em;
         }
-
-        .card p {
-            font-size: 0.9rem;
-            color: #555;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        /* Button-Bereich abtrennen */
-        .button-container {
-            margin-top: 20px;
-            width: 100%;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        /* Button Styling */
-/* From Uiverse.io by vinodjangid07 */ 
-.Btn {
+        
+        .Btn {
   width: 50px;
   height: 50px;
   border: 2px solid rgb(214, 214, 214);
@@ -110,33 +96,76 @@
   }
 }
 
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
 
-        /* Responsiveness */
-        @media (max-width: 480px) {
-            .card {
-                padding: 15px;
-            }
+        .download-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
 
-            .card h1 {
-                font-size: 1.2rem;
-            }
+        .download-item:hover {
+            transform: translateY(-5px);
+        }
 
-            .card p {
-                font-size: 0.8rem;
-            }
+        .download-icon {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
 
-            .download-button {
-                font-size: 0.9rem;
-                padding: 8px 15px;
+        .download-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .download-description {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .download-button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        @media screen and (max-width: 600px) {
+            .download-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Formular Download</h1>
-        <p>Bitte klicken Sie auf den Button, um das Formular herunterzuladen. Die Datei wird als PDF bereitgestellt.</p>
-        <div class="button-container">
+    <div class="container">
+        <h1>Downloads</h1>
+        <div class="download-grid">
+            <div class="download-item">
+                <div class="download-icon">📄</div>
+                <h2 class="download-title">User Manual</h2>
+                <p class="download-description">Comprehensive guide for using our product. Includes setup instructions and troubleshooting tips.</p>
 <button class="Btn" onclick="window.location.href='/download-form'">
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +179,61 @@
   </svg>
   <span class="icon2"></span>
 </button>
-
+            </div>
+            <div class="download-item">
+                <div class="download-icon">💻</div>
+                <h2 class="download-title">Software Update</h2>
+                <p class="download-description">Latest version of our software with new features and bug fixes. Compatible with Windows and macOS.</p>
+<button class="Btn" onclick="window.location.href='/download-form'">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    height="1em"
+    viewBox="0 0 384 512"
+    class="svgIcon"
+  >
+    <path
+      d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+    ></path>
+  </svg>
+  <span class="icon2"></span>
+</button>
+            </div>
+            <div class="download-item">
+                <div class="download-icon">🎥</div>
+                <h2 class="download-title">Tutorial Video</h2>
+                <p class="download-description">Step-by-step video guide showing how to use key features of our product.</p>
+<button class="Btn" onclick="window.location.href='/download-form'">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    height="1em"
+    viewBox="0 0 384 512"
+    class="svgIcon"
+  >
+    <path
+      d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+    ></path>
+  </svg>
+  <span class="icon2"></span>
+</button>
+            </div>
+            <div class="download-item">
+                <div class="download-icon">📱</div>
+                <h2 class="download-title">Mobile App</h2>
+                <p class="download-description">Our official mobile app for iOS and Android devices. Access your account on the go.</p>
+<button class="Btn" onclick="window.location.href='/download-form'">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    height="1em"
+    viewBox="0 0 384 512"
+    class="svgIcon"
+  >
+    <path
+      d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+    ></path>
+  </svg>
+  <span class="icon2"></span>
+</button>
+            </div>
         </div>
     </div>
 </body>
