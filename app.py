@@ -558,38 +558,7 @@ def page_not_found(e):
 def schule():
     return render_template('schule.html')
 
-from flask import Flask, request, render_template
-import pandas as pd
-import os
 
-
-
-# Pfad zur Excel-Datei
-EXCEL_FILE = "anmeldungen.xlsx"
-
-# Sicherstellen, dass die Datei existiert
-if not os.path.exists(EXCEL_FILE):
-    df = pd.DataFrame(columns=["Name", "E-Mail", "Telefonnummer"])
-    df.to_excel(EXCEL_FILE, index=False)
-
-@app.route("/exel")
-def form():
-    return render_template("exel.html")  # Dein HTML-Formular speichern als form.html
-
-@app.route("/exel-submit", methods=["POST"])
-def submit_form():
-    # Daten aus dem Formular abrufen
-    name = request.form.get("name")
-    email = request.form.get("email")
-    phone = request.form.get("phone")
-
-    # Neue Zeile in die Excel-Datei schreiben
-    df = pd.read_excel(EXCEL_FILE)
-    new_row = {"Name": name, "E-Mail": email, "Telefonnummer": phone}
-    df = df.append(new_row, ignore_index=True)
-    df.to_excel(EXCEL_FILE, index=False)
-
-    return "Vielen Dank für Ihre Anmeldung!"
 
 
 
