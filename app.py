@@ -572,7 +572,7 @@ if not os.path.exists(EXCEL_FILE):
     df = pd.DataFrame(columns=["Name", "E-Mail", "Telefonnummer"])
     df.to_excel(EXCEL_FILE, index=False)
 
-@app.route("/")
+@app.route("/exel")
 def form():
     return render_template("exel.html")  # Dein HTML-Formular speichern als form.html
 
