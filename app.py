@@ -558,6 +558,48 @@ def page_not_found(e):
 def schule():
     return render_template('schule.html')
 
+from flask import Flask, request, jsonify
+from openpyxl import load_workbook
+import os
+
+
+# Replace this with your actual API key
+API_KEY = "your_secret_api_key"
+
+# Excel file path
+EXCEL_FILE = "data.xlsx"
+
+@app.route('/exel-submit', methods=['POST'])
+def submit():
+    # Check API key
+    if request.form.get('api_key') != API_KEY:
+        return jsonify({"error": "Invalid API key"}), 401
+
+    # Get form data
+    name = request.form.get('name')
+    email = request.form.get('email')
+    age = request.form.get('age')
+
+    # Write data to Excel
+    try:
+        if not os.path.exists(EXCEL_FILE):
+            wb = load_workbook()
+            ws = wb.active
+            ws.append(["Name", "Email", "Age"])
+        else:
+            wb = load_workbook(EXCEL_FILE)
+            ws = wb.active
+
+        ws.append([name, email, age])
+        wb.save(EXCEL_FILE)
+
+        return jsonify({"message": "Data submitted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
