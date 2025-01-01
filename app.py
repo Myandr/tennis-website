@@ -562,6 +562,9 @@ from flask import Flask, request, jsonify
 from openpyxl import load_workbook
 import os
 
+@app.route('/exel')
+def about():
+    return render_template('exel.html')
 
 # Replace this with your actual API key
 API_KEY = "your_secret_api_key"
