@@ -558,48 +558,38 @@ def page_not_found(e):
 def schule():
     return render_template('schule.html')
 
-from flask import Flask, request, jsonify
-from openpyxl import load_workbook
+from flask import Flask, request, render_template
+import pandas as pd
 import os
 
-@app.route('/exel')
-def about():
-    return render_template('exel.html')
 
-# Replace this with your actual API key
-API_KEY = "your_secret_api_key"
 
-# Excel file path
-EXCEL_FILE = "data.xlsx"
+# Pfad zur Excel-Datei
+EXCEL_FILE = "anmeldungen.xlsx"
 
-@app.route('/exel-submit', methods=['POST'])
-def submit():
-    # Check API key
-    if request.form.get('api_key') != API_KEY:
-        return jsonify({"error": "Invalid API key"}), 401
+# Sicherstellen, dass die Datei existiert
+if not os.path.exists(EXCEL_FILE):
+    df = pd.DataFrame(columns=["Name", "E-Mail", "Telefonnummer"])
+    df.to_excel(EXCEL_FILE, index=False)
 
-    # Get form data
-    name = request.form.get('name')
-    email = request.form.get('email')
-    age = request.form.get('age')
+@app.route("/")
+def form():
+    return render_template("form.html")  # Dein HTML-Formular speichern als form.html
 
-    # Write data to Excel
-    try:
-        if not os.path.exists(EXCEL_FILE):
-            wb = load_workbook()
-            ws = wb.active
-            ws.append(["Name", "Email", "Age"])
-        else:
-            wb = load_workbook(EXCEL_FILE)
-            ws = wb.active
+@app.route("/submit", methods=["POST"])
+def submit_form():
+    # Daten aus dem Formular abrufen
+    name = request.form.get("name")
+    email = request.form.get("email")
+    phone = request.form.get("phone")
 
-        ws.append([name, email, age])
-        wb.save(EXCEL_FILE)
+    # Neue Zeile in die Excel-Datei schreiben
+    df = pd.read_excel(EXCEL_FILE)
+    new_row = {"Name": name, "E-Mail": email, "Telefonnummer": phone}
+    df = df.append(new_row, ignore_index=True)
+    df.to_excel(EXCEL_FILE, index=False)
 
-        return jsonify({"message": "Data submitted successfully"}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
+    return "Vielen Dank für Ihre Anmeldung!"
 
 
 
