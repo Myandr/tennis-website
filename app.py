@@ -574,7 +574,7 @@ if not os.path.exists(EXCEL_FILE):
 
 @app.route("/")
 def form():
-    return render_template("form.html")  # Dein HTML-Formular speichern als form.html
+    return render_template("exel.html")  # Dein HTML-Formular speichern als form.html
 
 @app.route("/submit", methods=["POST"])
 def submit_form():
