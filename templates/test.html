@@ -1,460 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tripify - Travel Agency</title>
+    <title>Suchfunktion mit Liste</title>
     <style>
-        :root {
-            --primary: #161616;
-            --secondary: #4b5563;
-            --accent: #8b9d90;
-            --background: #f8f8f8;
-            --white: #ffffff;
-            --nav-height: 70px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, sans-serif;
-        }
-
         body {
-            background-color: var(--background);
-            color: var(--primary);
-            min-height: 100vh;
-            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
         }
-
-        /* Enhanced Navigation */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--nav-height);
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        .search-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            height: 100%;
+        .search-form {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .search-input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            width: 300px;
         }
-
-        .logo::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent);
-            border-radius: 50%;
+        .search-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
+        .search-button:hover {
+            background-color: #45a049;
         }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--primary);
-            position: relative;
-            padding: 0.5rem 0;
+        .list-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
+        .list-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
         }
-
-        .nav-links a:hover::after {
-            width: 100%;
+        .list-item:last-child {
+            border-bottom: none;
         }
-
-        .menu-button {
+        .hidden {
             display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 1200px;
-            margin: var(--nav-height) auto 0;
-            padding: 2rem;
-        }
-
-        /* Enhanced Filters */
-        .filters {
-            display: flex;
-            gap: 1rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            border: 1px solid var(--secondary);
-            background: var(--white);
-            color: var(--primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn.active {
-            background: var(--accent);
-            color: var(--white);
-            border-color: var(--accent);
-        }
-
-        .filter-btn:hover {
-            background: var(--accent);
-            color: var(--white);
-            border-color: var(--accent);
-        }
-
-        /* Hero Section */
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin: 3rem 0;
-        }
-
-        .hero-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .travel-agency {
-            color: var(--secondary);
-            font-size: 0.875rem;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-description {
-            color: var(--secondary);
-            margin-bottom: 2rem;
-            max-width: 400px;
-            line-height: 1.6;
-        }
-
-        /* Interactive Buttons */
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .discover-btn, .request-call {
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .discover-btn {
-            background: var(--accent);
-            color: var(--white);
-            border: none;
-        }
-
-        .request-call {
-            background: transparent;
-            border: 1px solid var(--secondary);
-            color: var(--primary);
-        }
-
-        .discover-btn:hover, .request-call:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Featured Image */
-        .featured-image {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            aspect-ratio: 16/9;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .featured-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .featured-image:hover img {
-            transform: scale(1.05);
-        }
-
-        .location-info {
-            position: absolute;
-            bottom: 2rem;
-            left: 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-        }
-
-        .location-info h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .featured-image:hover .location-info {
-            transform: translateY(-5px);
-        }
-
-        /* Enhanced Mobile Menu */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100vh;
-            background: var(--white);
-            padding: 2rem;
-            transition: transform 0.3s ease-in-out;
-            z-index: 1001;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .mobile-menu.active {
-            transform: translateX(-100%);
-        }
-
-        .mobile-menu a {
-            font-size: 1.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            padding: 1rem 0;
-            transition: color 0.3s ease;
-        }
-
-        .mobile-menu a:hover {
-            color: var(--accent);
-        }
-
-        .close-menu {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            background: none;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--primary);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .menu-button {
-                display: block;
-            }
-
-            .hero {
-                grid-template-columns: 1fr;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            .filters {
-                justify-content: center;
-            }
-
-            .cta-buttons {
-                justify-content: center;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Enhanced Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">Tripify</a>
-            <div class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#destinations">Destinations</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
-            </div>
-            <button class="menu-button" onclick="toggleMenu()">☰</button>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="close-menu" onclick="toggleMenu()">×</button>
-        <a href="#home" onclick="toggleMenu()">Home</a>
-        <a href="#destinations" onclick="toggleMenu()">Destinations</a>
-        <a href="#about" onclick="toggleMenu()">About</a>
-        <a href="#contact" onclick="toggleMenu()">Contact</a>
+    <div class="search-container">
+        <form class="search-form" onsubmit="return false;">
+            <input type="text" class="search-input" placeholder="Suche..." id="searchInput">
+            <button type="button" class="search-button" onclick="searchList()">Suchen</button>
+        </form>
     </div>
-
-    <div class="container">
-        <!-- Enhanced Filters -->
-        <div class="filters">
-            <button class="filter-btn" onclick="toggleFilter(this)">Terrasse</button>
-            <button class="filter-btn" onclick="toggleFilter(this)">Bathroom</button>
-            <button class="filter-btn" onclick="toggleFilter(this)">Kitchen</button>
-            <button class="filter-btn" onclick="toggleFilter(this)">Bedroom</button>
-        </div>
-
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <div class="travel-agency">TRAVEL AGENCY</div>
-                <h1 class="hero-title">Discover your dream place</h1>
-                <p class="hero-description">Plan and book your perfect trip with expert advice, destination information and inspiration from us!</p>
-                <div class="cta-buttons">
-                    <button class="discover-btn" onclick="handleDiscover()">
-                        Discover now
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                            <path d="M3 8h10m-4 4l4-4-4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <button class="request-call" onclick="handleCallRequest()">
-                        Request a call
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                            <path d="M15 11v3a1 1 0 01-1 1H2a1 1 0 01-1-1v-3M8 12V4m0 0L4 8m4-4l4 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="featured-image">
-                <img src="/placeholder.svg?height=600&width=800" alt="Sunrise Resort View">
-                <div class="location-info">
-                    <h3>Sunrise Resort 5*</h3>
-                    <p>Thailand, Phuket</p>
-                </div>
-            </div>
-        </section>
+    <div class="list-container" id="listContainer">
+        <!-- Die Liste wird dynamisch mit JavaScript gefüllt -->
     </div>
 
     <script>
-        // Enhanced Mobile Menu
-        function toggleMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('active');
-            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        // Liste von Elementen
+        const items = [
+            "Apfel", "Banane", "Kirsche", "Dattel", "Elderbeere",
+            "Feige", "Grapefruit", "Himbeere", "Ingwer", "Johannisbeere",
+            "Kiwi", "Limette", "Mango", "Nektarine", "Orange",
+            "Pfirsich", "Quitte", "Rhabarber", "Stachelbeere", "Traube",
+            "Ugli-Frucht", "Vogelbeere", "Wassermelone", "Xigua", "Yuzu",
+            "Zitrone", "Ananas", "Brombeere", "Clementine", "Drachenfrucht"
+        ];
+
+        // Funktion zum Anzeigen der Liste
+        function displayList(items) {
+            const listContainer = document.getElementById('listContainer');
+            listContainer.innerHTML = '';
+            items.forEach(item => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                listItem.textContent = item;
+                listContainer.appendChild(listItem);
+            });
         }
 
-        // Filter Functionality
-        function toggleFilter(button) {
-            button.classList.toggle('active');
-        }
+        // Funktion zum Suchen in der Liste
+        function searchList() {
+            const searchInput = document.getElementById('searchInput');
+            const filter = searchInput.value.toLowerCase();
+            const listItems = document.querySelectorAll('.list-item');
 
-        // CTA Button Handlers
-        function handleDiscover() {
-            console.log('Discovering destinations...');
-            // Add your discovery functionality here
-            alert('Discovering new destinations for you!');
-        }
-
-        function handleCallRequest() {
-            console.log('Processing call request...');
-            // Add your call request functionality here
-            alert('Thank you! Our team will contact you shortly.');
-        }
-
-        // Smooth Scroll for Navigation Links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
                 }
             });
-        });
+        }
 
-        // Close Mobile Menu When Clicking Outside
-        document.addEventListener('click', (e) => {
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuButton = document.querySelector('.menu-button');
-            
-            if (!mobileMenu.contains(e.target) && 
-                !menuButton.contains(e.target) && 
-                mobileMenu.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
-
-        // Navbar Scroll Effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-            } else {
-                navbar.style.boxShadow = 'none';
-            }
-        });
-
-        // Initialize Active States
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstFilter = document.querySelector('.filter-btn');
-            if (firstFilter) {
-                firstFilter.classList.add('active');
-            }
-        });
+        // Initial die Liste anzeigen
+        displayList(items);
     </script>
 </body>
 </html>
+
