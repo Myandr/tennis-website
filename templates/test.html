@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suchfunktion mit Liste</title>
+    <title>Echtzeit-Suchfunktion mit Liste</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,28 +18,13 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
-        .search-form {
-            display: flex;
-        }
         .search-input {
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
-            width: 300px;
-        }
-        .search-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .search-button:hover {
-            background-color: #45a049;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .list-container {
             background-color: white;
@@ -57,14 +42,17 @@
         .hidden {
             display: none;
         }
+        .search-info {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <div class="search-container">
-        <form class="search-form" onsubmit="return false;">
-            <input type="text" class="search-input" placeholder="Suche..." id="searchInput">
-            <button type="button" class="search-button" onclick="searchList()">Suchen</button>
-        </form>
+        <input type="text" class="search-input" placeholder="Suche..." id="searchInput" oninput="searchList()">
+        <div class="search-info" id="searchInfo"></div>
     </div>
     <div class="list-container" id="listContainer">
         <!-- Die Liste wird dynamisch mit JavaScript gefüllt -->
@@ -98,19 +86,34 @@
             const searchInput = document.getElementById('searchInput');
             const filter = searchInput.value.toLowerCase();
             const listItems = document.querySelectorAll('.list-item');
+            let visibleCount = 0;
 
             listItems.forEach(item => {
                 const text = item.textContent.toLowerCase();
                 if (text.includes(filter)) {
                     item.classList.remove('hidden');
+                    visibleCount++;
                 } else {
                     item.classList.add('hidden');
                 }
             });
+
+            updateSearchInfo(visibleCount);
+        }
+
+        // Funktion zum Aktualisieren der Suchinformationen
+        function updateSearchInfo(count) {
+            const searchInfo = document.getElementById('searchInfo');
+            if (count === items.length) {
+                searchInfo.textContent = `Alle ${count} Elemente werden angezeigt.`;
+            } else {
+                searchInfo.textContent = `${count} von ${items.length} Elementen gefunden.`;
+            }
         }
 
         // Initial die Liste anzeigen
         displayList(items);
+        updateSearchInfo(items.length);
     </script>
 </body>
 </html>
