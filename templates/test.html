@@ -1,703 +1,408 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Design & Architecture</title>
+    <title>Tripify - Travel Agency</title>
     <style>
-        /* Reset & Variables */
+        /* Reset and variables */
         :root {
-            --primary-color: #1a2b3c;
-            --secondary-color: #f5f5f5;
-            --accent-color: #4a7856;
-            --text-color: #333;
+            --primary: #161616;
+            --secondary: #4b5563;
+            --accent: #8b9d90;
+            --background: #f8f8f8;
             --white: #ffffff;
-            --gradient: linear-gradient(45deg, #1a2b3c, #4a7856);
-            --transition: all 0.3s ease;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
+            font-family: 'Inter', -apple-system, sans-serif;
         }
 
         body {
-            line-height: 1.6;
-            color: var(--text-color);
+            background-color: var(--background);
+            color: var(--primary);
+            min-height: 100vh;
             overflow-x: hidden;
-            width: 100%;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
         }
 
         /* Navigation */
         .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1rem;
+            position: relative;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            transition: var(--transition);
         }
 
         .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
         }
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
             align-items: center;
         }
 
-        .nav-links a {
+        .contact-link {
             text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-            font-size: 0.9rem;
+            color: var(--primary);
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-color);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .cta-button {
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            font-size: 0.9rem;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            transition: 0.5s ease;
-        }
-
-        .cta-button:hover::before {
-            transform: translate(-50%, -50%) scale(2);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('/placeholder.svg?height=1080&width=1920');
-            background-size: cover;
-            background-position: center;
+        .menu-button {
             display: flex;
             align-items: center;
-            padding: 2rem 1rem;
-            color: var(--white);
-            position: relative;
-            overflow: hidden;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--secondary);
+            border-radius: 50px;
+            background: transparent;
+            cursor: pointer;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--gradient);
-            opacity: 0.8;
-            z-index: 1;
+        /* Filter buttons */
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: none;
+            background: var(--white);
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        /* Hero section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
         }
 
         .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .hero-title {
+            font-size: 3.5rem;
             line-height: 1.2;
+            margin-bottom: 1rem;
         }
 
-        .hero p {
-            font-size: 1rem;
+        .travel-agency {
+            color: var(--secondary);
+            font-size: 0.875rem;
+            letter-spacing: 2px;
             margin-bottom: 2rem;
         }
 
-        /* Features Section */
-        .features {
-            padding: 4rem 1rem;
-            background: var(--secondary-color);
+        .hero-description {
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            max-width: 400px;
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: 0.5s;
-        }
-
-        .feature-card:hover::before {
-            transform: translateX(100%);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Projects Section */
-        .projects {
-            padding: 4rem 1rem;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .project-card {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            height: 300px;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .project-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .project-card:hover img {
-            transform: scale(1.05);
-        }
-
-        .project-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(26, 43, 60, 0.9);
-            padding: 1.5rem;
-            color: var(--white);
-            transform: translateY(100%);
-            transition: var(--transition);
-            backdrop-filter: blur(5px);
-        }
-
-        .project-card:hover .project-overlay {
-            transform: translateY(0);
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 4rem 1rem;
-            background: var(--primary-color);
-            color: var(--white);
-        }
-
-        .contact-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .contact-form {
-            display: grid;
+        .cta-buttons {
+            display: flex;
             gap: 1rem;
         }
 
-        .form-group {
-            display: grid;
+        .discover-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
             gap: 0.5rem;
         }
 
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
+        .request-call {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
             border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--white);
-            backdrop-filter: blur(5px);
-            transition: var(--transition);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(74, 120, 86, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            padding: 3rem 1rem;
-            background: var(--secondary-color);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
+            color: var(--primary);
             cursor: pointer;
-            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Background Shapes */
-        .shape {
+        /* Featured image section */
+        .featured-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .location-info {
             position: absolute;
-            z-index: -1;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 10px;
         }
 
-        .shape-1 {
-            width: 200px;
+        /* Carousel */
+        .carousel {
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .carousel-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-item {
+            flex: 0 0 300px;
+            scroll-snap-align: start;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .carousel-item img {
+            width: 100%;
             height: 200px;
-            background: var(--accent-color);
+            object-fit: cover;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .carousel-nav button {
+            background: var(--white);
+            border: none;
+            padding: 0.5rem;
             border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.3;
-            top: 20%;
-            left: -100px;
-            animation: float 8s ease-in-out infinite;
+            cursor: pointer;
         }
 
-        .shape-2 {
-            width: 150px;
-            height: 150px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            filter: blur(70px);
-            opacity: 0.2;
-            top: 40%;
-            right: -75px;
-            animation: float 6s ease-in-out infinite reverse;
-        }
-
-        .shape-3 {
-            width: 100px;
-            height: 100px;
-            background: var(--accent-color);
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            opacity: 0.1;
-            bottom: 10%;
-            left: 50%;
-            animation: rotate 15s linear infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Scroll Progress Bar */
-        .scroll-progress {
+        /* Mobile menu */
+        .mobile-menu {
             position: fixed;
             top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: var(--accent-color);
-            z-index: 1001;
-            transition: width 0.1s ease;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--white);
+            padding: 2rem;
+            transition: right 0.3s ease;
+            z-index: 999;
         }
 
-        /* Mouse Trail Effect */
-        .mouse-trail {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            pointer-events: none;
-            opacity: 0.5;
-            z-index: 9999;
-            transition: 0.1s ease;
+        .mobile-menu.active {
+            right: 0;
         }
 
-        /* Responsive Design */
+        .close-menu {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive design */
         @media (max-width: 768px) {
-            html {
-                font-size: 14px;
-            }
-
-            .mobile-menu-btn {
-                display: block;
+            .hero {
+                grid-template-columns: 1fr;
             }
 
             .nav-links {
                 display: none;
-                position: fixed;
-                top: 60px;
-                left: 0;
-                right: 0;
-                background: var(--white);
-                padding: 1rem;
-                flex-direction: column;
-                text-align: center;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
 
-            .nav-links.active {
-                display: flex;
+            .hero-title {
+                font-size: 2.5rem;
             }
 
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 0.9rem;
-            }
-
-            .features-grid,
-            .projects-grid,
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .project-card {
-                height: 250px;
-            }
-
-            .shape-1,
-            .shape-2,
-            .shape-3 {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar {
-                padding: 0.75rem;
-            }
-
-            .logo {
-                font-size: 1rem;
-            }
-
-            .hero h1 {
-                font-size: 1.75rem;
-            }
-
-            .section-title h2 {
-                font-size: 1.5rem;
-            }
-
-            .feature-card,
-            .project-card {
-                padding: 1rem;
-            }
-
-            .project-card {
-                height: 200px;
+            .filters {
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
-    <div class="scroll-progress"></div>
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
-    <div class="shape shape-3"></div>
-    <nav class="navbar">
-        <a href="#" class="logo">ModernDesign</a>
-        <div class="nav-links">
-            <a href="#features">Features</a>
-            <a href="#projects">Projects</a>
-            <a href="#about">About</a>
-            <a href="#contact" class="cta-button">Kontakt</a>
-        </div>
-        <div class="mobile-menu-btn">☰</div>
-    </nav>
+    <div class="container">
+        <nav class="navbar">
+            <a href="#" class="logo">Tripify</a>
+            <div class="nav-links">
+                <a href="#" class="contact-link">Contact us</a>
+                <button class="menu-button" onclick="toggleMenu()">
+                    Menu
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Set New Standards in Modern Design</h1>
-            <p>Crafting Tomorrow's Living Spaces with Innovation and Style</p>
-            <a href="#contact" class="cta-button">Projekt starten</a>
+        <div class="filters">
+            <button class="filter-btn">Terrasse</button>
+            <button class="filter-btn">Bathroom</button>
+            <button class="filter-btn">Kitchen</button>
+            <button class="filter-btn">Bedroom</button>
         </div>
-    </section>
 
-    <section id="features" class="features">
-        <div class="section-title">
-            <h2>Unsere Leistungen</h2>
-            <p>Entdecken Sie unsere einzigartigen Designlösungen</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>Modernes Design</h3>
-                <p>Zeitgemäße Architektur mit klaren Linien und innovativen Materialien</p>
+        <main class="hero">
+            <div class="hero-content">
+                <div class="travel-agency">TRAVEL AGENCY</div>
+                <h1 class="hero-title">Discover your dream place</h1>
+                <p class="hero-description">Plan and book your perfect trip with expert advice, destination information and inspiration from us!</p>
+                <div class="cta-buttons">
+                    <button class="discover-btn">
+                        Discover now
+                        <svg width="16" height="16" viewBox="0 0 16 16">
+                            <path d="M1 8h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                    <button class="request-call">
+                        Request a call
+                        <svg width="16" height="16" viewBox="0 0 16 16">
+                            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2"/>
+                            <path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div class="feature-card">
-                <h3>Nachhaltigkeit</h3>
-                <p>Umweltfreundliche Lösungen für eine bessere Zukunft</p>
-            </div>
-            <div class="feature-card">
-                <h3>Individuelle Planung</h3>
-                <p>Maßgeschneiderte Konzepte nach Ihren Wünschen</p>
-            </div>
-        </div>
-    </section>
 
-    <section id="projects" class="projects">
-        <div class="section-title">
-            <h2>Unsere Projekte</h2>
-            <p>Einblicke in unsere realisierten Arbeiten</p>
-        </div>
-        <div class="projects-grid">
-            <div class="project-card">
-                <img src="/placeholder.svg?height=400&width=600" alt="Modern House">
-                <div class="project-overlay">
-                    <h3>Villa Modern</h3>
-                    <p>Luxuriöses Wohndesign mit Panoramablick</p>
+            <div class="featured-image">
+                <img src="/placeholder.svg?height=600&width=800" alt="Luxury resort view">
+                <div class="location-info">
+                    <h3>Sunrise Resort 5*</h3>
+                    <p>Thailand, Phuket</p>
                 </div>
             </div>
-            <div class="project-card">
-                <img src="/placeholder.svg?height=400&width=600" alt="Interior Design">
-                <div class="project-overlay">
-                    <h3>Urban Living</h3>
-                    <p>Stadtapartments mit cleveren Raumlösungen</p>
-                </div>
-            </div>
-            <div class="project-card">
-                <img src="/placeholder.svg?height=400&width=600" alt="Kitchen Design">
-                <div class="project-overlay">
-                    <h3>Moderne Küche</h3>
-                    <p>Funktionales Design für Genießer</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        </main>
 
-    <section id="contact" class="contact">
-        <div class="contact-container">
-            <div class="section-title">
-                <h2>Kontakt</h2>
-                <p>Lassen Sie uns Ihr Traumprojekt besprechen</p>
+        <div class="carousel">
+            <div class="carousel-container">
+                <div class="carousel-item">
+                    <img src="/placeholder.svg?height=200&width=300" alt="Faroe Islands">
+                    <div class="location-info">
+                        <h4>Faroe Islands</h4>
+                        <p>Grand Hyatt Villas</p>
+                    </div>
+                </div>
+                <!-- Add more carousel items as needed -->
             </div>
-            <form class="contact-form">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Nachricht</label>
-                    <textarea id="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="cta-button">Senden</button>
-            </form>
+            <div class="carousel-nav">
+                <button class="prev">←</button>
+                <span>01/08</span>
+                <button class="next">→</button>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <footer>
-        <div class="footer-grid">
-            <div>
-                <h3>Über uns</h3>
-                <p>Wir gestalten moderne Lebensräume mit Leidenschaft für Design und Funktionalität.</p>
-            </div>
-            <div>
-                <h3>Kontakt</h3>
-                <p>Email: info@moderndesign.de</p>
-                <p>Tel: +49 123 456789</p>
-            </div>
-            <div>
-                <h3>Folgen Sie uns</h3>
-                <p>Instagram</p>
-                <p>Facebook</p>
-                <p>LinkedIn</p>
-            </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" onclick="toggleMenu()">×</button>
+        <div style="padding-top: 4rem;">
+            <a href="#" style="display: block; padding: 1rem 0;">Home</a>
+            <a href="#" style="display: block; padding: 1rem 0;">Destinations</a>
+            <a href="#" style="display: block; padding: 1rem 0;">About Us</a>
+            <a href="#" style="display: block; padding: 1rem 0;">Contact</a>
         </div>
-    </footer>
+    </div>
 
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Form Submission
-        const form = document.querySelector('.contact-form');
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Vielen Dank für Ihre Nachricht! Wir melden uns in Kürze bei Ihnen.');
-            form.reset();
-        });
-
-        // Scroll Animation
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-            } else {
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                navbar.style.boxShadow = 'none';
-            }
-        });
-
-        // Scroll Progress Bar
-        window.addEventListener('scroll', () => {
-            const scrollProgress = document.querySelector('.scroll-progress');
-            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-            scrollProgress.style.width = `${scrolled}%`;
-        });
-
-        // Mouse Trail Effect
-        function createMouseTrail() {
-            const trail = document.createElement('div');
-            trail.className = 'mouse-trail';
-            document.body.appendChild(trail);
-
-            let timeout;
-            window.addEventListener('mousemove', (e) => {
-                trail.style.left = e.clientX + 'px';
-                trail.style.top = e.clientY + 'px';
-                trail.style.opacity = '0.5';
-
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    trail.style.opacity = '0';
-                }, 100);
-            });
+        // Hamburger menu functionality
+        function toggleMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
         }
 
-        createMouseTrail();
+        // Carousel functionality
+        const carousel = document.querySelector('.carousel-container');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
 
-        // Parallax Effect for Hero Section
-        window.addEventListener('scroll', () => {
-            const hero = document.querySelector('.hero');
-            const scrolled = window.scrollY;
-            hero.style.backgroundPositionY = `${scrolled * 0.5}px`;
+        prevBtn.addEventListener('click', () => {
+            carousel.scrollBy({
+                left: -300,
+                behavior: 'smooth'
+            });
         });
 
-        // Intersection Observer for Animations
-        const observerOptions = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
+        nextBtn.addEventListener('click', () => {
+            carousel.scrollBy({
+                left: 300,
+                behavior: 'smooth'
             });
-        }, observerOptions);
+        });
 
-        document.querySelectorAll('.feature-card, .project-card').forEach(el => {
-            observer.observe(el);
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = document.querySelector('.menu-button');
+            
+            if (!mobileMenu.contains(e.target) && !menuButton.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
         });
     </script>
 </body>
 </html>
-
