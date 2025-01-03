@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tripify - Travel Agency</title>
     <style>
-        /* Reset and variables */
         :root {
             --primary: #161616;
             --secondary: #4b5563;
             --accent: #8b9d90;
             --background: #f8f8f8;
             --white: #ffffff;
+            --nav-height: 70px;
         }
 
         * {
@@ -28,21 +28,27 @@
             overflow-x: hidden;
         }
 
-        /* Main container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
+        /* Enhanced Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Navigation */
-        .navbar {
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
-            position: relative;
-            z-index: 1000;
         }
 
         .logo {
@@ -69,50 +75,80 @@
             align-items: center;
         }
 
-        .contact-link {
+        .nav-links a {
             text-decoration: none;
             color: var(--primary);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .menu-button {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--secondary);
-            border-radius: 50px;
-            background: transparent;
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
             cursor: pointer;
+            padding: 0.5rem;
         }
 
-        /* Filter buttons */
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: var(--nav-height) auto 0;
+            padding: 2rem;
+        }
+
+        /* Enhanced Filters */
         .filters {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
         }
 
         .filter-btn {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 50px;
-            border: none;
+            border: 1px solid var(--secondary);
             background: var(--white);
             color: var(--primary);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
+        .filter-btn.active {
+            background: var(--accent);
+            color: var(--white);
+            border-color: var(--accent);
+        }
+
         .filter-btn:hover {
             background: var(--accent);
             color: var(--white);
+            border-color: var(--accent);
         }
 
-        /* Hero section */
+        /* Hero Section */
         .hero {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            padding: 2rem 0;
+            gap: 3rem;
+            margin: 3rem 0;
         }
 
         .hero-content {
@@ -121,124 +157,100 @@
             justify-content: center;
         }
 
-        .hero-title {
-            font-size: 3.5rem;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-
         .travel-agency {
             color: var(--secondary);
             font-size: 0.875rem;
             letter-spacing: 2px;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
         }
 
         .hero-description {
             color: var(--secondary);
             margin-bottom: 2rem;
             max-width: 400px;
+            line-height: 1.6;
         }
 
+        /* Interactive Buttons */
         .cta-buttons {
             display: flex;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .discover-btn {
-            padding: 0.75rem 1.5rem;
-            background: var(--accent);
-            color: var(--white);
-            border: none;
+        .discover-btn, .request-call {
+            padding: 1rem 2rem;
             border-radius: 50px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .discover-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
         }
 
         .request-call {
-            padding: 0.75rem 1.5rem;
             background: transparent;
-            border: none;
+            border: 1px solid var(--secondary);
             color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
-        /* Featured image section */
+        .discover-btn:hover, .request-call:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Featured Image */
         .featured-image {
             position: relative;
             border-radius: 20px;
             overflow: hidden;
             aspect-ratio: 16/9;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .featured-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .featured-image:hover img {
+            transform: scale(1.05);
         }
 
         .location-info {
             position: absolute;
             bottom: 2rem;
             left: 2rem;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1rem;
-            border-radius: 10px;
-        }
-
-        /* Carousel */
-        .carousel {
-            margin-top: 2rem;
-            position: relative;
-        }
-
-        .carousel-container {
-            display: flex;
-            gap: 1rem;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .carousel-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .carousel-item {
-            flex: 0 0 300px;
-            scroll-snap-align: start;
-            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
             border-radius: 15px;
-            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
         }
 
-        .carousel-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
+        .location-info h3 {
+            margin-bottom: 0.5rem;
         }
 
-        .carousel-nav {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
+        .featured-image:hover .location-info {
+            transform: translateY(-5px);
         }
 
-        .carousel-nav button {
-            background: var(--white);
-            border: none;
-            padding: 0.5rem;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        /* Mobile menu */
+        /* Enhanced Mobile Menu */
         .mobile-menu {
             position: fixed;
             top: 0;
@@ -247,12 +259,27 @@
             height: 100vh;
             background: var(--white);
             padding: 2rem;
-            transition: right 0.3s ease;
-            z-index: 999;
+            transition: transform 0.3s ease-in-out;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .mobile-menu.active {
-            right: 0;
+            transform: translateX(-100%);
+        }
+
+        .mobile-menu a {
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            padding: 1rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
         }
 
         .close-menu {
@@ -261,146 +288,171 @@
             right: 2rem;
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 2rem;
             cursor: pointer;
+            color: var(--primary);
         }
 
-        /* Responsive design */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .hero {
-                grid-template-columns: 1fr;
-            }
-
             .nav-links {
                 display: none;
             }
 
-            .hero-title {
-                font-size: 2.5rem;
+            .menu-button {
+                display: block;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
             }
 
             .filters {
-                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .cta-buttons {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <nav class="navbar">
+    <!-- Enhanced Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
             <a href="#" class="logo">Tripify</a>
             <div class="nav-links">
-                <a href="#" class="contact-link">Contact us</a>
-                <button class="menu-button" onclick="toggleMenu()">
-                    Menu
-                    <svg width="16" height="16" viewBox="0 0 16 16">
-                        <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                </button>
+                <a href="#home">Home</a>
+                <a href="#destinations">Destinations</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
             </div>
-        </nav>
+            <button class="menu-button" onclick="toggleMenu()">☰</button>
+        </div>
+    </nav>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" onclick="toggleMenu()">×</button>
+        <a href="#home" onclick="toggleMenu()">Home</a>
+        <a href="#destinations" onclick="toggleMenu()">Destinations</a>
+        <a href="#about" onclick="toggleMenu()">About</a>
+        <a href="#contact" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <div class="container">
+        <!-- Enhanced Filters -->
         <div class="filters">
-            <button class="filter-btn">Terrasse</button>
-            <button class="filter-btn">Bathroom</button>
-            <button class="filter-btn">Kitchen</button>
-            <button class="filter-btn">Bedroom</button>
+            <button class="filter-btn" onclick="toggleFilter(this)">Terrasse</button>
+            <button class="filter-btn" onclick="toggleFilter(this)">Bathroom</button>
+            <button class="filter-btn" onclick="toggleFilter(this)">Kitchen</button>
+            <button class="filter-btn" onclick="toggleFilter(this)">Bedroom</button>
         </div>
 
-        <main class="hero">
+        <!-- Hero Section -->
+        <section class="hero">
             <div class="hero-content">
                 <div class="travel-agency">TRAVEL AGENCY</div>
                 <h1 class="hero-title">Discover your dream place</h1>
                 <p class="hero-description">Plan and book your perfect trip with expert advice, destination information and inspiration from us!</p>
                 <div class="cta-buttons">
-                    <button class="discover-btn">
+                    <button class="discover-btn" onclick="handleDiscover()">
                         Discover now
-                        <svg width="16" height="16" viewBox="0 0 16 16">
-                            <path d="M1 8h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2"/>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <path d="M3 8h10m-4 4l4-4-4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                    <button class="request-call">
+                    <button class="request-call" onclick="handleCallRequest()">
                         Request a call
-                        <svg width="16" height="16" viewBox="0 0 16 16">
-                            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2"/>
-                            <path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="2"/>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <path d="M15 11v3a1 1 0 01-1 1H2a1 1 0 01-1-1v-3M8 12V4m0 0L4 8m4-4l4 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
                 </div>
             </div>
 
             <div class="featured-image">
-                <img src="/placeholder.svg?height=600&width=800" alt="Luxury resort view">
+                <img src="/placeholder.svg?height=600&width=800" alt="Sunrise Resort View">
                 <div class="location-info">
                     <h3>Sunrise Resort 5*</h3>
                     <p>Thailand, Phuket</p>
                 </div>
             </div>
-        </main>
-
-        <div class="carousel">
-            <div class="carousel-container">
-                <div class="carousel-item">
-                    <img src="/placeholder.svg?height=200&width=300" alt="Faroe Islands">
-                    <div class="location-info">
-                        <h4>Faroe Islands</h4>
-                        <p>Grand Hyatt Villas</p>
-                    </div>
-                </div>
-                <!-- Add more carousel items as needed -->
-            </div>
-            <div class="carousel-nav">
-                <button class="prev">←</button>
-                <span>01/08</span>
-                <button class="next">→</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="close-menu" onclick="toggleMenu()">×</button>
-        <div style="padding-top: 4rem;">
-            <a href="#" style="display: block; padding: 1rem 0;">Home</a>
-            <a href="#" style="display: block; padding: 1rem 0;">Destinations</a>
-            <a href="#" style="display: block; padding: 1rem 0;">About Us</a>
-            <a href="#" style="display: block; padding: 1rem 0;">Contact</a>
-        </div>
+        </section>
     </div>
 
     <script>
-        // Hamburger menu functionality
+        // Enhanced Mobile Menu
         function toggleMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
             mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
         }
 
-        // Carousel functionality
-        const carousel = document.querySelector('.carousel-container');
-        const prevBtn = document.querySelector('.prev');
-        const nextBtn = document.querySelector('.next');
+        // Filter Functionality
+        function toggleFilter(button) {
+            button.classList.toggle('active');
+        }
 
-        prevBtn.addEventListener('click', () => {
-            carousel.scrollBy({
-                left: -300,
-                behavior: 'smooth'
+        // CTA Button Handlers
+        function handleDiscover() {
+            console.log('Discovering destinations...');
+            // Add your discovery functionality here
+            alert('Discovering new destinations for you!');
+        }
+
+        function handleCallRequest() {
+            console.log('Processing call request...');
+            // Add your call request functionality here
+            alert('Thank you! Our team will contact you shortly.');
+        }
+
+        // Smooth Scroll for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         });
 
-        nextBtn.addEventListener('click', () => {
-            carousel.scrollBy({
-                left: 300,
-                behavior: 'smooth'
-            });
-        });
-
-        // Close mobile menu when clicking outside
+        // Close Mobile Menu When Clicking Outside
         document.addEventListener('click', (e) => {
             const mobileMenu = document.getElementById('mobileMenu');
             const menuButton = document.querySelector('.menu-button');
             
-            if (!mobileMenu.contains(e.target) && !menuButton.contains(e.target)) {
-                mobileMenu.classList.remove('active');
+            if (!mobileMenu.contains(e.target) && 
+                !menuButton.contains(e.target) && 
+                mobileMenu.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Initialize Active States
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstFilter = document.querySelector('.filter-btn');
+            if (firstFilter) {
+                firstFilter.classList.add('active');
             }
         });
     </script>
