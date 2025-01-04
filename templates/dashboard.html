@@ -8,8 +8,167 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=DM+Serif+Text:ital@0;1&family=Fugaz+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     
     <title>Dashboard</title>
+    <style>
+
+        .container {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        
+        .container {
+            max-width: 800px;
+            margin-top: 5rem;
+            margin: 5rem auto;
+            padding: 2rem;
+            background: white;
+            border: 1px solid #b4b4b4;
+            border-radius: 4px;
+        }
+
+        .profile-header {
+            border-bottom: 1px solid #b4b4b4;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header h1 {
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .info-group {
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid #e6e5e5;
+        }
+
+        .info-label {
+            font-weight: 500;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #666;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .info-label i {
+            color: #888;
+            width: 16px;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #b4b4b4;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            background: white;
+            color: #333;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background: #f8f8f8;
+            border-color: #d0d0d0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            background: #f0f0f0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
+            transform: translateY(0);
+        }
+
+        .btn i {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .btn-primary {
+            background: #f0f0f0;
+            border-color: #d0d0d0;
+        }
+
+        .btn-primary:hover {
+            background: #e8e8e8;
+        }
+
+        .btn-danger {
+            color: #d32f2f;
+            border-color: #d32f2f;
+        }
+
+        .btn-danger:hover {
+            background: #fff5f5;
+            color: #b71c1c;
+            border-color: #b71c1c;
+        }
+
+        .btn-danger i {
+            color: #d32f2f;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="loader" id="loader">
@@ -58,29 +217,81 @@
             </ul>
         </div>
     </header>
-    <main class="content">
-        <section class="summary">
-            <h1 class="h1">Profil von {{ user.name }}</h1>
-            <p><strong>E-Mail:</strong> {{ user.email }}</p>
-            <p><strong>Telefon:</strong> {{ user.tele }}</p>
-            <p><strong>Mitgliedschaftstyp:</strong> {{ user.typ }}</p>
-            <p><strong>Rolle:</strong> {{ user.role }}</p>
-            <p><strong>Zusätzliche Informationen:</strong> {{ user.info }}</p><br><br>
-            <form action="{{ url_for('delete_account') }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
-                <button type="submit" class="delete-button">Konto löschen</button>
-            </form>
-        
-        
-            <!-- Andere Buttons -->
-            <a href="/" class="button">Zurück zur Startseite</a>
-            <a class="button" href="{{ url_for('logout') }}">Logout</a>
-            <a class="btn button" href="{{ url_for('forgot_password') }}">Passwort ändern</a>
-            <a class="btn button" href="{{ url_for('edit_account') }}">Account bearbeiten</a>
 
-        </section>
-        
-    
-    </main>
+
+    <div class="container">
+        <div class="profile-header">
+            <h1><i class="fas fa-user-circle"></i>Profil von {{ user.name }}</h1>
+        </div>
+
+        <div class="info-group">
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-envelope"></i>
+                    E-Mail:
+                </div>
+                <div class="info-value">{{ user.email }}</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-phone"></i>
+                    Telefon:
+                </div>
+                <div class="info-value">{{ user.tele }}</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-users"></i>
+                    Mitgliedschaftstyp:
+                </div>
+                <div class="info-value">{{ user.typ }}</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-user-shield"></i>
+                    Rolle:
+                </div>
+                <div class="info-value">{{ user.role }}</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-info-circle"></i>
+                    Info:
+                </div>
+                <div class="info-value">{{ user.info }}</div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                Zurück zur Startseite
+            </a>
+            
+            <a href="{{ url_for('forgot_password') }}" class="btn" >
+                <i class="fas fa-key"></i>
+                Passwort ändern
+            </a>
+            
+            <a href="{{ url_for('edit_account') }}" class="btn">
+                <i class="fas fa-edit"></i>
+                Account bearbeiten
+            </a>
+            
+            <a href="{{ url_for('logout') }}" class="btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+
+            <form action="{{ url_for('delete_account') }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
+                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>Konto löschen</button>
+            </form>
+        </div>
+    </div>
 
     <script>
 
