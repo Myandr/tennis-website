@@ -82,6 +82,18 @@
             }
         });
         
+        // Schließen des Menüs bei Klick auf einen Menü-Link
+const menuLinks = menu.querySelectorAll('a');
+menuLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        menu.classList.remove('show');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('active');
+    });
+});
+
+
+        
         window.onscroll = function() {
             const scrollToTopButton = document.getElementById("scrollToTop");
             if (window.scrollY > 300) { // Button ab 300px sichtbar machen
