@@ -271,13 +271,13 @@ def verify():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = request.form['user']
+        email = request.form['email']
         password = request.form['password']
         
-        user = User.query.filter_by(user=user).first()
-        if user and check_password_hash(user.password_hash, password):
-            if user.is_verified:
-                session['user_id'] = user.id
+        email = User.query.filter_by(email=email).first()
+        if email and check_password_hash(email.password_hash, password):
+            if email.is_verified:
+                session['user_id'] = email.id
                 flash('Logged in successfully')
                 return redirect(url_for('dashboard'))
             else:
