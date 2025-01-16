@@ -466,9 +466,9 @@ def home():
     termine = Termin.query.all()  # Alle Termine aus der DB abfragen
 
     if 'user_id' in session:
-        return render_template('test-9.html', logged_in=True, username=session['user_id'], termine=termine, is_admin=is_admin, about_texts=about_texts, images=images)
+        return render_template('index2.html', logged_in=True, username=session['user_id'], termine=termine, is_admin=is_admin, about_texts=about_texts, images=images)
     
-    return render_template('test-9.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images)
+    return render_template('index2.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images)
 
 
 
