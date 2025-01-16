@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-    <title>Hardter TV</title>
+    <title>VOUS Church</title>
     <style>
         * {
             margin: 0;
@@ -54,8 +54,17 @@
             font-weight: 500;
         }
 
+        .menu-button {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
         .hamburger {
             cursor: pointer;
+            z-index: 1001;
         }
 
         .hamburger input {
@@ -92,6 +101,43 @@
             stroke-dasharray: 20 300;
             stroke-dashoffset: -32.42;
         }
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.menu.open {
+  display: flex;
+}
+
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  margin: 20px 0;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #333;
+  font-size: 2rem;
+  font-weight: bold;
+  transition: color 0.3s, transform 0.3s;
+}
+
 
         /* Main Content */
         .main-content {
@@ -738,16 +784,28 @@ iframe {
             <a href="/schedule">TERMINE</a>
             <a href="/coaches">TRAINER</a>
         </div>
-        <div id="menu-button" class="hamburger">
+    
+        <div id="hamburger" class="hamburger">
             <label class="hamburger">
-            <input type="checkbox">
-            <svg viewBox="0 0 32 32">
-                <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
-                <path class="line" d="M7 16 27 16"></path>
-            </svg>
+                <input type="checkbox" id="menuToggle">
+                <svg viewBox="0 0 32 32">
+                    <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+                    <path class="line" d="M7 16 27 16"></path>
+                </svg>
             </label>
         </div>
+    
+        <div class="menu" id="menu">
+            <ul>
+                <li><a href="#home">STARTSEITE</a></li>
+                <li><a href="#about">ÜBER UNS</a></li>
+                <li><a href="#contact">KONTAKT</a></li>
+                <li><a href="/schedule">TERMINE</a></li>
+                <li><a href="/coaches">TRAINER</a></li>
+            </ul>
+        </div>
     </nav>
+    
 
     <main class="main-content" id="home">
         <div class="sermon-info">
@@ -755,7 +813,7 @@ iframe {
             <span class="span"></span>
             <span>SO 5.14.2023</span>
         </div>
-        <h1 class="sermon-title">Hardter TV Tennis</h1>
+        <h1 class="sermon-title">Willkommen beim Hardter Tennisverein</h1>
         <div class="video-container">
             <!-- Video-Placeholder -->
         </div>
@@ -960,34 +1018,20 @@ iframe {
 </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButton = document.getElementById('menuButton');
-            const navLinks = document.getElementById('navLinks');
+const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+const navLinks = document.getElementById('navLinks');
+const menuToggle = document.getElementById('menuToggle');
 
-            menuButton.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
-                menuButton.textContent = navLinks.classList.contains('active') ? 'SCHLIESSEN' : 'MENÜ';
-            });
+menuToggle.addEventListener('change', () => {
+  if (menuToggle.checked) {
+    menu.classList.add('open');
+  } else {
+    menu.classList.remove('open');
+    navLinks.style.display = 'flex'; // Optional: Zeigt die Navigation wieder an.
+  }
+});
 
-            // Menü schließen, wenn außerhalb geklickt wird
-            document.addEventListener('click', function(event) {
-                const isClickInsideNav = navLinks.contains(event.target);
-                const isClickOnMenuButton = menuButton.contains(event.target);
-
-                if (!isClickInsideNav && !isClickOnMenuButton && navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                    menuButton.textContent = 'MENÜ';
-                }
-            });
-
-            // Menü schließen bei Fenstergrößenänderung
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                    menuButton.textContent = 'MENÜ';
-                }
-            });
-        });
     </script>
 </body>
 </html>
