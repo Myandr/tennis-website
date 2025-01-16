@@ -220,6 +220,11 @@ body {
   </div>
 
   <div class="flex-column">
+    <label for="tele">Telephone:</label>
+  </div>
+  <input  class="inputForm" type="tel" id="tele" name="tele"><br>
+
+  <div class="flex-column">
     <label for="type">Mitgliedschaft </label>
   </div>
   <select class="inputForm" id="typ" name="typ" required>
@@ -250,7 +255,7 @@ body {
     <input class="inputForm" type="password" id="admin_password" name="admin_password"><br>
 </div>
 
-  <input class="button-submit" type="submit" value="Sign Up">
+  <button class="button-submit">Sign Up</button>
   <p class="p">Already have a account? <span class="span"><a href="{{ url_for('login') }}">Login</a></span></p>
   <div class="flex-row">
     <button class="btn google">
