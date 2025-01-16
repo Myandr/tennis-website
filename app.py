@@ -245,7 +245,7 @@ def signup():
         flash('Please check your email for verification code')
         return redirect(url_for('verify'))
     
-    return render_template('signup1.html')
+    return render_template('signup.html')
 
 
 @app.route('/verify', methods=['GET', 'POST'])
