@@ -271,10 +271,10 @@ def verify():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
+        user = request.form['user']
         password = request.form['password']
         
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(user=user).first()
         if user and check_password_hash(user.password_hash, password):
             if user.is_verified:
                 session['user_id'] = user.id
@@ -284,7 +284,7 @@ def login():
                 flash('Please verify your email first')
                 return redirect(url_for('verify'))
         else:
-            flash('Invalid email or password', 'info')
+            flash('Invalid name or password', 'info')
     
     return render_template('login.html')
 
