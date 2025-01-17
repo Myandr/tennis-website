@@ -1202,6 +1202,62 @@ menuLinks.forEach(link => {
   });
 });
 
+        let dropArea = document.getElementById('drop-area');
+let fileInput = document.getElementById('fileElem');
+let preview = document.getElementById('preview');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    dropArea.classList.add('highlight');
+}
+
+function unhighlight(e) {
+    dropArea.classList.remove('highlight');
+}
+
+dropArea.addEventListener('drop', handleDrop, false);
+fileInput.addEventListener('change', handleFiles, false);
+
+function handleDrop(e) {
+    let dt = e.dataTransfer;
+    let files = dt.files;
+
+    handleFiles(files);
+}
+
+function handleFiles(files) {
+    files = files.length ? files : this.files;
+    [...files].forEach(previewFile);
+}
+
+function previewFile(file) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function() {
+        let img = document.createElement('img');
+        img.src = reader.result;
+        preview.innerHTML = '';
+        preview.appendChild(img);
+    }
+}
+
+
 
     </script>
 </body>
