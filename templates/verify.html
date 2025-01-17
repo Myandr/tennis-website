@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifizieren</title>
+    <link rel="stylesheet" type="text/css" href="forms.css">
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="dot"></div>
+            <h1 class="title">Konto verifizieren</h1>
+        </div>
+        <p class="subtitle">Verifizieren Sie Ihr Konto mit dem Code, der per E-Mail gesendet wurde</p>
+        <form class="form">
+            <div class="input-group">
+                <input  name="email" type="email" class="input" id="email" placeholder=" " required>
+                <label for="email" class="label">E-Mail</label>
+            </div>
+            <div class="input-group">
+                <input type="password" class="input" id="code" name="code" placeholder=" " required>
+                <label for="code" class="label">Passwort</label>
+            </div>
+            <button type="submit" value="Verify" class="submit">Absenden</button>         
+        </form>
+        <p class="footer">
+          Keinen Code bekommen? <a href="{{ url_for('resend_verification') }}">Neuen code senden</a>
+      </p>
+    </div>
+</body>
+</html>
