@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -23,6 +23,7 @@ app.config['MAIL_USERNAME'] = 'myandr180709@gmail.com'  # Deine Gmail-Adresse
 app.config['MAIL_PASSWORD'] = 'tkkl szsh ybkj vprx'  # Dein App-Passwort
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     "connect_args": {
         "sslmode": "require"
@@ -37,6 +38,7 @@ migrate = Migrate(app, db)
 
 
 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
 
@@ -82,6 +84,13 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(100), nullable=False)
 
+class ContentItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_filename = db.Column(db.String(200), nullable=False)
+    heading = db.Column(db.String(100), nullable=False)
+    text1 = db.Column(db.Text, nullable=False)
+    text2 = db.Column(db.Text, nullable=False)
+
 # Erstellen Sie die Tabellen in der Datenbank
 with app.app_context():
     db.create_all()
@@ -90,6 +99,52 @@ with app.app_context():
 
 
 #ADD
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/add', methods=['POST'])
+def add_content():
+    if 'image' not in request.files:
+        return redirect(url_for('home'))
+    
+    file = request.files['image']
+    
+    if file.filename == '':
+        return redirect(url_for('home'))
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        new_item = ContentItem(
+            image_filename=filename,
+            heading=request.form['heading'],
+            text1=request.form['text1'],
+            text2=request.form['text2']
+        )
+        db.session.add(new_item)
+        db.session.commit()
+    
+    return redirect(url_for('home'))
+
+@app.route('/delete/<int:item_id>')
+def delete_content(item_id):
+    item = ContentItem.query.get_or_404(item_id)
+    if item.image_filename:
+        try:
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], item.image_filename))
+        except OSError:
+            pass  # If file doesn't exist, just continue
+    db.session.delete(item)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
@@ -445,6 +500,8 @@ def edit_account():
 def home():
     images = Image.query.all()
     about_texts = AboutText.query.all()
+    content_items = ContentItem.query.all()
+
 
     # Überprüfen, ob der Benutzer in der Session eingeloggt ist
     if 'user_id' in session:
@@ -464,7 +521,7 @@ def home():
     if 'user_id' in session:
         return render_template('index2.html', logged_in=True, username=session['user_id'], termine=termine, is_admin=is_admin, about_texts=about_texts, images=images)
     
-    return render_template('index2.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images)
+    return render_template('index2.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items)
 
 
 
@@ -560,4 +617,5 @@ def schule():
 
 
 if __name__ == '__main__':
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     app.run(host='0.0.0.0', port=5000, debug=True)
