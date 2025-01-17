@@ -19,17 +19,19 @@
 </head>
 <body>
     <div class="card">
-      <div class="error-message">
-        <div class="error-icon">!</div>
+      
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul>
                 {% for message in messages %}
-                    <li>{{ message }}</li>
+                <div class="error-message">
+                <div class="error-icon">!</div>
+                    <p>{{ message }}</p>
+                </div>                    
                 {% endfor %}
             </ul>
         {% endif %}
-        {% endwith %}    </div>
+        {% endwith %}    
         <div class="header">
             <div class="dot"></div>
             <h1 class="title">Registrieren</h1>
