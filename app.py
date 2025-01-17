@@ -106,15 +106,18 @@ git config --global user.email "paulspengler09@gmail.com"
 
 def add_file_to_git(filename):
     try:
-        # Ändere den Pfad in das Verzeichnis deines Repositories
-        repo_path = os.path.abspath('static/uploads')
-        
+        # Git-Konfiguration
+        subprocess.run(["git", "config", "--global", "user.name", "Myandr"], check=True)
+        subprocess.run(["git", "config", "--global", "user.email", "paulspengler09@gmail.com"], check=True)
+
         # Git-Befehle ausführen
-        subprocess.run(['git', '-C', repo_path, 'add', filename], check=True)
-        subprocess.run(['git', '-C', repo_path, 'commit', '-m', f'Added {filename}'], check=True)
-        subprocess.run(['git', '-C', repo_path, 'push'], check=True)
+        subprocess.run(["git", "-C", "/opt/render/project/src/", "add", "static/uploads/"], check=True)
+        subprocess.run(["git", "-C", "/opt/render/project/src/", "commit", "-m", "Added new file"], check=True)
+        subprocess.run(["git", "-C", "/opt/render/project/src/", "push"], check=True)
+
+        print("Git commit and push successful!")
     except subprocess.CalledProcessError as e:
-        print(f"Git-Befehl fehlgeschlagen: {e}")
+        print(f"Error during Git operation: {e}")
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
