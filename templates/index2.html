@@ -1129,7 +1129,6 @@ iframe {
                     <div class="location-address">17801 Sportstraße, Hardt, Deutschland</div>
                 </div>
             </div>
-            <div class="cm-content-container">
                 {% for item in content_items %}
                     <div class="location-card">
                         <img src="{{ url_for('uploaded_file', filename=item.image_filename) }}" alt="Content Image">
@@ -1144,7 +1143,6 @@ iframe {
                         {% endif %}
                     </div>
                 {% endfor %}
-            </div>
         </div>
       
       </section>
