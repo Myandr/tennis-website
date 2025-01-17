@@ -138,7 +138,7 @@ def delete_content(item_id):
             pass  # If file doesn't exist, just continue
     db.session.delete(item)
     db.session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
