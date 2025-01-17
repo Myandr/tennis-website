@@ -105,12 +105,9 @@
     border: 1px solid #c0c0c0;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: none; /* Standardmäßig ausgeblendet */
+    display: block; /* Standardmäßig ausgeblendet */
 }
 
-.termin-form.hidden {
-    display: none;
-}
 
 .termin-form h3 {
     text-align: center;
@@ -1256,9 +1253,6 @@ iframe {
         </div>
 
                     {% if is_admin %}
-            <div class="add-button-container">
-                <button id="toggle-form-button">+</button>
-            </div>
         
             <!-- Formular zum Hinzufügen eines neuen Termins -->
             <form class="termin-form hidden" action="/add_termin" method="POST">
