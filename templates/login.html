@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/forms.css">
+</head>
+<body>
+    <div class="card">
+      <div class="error-message">
+        <div class="error-icon">!</div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}    </div>
+        <div class="header">
+            <div class="dot"></div>
+            <h1 class="title">Anmelden</h1>
+        </div>
+        <p class="subtitle">Melde dich jetzt an und sieh dein Konto</p>
+        <form class="form" method="POST">
+            <div class="input-group">
+                <input type="email" class="input" id="email" name="email" placeholder=" " required>
+                <label for="email" class="label">E-Mail</label>
+            </div>
+            <div class="input-group">
+                <input type="password" class="input" id="password" name="name" placeholder=" " required>
+                <label for="password" class="label">Passwort</label>
+            </div>
+            <button type="submit" class="submit">Absenden</button>
+        </form>
+        <p class="footer">
+            Du hast noch kein Konto? <a href="{{ url_for('signup') }}">Sign Up</a>
+        </p>
+    </div>
+</body>
+</html>
