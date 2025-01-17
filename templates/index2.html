@@ -1052,6 +1052,32 @@ iframe {
                     <div class="about-text">
                         <p>Unser Tennisverein besteht aus einer engagierten Gemeinschaft von Spielern aller Altersgruppen. Wir bieten regelmäßige Trainings, Turniere und ein aktives Vereinsleben. Unser Ziel ist es, Tennis für alle zugänglich zu machen und ein Umfeld zu schaffen, in dem sich jeder verbessern kann.</p>
                         <p>Wir legen besonderen Wert auf Teamgeist, Fairplay und Spaß am Spiel. Kommen Sie vorbei und machen Sie mit!</p>
+                            {% for text in about_texts %}
+                                {% if text.type == "headline" %}
+                                    <br><h3>{{ text.content }}</h3><br>
+                                {% else %}
+                                    <p>{{ text.content }}</p>
+                                {% endif %}
+                                
+                                {% if is_admin %}
+                                <form action="/delete_about_text/{{ text.id }}" method="POST" style="display: inline;">
+                                    <button class="delete" type="submit" onclick="return confirm('Möchten Sie diesen Text wirklich löschen?')">Löschen</button>
+                                </form>
+                                {% endif %}
+                            {% endfor %}
+                        
+                        {% if is_admin %}                     
+                        <form class="about-form hidden" action="/add_about_text" method="POST">
+                            <h3>Text hinzufügen</h3>
+                            <label for="text-type">Texttyp:</label>
+                            <select id="text-type" name="text_type" required>
+                                <option value="normal">Normaler Text</option>
+                            </select>
+                            <br><br><label for="about-content">Textinhalt:</label>
+                            <textarea id="about-content" name="about_content" rows="10" required></textarea>
+                            <button type="submit">Hinzufügen</button>
+                        </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
