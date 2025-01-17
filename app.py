@@ -104,7 +104,7 @@ with app.app_context():
 def add_file_to_git(filename):
     try:
         # Ändere den Pfad in das Verzeichnis deines Repositories
-        repo_path = os.path.abspath('https://github.com/Myandr/tennis-website/tree/a3265f8b5cad76687103627c48ad90eb5eac0141/static/uploads')
+        repo_path = os.path.abspath('static/uploads')
         
         # Git-Befehle ausführen
         subprocess.run(['git', '-C', repo_path, 'add', filename], check=True)
