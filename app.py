@@ -100,6 +100,18 @@ with app.app_context():
 
 #ADD
 
+def add_file_to_git(filename):
+    try:
+        # Ändere den Pfad in das Verzeichnis deines Repositories
+        repo_path = os.path.abspath('https://github.com/Myandr/tennis-website/tree/a3265f8b5cad76687103627c48ad90eb5eac0141/static/uploads')
+        
+        # Git-Befehle ausführen
+        subprocess.run(['git', '-C', repo_path, 'add', filename], check=True)
+        subprocess.run(['git', '-C', repo_path, 'commit', '-m', f'Added {filename}'], check=True)
+        subprocess.run(['git', '-C', repo_path, 'push'], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Git-Befehl fehlgeschlagen: {e}")
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -116,6 +128,8 @@ def add_content():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        add_file_to_git(filename)
         
         new_item = ContentItem(
             image_filename=filename,
