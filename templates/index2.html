@@ -963,6 +963,7 @@ iframe {
     </section>
 
     <section class="locations-section">
+        {% if is_admin %}                     
         <form class="cm-form" action="{{ url_for('add_content') }}" method="post" enctype="multipart/form-data">
             <div id="cm-drop-area" class="cm-drop-area">
                 <input type="file" name="image" id="cm-fileElem" class="cm-file-input" accept="image/*" required>
@@ -975,6 +976,7 @@ iframe {
             <textarea name="text2" class="cm-textarea" placeholder="Text 2" required></textarea>
             <button type="submit" class="cm-button">Add Content</button>
         </form>
+        {% endif %}
         <div class="locations-header">
             <h2>Besuche unseren Verein</h2>
             <p>Besuche uns jeden Sonntag an einem unserer Standorte!</p>
@@ -1027,7 +1029,9 @@ iframe {
                             <p>{{ item.text1 }}</p>
                             <p>{{ item.text2 }}</p>
                         </div>
-                        <a href="{{ url_for('delete_content', item_id=item.id) }}" class="cm-delete-btn">Delete</a>
+                        {% if is_admin %}                        
+                            <a href="{{ url_for('delete_content', item_id=item.id) }}" class="cm-delete-btn">Delete</a>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
@@ -1050,6 +1054,32 @@ iframe {
                     <div class="about-text">
                         <p>Unser Tennisverein besteht aus einer engagierten Gemeinschaft von Spielern aller Altersgruppen. Wir bieten regelmäßige Trainings, Turniere und ein aktives Vereinsleben. Unser Ziel ist es, Tennis für alle zugänglich zu machen und ein Umfeld zu schaffen, in dem sich jeder verbessern kann.</p>
                         <p>Wir legen besonderen Wert auf Teamgeist, Fairplay und Spaß am Spiel. Kommen Sie vorbei und machen Sie mit!</p>
+                            {% for text in about_texts %}
+                                {% if text.type == "headline" %}
+                                    <br><h3>{{ text.content }}</h3><br>
+                                {% else %}
+                                    <p>{{ text.content }}</p>
+                                {% endif %}
+                                
+                                {% if is_admin %}
+                                <form action="/delete_about_text/{{ text.id }}" method="POST" style="display: inline;">
+                                    <button class="delete" type="submit" onclick="return confirm('Möchten Sie diesen Text wirklich löschen?')">Löschen</button>
+                                </form>
+                                {% endif %}
+                            {% endfor %}
+                        
+                        {% if is_admin %}                     
+                        <form class="about-form hidden" action="/add_about_text" method="POST">
+                            <h3>Text hinzufügen</h3>
+                            <label for="text-type">Texttyp:</label>
+                            <select id="text-type" name="text_type" required>
+                                <option value="normal">Normaler Text</option>
+                            </select>
+                            <br><br><label for="about-content">Textinhalt:</label>
+                            <textarea id="about-content" name="about_content" rows="10" required></textarea>
+                            <button type="submit">Hinzufügen</button>
+                        </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -1067,32 +1097,46 @@ iframe {
                 <table class="clean-table">
                     <thead>
                         <tr>
-                            <th>Veranstaltung</th>
                             <th>Datum</th>
+                            <th>Veranstaltung</th>
+                            <th>Uhrzeit</th>
                             <th>Ort</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td>21. März 2025</td>
                             <td>Tennis-Turnier</td>
-                            <td>Samstag, 21. März 2025</td>
+                            <td>10:20 Uhr</td>
                             <td>Hardter Tennisplatz</td>
                         </tr>
                         <tr>
+                            <td>21. März 2025</td>
                             <td>Training für Anfänger</td>
-                            <td>Sonntag, 22. März 2025</td>
+                            <td>10:20 Uhr</td>
                             <td>Clubhaus Hardt</td>
                         </tr>
                         <tr>
+                            <td>21. März 2025</td>
                             <td>Jugend-Turnier</td>
-                            <td>Samstag, 28. März 2025</td>
+                            <td>10:20 Uhr</td>
                             <td>Tennis im Park</td>
                         </tr>
+                        {% for termin in termine %}
                         <tr>
-                            <td>Sommerfest</td>
-                            <td>Sonntag, 5. Juli 2025</td>
-                            <td>Tennisgarten Hardt</td>
-                        </tr>
+                        <td>{{ termin.datum }}</td>
+                        <td>{{ termin.veranstaltung }}</td>
+                        <td>{{ termin.uhrzeit }}</td>
+                        <td>{{ termin.ort }}</td>
+                        {% if is_admin %}
+                        <td>
+                            <form action="/delete_termin/{{ termin.id }}" method="POST" style="display: inline;">
+                                <button class="delete" type="submit" onclick="return confirm('Möchten Sie diesen Termin wirklich löschen?')">Löschen</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
