@@ -917,6 +917,125 @@ iframe {
             object-fit: contain;
         }
 
+            .trainer-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .trainer-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .trainer-image {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .trainer-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .trainer-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 10px;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .trainer-card:hover .trainer-overlay {
+        transform: translateY(0);
+    }
+
+    .trainer-info {
+        padding: 20px;
+    }
+
+    .trainer-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .trainer-title {
+        color: #666;
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+
+    .trainer-description {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    /* News Section Styles */
+    .news-card {
+        display: flex;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .news-image {
+        flex: 1;
+        max-width: 200px;
+    }
+
+    .news-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .news-content {
+        flex: 2;
+        padding: 20px;
+    }
+
+    .news-date {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .news-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .news-excerpt {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+
+    .read-more {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: #000;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .read-more:hover {
+        background-color: #333;
+    }
+
   @media screen and (max-width: 600px) {
     .clean-table {
       border: 0;
@@ -1280,37 +1399,50 @@ iframe {
             {% endif %}
     </section>
 
-    <!-- ... (previous code remains unchanged) ... -->
-
-<section class="locations-section" id="trainer">
+    <section class="locations-section" id="trainer">
     <div class="locations-header">
         <h2>Unsere Trainer</h2>
         <p>Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen</p>
         <a href="#" class="learn-more">Alle Trainer ansehen →</a>
     </div>
     <div class="locations-grid">
-        <div class="location-card">
-            <img src="https://cdn.pixabay.com/photo/2017/08/07/14/02/man-2604149_960_720.jpg" alt="Trainer 1">
-            <div class="location-info">
-                <h3>Max Mustermann</h3>
-                <div class="location-times">Haupttrainer</div>
-                <div class="location-address">15 Jahre Erfahrung</div>
+        <div class="trainer-card">
+            <div class="trainer-image">
+                <img src="https://cdn.pixabay.com/photo/2017/08/07/14/02/man-2604149_960_720.jpg" alt="Max Mustermann">
+                <div class="trainer-overlay">
+                    <p>"Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."</p>
+                </div>
+            </div>
+            <div class="trainer-info">
+                <h3 class="trainer-name">Max Mustermann</h3>
+                <div class="trainer-title">Haupttrainer</div>
+                <p class="trainer-description">Mit 15 Jahren Erfahrung bringt Max eine Fülle von Wissen und Leidenschaft in jede Trainingseinheit ein. Spezialisiert auf Fortgeschrittene und Wettkampfspieler.</p>
             </div>
         </div>
-        <div class="location-card">
-            <img src="https://cdn.pixabay.com/photo/2017/08/06/12/52/woman-2592247_960_720.jpg" alt="Trainer 2">
-            <div class="location-info">
-                <h3>Anna Schmidt</h3>
-                <div class="location-times">Jugendtrainerin</div>
-                <div class="location-address">10 Jahre Erfahrung</div>
+        <div class="trainer-card">
+            <div class="trainer-image">
+                <img src="https://cdn.pixabay.com/photo/2017/08/06/12/52/woman-2592247_960_720.jpg" alt="Anna Schmidt">
+                <div class="trainer-overlay">
+                    <p>"Jeder Schlag ist eine Chance, besser zu werden."</p>
+                </div>
+            </div>
+            <div class="trainer-info">
+                <h3 class="trainer-name">Anna Schmidt</h3>
+                <div class="trainer-title">Jugendtrainerin</div>
+                <p class="trainer-description">Anna hat eine besondere Gabe, junge Talente zu fördern. In ihren 10 Jahren als Trainerin hat sie zahlreiche Jugendspieler zu Erfolgen geführt.</p>
             </div>
         </div>
-        <div class="location-card">
-            <img src="https://cdn.pixabay.com/photo/2015/07/02/10/22/training-828726_960_720.jpg" alt="Trainer 3">
-            <div class="location-info">
-                <h3>Thomas Weber</h3>
-                <div class="location-times">Leistungstrainer</div>
-                <div class="location-address">20 Jahre Erfahrung</div>
+        <div class="trainer-card">
+            <div class="trainer-image">
+                <img src="https://cdn.pixabay.com/photo/2015/07/02/10/22/training-828726_960_720.jpg" alt="Thomas Weber">
+                <div class="trainer-overlay">
+                    <p>"Technik ist wichtig, aber mentale Stärke gewinnt Matches."</p>
+                </div>
+            </div>
+            <div class="trainer-info">
+                <h3 class="trainer-name">Thomas Weber</h3>
+                <div class="trainer-title">Leistungstrainer</div>
+                <p class="trainer-description">Thomas' 20-jährige Erfahrung im Leistungssport macht ihn zum Experten für Spieler, die ihre Fähigkeiten auf ein neues Level bringen wollen.</p>
             </div>
         </div>
     </div>
@@ -1323,34 +1455,41 @@ iframe {
         <a href="#" class="learn-more">Alle Neuigkeiten ansehen →</a>
     </div>
     <div class="locations-grid">
-        <div class="location-card">
-            <img src="https://cdn.pixabay.com/photo/2020/04/08/19/04/tennis-5018589_960_720.jpg" alt="News 1">
-            <div class="location-info">
-                <h3>Neuer Tennisplatz eröffnet</h3>
-                <div class="location-times">15. Mai 2025</div>
-                <div class="location-address">Unser Verein freut sich über einen neuen, modernen Tennisplatz.</div>
+        <div class="news-card">
+            <div class="news-image">
+                <img src="https://cdn.pixabay.com/photo/2020/04/08/19/04/tennis-5018589_960_720.jpg" alt="Neuer Tennisplatz">
+            </div>
+            <div class="news-content">
+                <div class="news-date">15. Mai 2025</div>
+                <h3 class="news-title">Neuer Tennisplatz eröffnet</h3>
+                <p class="news-excerpt">Unser Verein freut sich, die Eröffnung eines brandneuen, state-of-the-art Tennisplatzes bekannt zu geben. Der Platz bietet optimale Bedingungen für Spieler aller Niveaus.</p>
+                <a href="#" class="read-more">Weiterlesen</a>
             </div>
         </div>
-        <div class="location-card">
-            <img src="https://cdn.pixabay.com/photo/2017/08/10/14/02/tennis-2623129_960_720.jpg" alt="News 2">
-            <div class="location-info">
-                <h3>Jugendturnier ein voller Erfolg</h3>
-                <div class="location-times">2. Juni 2025</div>
-                <div class="location-address">Über 50 Jugendliche nahmen am diesjährigen Sommerturnier teil.</div>
+        <div class="news-card">
+            <div class="news-image">
+                <img src="https://cdn.pixabay.com/photo/2017/08/10/14/02/tennis-2623129_960_720.jpg" alt="Jugendturnier">
+            </div>
+            <div class="news-content">
+                <div class="news-date">2. Juni 2025</div>
+                <h3 class="news-title">Jugendturnier ein voller Erfolg</h3>
+                <p class="news-excerpt">Das diesjährige Sommerturnier für Jugendliche war ein Rekorderfolg. Über 50 junge Talente zeigten ihr Können und begeisterten Zuschauer und Trainer gleichermaßen.</p>
+                <a href="#" class="read-more">Weiterlesen</a>
             </div>
         </div>
-        <div class="location-card">
-            <img src="https://cdn.pixabay.com/photo/2016/09/15/15/27/tennis-court-1671852_960_720.jpg" alt="News 3">
-            <div class="location-info">
-                <h3>Neue Trainingszeiten ab Juli</h3>
-                <div class="location-times">20. Juni 2025</div>
-                <div class="location-address">Ab Juli bieten wir erweiterte Trainingszeiten für alle Altersgruppen an.</div>
+        <div class="news-card">
+            <div class="news-image">
+                <img src="https://cdn.pixabay.com/photo/2016/09/15/15/27/tennis-court-1671852_960_720.jpg" alt="Neue Trainingszeiten">
+            </div>
+            <div class="news-content">
+                <div class="news-date">20. Juni 2025</div>
+                <h3 class="news-title">Neue Trainingszeiten ab Juli</h3>
+                <p class="news-excerpt">Um allen Mitgliedern gerecht zu werden, bieten wir ab Juli erweiterte Trainingszeiten an. Dies umfasst auch neue Früh- und Abendkurse für Berufstätige.</p>
+                <a href="#" class="read-more">Weiterlesen</a>
             </div>
         </div>
     </div>
 </section>
-
-<!-- ... (rest of the code remains unchanged) ... -->
 
 
 
