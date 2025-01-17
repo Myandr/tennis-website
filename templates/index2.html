@@ -1141,6 +1141,27 @@ iframe {
                 </table>
             </div>
         </div>
+
+                    {% if is_admin %}
+            <div class="add-button-container">
+                <button id="toggle-form-button">+</button>
+            </div>
+        
+            <!-- Formular zum Hinzufügen eines neuen Termins -->
+            <form class="termin-form hidden" action="/add_termin" method="POST">
+                <h3>Neuen Termin hinzufügen</h3>
+                <label for="datum">Datum:</label>
+                <input type="date" id="datum" name="datum" required>
+                <label for="veranstaltung">Veranstaltung:</label>
+                <input type="text" id="veranstaltung" name="veranstaltung" required>
+                <label for="uhrzeit">Uhrzeit:</label>
+                <input type="time" id="uhrzeit" name="uhrzeit" required>
+                <label for="ort">Ort:</label>
+                <input type="text" id="ort" name="ort" required>
+                <button type="submit">Hinzufügen</button>
+            </form>
+
+            {% endif %}
     </section>
 
 
