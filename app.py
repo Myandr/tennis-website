@@ -104,7 +104,7 @@ with app.app_context():
 def add_file_to_git(filename):
     try:
         # Git-Konfiguration
-        subprocess.run(["git", "config", "--global", "user.name", "Myandr"], check=True)
+        subprocess.run(["git", "config", "--global", "user.name", "Paul Spengler"], check=True)
         subprocess.run(["git", "config", "--global", "user.email", "paulspengler09@gmail.com"], check=True)
 
         # Git-Befehle ausführen
