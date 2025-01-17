@@ -132,6 +132,43 @@
   transition: color 0.3s, transform 0.3s;
 }
 
+        .about-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+
+}
+
+.about-form textarea {
+    width: 100%;
+
+}
+
+.about-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.about-form button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.about-form button:hover {
+    background-color: #383838;
+}
 
         /* Main Content */
         .main-content {
@@ -963,6 +1000,7 @@ iframe {
     </section>
 
     <section class="locations-section">
+        {% if is_admin %}
         <form class="cm-form" action="{{ url_for('add_content') }}" method="post" enctype="multipart/form-data">
             <div id="cm-drop-area" class="cm-drop-area">
                 <input type="file" name="image" id="cm-fileElem" class="cm-file-input" accept="image/*" required>
@@ -975,6 +1013,7 @@ iframe {
             <textarea name="text2" class="cm-textarea" placeholder="Text 2" required></textarea>
             <button type="submit" class="cm-button">Add Content</button>
         </form>
+        {% endif %}
         <div class="locations-header">
             <h2>Besuche unseren Verein</h2>
             <p>Besuche uns jeden Sonntag an einem unserer Standorte!</p>
@@ -1050,6 +1089,32 @@ iframe {
                     <div class="about-text">
                         <p>Unser Tennisverein besteht aus einer engagierten Gemeinschaft von Spielern aller Altersgruppen. Wir bieten regelmäßige Trainings, Turniere und ein aktives Vereinsleben. Unser Ziel ist es, Tennis für alle zugänglich zu machen und ein Umfeld zu schaffen, in dem sich jeder verbessern kann.</p>
                         <p>Wir legen besonderen Wert auf Teamgeist, Fairplay und Spaß am Spiel. Kommen Sie vorbei und machen Sie mit!</p>
+                            {% for text in about_texts %}
+                                {% if text.type == "headline" %}
+                                    <br><h3>{{ text.content }}</h3><br>
+                                {% else %}
+                                    <p>{{ text.content }}</p>
+                                {% endif %}
+                                
+                                {% if is_admin %}
+                                <form action="/delete_about_text/{{ text.id }}" method="POST" style="display: inline;">
+                                    <button class="delete" type="submit" onclick="return confirm('Möchten Sie diesen Text wirklich löschen?')">Löschen</button>
+                                </form>
+                                {% endif %}
+                            {% endfor %}
+                        
+                        {% if is_admin %}                     
+                        <form class="about-form hidden" action="/add_about_text" method="POST">
+                            <h3>Text hinzufügen</h3>
+                            <label for="text-type">Texttyp:</label>
+                            <select id="text-type" name="text_type" required>
+                                <option value="normal">Normaler Text</option>
+                            </select>
+                            <br><br><label for="about-content">Textinhalt:</label>
+                            <textarea id="about-content" name="about_content" rows="10" required></textarea>
+                            <button type="submit">Hinzufügen</button>
+                        </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -1202,60 +1267,62 @@ menuLinks.forEach(link => {
   });
 });
 
-let dropArea = document.getElementById('cm-drop-area');
-        let fileInput = document.getElementById('cm-fileElem');
-        let preview = document.getElementById('cm-preview');
+let dropArea = document.getElementById('drop-area');
+let fileInput = document.getElementById('fileElem');
+let preview = document.getElementById('preview');
 
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-        });
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+});
 
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
 
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, highlight, false);
-        });
+['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false);
+});
 
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, unhighlight, false);
-        });
+['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+});
 
-        function highlight(e) {
-            dropArea.classList.add('cm-highlight');
-        }
+function highlight(e) {
+    dropArea.classList.add('highlight');
+}
 
-        function unhighlight(e) {
-            dropArea.classList.remove('cm-highlight');
-        }
+function unhighlight(e) {
+    dropArea.classList.remove('highlight');
+}
 
-        dropArea.addEventListener('drop', handleDrop, false);
-        fileInput.addEventListener('change', handleFiles, false);
+dropArea.addEventListener('drop', handleDrop, false);
+fileInput.addEventListener('change', handleFiles, false);
 
-        function handleDrop(e) {
-            let dt = e.dataTransfer;
-            let files = dt.files;
+function handleDrop(e) {
+    let dt = e.dataTransfer;
+    let files = dt.files;
 
-            handleFiles(files);
-        }
+    handleFiles(files);
+}
 
-        function handleFiles(files) {
-            files = files.length ? files : this.files;
-            [...files].forEach(previewFile);
-        }
+function handleFiles(files) {
+    files = files.length ? files : this.files;
+    [...files].forEach(previewFile);
+}
 
-        function previewFile(file) {
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function() {
-                let img = document.createElement('img');
-                img.src = reader.result;
-                preview.innerHTML = '';
-                preview.appendChild(img);
-            }
-        }
+function previewFile(file) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function() {
+        let img = document.createElement('img');
+        img.src = reader.result;
+        preview.innerHTML = '';
+        preview.appendChild(img);
+    }
+}
+
+
 
 
     </script>
