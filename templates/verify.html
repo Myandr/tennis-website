@@ -8,18 +8,30 @@
 </head>
 <body>
     <div class="card">
+      <div class="error-message">
+        <div class="error-icon">!</div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
         <div class="header">
             <div class="dot"></div>
             <h1 class="title">Konto verifizieren</h1>
         </div>
         <p class="subtitle">Verifizieren Sie Ihr Konto mit dem Code, der per E-Mail gesendet wurde</p>
-        <form class="form">
+        <form class="form" method="POST">
             <div class="input-group">
                 <input  name="email" type="email" class="input" id="email" placeholder=" " required>
                 <label for="email" class="label">E-Mail</label>
             </div>
             <div class="input-group">
-                <input type="text" class="input" id="code" name="code" placeholder=" " required>
+                <input type="password" class="input" id="code" name="code" placeholder=" " required>
                 <label for="code" class="label">Passwort</label>
             </div>
             <button type="submit" value="Verify" class="submit">Absenden</button>         
