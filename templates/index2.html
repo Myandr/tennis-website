@@ -963,6 +963,7 @@ iframe {
     </section>
 
     <section class="locations-section">
+        {% if is_admin %}
         <form class="cm-form" action="{{ url_for('add_content') }}" method="post" enctype="multipart/form-data">
             <div id="cm-drop-area" class="cm-drop-area">
                 <input type="file" name="image" id="cm-fileElem" class="cm-file-input" accept="image/*" required>
@@ -975,6 +976,7 @@ iframe {
             <textarea name="text2" class="cm-textarea" placeholder="Text 2" required></textarea>
             <button type="submit" class="cm-button">Add Content</button>
         </form>
+        {% endif %}
         <div class="locations-header">
             <h2>Besuche unseren Verein</h2>
             <p>Besuche uns jeden Sonntag an einem unserer Standorte!</p>
