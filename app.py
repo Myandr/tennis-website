@@ -100,9 +100,6 @@ with app.app_context():
 
 
 #ADD
-git config --global user.name "Myandr"
-git config --global user.email "paulspengler09@gmail.com"
-
 
 def add_file_to_git(filename):
     try:
