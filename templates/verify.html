@@ -8,18 +8,18 @@
 </head>
 <body>
     <div class="card">
-      <div class="error-message">
-        <div class="error-icon">!</div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        {% endwith %}
-    </div>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          <ul>
+              {% for message in messages %}
+              <div class="error-message">
+              <div class="error-icon">!</div>
+                  <p>{{ message }}</p>
+              </div>                    
+              {% endfor %}
+          </ul>
+      {% endif %}
+      {% endwith %} 
         <div class="header">
             <div class="dot"></div>
             <h1 class="title">Konto verifizieren</h1>
