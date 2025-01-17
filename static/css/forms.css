@@ -128,3 +128,29 @@ body {
 .footer a:hover {
     text-decoration: underline;
 }
+
+.error-message {
+    background-color: #fff2f2;
+    border: 1px solid #ffcfcf;
+    border-radius: 0.5rem;
+    color: #d63301;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error-icon {
+    width: 20px;
+    height: 20px;
+    background-color: #d63301;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
