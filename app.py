@@ -45,11 +45,9 @@ migrate = Migrate(app, db)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    firstname = db.Column(db.String(100), unique=True, nullable=False)
+    lastname = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    tele = db.Column(db.String(20))
-    typ = db.Column(db.String(50), nullable=False)
-    info = db.Column(db.Text)
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(50), default='user')
     is_verified = db.Column(db.Boolean, default=False)
@@ -213,15 +211,13 @@ def send_verification_email(email, code):
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        name = request.form['name']
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
         email = request.form['email']
         password = request.form['password']
-        tele = request.form['tele']
-        typ = request.form['typ']
-        info = request.form['info']
         role = request.form['role']
 
-        existing_user = User.query.filter((User.name == name) | (User.email == email)).first()
+        existing_user = User.query.filter((User.firstname == firstname) | (User.email == email)).first()
         if existing_user:
             flash('Username or email already exists', 'info')
             return redirect(url_for('signup'))
@@ -234,7 +230,7 @@ def signup():
 
         hashed_password = generate_password_hash(password)
         verification_code = generate_verification_code()
-        new_user = User(name=name, email=email, tele=tele, typ=typ, info=info, 
+        new_user = User(firstname=firstname, lastname=lastname, email=email,
                         password_hash=hashed_password, role=role, verification_code=verification_code)
         
         db.session.add(new_user)
