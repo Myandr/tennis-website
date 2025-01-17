@@ -1063,7 +1063,7 @@ iframe {
             <p>Erlebe die Freude am Tennis und die Kraft der Gemeinschaft. Verbinde dich mit Gleichgesinnten und wachse gemeinsam im Sport.</p>
             <a class="cta-button" href="{{ url_for('signup') }}">Jetzt Account erstellen</a><br><br>
             {% if logged_in %}
-                <a href="/dashboard" class="client-login">Dein Account</a>
+                <a href="/dashboard" class="learn-more">Dein Account</a>
             {% else %}
                 <a href="{{ url_for('login') }}" class="learn-more">Oder login →</a>
             {% endif %}
