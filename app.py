@@ -104,7 +104,7 @@ with app.app_context():
 def add_file_to_git(filename):
     try:
         # Setze den Benutzernamen und die E-Mail-Adresse für Git
-        subprocess.run(["git", "config", "--global", "user.name", "Myandr"], check=True)
+        subprocess.run(["git", "config", "--global", "user.name", "Paul Spengler"], check=True)
         subprocess.run(["git", "config", "--global", "user.email", "paulspengler09@gmail.com"], check=True)
 
         # Stelle sicher, dass das Remote-Repository hinzugefügt wird
