@@ -12,7 +12,7 @@ from flask_migrate import Migrate
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://users_cq6w_user:7ZnSE4i2W0aihEYTu85KvKFI6Z0zJIWO@dpg-ctmpp7tds78s73buvh4g-a/users_cq6w'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_flf1_user:BRVbht2Ykl1b0F8OI5P3jlGR7kMDktsL@dpg-cu514s9u0jms73fd2h20-a/user_flf1'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
