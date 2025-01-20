@@ -574,8 +574,8 @@ def home():
     images = Image.query.all()
     about_texts = AboutText.query.all()
     content_items = ContentItem.query.all()
-    if item and item.image_data:
-        image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
+    if content_items and content_items.image_data:
+        image_data_base64 = base64.b64encode(content_items.image_data).decode('utf-8')
     else:
         image_data_base64 = None
     
