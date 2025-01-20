@@ -13,7 +13,7 @@ import subprocess
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_c5s6_user:qvyInxY0NOAnx91trcYF8Q9PN5w2G6zo@dpg-cu72rha3esus73ffec60-a/user_c5s6'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_hs17_user:w3vGNCM975whoxDAxxViJYEvUo6hEyRU@dpg-cu741kdumphs73d2j99g-a/user_hs17'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
