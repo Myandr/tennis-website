@@ -11,6 +11,7 @@ from itsdangerous import URLSafeTimedSerializer
 from flask_migrate import Migrate
 import subprocess
 from io import BytesIO
+import base64
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
@@ -192,10 +193,9 @@ def add_content():
         return redirect(url_for('home'))
     
     if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        # Bild in Binärdaten umwandeln
         image_data = file.read()
-
-        
-        
         new_item = ContentItem(
             image_data=image_data,
             heading=request.form['heading'],
@@ -574,8 +574,9 @@ def home():
     images = Image.query.all()
     about_texts = AboutText.query.all()
     content_items = ContentItem.query.all()
-
-
+    for item in content_items:
+        item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
+    
     # Überprüfen, ob der Benutzer in der Session eingeloggt ist
     if 'user_id' in session:
         user_id = session['user_id']
