@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/forms.css">
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="dot"></div>
+            <h1 class="title">Beareiten</h1>
+        </div>
+        <p class="subtitle">Hier kannst du deinen Account bearbeiten</p>
+        <form action="{{ url_for('edit_account') }}" class="form" method="POST">
+            <div class="input-group">
+                <input type="email" class="input" id="firstname" name="firstname" value="{{ user.firstname }}" placeholder=" " required>
+                <label for="firstname" class="label">Firstname</label>
+            </div>
+            <div class="input-group">
+                <input type="text" class="input" id="lastname" name="lastname" value="{{ user.lastname }}" placeholder=" " required>
+                <label for="lastname" class="label">Passwort</label>
+            </div>
+            <div class="input-group">
+                <input type="email" class="input" id="email" name="email" value="{{ user.email }}" placeholder=" " required>
+                <label for="email" class="label">Email</label>
+            </div>
+            <button type="submit" class="submit">Absenden</button>
+        </form>
+    </div>
+</body>
+</html>
