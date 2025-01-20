@@ -1284,26 +1284,24 @@ button:hover {
                     <a href="#" class="read-more">Weiterlesen</a>
                 </div>
             </div>
+            {% for box in boxes %}
             <div class="news-card">
-                    {% for box in boxes %}
-                    <div class="news-image">
-                        <img src="{{ url_for('static', filename='uploads/' + box.image_filename) }}" alt="{{ box.heading }}">
+                <div class="news-image">
+                    <img src="{{ url_for('static', filename='uploads/' + box.image_filename) }}" alt="{{ box.heading }}">
+                </div>
+                <div class="news-content">
+                        <p class="news-date">{{ box.date.strftime('%d.%m.%Y') }}</p>
+                        <h3 class="news-title">{{ box.heading }}</h3>
+                        <p class="news-excerpt">{{ box.info }}</p>
+                        <a href="#" class="read-more">Weiterlesen</a>
+                        {% if is_admin %}
+                        <form action="{{ url_for('delete_box', box_id=box.id) }}" method="post" class="delete-form">
+                            <button type="submit" class="delete-btn">Löschen</button>
+                        </form>
+                        {% endif %}
                     </div>
-                    <div class="news-content">
-                            <p class="news-date">{{ box.date.strftime('%d.%m.%Y') }}</p>
-                            <h3 class="news-title">{{ box.heading }}</h3>
-                            <p class="news-excerpt">{{ box.info }}</p>
-                            <a href="#" class="read-more">Weiterlesen</a>
-                            {% if is_admin %}
-                            <form action="{{ url_for('delete_box', box_id=box.id) }}" method="post" class="delete-form">
-                                <button type="submit" class="delete-btn">Löschen</button>
-                            </form>
-                            {% endif %}
-                    </div>
-        
-                    {% endfor %}
-                
             </div>
+            {% endfor %}
         </div>
     </section>
 </body>
