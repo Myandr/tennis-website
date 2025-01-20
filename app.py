@@ -25,6 +25,7 @@ app.config['MAIL_PASSWORD'] = 'tkkl szsh ybkj vprx'  # Dein App-Passwort
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     "connect_args": {
         "sslmode": "require"
@@ -91,6 +92,13 @@ class ContentItem(db.Model):
     heading = db.Column(db.String(100), nullable=False)
     text1 = db.Column(db.Text, nullable=False)
     text2 = db.Column(db.Text, nullable=False)
+
+class News(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_filename = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    excerpt = db.Column(db.Text, nullable=False)
+    date = db.Column(db.String(50), nullable=False)
 
 # Erstellen Sie die Tabellen in der Datenbank
 with app.app_context():
@@ -203,8 +211,55 @@ def delete_image(image_id):
     return redirect(url_for('home') + "#awards")
 
 
+def allowed_file1(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
+@app.route('/')
+def news():
+    return render_template('news.html')
 
+@app.route('/get_news')
+def get_news():
+    news_list = News.query.order_by(News.date.desc()).all()
+    return jsonify([
+        {
+            'id': news.id,
+            'image_filename': news.image_filename,
+            'title': news.title,
+            'excerpt': news.excerpt,
+            'date': news.date
+        } for news in news_list
+    ])
+
+@app.route('/add_news', methods=['POST'])
+def add_news():
+    title = request.form['title']
+    excerpt = request.form['excerpt']
+    date = datetime.strptime(request.form['date'], '%Y-%m-%d').strftime('%d. %B %Y')
+    
+    file = request.files['image']
+    if file and allowed_file1(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        new_news = News(image_filename=filename, title=title, excerpt=excerpt, date=date)
+        db.session.add(new_news)
+        db.session.commit()
+        
+        return jsonify({'success': True})
+    return jsonify({'success': False, 'error': 'Invalid file'})
+
+@app.route('/delete_news/<int:id>', methods=['POST'])
+def delete_news(id):
+    news = News.query.get_or_404(id)
+    if news.image_filename:
+        try:
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], news.image_filename))
+        except:
+            pass
+    db.session.delete(news)
+    db.session.commit()
+    return jsonify({'success': True})
 
 
 @app.route('/add_termin', methods=['POST'])
