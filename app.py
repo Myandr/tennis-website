@@ -574,8 +574,10 @@ def home():
     images = Image.query.all()
     about_texts = AboutText.query.all()
     content_items = ContentItem.query.all()
-    for item in content_items:
-        item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
+    if item and item.image_data:
+        image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
+    else:
+        image_data_base64 = None
     
     # Überprüfen, ob der Benutzer in der Session eingeloggt ist
     if 'user_id' in session:
@@ -593,9 +595,9 @@ def home():
     termine = Termin.query.all()  # Alle Termine aus der DB abfragen
 
     if 'user_id' in session:
-        return render_template('index2.html', logged_in=True, username=session['user_id'], termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items)
+        return render_template('index2.html', logged_in=True, username=session['user_id'], termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items, image_data_base64=image_data_base64)
     
-    return render_template('index2.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items)
+    return render_template('index2.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items, image_data_base64=image_data_base64)
 
 @app.route('/newsletter')
 def newsletter():
