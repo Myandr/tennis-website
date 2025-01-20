@@ -125,9 +125,35 @@ def news():
         db.session.commit()
 
         return redirect(url_for('news'))
+        
+    # Überprüfen, ob der Benutzer in der Session eingeloggt ist
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)  # Holen des Benutzers aus der DB anhand der ID
+
+        # Überprüfen, ob der Benutzer existiert, bevor auf seine Rolle zugegriffen wird
+        if user:
+            is_admin = user.role == 'admin'
+        else:
+            is_admin = False  # Benutzer nicht gefunden, also kein Admin
+    else:
+        is_admin = False  # Kein Benutzer eingeloggt, also kein Admin
 
     boxes = Box.query.all()
-    return render_template('news.html', boxes=boxes)
+
+    if 'user_id' in session:
+        return render_template('news.html', logged_in=True, username=session['user_id'], termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items, boxes=boxes)
+        
+    return render_template('news.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items, boxes=boxes)
+
+
+
+
+
+
+    
+
+
 
 
 
