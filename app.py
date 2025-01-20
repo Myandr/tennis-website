@@ -92,7 +92,7 @@ class ContentItem(db.Model):
     heading = db.Column(db.String(100), nullable=False)
     text1 = db.Column(db.Text, nullable=False)
     text2 = db.Column(db.Text, nullable=False)
-    iframe = db.Column(db.String(255), nullable=False)
+    iframe = db.Column(db.Text, nullable=False)
     
 
 class Box(db.Model):
