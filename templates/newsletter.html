@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis-Club Newsletter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background-color: #f8f9ff;
+            border-radius: 8px;
+        }
+
+        .newsletter-title {
+            color: #5b6dcd;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            background-color: #f8f9ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #5b6dcd;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #5b6dcd;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid #e0e4ff;
+            padding-bottom: 0.5rem;
+        }
+
+        .activity {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity:last-child {
+            border-bottom: none;
+        }
+
+        .activity img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .activity h3 {
+            color: #444;
+            margin-bottom: 1rem;
+        }
+
+        .learning-section {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .learning-section h3 {
+            color: #5b6dcd;
+            margin-bottom: 1rem;
+        }
+
+        .learning-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .learning-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .learning-list li::before {
+            content: "•";
+            color: #5b6dcd;
+            position: absolute;
+            left: 0;
+        }
+
+        .coach-message {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .coach-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .coach-profile img {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            margin-right: 1.5rem;
+        }
+
+        .coach-info h2 {
+            color: #5b6dcd;
+            margin-bottom: 0.5rem;
+        }
+
+        .coach-info p {
+            color: #666;
+        }
+
+        .weekly-recap {
+            background-color: #fff5e6;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .weekly-recap h2 {
+            color: #ff9900;
+            margin-bottom: 1.5rem;
+        }
+
+        .events-list {
+            list-style: none;
+        }
+
+        .event-item {
+            padding: 1.5rem;
+            background-color: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-date {
+            background-color: #5b6dcd;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .reminders {
+            background-color: #fff0f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .reminders h2 {
+            color: #ff4444;
+            margin-bottom: 1rem;
+        }
+
+        .reminder-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 4px;
+        }
+
+        .qa-section {
+            background-color: #f0f8ff;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .qa-item {
+            margin-bottom: 2rem;
+        }
+
+        .qa-item h3 {
+            color: #5b6dcd;
+            margin-bottom: 1rem;
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .gallery-item {
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #f8f9ff;
+            border-radius: 8px;
+            margin-top: 3rem;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            text-align: left;
+            padding: 1rem;
+        }
+
+        .contact-item h3 {
+            color: #5b6dcd;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+
+            .newsletter-title {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .coach-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .coach-profile img {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .event-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="newsletter-title">TENNIS-CLUB NEWSLETTER</h1>
+            <p class="subtitle">WÖCHENTLICHER NEWSLETTER - AUSGABE 01</p>
+        </header>
+
+        <section class="coach-message">
+            <div class="coach-profile">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/school-newsletter-template-cover.jpg-WYwgQrFulJwOV76HiFoEnJ2Nv4DQWP.jpeg" alt="Foto des Trainers">
+                <div class="coach-info">
+                    <h2>Eine Nachricht von unserem Cheftrainer</h2>
+                    <p>Tennisprofi und zertifizierter Trainer</p>
+                </div>
+            </div>
+            <p>Liebe Tennisfreunde,</p>
+            <p>Ich freue mich, Sie in unserem wöchentlichen Newsletter begrüßen zu dürfen. Diese Woche haben wir viele spannende Aktivitäten und Fortschritte in unserem Club erlebt. Unsere Spieler haben hart trainiert und sich in verschiedenen Bereichen weiterentwickelt.</p>
+            <p>Lasst uns gemeinsam die Freude am Tennis feiern und uns auf die kommenden Herausforderungen und Erfolge freuen!</p>
+        </section>
+
+        <section class="weekly-recap">
+            <h2>📝 Wochenrückblick</h2>
+            <p>Diese Woche war geprägt von intensivem Training und großartigen Leistungen unserer Mitglieder. Wir haben uns auf die Verbesserung der Grundschläge konzentriert und tolle Fortschritte bei der Beinarbeit und dem Timing gesehen.</p>
+            <p>Besonders erfreulich war das Jugendturnier am vergangenen Wochenende, bei dem unsere Nachwuchsspieler hervorragende Ergebnisse erzielten.</p>
+        </section>
+
+        <div class="grid">
+            <section class="section">
+                <h2 class="section-title">🎾 Aktivitäten</h2>
+                <div class="activity">
+                    <h3>Techniktraining: Aufschlag</h3>
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/school-newsletter-template-cover.jpg-WYwgQrFulJwOV76HiFoEnJ2Nv4DQWP.jpeg" alt="Aufschlagtraining">
+                    <p>In dieser Woche haben wir uns intensiv mit der Verbesserung des Aufschlags beschäftigt. Die Teilnehmer lernten die richtige Wurftechnik und wie man mehr Power und Präzision in den Aufschlag bringt.</p>
+                    <p>Wir haben verschiedene Übungen durchgeführt, um die Konsistenz und Variabilität des Aufschlags zu verbessern.</p>
+                </div>
+                <div class="activity">
+                    <h3>Taktik-Workshop: Doppelspiel</h3>
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/school-newsletter-template-cover.jpg-WYwgQrFulJwOV76HiFoEnJ2Nv4DQWP.jpeg" alt="Doppelspiel-Taktik">
+                    <p>Unser Taktik-Workshop zum Doppelspiel war ein voller Erfolg. Die Teilnehmer lernten wichtige Strategien für effektives Doppelspiel, einschließlich Positionierung, Kommunikation und Spielaufbau.</p>
+                    <p>Durch praktische Übungen und Spielsituationen konnten alle ihre neu erlernten Fähigkeiten direkt anwenden und verbessern.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">📚 Was wir lernen</h2>
+                <div class="learning-section">
+                    <h3>Grundschläge</h3>
+                    <p>Diese Woche haben wir uns konzentriert auf:</p>
+                    <ul class="learning-list">
+                        <li>Verbesserung der Vorhand-Technik</li>
+                        <li>Präzision bei der Rückhand</li>
+                        <li>Timing und Rhythmus bei Grundlinienschlägen</li>
+                    </ul>
+                </div>
+                <div class="learning-section">
+                    <h3>Fitness und Kondition</h3>
+                    <p>Unser Fitnessprogramm umfasste:</p>
+                    <ul class="learning-list">
+                        <li>Schnelligkeitsübungen auf dem Platz</li>
+                        <li>Ausdauertraining für längere Matches</li>
+                        <li>Kraftübungen für mehr Power in den Schlägen</li>
+                    </ul>
+                </div>
+                <div class="learning-section">
+                    <h3>Mentale Stärke</h3>
+                    <ul class="learning-list">
+                        <li>Techniken zur Konzentrationssteigerung</li>
+                        <li>Umgang mit Druck in Wettkampfsituationen</li>
+                        <li>Positive Selbstgespräche und Visualisierung</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">📅 Kommende Veranstaltungen</h2>
+            <ul class="events-list">
+                <li class="event-item">
+                    <span class="event-title">Clubmeisterschaften - Einzel</span>
+                    <span class="event-date">Samstag, 5. August</span>
+                </li>
+                <li class="event-item">
+                    <span class="event-title">Tennis-Schnupperkurs für Anfänger</span>
+                    <span class="event-date">Sonntag, 6. August</span>
+                </li>
+                <li class="event-item">
+                    <span class="event-title">Freundschaftsspiel gegen TC Grün-Weiß</span>
+                    <span class="event-date">Samstag, 12. August</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="reminders">
+            <h2>⚠️ Wichtige Erinnerungen</h2>
+            <div class="reminder-item">
+                <span>Bitte denken Sie daran, Ihre Platzreservierungen rechtzeitig vorzunehmen.</span>
+            </div>
+            <div class="reminder-item">
+                <span>Die Anmeldung für das Sommercamp endet am 15. August.</span>
+            </div>
+            <div class="reminder-item">
+                <span>Nächste Woche findet die jährliche Platzpflege statt - einige Plätze werden vorübergehend gesperrt sein.</span>
+            </div>
+        </section>
+
+        <section class="qa-section">
+            <h2 class="section-title">💭 Fragen & Antworten mit dem Trainer</h2>
+            <div class="qa-item">
+                <h3>F: Wie kann ich meine Aufschlaggeschwindigkeit verbessern?</h3>
+                <p>A: Um Ihre Aufschlaggeschwindigkeit zu verbessern, konzentrieren Sie sich auf die richtige Technik, insbesondere auf die Beinarbeit und den Treffpunkt. Regelmäßiges Krafttraining für Schultern und Rumpf sowie spezifische Aufschlagübungen können ebenfalls helfen. Vergessen Sie nicht, dass Konsistenz genauso wichtig ist wie Geschwindigkeit.</p>
+            </div>
+            <div class="qa-item">
+                <h3>F: Wie bereite ich mich am besten auf ein Turnier vor?</h3>
+                <p>A: Eine gute Turniervorbereitung umfasst sowohl physische als auch mentale Aspekte. Planen Sie Ihr Training so, dass Sie in den Tagen vor dem Turnier nicht übermüdet sind. Arbeiten Sie an Ihrer Matchstrategie, üben Sie Wettkampfsituationen im Training und stellen Sie sicher, dass Ihre Ausrüstung in gutem Zustand ist. Mentale Vorbereitung durch Visualisierung und Entspannungstechniken kann ebenfalls sehr hilfreich sein.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📸 Fotogalerie</h2>
+            <div class="photo-gallery">
+                <div class="gallery-item">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/school-newsletter-template-cover.jpg-WYwgQrFulJwOV76HiFoEnJ2Nv4DQWP.jpeg" alt="Jugendturnier">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/school-newsletter-template-cover.jpg-WYwgQrFulJwOV76HiFoEnJ2Nv4DQWP.jpeg" alt="Aufschlagtraining">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/school-newsletter-template-cover.jpg-WYwgQrFulJwOV76HiFoEnJ2Nv4DQWP.jpeg" alt="Doppelspiel-Workshop">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/school-newsletter-template-cover.jpg-WYwgQrFulJwOV76HiFoEnJ2Nv4DQWP.jpeg" alt="Fitness-Training">
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>Adresse</h3>
+                    <p>Tennisstraße 123</p>
+                    <p>12345 Tennisstadt</p>
+                </div>
+                <div class="contact-item">
+                    <h3>Kontakt</h3>
+                    <p>Telefon: (0123) 456-7890</p>
+                    <p>E-Mail: info@tennisclub.de</p>
+                </div>
+                <div class="contact-item">
+                    <h3>Öffnungszeiten</h3>
+                    <p>Montag - Freitag: 8:00 - 22:00 Uhr</p>
+                    <p>Samstag - Sonntag: 9:00 - 20:00 Uhr</p>
+                </div>
+            </div>
+            <p>&copy; 2024 Tennis-Club Newsletter. Alle Rechte vorbehalten.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
