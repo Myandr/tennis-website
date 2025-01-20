@@ -142,9 +142,9 @@ def news():
     boxes = Box.query.all()
 
     if 'user_id' in session:
-        return render_template('news.html', logged_in=True, username=session['user_id'], termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items, boxes=boxes)
+        return render_template('news.html', logged_in=True, username=session['user_id'], is_admin=is_admin, boxes=boxes)
         
-    return render_template('news.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items, boxes=boxes)
+    return render_template('news.html', logged_in=False, is_admin=is_admin,  boxes=boxes)
 
 
 
