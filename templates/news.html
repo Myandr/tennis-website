@@ -1284,10 +1284,7 @@ button:hover {
                     <a href="#" class="read-more">Weiterlesen</a>
                 </div>
             </div>
-            <div class="container">
-
-        
-                <div class="news-card">
+            <div class="news-card">
                     {% for box in boxes %}
                     <div class="news-image">
                         <img src="{{ url_for('static', filename='uploads/' + box.image_filename) }}" alt="{{ box.heading }}">
@@ -1302,10 +1299,10 @@ button:hover {
                                 <button type="submit" class="delete-btn">Löschen</button>
                             </form>
                             {% endif %}
-                    </div>
+                </div>
         
                     {% endfor %}
-                </div>
+                
             </div>
         </div>
     </section>
