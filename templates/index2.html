@@ -1349,7 +1349,7 @@ iframe {
                             <p>{{ item.text2 }}</p>
                         </div>
                         <div class="expanded-info">
-                            {{ item.iframe }}
+                            <iframe{{ item.iframe }}></iframe>
                         </div>
                         {% if is_admin %}                        
                             <a href="{{ url_for('delete_content', item_id=item.id) }}" class="cm-delete-btn">Delete</a>
