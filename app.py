@@ -621,6 +621,11 @@ def home():
     
     return render_template('index2.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items)
 
+@app.route('/newsletter')
+def newsletter():
+    return render_template('newsletter.html')
+
+
 
 
 
