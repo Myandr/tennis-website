@@ -1352,7 +1352,7 @@ iframe {
               {% for item in content_items %}
                 <div class="location-card" onclick="expandCard(this)">
                     <!-- Direktes Einbetten des Bildes als Base64 -->
-                    <img src="data:image/jpeg;base64,{{ item.image_data|b64encode }}" alt="Content Image">
+                    <img src="data:image/jpeg;base64,{{ image_data_base64 }}" alt="Content Image">
                     <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
                     <div class="location-info">
                         <h2>{{ item.heading }}</h2>
