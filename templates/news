@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nachrichten-Verwaltung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .news-card {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            display: flex;
+        }
+        .news-image {
+            flex: 1;
+        }
+        .news-image img {
+            width: 100%;
+            height: auto;
+        }
+        .news-content {
+            flex: 2;
+            padding: 15px;
+        }
+        .news-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .news-title {
+            margin: 10px 0;
+        }
+        .news-excerpt {
+            margin-bottom: 10px;
+        }
+        .read-more, .delete-link {
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .read-more {
+            color: #007bff;
+        }
+        .delete-link {
+            color: #ff4136;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 5px;
+        }
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+        }
+        #deleteConfirmModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nachrichten-Verwaltung</h1>
+    
+    <h2>Neue Nachricht hinzufügen</h2>
+    <form id="addNewsForm" enctype="multipart/form-data">
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <input type="text" id="title" name="title" placeholder="Titel" required>
+        <textarea id="excerpt" name="excerpt" placeholder="Kurzbeschreibung" required></textarea>
+        <input type="date" id="date" name="date" required>
+        <button type="submit">Nachricht hinzufügen</button>
+    </form>
+
+    <h2>Nachrichten</h2>
+    <div id="newsList"></div>
+
+    <div id="deleteConfirmModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Sind Sie sicher, dass Sie diese Nachricht löschen möchten?</p>
+            <button id="confirmDelete">Löschen</button>
+            <button id="cancelDelete">Abbrechen</button>
+        </div>
+    </div>
+
+    <script>
+        function fetchNews() {
+            fetch('/get_news')
+                .then(response => response.json())
+                .then(data => {
+                    const newsListElement = document.getElementById('newsList');
+                    newsListElement.innerHTML = '';
+                    data.forEach(news => {
+                        const newsCard = document.createElement('div');
+                        newsCard.className = 'news-card';
+                        newsCard.innerHTML = `
+                            <div class="news-image">
+                                <img src="/static/uploads/${news.image_filename}" alt="${news.title}">
+                            </div>
+                            <div class="news-content">
+                                <div class="news-date">${news.date}</div>
+                                <h3 class="news-title">${news.title}</h3>
+                                <p class="news-excerpt">${news.excerpt}</p>
+                                <a href="#" class="read-more">Weiterlesen</a>
+                                <a href="#" class="delete-link" data-id="${news.id}">Löschen</a>
+                            </div>
+                        `;
+                        newsListElement.appendChild(newsCard);
+                    });
+                    addDeleteListeners();
+                });
+        }
+
+        function addDeleteListeners() {
+            const deleteLinks = document.querySelectorAll('.delete-link');
+            deleteLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const newsId = e.target.getAttribute('data-id');
+                    showDeleteConfirmModal(newsId);
+                });
+            });
+        }
+
+        function showDeleteConfirmModal(newsId) {
+            const modal = document.getElementById('deleteConfirmModal');
+            const confirmButton = document.getElementById('confirmDelete');
+            const cancelButton = document.getElementById('cancelDelete');
+            const closeButton = document.querySelector('.close');
+
+            modal.style.display = 'block';
+
+            confirmButton.onclick = () => {
+                deleteNews(newsId);
+                modal.style.display = 'none';
+            };
+
+            cancelButton.onclick = closeButton.onclick = () => {
+                modal.style.display = 'none';
+            };
+
+            window.onclick = (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        }
+
+        function deleteNews(id) {
+            fetch(`/delete_news/${id}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchNews();
+                    } else {
+                        alert('Fehler beim Löschen der Nachricht');
+                    }
+                });
+        }
+
+        document.getElementById('addNewsForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            fetch('/add_news', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    e.target.reset();
+                    fetchNews();
+                } else {
+                    alert('Fehler beim Hinzufügen der Nachricht');
+                }
+            });
+        });
+
+        fetchNews();
+    </script>
+</body>
+</html>
+
