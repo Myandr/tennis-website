@@ -1172,9 +1172,9 @@ iframe {
                 <li><a href="#trainer">TRAINER</a></li>
                 <li><a href="#news">NEUIGKEITEN</a></li>
                 {% if logged_in %}
-                <li><a href="/dashboard" class="learn-more">Dein Account</a></li>
+                <li><a href="/dashboard">Dein Account</a></li>
             {% else %}
-                <li><a href="{{ url_for('login') }}" class="learn-more">Oder login →</a></li>
+                <li><a href="{{ url_for('login') }}">Signup/Login →</a></li>
             {% endif %}
             </ul>
         </div>
