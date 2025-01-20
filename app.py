@@ -332,7 +332,7 @@ def delete_about_text(id):
 
 
 def generate_verification_code():
-    return ''.join(random.choices(string.digits, k=6))
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 def send_verification_email(email, code):
     msg = Message('Verify Your Email', sender='your_email@gmail.com', recipients=[email])
