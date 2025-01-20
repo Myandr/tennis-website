@@ -176,29 +176,6 @@ def delete_box(box_id):
 
 
 
-def add_file_to_git(filename):
-    try:
-        # Setze den Benutzernamen und die E-Mail-Adresse für Git
-        subprocess.run(["git", "config", "--global", "user.name", "Paul Spengler"], check=True)
-        subprocess.run(["git", "config", "--global", "user.email", "paulspengler09@gmail.com"], check=True)
-
-        # Stelle sicher, dass das Remote-Repository hinzugefügt wird
-        subprocess.run(["git", "-C", "/opt/render/project/src/", "remote", "add", "origin", "https://github.com/Myandr/tennis-website.git"], check=True)
-
-        # Füge die Datei(en) zu Git hinzu
-        upload_path = "/opt/render/project/src/static/uploads"
-        subprocess.run(["git", "-C", "/opt/render/project/src/", "add", upload_path], check=True)
-
-        # Mache den Commit
-        subprocess.run(["git", "-C", "/opt/render/project/src/", "commit", "-m", "Added new file"], check=True)
-
-        # Pushe die Änderungen zu GitHub
-        subprocess.run(["git", "-C", "/opt/render/project/src/", "push", "origin", "main"], check=True)
-
-        print("Git commit and push successful!")
-
-    except subprocess.CalledProcessError as e:
-        print(f"Error during Git operation: {e}")
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -217,7 +194,7 @@ def add_content():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        add_file_to_git(filename)
+        
         
         new_item = ContentItem(
             image_filename=filename,
