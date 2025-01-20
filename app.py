@@ -10,10 +10,11 @@ from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
 from flask_migrate import Migrate
 import subprocess
+from io import BytesIO
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_hs17_user:w3vGNCM975whoxDAxxViJYEvUo6hEyRU@dpg-cu741kdumphs73d2j99g-a/user_hs17'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_epds_user:8tM8NtnJDeyVs2Irt7hwpVH8WL6Tnctm@dpg-cu74v1lsvqrc739672f0-a/user_epds'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -88,7 +89,7 @@ class Image(db.Model):
 
 class ContentItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    image_filename = db.Column(db.String(200), nullable=False)
+    image_data = db.Column(db.LargeBinary)
     heading = db.Column(db.String(100), nullable=False)
     text1 = db.Column(db.Text, nullable=False)
     text2 = db.Column(db.Text, nullable=False)
@@ -191,13 +192,12 @@ def add_content():
         return redirect(url_for('home'))
     
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        image_data = file.read()
 
         
         
         new_item = ContentItem(
-            image_filename=filename,
+            image_data=image_data,
             heading=request.form['heading'],
             text1=request.form['text1'],
             text2=request.form['text2'],
@@ -211,11 +211,6 @@ def add_content():
 @app.route('/delete/<int:item_id>')
 def delete_content(item_id):
     item = ContentItem.query.get_or_404(item_id)
-    if item.image_filename:
-        try:
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], item.image_filename))
-        except OSError:
-            pass  # If file doesn't exist, just continue
     db.session.delete(item)
     db.session.commit()
     return redirect(url_for('home'))
