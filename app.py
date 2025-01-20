@@ -92,6 +92,8 @@ class ContentItem(db.Model):
     heading = db.Column(db.String(100), nullable=False)
     text1 = db.Column(db.Text, nullable=False)
     text2 = db.Column(db.Text, nullable=False)
+    iframe = db.Column(db.String(255), nullable=False)
+    
 
 class Box(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -222,6 +224,7 @@ def add_content():
             heading=request.form['heading'],
             text1=request.form['text1'],
             text2=request.form['text2']
+            iframe=request.form['iframe']
         )
         db.session.add(new_item)
         db.session.commit()
