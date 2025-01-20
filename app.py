@@ -214,7 +214,7 @@ def delete_image(image_id):
 def allowed_file1(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-@app.route('/')
+@app.route('/news')
 def news():
     return render_template('news.html')
 
