@@ -1044,11 +1044,17 @@ iframe {
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
     }
 
     .news-image {
         flex: 1;
         max-width: 200px;
+        transition: all 0.3s ease;
+    }
+
+    .news-card:hover .news-image {
+        max-width: 100px;
     }
 
     .news-image img {
@@ -1060,6 +1066,7 @@ iframe {
     .news-content {
         flex: 2;
         padding: 20px;
+        transition: all 0.3s ease;
     }
 
     .news-date {
