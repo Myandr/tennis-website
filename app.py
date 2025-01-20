@@ -223,7 +223,7 @@ def add_content():
             image_filename=filename,
             heading=request.form['heading'],
             text1=request.form['text1'],
-            text2=request.form['text2']
+            text2=request.form['text2'],
             iframe=request.form['iframe']
         )
         db.session.add(new_item)
