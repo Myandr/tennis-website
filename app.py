@@ -93,12 +93,12 @@ class ContentItem(db.Model):
     text1 = db.Column(db.Text, nullable=False)
     text2 = db.Column(db.Text, nullable=False)
 
-class News(db.Model):
+class Box(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    image_filename = db.Column(db.String(255), nullable=False)
-    title = db.Column(db.String(255), nullable=False)
-    excerpt = db.Column(db.Text, nullable=False)
-    date = db.Column(db.String(50), nullable=False)
+    image_filename = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    heading = db.Column(db.String(100), nullable=False)
+    info = db.Column(db.Text, nullable=False)
 
 # Erstellen Sie die Tabellen in der Datenbank
 with app.app_context():
@@ -108,6 +108,45 @@ with app.app_context():
 
 
 #ADD
+@app.route('/news', methods=['GET', 'POST'])
+def news():
+    if request.method == 'POST':
+        image = request.files['image']
+        date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+        heading = request.form['heading']
+        info = request.form['info']
+
+        if image:
+            filename = image.filename
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        new_box = Box(image_filename=filename, date=date, heading=heading, info=info)
+        db.session.add(new_box)
+        db.session.commit()
+
+        return redirect(url_for('news'))
+
+    boxes = Box.query.all()
+    return render_template('news.html', boxes=boxes)
+
+
+
+@app.route('/delete/<int:box_id>', methods=['POST'])
+def delete_box(box_id):
+    box = Box.query.get_or_404(box_id)
+    
+    # Delete the associated image file
+    if box.image_filename:
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], box.image_filename)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+    
+    db.session.delete(box)
+    db.session.commit()
+    return redirect(url_for('news'))
+
+
+
 
 def add_file_to_git(filename):
     try:
@@ -211,55 +250,6 @@ def delete_image(image_id):
     return redirect(url_for('home') + "#awards")
 
 
-def allowed_file1(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
-
-@app.route('/news')
-def news():
-    return render_template('news.html')
-
-@app.route('/get_news')
-def get_news():
-    news_list = News.query.order_by(News.date.desc()).all()
-    return jsonify([
-        {
-            'id': news.id,
-            'image_filename': news.image_filename,
-            'title': news.title,
-            'excerpt': news.excerpt,
-            'date': news.date
-        } for news in news_list
-    ])
-
-@app.route('/add_news', methods=['POST'])
-def add_news():
-    title = request.form['title']
-    excerpt = request.form['excerpt']
-    date = datetime.strptime(request.form['date'], '%Y-%m-%d').strftime('%d. %B %Y')
-    
-    file = request.files['image']
-    if file and allowed_file1(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        
-        new_news = News(image_filename=filename, title=title, excerpt=excerpt, date=date)
-        db.session.add(new_news)
-        db.session.commit()
-        
-        return jsonify({'success': True})
-    return jsonify({'success': False, 'error': 'Invalid file'})
-
-@app.route('/delete_news/<int:id>', methods=['POST'])
-def delete_news(id):
-    news = News.query.get_or_404(id)
-    if news.image_filename:
-        try:
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], news.image_filename))
-        except:
-            pass
-    db.session.delete(news)
-    db.session.commit()
-    return jsonify({'success': True})
 
 
 @app.route('/add_termin', methods=['POST'])
