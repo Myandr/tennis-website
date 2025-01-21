@@ -149,24 +149,9 @@ def news():
     for box in boxes:
         if box.image_data:
             box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
-            
-    if 'user_id' in session:
-        user_id = session['user_id']
-        user = User.query.get(user_id)  # Holen des Benutzers aus der DB anhand der ID
-
-        # Überprüfen, ob der Benutzer existiert, bevor auf seine Rolle zugegriffen wird
-        if user:
-            is_admin = user.role == 'admin'
-        else:
-            is_admin = False  # Benutzer nicht gefunden, also kein Admin
-    else:
-        is_admin = False  # Kein Benutzer eingeloggt, also kein Admin
 
 
-        if 'user_id' in session:
-            return render_template('news.html', logged_in=True, is_admin=is_admin, boxes=boxes)
-    
-    return render_template('news.html', logged_in=False, is_admin=is_admin, boxes=boxes)
+    return render_template('news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin', boxes=boxes)
 
 
 
@@ -559,25 +544,16 @@ def home():
         else:
             item.image_data_base64 = None
     
-    # Überprüfen, ob der Benutzer in der Session eingeloggt ist
-    if 'user_id' in session:
-        user_id = session['user_id']
-        user = User.query.get(user_id)  # Holen des Benutzers aus der DB anhand der ID
-
-        # Überprüfen, ob der Benutzer existiert, bevor auf seine Rolle zugegriffen wird
-        if user:
-            is_admin = user.role == 'admin'
-        else:
-            is_admin = False  # Benutzer nicht gefunden, also kein Admin
-    else:
-        is_admin = False  # Kein Benutzer eingeloggt, also kein Admin
-
     termine = Termin.query.all()  # Alle Termine aus der DB abfragen
 
-    if 'user_id' in session:
-        return render_template('index2.html', logged_in=True, username=session['user_id'], termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items)
-    
-    return render_template('index2.html', logged_in=False, termine=termine, is_admin=is_admin, about_texts=about_texts, images=images, content_items=content_items)
+    return render_template('index2.html', 
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin',
+                           termine=termine,
+                           about_texts=about_texts,
+                           images=images,
+                           content_items=content_items)
 
 @app.route('/newsletter')
 def newsletter():
