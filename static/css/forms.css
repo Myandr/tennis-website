@@ -24,6 +24,7 @@ body {
 
 .remember {
     display: inline-block;
+    bottom: 50%;
 }
 
 .remember-label {
