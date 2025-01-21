@@ -12,6 +12,8 @@ from flask_migrate import Migrate
 import subprocess
 from io import BytesIO
 import base64
+from functools import wraps
+from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
@@ -326,15 +328,22 @@ def delete_about_text(id):
 
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Please log in to access this page.', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 def generate_verification_code():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    return ''.join(random.choices('0123456789', k=6))
 
 def send_verification_email(email, code):
     msg = Message('Verify Your Email', sender='your_email@gmail.com', recipients=[email])
     msg.body = f'Your verification code is: {code}'
     mail.send(msg)
-
-
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -345,18 +354,18 @@ def signup():
         password = request.form['password']
         role = request.form['role']
 
-        existing_user = User.query.filter((User.firstname == firstname) | (User.email == email)).first()
+        existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            flash('Username or email already exists', 'info')
+            flash('Email already exists', 'error')
             return redirect(url_for('signup'))
 
         if role == 'admin':
             admin_password = request.form['admin_password']
-            if admin_password != '1234':  # Replace '1234' with your actual admin password
-                flash('Invalid admin password')
+            if admin_password != os.environ.get('ADMIN_PASSWORD', '1234'):
+                flash('Invalid admin password', 'error')
                 return redirect(url_for('signup'))
 
-        hashed_password = generate_password_hash(password)
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         verification_code = generate_verification_code()
         new_user = User(firstname=firstname, lastname=lastname, email=email,
                         password_hash=hashed_password, role=role, verification_code=verification_code)
@@ -366,11 +375,10 @@ def signup():
         
         send_verification_email(email, verification_code)
         
-        flash('Please check your email for verification code')
+        flash('Please check your email for verification code', 'info')
         return redirect(url_for('verify'))
     
     return render_template('signup.html')
-
 
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
@@ -383,14 +391,12 @@ def verify():
             user.is_verified = True
             user.verification_code = None
             db.session.commit()
-            flash('Your account has been verified')
+            flash('Your account has been verified', 'success')
             return redirect(url_for('login'))
         else:
-            flash('Invalid email or verification code')
+            flash('Invalid email or verification code', 'error')
     
     return render_template('verify.html')
-
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -398,33 +404,30 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        email = User.query.filter_by(email=email).first()
-        if email and check_password_hash(email.password_hash, password):
-            if email.is_verified:
-                session['user_id'] = email.id
-                flash('Logged in successfully')
+        user = User.query.filter_by(email=email).first()
+        if user and bcrypt.check_password_hash(user.password_hash, password):
+            if user.is_verified:
+                session['user_id'] = user.id
+                flash('Logged in successfully', 'success')
                 return redirect(url_for('dashboard'))
             else:
-                flash('Please verify your email first')
+                flash('Please verify your email first', 'warning')
                 return redirect(url_for('verify'))
         else:
-            flash('Invalid name or password', 'info')
+            flash('Invalid email or password', 'error')
     
     return render_template('login.html')
 
-
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    
     user = User.query.get(session['user_id'])
     return render_template('dashboard.html', user=user)
 
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
-    flash('You have been logged out')
+    flash('You have been logged out', 'info')
     return redirect(url_for('home'))
 
 @app.route('/resend_verification', methods=['GET', 'POST'])
@@ -437,13 +440,11 @@ def resend_verification():
             user.verification_code = new_code
             db.session.commit()
             send_verification_email(email, new_code)
-            flash('A new verification code has been sent to your email')
+            flash('A new verification code has been sent to your email', 'info')
             return redirect(url_for('verify'))
         else:
-            flash('Invalid email or account already verified')
+            flash('Invalid email or account already verified', 'error')
     return render_template('resend_verification.html')
-
-
 
 def send_password_reset_email(user_email):
     token = serializer.dumps(user_email, salt='password-reset-salt')
@@ -461,7 +462,7 @@ def forgot_password():
         user = User.query.filter_by(email=email).first()
         if user:
             send_password_reset_email(user.email)
-            flash('Es wurde eine E-mail zum zurücksetzen des Passworts geschickt.', 'info')
+            flash('A password reset email has been sent.', 'info')
         else:
             flash('Email address not found', 'error')
         return redirect(url_for('login'))
@@ -487,7 +488,7 @@ def reset_password(token):
             flash('Passwords do not match', 'error')
             return render_template('reset_password.html', token=token)
         
-        user.password_hash = generate_password_hash(password)
+        user.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         db.session.commit()
         flash('Your password has been updated!', 'success')
         return redirect(url_for('login'))
@@ -495,68 +496,49 @@ def reset_password(token):
     return render_template('reset_password.html', token=token)
 
 @app.route('/delete_account', methods=['POST'])
+@login_required
 def delete_account():
-    if 'user_id' not in session:
-        flash('Bitte melden Sie sich an, um Ihr Konto zu löschen.', 'error')
-        return redirect(url_for('login'))
-    
     user_id = session['user_id']
     user = User.query.get(user_id)
     
     if user:
         db.session.delete(user)
         db.session.commit()
-        session.pop('user_id', None)  # Benutzer aus der Session entfernen
-        flash('Ihr Konto wurde erfolgreich gelöscht.', 'success')
+        session.pop('user_id', None)
+        flash('Your account has been successfully deleted.', 'success')
     else:
-        flash('Konto nicht gefunden.', 'error')
+        flash('Account not found.', 'error')
     
     return redirect(url_for('home'))
 
-
-
 @app.route('/edit_account', methods=['GET', 'POST'])
+@login_required
 def edit_account():
-    if 'user_id' not in session:
-        flash('Bitte melden Sie sich an, um Ihr Konto zu bearbeiten.', 'error')
-        return redirect(url_for('login'))
-    
     user_id = session['user_id']
     user = User.query.get(user_id)
 
     if not user:
-        flash('Konto nicht gefunden.', 'error')
+        flash('Account not found.', 'error')
         return redirect(url_for('dashboard'))
     
     if request.method == 'POST':
-        name = request.form.get('name')
+        firstname = request.form.get('firstname')
+        lastname = request.form.get('lastname')
         email = request.form.get('email')
-        tele = request.form.get('tele')
-        info = request.form.get('info')
-
-        # Überprüfen, ob der neue Name oder die neue E-Mail-Adresse bereits existiert
-        if User.query.filter((User.name == name) & (User.id != user.id)).first():
-            flash('Der Benutzername ist bereits vergeben.', 'error')
-            return redirect(url_for('edit_account'))
 
         if User.query.filter((User.email == email) & (User.id != user.id)).first():
-            flash('Die E-Mail-Adresse ist bereits vergeben.', 'error')
+            flash('The email address is already taken.', 'error')
             return redirect(url_for('edit_account'))
 
-        # Aktualisieren der Daten
-        user.name = name
+        user.firstname = firstname
+        user.lastname = lastname
         user.email = email
-        user.tele = tele
-        user.info = info
         db.session.commit()
 
-        flash('Ihr Konto wurde erfolgreich aktualisiert.', 'success')
+        flash('Your account has been successfully updated.', 'success')
         return redirect(url_for('dashboard'))
 
     return render_template('edit_account.html', user=user)
-
-
-
 
 
 
