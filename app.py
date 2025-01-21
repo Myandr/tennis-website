@@ -167,7 +167,7 @@ def news():
 
 
         if 'user_id' in session:
-        return render_template('index2.html', logged_in=True, is_admin=is_admin, boxes=boxes)
+            return render_template('index2.html', logged_in=True, is_admin=is_admin, boxes=boxes)
     
     return render_template('index2.html', logged_in=False, is_admin=is_admin, boxes=boxes)
 
