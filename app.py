@@ -122,10 +122,17 @@ def news():
         heading = request.form['heading']
         info = request.form['info']
 
-        if image:
-            image_data = image.read()  # Bild als Binärdaten einlesen
+        if image and allowed_file(image.filename):
+            # Bild in Binärdaten umwandeln
+            image_data = image.read()
 
-        new_box = Box(image_data=image_data, date=date, heading=heading, info=info)
+        # Box in der Datenbank speichern
+        new_box = Box(
+            image_data=image_data,  # Binärdaten des Bildes
+            date=date,
+            heading=heading,
+            info=info
+        )
         db.session.add(new_box)
         db.session.commit()
 
@@ -150,6 +157,7 @@ def news():
         return render_template('news.html', logged_in=True, username=session['user_id'], is_admin=is_admin, boxes=boxes)
         
     return render_template('news.html', logged_in=False, is_admin=is_admin,  boxes=boxes)
+
 
 
 
