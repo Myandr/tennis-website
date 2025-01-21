@@ -38,8 +38,8 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 }
 
 
-migrate = Migrate(app, db)
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 mail = Mail(app)
 login_manager = LoginManager(app)
@@ -114,7 +114,6 @@ with app.app_context():
 
 
 #ADD
-import base64
 
 @app.route('/news', methods=['GET', 'POST'])
 def news():
