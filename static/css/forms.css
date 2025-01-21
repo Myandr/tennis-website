@@ -22,6 +22,10 @@ body {
     max-width: 400px;
 }
 
+.remember {
+    display: inline-block;
+}
+
 .header {
     display: flex;
     align-items: center;
