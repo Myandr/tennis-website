@@ -594,9 +594,13 @@ def save_cookie_settings():
     
     return response
 
+
+
 @app.route('/newsletter')
 def newsletter():
     return render_template('newsletter.html')
+
+
 
 
 
