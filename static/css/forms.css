@@ -26,6 +26,10 @@ body {
     display: inline-block;
 }
 
+.remember-label {
+    display: inline-block;
+}
+
 .header {
     display: flex;
     align-items: center;
