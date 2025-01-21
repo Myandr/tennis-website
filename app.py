@@ -114,6 +114,8 @@ with app.app_context():
 
 
 #ADD
+import base64
+
 @app.route('/news', methods=['GET', 'POST'])
 def news():
     if request.method == 'POST':
@@ -137,26 +139,17 @@ def news():
         db.session.commit()
 
         return redirect(url_for('news'))
-        
-    # Überprüfen, ob der Benutzer in der Session eingeloggt ist
-    if 'user_id' in session:
-        user_id = session['user_id']
-        user = User.query.get(user_id)  # Holen des Benutzers aus der DB anhand der ID
-
-        # Überprüfen, ob der Benutzer existiert, bevor auf seine Rolle zugegriffen wird
-        if user:
-            is_admin = user.role == 'admin'
-        else:
-            is_admin = False  # Benutzer nicht gefunden, also kein Admin
-    else:
-        is_admin = False  # Kein Benutzer eingeloggt, also kein Admin
-
+    
+    # Abrufen der Boxen
     boxes = Box.query.all()
 
-    if 'user_id' in session:
-        return render_template('news.html', logged_in=True, username=session['user_id'], is_admin=is_admin, boxes=boxes)
-        
-    return render_template('news.html', logged_in=False, is_admin=is_admin,  boxes=boxes)
+    # Base64-Umwandlung für jedes Bild
+    for box in boxes:
+        if box.image_data:
+            box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
+
+    return render_template('news.html', boxes=boxes)
+
 
 
 
