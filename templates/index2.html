@@ -2051,48 +2051,8 @@
     </div>
 
     <script>
-      const hamburger = document.getElementById("hamburger");
-      const menu = document.getElementById("menu");
-      const menuToggle = document.getElementById("menuToggle");
-      const menuLinks = document.querySelectorAll("#menu a");
 
-      // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
-      menuToggle.addEventListener("change", () => {
-        if (menuToggle.checked) {
-          menu.classList.add("open");
-        } else {
-          menu.classList.remove("open");
-        }
-      });
-
-      // Schließt das Menü, wenn ein Link angeklickt wird
-      menuLinks.forEach((link) => {
-        link.addEventListener("click", () => {
-          menuToggle.checked = false; // Deaktiviert die Checkbox
-          menu.classList.remove("open"); // Schließt das Menü
-        });
-      });
-
-      
-      document.addEventListener("DOMContentLoaded", () => {
-        const readMoreButtons = document.querySelectorAll(".read-more");
-
-        readMoreButtons.forEach((button) => {
-          button.addEventListener("click", (e) => {
-            e.preventDefault();
-            const newsCard = button.closest(".news-card");
-            newsCard.classList.toggle("expanded");
-
-            // Button-Text ändern
-            const isExpanded = newsCard.classList.contains("expanded");
-            button.textContent = isExpanded
-              ? "Weniger anzeigen"
-              : "Weiterlesen";
-          });
-        });
-      });
-
-        document.addEventListener('DOMContentLoaded', function() {
+              document.addEventListener('DOMContentLoaded', function() {
             if (!{{ cookie_consent|tojson }}) {
                 document.getElementById('cookieConsent').style.display = 'block';
             }
@@ -2171,6 +2131,52 @@
         }
 
         document.querySelector('.button-secondary').addEventListener('click', loadCookieSettings);
+
+      
+      const hamburger = document.getElementById("hamburger");
+      const menu = document.getElementById("menu");
+      const menuToggle = document.getElementById("menuToggle");
+      const menuLinks = document.querySelectorAll("#menu a");
+
+      // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
+      menuToggle.addEventListener("change", () => {
+        if (menuToggle.checked) {
+          menu.classList.add("open");
+        } else {
+          menu.classList.remove("open");
+        }
+      });
+
+      // Schließt das Menü, wenn ein Link angeklickt wird
+      menuLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          menuToggle.checked = false; // Deaktiviert die Checkbox
+          menu.classList.remove("open"); // Schließt das Menü
+        });
+      });
+
+      
+      document.addEventListener("DOMContentLoaded", () => {
+        const readMoreButtons = document.querySelectorAll(".read-more");
+
+        readMoreButtons.forEach((button) => {
+          button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const newsCard = button.closest(".news-card");
+            newsCard.classList.toggle("expanded");
+
+            // Button-Text ändern
+            const isExpanded = newsCard.classList.contains("expanded");
+            button.textContent = isExpanded
+              ? "Weniger anzeigen"
+              : "Weiterlesen";
+          });
+        });
+      });
+
+
+      
+      
       let dropArea = document.getElementById("cm-drop-area");
       let fileInput = document.getElementById("cm-fileElem");
       let preview = document.getElementById("cm-preview");
