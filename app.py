@@ -405,10 +405,9 @@ def login():
         if user and bcrypt.check_password_hash(user.password_hash, password):
             if user.is_verified:
                 login_user(user, remember=remember)
-                flash('Logged in successfully', 'success')
                 return redirect(url_for('dashboard'))
             else:
-                flash('Please verify your email first', 'warning')
+                flash('Please verify your email first', 'error')
                 return redirect(url_for('verify'))
         else:
             flash('Invalid email or password', 'error')
@@ -424,7 +423,6 @@ def dashboard():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out', 'info')
     return redirect(url_for('home'))
 
 @app.route('/resend_verification', methods=['GET', 'POST'])
