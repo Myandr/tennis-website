@@ -195,7 +195,7 @@
                 <a  href="{{ url_for('logout') }}">Logout</a>
             </button>
             
-                <form class="btnr" action="{{ url_for('delete_account') }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
+                <form class="btn" action="{{ url_for('delete_account') }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>Konto löschen</button>
                 </form>
         </div>
