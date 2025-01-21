@@ -30,30 +30,27 @@ app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['REMEMBER_COOKIE_DURATION'] = 2592000  # 30 days
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     "connect_args": {
         "sslmode": "require"
     }
 }
-serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
-
-db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
-
+db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-
+mail = Mail(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-mail = Mail(app)
-
-
 #datebank
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(80), nullable=False)
     lastname = db.Column(db.String(80), nullable=False)
@@ -347,14 +344,9 @@ def delete_about_text(id):
 #login
 
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            flash('Please log in to access this page.', 'error')
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 def generate_verification_code():
     return ''.join(random.choices('0123456789', k=6))
@@ -422,11 +414,12 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        remember = 'remember' in request.form
         
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password_hash, password):
             if user.is_verified:
-                session['user_id'] = user.id
+                login_user(user, remember=remember)
                 flash('Logged in successfully', 'success')
                 return redirect(url_for('dashboard'))
             else:
@@ -440,12 +433,12 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    user = User.query.get(session['user_id'])
-    return render_template('dashboard.html', user=user)
+    return render_template('dashboard.html', user=current_user)
 
 @app.route('/logout')
+@login_required
 def logout():
-    session.pop('user_id', None)
+    logout_user()
     flash('You have been logged out', 'info')
     return redirect(url_for('home'))
 
@@ -517,52 +510,34 @@ def reset_password(token):
 @app.route('/delete_account', methods=['POST'])
 @login_required
 def delete_account():
-    user_id = session['user_id']
-    user = User.query.get(user_id)
-    
-    if user:
-        db.session.delete(user)
-        db.session.commit()
-        session.pop('user_id', None)
-        flash('Your account has been successfully deleted.', 'success')
-    else:
-        flash('Account not found.', 'error')
-    
+    user = current_user
+    logout_user()
+    db.session.delete(user)
+    db.session.commit()
+    flash('Your account has been successfully deleted.', 'success')
     return redirect(url_for('home'))
 
 @app.route('/edit_account', methods=['GET', 'POST'])
 @login_required
 def edit_account():
-    user_id = session['user_id']
-    user = User.query.get(user_id)
-
-    if not user:
-        flash('Account not found.', 'error')
-        return redirect(url_for('dashboard'))
-    
     if request.method == 'POST':
         firstname = request.form.get('firstname')
         lastname = request.form.get('lastname')
         email = request.form.get('email')
 
-        if User.query.filter((User.email == email) & (User.id != user.id)).first():
+        if User.query.filter((User.email == email) & (User.id != current_user.id)).first():
             flash('The email address is already taken.', 'error')
             return redirect(url_for('edit_account'))
 
-        user.firstname = firstname
-        user.lastname = lastname
-        user.email = email
+        current_user.firstname = firstname
+        current_user.lastname = lastname
+        current_user.email = email
         db.session.commit()
 
         flash('Your account has been successfully updated.', 'success')
         return redirect(url_for('dashboard'))
 
-    return render_template('edit_account.html', user=user)
-
-
-@app.before_request
-def before_request():
-    session.modified = True  # Diese Zeile sicherstellen, um Sitzung sofort zu aktualisieren
+    return render_template('edit_account.html', user=current_user)
 
 
 
