@@ -1283,6 +1283,10 @@
           <label for="info">Info:</label>
           <textarea id="info" name="info" required></textarea>
         </div>
+        <div class="form-group">
+          <label for="span">Info:</label>
+          <textarea id="span" name="span" required></textarea>
+        </div>
         <button type="submit">Box Hinzufügen</button>
       </form>
       {% endif %}
@@ -1376,6 +1380,9 @@
             <p class="news-date">{{ box.date.strftime('%d.%m.%Y') }}</p>
             <h3 class="news-title">{{ box.heading }}</h3>
             <p class="news-excerpt">{{ box.info }}</p>
+            <span class="hidden-text"
+                >{{ box.span }}</span
+              >
             <a href="#" class="read-more">Weiterlesen</a>
             {% if is_admin %}
             <form
