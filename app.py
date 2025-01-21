@@ -526,6 +526,9 @@ def edit_account():
 
 
 
+@app.before_request
+def before_request():
+    session.modified = True
 
 
 
