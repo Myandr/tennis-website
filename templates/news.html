@@ -1367,10 +1367,7 @@
         {% for box in boxes %}
         <div class="news-card">
           <div class="news-image">
-            <img
-              src="{{ url_for('static', filename='uploads/' + box.image_filename) }}"
-              alt="{{ box.heading }}"
-            />
+                <img src="data:image/jpeg;base64,{{ box.image_data|tojson }}" alt="{{ box.heading }}">
           </div>
           <div class="news-content">
             <p class="news-date">{{ box.date.strftime('%d.%m.%Y') }}</p>
