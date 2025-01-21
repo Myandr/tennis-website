@@ -1319,6 +1319,7 @@
   margin-top: 1.5rem;
   border-top: 1px solid #eee;
   padding-top: 1.5rem;
+  z-index: 10000000;
 }
 
 .cookie-settings h3 {
@@ -2093,13 +2094,11 @@
 
       // Diese Funktion würde normalerweise die Cookies setzen und das Banner ausblenden
         function acceptAllCookies() {
-            alert('Alle Cookies akzeptiert');
             document.getElementById('cookieConsent').style.transform = 'translateY(100%)';
         }
 
         // Diese Funktion würde normalerweise die ausgewählten Cookie-Einstellungen speichern
         function saveCookieSettings() {
-            alert('Cookie-Einstellungen gespeichert');
             document.getElementById('cookieConsent').style.transform = 'translateY(100%)';
         }
 
