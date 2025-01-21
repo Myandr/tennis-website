@@ -44,9 +44,11 @@ migrate = Migrate(app, db)
 
 bcrypt = Bcrypt(app)
 
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-
+mail = Mail(app)
 
 
 #datebank
@@ -612,7 +614,7 @@ def make_session_permanent():
 
 
 # Mail-Objekt erstellen
-mail = Mail(app)
+
 
 # Route für das Formular
 
