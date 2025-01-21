@@ -105,6 +105,7 @@ class Box(db.Model):
     date = db.Column(db.Date, nullable=False)
     heading = db.Column(db.String(100), nullable=False)
     info = db.Column(db.Text, nullable=False)
+    span = db.Column(db.Text, nullable=False)
 
 # Erstellen Sie die Tabellen in der Datenbank
 with app.app_context():
@@ -123,6 +124,7 @@ def news():
         date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
         heading = request.form['heading']
         info = request.form['info']
+        span = request.form['span']
 
         if image and allowed_file(image.filename):
             # Bild in Binärdaten umwandeln
@@ -133,7 +135,8 @@ def news():
             image_data=image_data,  # Binärdaten des Bildes
             date=date,
             heading=heading,
-            info=info
+            info=info, 
+            span=span
         )
         db.session.add(new_box)
         db.session.commit()
