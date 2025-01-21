@@ -77,7 +77,7 @@
 
       .hamburger {
         cursor: pointer;
-        z-index: 10001;
+        z-index: 1001;
       }
 
       .hamburger input {
@@ -241,7 +241,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        z-index: 10000;
+        z-index: 1000;
       }
 
       .menu.open {
@@ -368,7 +368,7 @@
         color: #000;
         font-weight: 500;
         text-transform: uppercase;
-        z-index: 1000;
+        z-index: 100000;
         letter-spacing: 2px;
       }
 
@@ -394,7 +394,7 @@
         transform: translateY(-50%) rotate(-90deg);
         text-decoration: none;
         color: #000;
-        z-index: 1000;
+        z-index: 100000;
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 2px;
@@ -1638,7 +1638,7 @@
                 den Platz zu besuchen und selbst auszuprobieren.</span
               >
             </p>
-            <a class="read-more">Weiterlesen</a>
+            <a href="#" class="read-more">Weiterlesen</a>
           </div>
         </div>
         <div class="news-card">
@@ -1661,7 +1661,7 @@
                 den Platz zu besuchen und selbst auszuprobieren.</span
               >
             </p>
-            <a class="read-more">Weiterlesen</a>
+            <a href="#" class="read-more">Weiterlesen</a>
           </div>
         </div>
         <div class="news-card">
@@ -1684,7 +1684,7 @@
                 den Platz zu besuchen und selbst auszuprobieren.</span
               >
             </p>
-            <a class="read-more">Weiterlesen</a>
+            <a href="#" class="read-more">Weiterlesen</a>
           </div>
         </div>
       </div>
@@ -1820,6 +1820,24 @@
         });
       });
 
+      document.addEventListener("DOMContentLoaded", () => {
+        const readMoreButtons = document.querySelectorAll(".read-more");
+
+        readMoreButtons.forEach((button) => {
+          button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const newsCard = button.closest(".news-card");
+            newsCard.classList.toggle("expanded");
+
+            // Button-Text ändern
+            const isExpanded = newsCard.classList.contains("expanded");
+            button.textContent = isExpanded
+              ? "Weniger anzeigen"
+              : "Weiterlesen";
+          });
+        });
+      });
+
       let dropArea = document.getElementById("cm-drop-area");
       let fileInput = document.getElementById("cm-fileElem");
       let preview = document.getElementById("cm-preview");
@@ -1896,23 +1914,7 @@
         }
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const readMoreButtons = document.querySelectorAll(".read-more");
-
-        readMoreButtons.forEach((button) => {
-          button.addEventListener("click", (e) => {
-            e.preventDefault();
-            const newsCard = button.closest(".news-card");
-            newsCard.classList.toggle("expanded");
-
-            // Button-Text ändern
-            const isExpanded = newsCard.classList.contains("expanded");
-            button.textContent = isExpanded
-              ? "Weniger anzeigen"
-              : "Weiterlesen";
-          });
-        });
-      });
+   
     </script>
   </body>
 </html>
