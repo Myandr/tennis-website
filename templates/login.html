@@ -22,7 +22,7 @@
       {% endwith %} 
       {% with messages = get_flashed_messages(with_categories=True) %}
       {% if messages %}
-        <div class="flash-container">
+      <ul>
           {% for category, message in messages %}
             <div class="{{ category }}-message">
             {% if category == 'success' %}
@@ -33,9 +33,9 @@
                 <i class="fas fa-exclamation-circle"></i>
             {% endif %}
               {{ message }}
-            </div>
           {% endfor %}
         </div>
+    </ul>
       {% endif %}
     {% endwith %}
         <div class="header">
