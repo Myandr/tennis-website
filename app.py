@@ -331,6 +331,10 @@ def delete_about_text(id):
 #login
 
 
+@app.before_request
+def before_request():
+    session.modified = True  # Diese Zeile sicherstellen, um Sitzung sofort zu aktualisieren
+
 
 def login_required(f):
     @wraps(f)
