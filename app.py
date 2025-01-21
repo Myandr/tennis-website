@@ -42,7 +42,7 @@ db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 
-
+bcrypt = Bcrypt(app)
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
