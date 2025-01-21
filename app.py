@@ -569,7 +569,6 @@ def newsletter():
 
 from datetime import timedelta
 
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)  # Sitzung läuft nach 5 Minuten Inaktivität ab
 
 @app.before_request
 def make_session_permanent():
