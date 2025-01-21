@@ -1381,7 +1381,7 @@
             <h3 class="news-title">{{ box.heading }}</h3>
             <p class="news-excerpt">{{ box.info }}</p>
             <span class="hidden-text"
-                >{{ box.span }}</span
+                >{{ box.span | safe }}</span
               >
             <a href="#" class="read-more">Weiterlesen</a>
             {% if is_admin %}
