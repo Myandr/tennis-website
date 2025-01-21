@@ -532,7 +532,7 @@ def before_request():
 
 
 
-#home seite
+#home seite + cookies
 
 @app.route('/')
 def home():
@@ -547,6 +547,9 @@ def home():
     
     termine = Termin.query.all()  # Alle Termine aus der DB abfragen
 
+    # Check if necessary cookie is set
+    cookie_consent = request.cookies.get('necessary') == 'true'
+
     return render_template('index2.html', 
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
@@ -554,7 +557,42 @@ def home():
                            termine=termine,
                            about_texts=about_texts,
                            images=images,
-                           content_items=content_items)
+                           content_items=content_items,
+                           cookie_consent=cookie_consent)
+
+
+@app.route('/api/cookies/accept-all', methods=['POST'])
+def accept_all_cookies():
+    response = make_response(jsonify({'message': 'All cookies accepted'}))
+    
+    # Set cookies with 1 year expiration
+    expires = datetime.now() + timedelta(days=365)
+    
+    response.set_cookie('necessary', 'true', expires=expires, secure=True, httponly=True)
+    response.set_cookie('functional', 'true', expires=expires, secure=True)
+    response.set_cookie('analytics', 'true', expires=expires, secure=True)
+    response.set_cookie('marketing', 'true', expires=expires, secure=True)
+    
+    return response
+
+@app.route('/api/cookies/save-settings', methods=['POST'])
+def save_cookie_settings():
+    settings = request.get_json()
+    response = make_response(jsonify({'message': 'Cookie settings saved'}))
+    
+    expires = datetime.now() + timedelta(days=365)
+    
+    # Necessary cookies are always enabled
+    response.set_cookie('necessary', 'true', expires=expires, secure=True, httponly=True)
+    
+    # Set other cookies based on user preferences
+    for cookie_type in ['functional', 'analytics', 'marketing']:
+        if cookie_type in settings and settings[cookie_type]:
+            response.set_cookie(cookie_type, 'true', expires=expires, secure=True)
+        else:
+            response.delete_cookie(cookie_type)
+    
+    return response
 
 @app.route('/newsletter')
 def newsletter():
