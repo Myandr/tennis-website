@@ -152,8 +152,24 @@ def news():
     for box in boxes:
         if box.image_data:
             box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
+            
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)  # Holen des Benutzers aus der DB anhand der ID
 
-    return render_template('news.html', boxes=boxes)
+        # Überprüfen, ob der Benutzer existiert, bevor auf seine Rolle zugegriffen wird
+        if user:
+            is_admin = user.role == 'admin'
+        else:
+            is_admin = False  # Benutzer nicht gefunden, also kein Admin
+    else:
+        is_admin = False  # Kein Benutzer eingeloggt, also kein Admin
+
+
+        if 'user_id' in session:
+        return render_template('index2.html', logged_in=True, is_admin=is_admin, boxes=boxes)
+    
+    return render_template('index2.html', logged_in=False, is_admin=is_admin, boxes=boxes)
 
 
 
