@@ -331,11 +331,6 @@ def delete_about_text(id):
 #login
 
 
-@app.before_request
-def before_request():
-    session.modified = True  # Diese Zeile sicherstellen, um Sitzung sofort zu aktualisieren
-
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -549,6 +544,9 @@ def edit_account():
     return render_template('edit_account.html', user=user)
 
 
+@app.before_request
+def before_request():
+    session.modified = True  # Diese Zeile sicherstellen, um Sitzung sofort zu aktualisieren
 
 
 
