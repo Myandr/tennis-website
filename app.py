@@ -101,7 +101,7 @@ class ContentItem(db.Model):
 
 class Box(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    image_filename = db.Column(db.String(100), nullable=False)
+    image_data = db.Column(db.LargeBinary)
     date = db.Column(db.Date, nullable=False)
     heading = db.Column(db.String(100), nullable=False)
     info = db.Column(db.Text, nullable=False)
@@ -123,10 +123,9 @@ def news():
         info = request.form['info']
 
         if image:
-            filename = image.filename
-            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_data = image.read()  # Bild als Binärdaten einlesen
 
-        new_box = Box(image_filename=filename, date=date, heading=heading, info=info)
+        new_box = Box(image_data=image_data, date=date, heading=heading, info=info)
         db.session.add(new_box)
         db.session.commit()
 
@@ -157,6 +156,7 @@ def news():
 
 
 
+
     
 
 
@@ -167,11 +167,9 @@ def news():
 def delete_box(box_id):
     box = Box.query.get_or_404(box_id)
     
-    # Delete the associated image file
-    if box.image_filename:
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], box.image_filename)
-        if os.path.exists(image_path):
-            os.remove(image_path)
+
+    if box.image_data:
+        box.image_data = None  # Bild aus der Datenbank entfernen
     
     db.session.delete(box)
     db.session.commit()
