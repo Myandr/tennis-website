@@ -1232,7 +1232,7 @@
         }
       }
 
-.cookie-modal {
+        .cookie-modal {
             display: none;
             position: fixed;
             bottom: 2rem;
@@ -2052,10 +2052,11 @@
 
     <script>
 
-              document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
             if (!{{ cookie_consent|tojson }}) {
                 document.getElementById('cookieConsent').style.display = 'block';
             }
+            document.getElementById('cookieSettings').style.display = 'none';
         });
 
         function closeCookieConsent() {
@@ -2064,7 +2065,11 @@
 
         function toggleSettings() {
             const settings = document.getElementById('cookieSettings');
-            settings.style.display = settings.style.display === 'none' ? 'block' : 'none';
+            if (settings.style.display === 'none' || settings.style.display === '') {
+                settings.style.display = 'block';
+            } else {
+                settings.style.display = 'none';
+            }
         }
 
         async function acceptAllCookies() {
