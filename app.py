@@ -55,13 +55,13 @@ mail = Mail(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(100), unique=True, nullable=False)
-    lastname = db.Column(db.String(100), unique=True, nullable=False)
-    email = db.Column(db.String(100), nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    role = db.Column(db.String(50), default='user')
+    firstname = db.Column(db.String(80), nullable=False)
+    lastname = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    role = db.Column(db.String(20), default='user')
     is_verified = db.Column(db.Boolean, default=False)
-    verification_code = db.Column(db.String(6), nullable=True)
+    verification_code = db.Column(db.String(6))
 
 class PasswordResetToken(db.Model):
     id = db.Column(db.Integer, primary_key=True)
