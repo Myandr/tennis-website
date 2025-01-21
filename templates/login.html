@@ -9,18 +9,6 @@
 </head>
 <body>
     <div class="card">
-      {% with messages = get_flashed_messages() %}
-      {% if messages %}
-          <ul>
-              {% for message in messages %}
-              <div class="error-message">
-              <div class="error-icon">!</div>
-                  <p>{{ message }}</p>
-              </div>                    
-              {% endfor %}
-          </ul>
-      {% endif %}
-      {% endwith %} 
       {% with messages = get_flashed_messages(with_categories=True) %}
       {% if messages %}
       <ul>
