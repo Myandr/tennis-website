@@ -45,7 +45,18 @@ bcrypt = Bcrypt(app)
 mail = Mail(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+login_manager.init_app(app)
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+
+login_manager.login_message = "Bitte melde dich an, um diese Seite zu sehen."
+login_manager.login_message_category = "info"
+login_manager.refresh_message = "Bitte authentifiziere dich erneut, um fortzufahren."
+login_manager.refresh_message_category = "error"
+login_manager.needs_refresh_message = "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
+login_manager.needs_refresh_message_category = "error"
+
+
+
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
