@@ -93,7 +93,7 @@
           <li><a href="#termine">TERMINE</a></li>
           <li><a href="#trainer">TRAINER</a></li>
           <li><a href="#news">NEUIGKEITEN</a></li>
-          {% if logged_in %}
+          {% if logged_in and is_verified%}
           <li><a href="/dashboard">Dein Account</a></li>
           {% else %}
           <li><a href="{{ url_for('login') }}">Signup/Login →</a></li>
