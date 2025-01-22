@@ -650,14 +650,13 @@ def home():
     return render_template('index2.html', 
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
-                           is_admin=current_user.is_authenticated and current_user.role == 'admin',
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
                            is_verified=current_user.is_authenticated and current_user.is_verified,
                            termine=termine,
                            about_texts=about_texts,
                            images=images,
                            content_items=content_items,
-                           cookie_consent=cookie_consent, 
-                           is_admin_active=is_admin_active)
+                           cookie_consent=cookie_consent)
 
 
 
