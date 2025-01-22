@@ -214,7 +214,14 @@ table {
                 {% for content in content_item %}
                 <tr>
                     <td>{{ content.id }}</td>
-                    <td>{{ content.image_data }}</td>
+                    <td>{% if content.image_data_base64 %}
+                        <img
+                          src="data:image/jpeg;base64,{{ content.image_data_base64 }}"
+                          alt="Content Image"
+                        />
+                        {% else %}
+                        <p>No image available</p>
+                        {% endif %}</td>
                     <td>{{ content.heading }}</td>
                     <td>{{ content.text1 }}</td>
                     <td>{{ content.text2 }}</td>
@@ -242,7 +249,14 @@ table {
                 {% for i in box %}
                 <tr>
                     <td>{{ i.id }}</td>
-                    <td>{{ i.image_data }}</td>
+                    <td>{% if i.image_data_base64 %}
+                        <img
+                          src="data:image/jpeg;base64,{{ i.image_data_base64 }}"
+                          alt="Content Image"
+                        />
+                        {% else %}
+                        <p>No image available</p>
+                        {% endif %}</td>
                     <td>{{ i.date }}</td>
                     <td>{{ i.heading }}</td>
                     <td>{{ i.info }}</td>
