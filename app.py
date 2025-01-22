@@ -276,7 +276,6 @@ def delete_termin(termin_id):
     termin = Termin.query.get_or_404(termin_id)
     db.session.delete(termin)
     db.session.commit()
-    flash("Termin erfolgreich gelöscht", "success")
     return redirect(url_for('home') + "#work")
 
 
@@ -290,7 +289,6 @@ def add_about_text():
     text_type = request.form["text_type"]
 
     if not text_content:
-        flash("Bitte geben Sie einen Text ein.", "error")
         return redirect(url_for('home') + "#about")
 
     
@@ -301,7 +299,6 @@ def add_about_text():
 
     db.session.add(new_text)
     db.session.commit()
-    flash("Text erfolgreich hinzugefügt.", "success")
     return redirect(url_for('home') + "#about")
 
 
@@ -312,7 +309,6 @@ def delete_about_text(id):
     if text_to_delete:
         db.session.delete(text_to_delete)
         db.session.commit()
-        flash("Text erfolgreich gelöscht.", "success")
     else:
         flash("Text nicht gefunden.", "error")
     return redirect(url_for('home') + "#about")
@@ -352,13 +348,13 @@ def signup():
 
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            flash('Email already exists', 'error')
+            flash('E-Mail existiert bereits', 'error')
             return redirect(url_for('signup'))
 
         if role == 'admin':
             admin_password = request.form['admin_password']
             if admin_password != os.environ.get('ADMIN_PASSWORD', 'hardter-tennis-tv-dorsten-admin'):
-                flash('Invalid admin password', 'error')
+                flash('Ungültiges Admin-Passwort', 'error')
                 return redirect(url_for('signup'))
 
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -371,7 +367,7 @@ def signup():
         
         send_verification_email(email, verification_code)
         
-        flash('Please check your email for verification code', 'info')
+        flash('Bitte überprüfen Sie Ihre E-Mails auf den Bestätigungscode', 'info')
         return redirect(url_for('verify'))
     
     return render_template('signup.html')
@@ -387,10 +383,10 @@ def verify():
             user.is_verified = True
             user.verification_code = None
             db.session.commit()
-            flash('Your account has been verified', 'success')
+            flash('Ihr Konto wurde verifiziert', 'success')
             return redirect(url_for('login'))
         else:
-            flash('Invalid email or verification code', 'error')
+            flash('Ungültige E-Mail oder Bestätigungscode', 'error')
     
     return render_template('verify.html')
 
@@ -405,13 +401,13 @@ def login():
         if user and bcrypt.check_password_hash(user.password_hash, password):
             if user.is_verified:
                 login_user(user, remember=remember)
-                flash('You are successfully logged in', 'success')
+                flash('Sie sind erfolgreich eingeloggt', 'success')
                 return redirect(url_for('dashboard'))
             else:
-                flash('Please verify your email first', 'error')
+                flash('Bitte verifizieren Sie zuerst Ihre E-Mail', 'error')
                 return redirect(url_for('verify'))
         else:
-            flash('Invalid email or password', 'error')
+            flash('Ungültige E-Mail oder Passwort', 'error')
     
     return render_template('login.html')
 
@@ -439,7 +435,7 @@ def dashboard():
 @login_required
 def logout():
     logout_user()
-    flash('You are successfully logged out', 'success')
+    flash('Sie sind erfolgreich ausgeloggt', 'success')
     return redirect(url_for('login'))
 
 @app.route('/resend_verification', methods=['GET', 'POST'])
@@ -452,10 +448,10 @@ def resend_verification():
             user.verification_code = new_code
             db.session.commit()
             send_verification_email(email, new_code)
-            flash('A new verification code has been sent to your email', 'info')
+            flash('Ein neuer Bestätigungscode wurde an Ihre E-Mail gesendet', 'info')
             return redirect(url_for('verify'))
         else:
-            flash('Invalid email or account already verified', 'error')
+            flash('Ungültige E-Mail oder Konto bereits verifiziert', 'error')
     return render_template('resend_verification.html')
 
 def send_password_reset_email(user_email):
@@ -464,7 +460,7 @@ def send_password_reset_email(user_email):
     msg = Message('Password Reset Request', 
                   sender='your_email@gmail.com', 
                   recipients=[user_email])
-    msg.body = f'To reset your password, visit the following link: {reset_url}'
+    msg.body = f'Um das Passwort zurück zu setzen, folge dem Link: {reset_url}'
     mail.send(msg)
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
@@ -474,9 +470,9 @@ def forgot_password():
         user = User.query.filter_by(email=email).first()
         if user:
             send_password_reset_email(user.email)
-            flash('A password reset email has been sent.', 'info')
+            flash('Eine E-Mail zur Zurücksetzung des Passworts wurde gesendet', 'info')
         else:
-            flash('Email address not found', 'error')
+            flash('E-Mail-Adresse nicht gefunden', 'error')
         return redirect(url_for('login'))
     return render_template('forgot_password.html')
 
@@ -485,24 +481,24 @@ def reset_password(token):
     try:
         email = serializer.loads(token, salt='password-reset-salt', max_age=3600)
     except:
-        flash('The password reset link is invalid or has expired.', 'error')
+        flash('Der Link zur Passwortzurücksetzung ist ungültig oder abgelaufen', 'error')
         return redirect(url_for('login'))
     
     user = User.query.filter_by(email=email).first()
     if not user:
-        flash('User not found', 'error')
+        flash('Benutzer nicht gefunden', 'error')
         return redirect(url_for('login'))
     
     if request.method == 'POST':
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         if password != confirm_password:
-            flash('Passwords do not match', 'error')
+            flash(' Passwörter stimmen nicht überein', 'error')
             return render_template('reset_password.html', token=token)
         
         user.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         db.session.commit()
-        flash('Your password has been updated!', 'success')
+        flash('Ihr Passwort wurde aktualisiert!', 'success')
         return redirect(url_for('login'))
     
     return render_template('reset_password.html', token=token)
@@ -514,7 +510,7 @@ def delete_account():
     logout_user()
     db.session.delete(user)
     db.session.commit()
-    flash('Your account has been successfully deleted.', 'success')
+    flash('Ihr Konto wurde erfolgreich gelöscht.', 'success')
     return redirect(url_for('home'))
 
 @app.route('/edit_account', methods=['GET', 'POST'])
@@ -526,7 +522,7 @@ def edit_account():
         email = request.form.get('email')
 
         if User.query.filter((User.email == email) & (User.id != current_user.id)).first():
-            flash('The email address is already taken.', 'error')
+            flash('Die E-Mail-Adresse ist bereits vergeben.', 'error')
             return redirect(url_for('edit_account'))
 
         current_user.firstname = firstname
@@ -534,7 +530,7 @@ def edit_account():
         current_user.email = email
         db.session.commit()
 
-        flash('Your account has been successfully updated.', 'success')
+        flash('Ihr Konto wurde erfolgreich aktualisiert.', 'success')
         return redirect(url_for('dashboard'))
 
     return render_template('edit_account.html', user=current_user)
@@ -580,7 +576,7 @@ def home():
 
 @app.route('/api/cookies/accept-all', methods=['POST'])
 def accept_all_cookies():
-    response = make_response(jsonify({'message': 'All cookies accepted'}))
+    response = make_response(jsonify({'message': 'Alle Cookies akzeptiert'}))
     
     # Set cookies with 1 year expiration
     expires = datetime.now() + timedelta(days=365)
@@ -595,7 +591,7 @@ def accept_all_cookies():
 @app.route('/api/cookies/save-settings', methods=['POST'])
 def save_cookie_settings():
     settings = request.get_json()
-    response = make_response(jsonify({'message': 'Cookie settings saved'}))
+    response = make_response(jsonify({'message': 'Cookie-Einstellungen gespeichert'}))
     
     expires = datetime.now() + timedelta(days=365)
     
