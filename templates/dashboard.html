@@ -186,89 +186,92 @@
       }
 
       .card h1 {
-            font-size: 24px;
-            font-weight: bold;
-            padding: 20px;
-            margin: 0;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-        }
-        .profile-info {
-            padding: 20px;
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid #e9ecef;
-        }
-        th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 14px;
-            color: #495057;
-        }
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-        td.admin-role {
-            background-color: orange;
-            color: white;
-            font-weight: bold;
-            border-radius: 5px;
-        }
+        font-size: 24px;
+        font-weight: bold;
+        padding: 20px;
+        margin: 0;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+      }
+      .profile-info {
+        padding: 20px;
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid #e9ecef;
+      }
+      th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 14px;
+        color: #495057;
+      }
+      tr:hover {
+        background-color: #f8f9fa;
+      }
+      td.admin-role {
+        background-color: orange;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+      }
 
-        i {
-            margin-right: 5px;
-        }
+      i {
+        margin-right: 5px;
+      }
 
-        a {
-            text-decoration: none;
+      a {
+        text-decoration: none;
+      }
+      @media screen and (max-width: 600px) {
+        table,
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+          display: block;
         }
-        @media screen and (max-width: 600px) {
-            table, thead, tbody, th, td, tr {
-                display: block;
-            }
-            thead tr {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
-            }
-            tr {
-                border: 1px solid #ccc;
-                margin-bottom: 10px;
-            }
-            td {
-                border: none;
-                border-bottom: 1px solid #eee;
-                position: relative;
-                padding-left: 40%;
-            }
-            td:before {
-                position: absolute;
-                top: 6px;
-                left: 6px;
-                width: 45%;
-                padding-right: 10px;
-                white-space: nowrap;
-                content: attr(data-label);
-                font-weight: bold;
-            }
-
+        thead tr {
+          position: absolute;
+          top: -9999px;
+          left: -9999px;
         }
+        tr {
+          border: 1px solid #ccc;
+          margin-bottom: 10px;
+        }
+        td {
+          border: none;
+          border-bottom: 1px solid #eee;
+          position: relative;
+          padding-left: 40%;
+        }
+        td:before {
+          position: absolute;
+          top: 6px;
+          left: 6px;
+          width: 45%;
+          padding-right: 10px;
+          white-space: nowrap;
+          content: attr(data-label);
+          font-weight: bold;
+        }
+      }
 
       @media (max-width: 600px) {
         .info-row {
           flex-direction: column;
           gap: 0.5rem;
         }
-
-
 
         .info-label {
           width: 100%;
@@ -330,24 +333,26 @@
 
       <div class="button-group">
         <a href="/">
-        <button class="btn">
-          <i class="fa fa-home"></i>Zurück zur Startseite
-        </button>
+          <button class="btn">
+            <i class="fa fa-home"></i>Zurück zur Startseite
+          </button>
         </a>
         <a href="{{ url_for('forgot_password') }}">
-        <button class="btn">
-          <i class="fa fa-key"></i>Passwort ändern
-        </button>
+          <button class="btn"><i class="fa fa-key"></i>Passwort ändern</button>
         </a>
         <a href="{{ url_for('edit_account') }}">
-        <button class="btn btn-primary">
-          Account bearbeiten
-        </button>
+          <button class="btn btn-primary">Account bearbeiten</button>
         </a>
+        {% if is_admin %}
+        <form action="{{ url_for('toggle_admin') }}" method="post">
+          <button type="submit" class="btn">
+            {% if session.get('is_admin_active', True) %} Admin-Rechte
+            deaktivieren {% else %} Admin-Rechte aktivieren {% endif %}
+          </button>
+        </form>
+        {% endif %}
         <a href="{{ url_for('logout') }}">
-        <button class="btn">
-          <i class="fa fa-sign-out-alt"></i>Logout
-        </button>
+          <button class="btn"><i class="fa fa-sign-out-alt"></i>Logout</button>
         </a>
 
         <form
@@ -363,31 +368,34 @@
     </div>
     {% if is_admin %}
     <div class="card">
-        <h1>Alle Mitglieder:  {{ users | length}}</h1>
-        <div class="profile-info">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Rolle</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for i in users %}
-                    <tr>
-                        <td data-label="Firstname">{{ i.firstname }}</td>
-                        <td data-label="Lastname">{{ i.lastname }}</td>
-                        <td data-label="Email">{{ i.email|mask_email }}</td>
-                        <td data-label="Rolle" class="{% if i.role == 'admin' %}admin-role{% endif %}">
-                            {{ i.role }}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+      <h1>Alle Mitglieder: {{ users | length}}</h1>
+      <div class="profile-info">
+        <table>
+          <thead>
+            <tr>
+              <th>Firstname</th>
+              <th>Lastname</th>
+              <th>Email</th>
+              <th>Rolle</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in users %}
+            <tr>
+              <td data-label="Firstname">{{ i.firstname }}</td>
+              <td data-label="Lastname">{{ i.lastname }}</td>
+              <td data-label="Email">{{ i.email|mask_email }}</td>
+              <td
+                data-label="Rolle"
+                class="{% if i.role == 'admin' %}admin-role{% endif %}"
+              >
+                {{ i.role }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
     {% endif %}
   </body>

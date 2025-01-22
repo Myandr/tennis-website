@@ -50,7 +50,7 @@
     </nav>
 
     <section class="locations-section" id="news">
-      {% if is_admin %}
+      {% if is_admin_active %}
       <form
         class="cm-form"
         action="{{ url_for('news') }}"
@@ -195,7 +195,7 @@
                 >{{ box.span | safe }}</span
               >
             <a href="#" class="read-more">Weiterlesen</a>
-            {% if is_admin %}
+            {% if is_admin_active %}
             <form
               action="{{ url_for('delete_box', box_id=box.id) }}"
               method="post"

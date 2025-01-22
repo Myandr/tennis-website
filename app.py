@@ -144,6 +144,8 @@ def news():
     
     # Abrufen der Boxen
     boxes = Box.query.all()
+    is_admin_active = session.get('is_admin_active', True)
+
 
     # Base64-Umwandlung für jedes Bild
     for box in boxes:
@@ -151,7 +153,7 @@ def news():
             box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
 
 
-    return render_template('news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin', boxes=boxes)
+    return render_template('news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin', boxes=boxes, is_admin_active=is_admin_active)
 
 
 
@@ -571,7 +573,16 @@ def before_request():
     session.modified = True
 
 
-
+@app.route('/toggle_admin', methods=['POST'])
+@login_required
+def toggle_admin():
+    if current_user.role == 'admin':  # Überprüfen, ob der Nutzer ein Admin ist
+        session['is_admin_active'] = not session.get('is_admin_active', True)
+        status = 'aktiviert' if session['is_admin_active'] else 'deaktiviert'
+        flash(f'Admin-Rechte wurden {status}.', 'success')
+    else:
+        flash('Sie haben keine Berechtigung, diese Aktion auszuführen.', 'error')
+    return redirect(url_for('dashboard'))
 
 
 #home seite + cookies
@@ -591,6 +602,8 @@ def home():
 
     cookie_consent = request.cookies.get('necessary') == 'true'
 
+    is_admin_active = session.get('is_admin_active', True)
+
     return render_template('index2.html', 
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
@@ -600,7 +613,8 @@ def home():
                            about_texts=about_texts,
                            images=images,
                            content_items=content_items,
-                           cookie_consent=cookie_consent)
+                           cookie_consent=cookie_consent, 
+                           is_admin_active=is_admin_active)
 
 
 
