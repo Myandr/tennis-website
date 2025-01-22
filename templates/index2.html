@@ -133,7 +133,7 @@
     </section>
 
     <section class="locations-section" id="one">
-      {% if is_admin_active %}
+      {% if is_admin %}
       <form
         class="cm-form"
         action="{{ url_for('add_content') }}"
@@ -299,7 +299,7 @@
             <p>{{ item.text2 }}</p>
           </div>
           <div class="expanded-info">{{ item.iframe | safe }}</div>
-          {% if is_admin_active %}
+          {% if is_admin %}
           <a
             href="{{ url_for('delete_content', item_id=item.id) }}"
             class="cm-delete-btn"
@@ -341,7 +341,7 @@
               <br />
               {% else %}
               <p>{{ text.content }}</p>
-              {% endif %} {% if is_admin_active %}
+              {% endif %} {% if is_admin %}
               <form
                 action="/delete_about_text/{{ text.id }}"
                 method="POST"
@@ -355,7 +355,7 @@
                   Löschen
                 </button>
               </form>
-              {% endif %} {% endfor %} {% if is_admin_active %}
+              {% endif %} {% endfor %} {% if is_admin%}
               <form
                 class="about-form hidden"
                 action="/add_about_text"
@@ -406,7 +406,7 @@
                 <td>{{ termin.veranstaltung }}</td>
                 <td>{{ termin.uhrzeit }}</td>
                 <td>{{ termin.ort }}</td>
-                {% if is_admin_active %}
+                {% if is_admin %}
                 <td>
                   <form
                     action="/delete_termin/{{ termin.id }}"
@@ -430,7 +430,7 @@
         </div>
       </div>
 
-      {% if is_admin_active %}
+      {% if is_admin %}
 
       <!-- Formular zum Hinzufügen eines neuen Termins -->
       <form class="termin-form hidden" action="/add_termin" method="POST">
