@@ -44,6 +44,23 @@
     <title>hardter tv</title>
   </head>
   <body>
+    {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %}
+      <ul>
+        {% for category, message in messages %}
+        <div class="flash {{ category }}-message">
+          {% if category == 'success' %}
+          <i class="fas fa-check-circle"></i>
+          {% elif category == 'info' %}
+          <i class="fas fa-info-circle"></i>
+          {% elif category == 'error' %}
+          <i class="fas fa-exclamation-circle"></i>
+          {% endif %}
+          <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      </ul>
+      {% endif %} {% endwith %}
     <nav class="navbar">
       <a href="/" class="logo">logo</a>
       <div class="nav-links" id="navLinks">
@@ -701,12 +718,14 @@
             Bleiben Sie auf dem Laufenden mit unseren neuesten Nachrichten und
             Angeboten.
           </p>
-          <form class="newsletter-form">
+          <form action="/subscribe" method="POST" class="newsletter-form">
             <input
               type="email"
               placeholder="Ihre E-Mail-Adresse"
               class="newsletter-input"
               required
+              name="email"
+              id="email"
             />
             <button type="submit" class="newsletter-btn">Abonnieren</button>
           </form>
@@ -878,6 +897,19 @@
         }
 
         document.querySelector('.button-secondary').addEventListener('click', loadCookieSettings);
+
+      
+      window.onload = function() {
+        // Suche nach allen Flash-Nachrichten
+        const flashMessages = document.querySelectorAll('.flash');
+
+        // Wenn es Flash-Nachrichten gibt, verstecke sie nach 10 Sekunden
+        flashMessages.forEach(function(message) {
+            setTimeout(function() {
+                message.style.display = 'none';  // Blende die Nachricht aus
+            }, 10000);  // 10000 Millisekunden = 10 Sekunden
+        });
+    }
 
 
       const hamburger = document.getElementById("hamburger");

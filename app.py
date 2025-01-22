@@ -26,6 +26,7 @@ app.config['MAIL_PORT'] = 587  # Port für TLS
 app.config['MAIL_USE_TLS'] = True  # TLS aktivieren
 app.config['MAIL_USE_SSL'] = False  # SSL nicht verwenden
 app.config['MAIL_USERNAME'] = 'myandr180709@gmail.com'  # Deine Gmail-Adresse
+app.config['MAIL_DEFAULT_SENDER'] = 'myandr180709@gmail.com'
 app.config['MAIL_PASSWORD'] = 'tkkl szsh ybkj vprx'  # Dein App-Passwort
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -690,7 +691,24 @@ def make_session_permanent():
 
 #mails
 
-
+@app.route('/subscribe', methods=['POST'])
+def subscribe():
+    email = request.form['email']  # E-Mail-Adresse vom Benutzer
+    
+    # Hier kannst du die E-Mail-Adresse in einer Datenbank speichern, wenn gewünscht
+    
+    # E-Mail senden
+    msg = Message('Danke für deine Anmeldung zum Newsletter!',
+                  recipients=[email])
+    msg.body = 'Willkommen! Du hast dich erfolgreich für unseren Newsletter angemeldet.'
+    
+    try:
+        mail.send(msg)  # E-Mail versenden
+        flash('E-Mail wurde erfolgreich versendet!', 'success')
+    except Exception as e:
+        flash(f'Fehler beim Senden der E-Mail: {e}', 'error')
+    
+    return redirect(url_for('home'))
 
 
 # Mail-Objekt erstellen
