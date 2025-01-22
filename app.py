@@ -18,7 +18,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_kw1i_user:cIOWrkpuUgc2yKNQapSWGI2iVQX967kw@dpg-cu7luljqf0us73e65f50-a/user_kw1i'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_kw1i_user:cIOWrkpuUgc2yKNQapSWGI2iVQX967kw@dpg-cu7luljqf0us73e65f50-a.oregon-postgres.render.com/user_kw1i'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -678,6 +678,9 @@ def db_preview():
                     item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
                 else:
                     item.image_data_base64 = None
+                    
+            box = Box.query.all()
+            
 
             for item in box:
                 if item.image_data:
@@ -685,7 +688,6 @@ def db_preview():
                 else:
                     item.image_data_base64 = None
 
-            box = Box.query.all()
 
             return render_template('db_preview.html', users=users,
                                    termine=termine, about_texts=about_texts, content_item=content_items, box=box)

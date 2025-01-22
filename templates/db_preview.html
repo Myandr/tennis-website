@@ -92,6 +92,10 @@ table {
             font-size: 0.9em;
         }
 
+        td img {
+            max-width: 200px;
+        }
+
         tr:nth-child(even) {
             background-color: #f8f9fa;
         }
@@ -214,7 +218,7 @@ table {
                 {% for content in content_item %}
                 <tr>
                     <td>{{ content.id }}</td>
-                    <td>{% if item.image_data_base64 %}
+                    <td>{% if content.image_data_base64 %}
                         <img
                           src="data:image/jpeg;base64,{{ content.image_data_base64 }}"
                           alt="Content Image"
@@ -249,7 +253,7 @@ table {
                 {% for i in box %}
                 <tr>
                     <td>{{ i.id }}</td>
-                    <td>{% if item.image_data_base64 %}
+                    <td>{% if i.image_data_base64 %}
                         <img
                           src="data:image/jpeg;base64,{{ i.image_data_base64 }}"
                           alt="Content Image"
