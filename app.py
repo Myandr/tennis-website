@@ -670,13 +670,12 @@ def db_preview():
         if request.form['password'] == DB_PASSWORD:
             # Daten aus der Datenbank holen
             users = User.query.all()
-            reset_tokens = PasswordResetToken.query.all()
             termine = Termin.query.all()
             about_texts = AboutText.query.all()
-            testimonials = Testimonial.query.all()
-            images = Image.query.all()
-            return render_template('db_preview.html', users=users, reset_tokens=reset_tokens,
-                                   termine=termine, about_texts=about_texts, testimonials=testimonials, images=images)
+            content_item = ContentItem.query.all()
+            box = Box.query.all()
+            return render_template('db_preview.html', users=users,
+                                   termine=termine, about_texts=about_texts, content_item=content_item, box=box)
         else:
             return render_template('passwort.html', error="Falsches Passwort! Versuche es erneut.")
 

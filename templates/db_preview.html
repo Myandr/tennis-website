@@ -126,11 +126,9 @@ table {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
                         <th>Email</th>
-                        <th>Telefon</th>
-                        <th>Typ</th>
-                        <th>Info</th>
                         <th>Rolle</th>
                         <th>Verifiziert</th>
                     </tr>
@@ -139,41 +137,15 @@ table {
                     {% for user in users %}
                     <tr>
                         <td>{{ user.id }}</td>
-                        <td>{{ user.name }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.lastname }}</td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.tele }}</td>
-                        <td>{{ user.typ }}</td>
-                        <td>{{ user.info }}</td>
                         <td>{{ user.role }}</td>
                         <td>{{ user.is_verified }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
-
-        <h2>Passwort Reset Tokens</h2>
-        <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>User ID</th>
-                    <th>Token</th>
-                    <th>Ablaufdatum</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for token in reset_tokens %}
-                <tr>
-                    <td>{{ token.id }}</td>
-                    <td>{{ token.user_id }}</td>
-                    <td>{{ token.token }}</td>
-                    <td>{{ token.expiration }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
         </div>
 
         <h2>Termine</h2>
@@ -224,47 +196,63 @@ table {
         </table>
         </div>
 
-        <h2>Testimonials</h2>
+        
+        <h2>Standorte</h2>
         <div class="table-container">
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Text</th>
-                    <th>Autor</th>
+                    <th>Img</th>
+                    <th>Heading</th>
+                    <th>Text1</th>
+                    <th>Text2</th>
+                    <th>Iframe</th>
                 </tr>
             </thead>
             <tbody>
-                {% for testimonial in testimonials %}
+                {% for about_text in about_texts %}
                 <tr>
-                    <td>{{ testimonial.id }}</td>
-                    <td>{{ testimonial.text }}</td>
-                    <td>{{ testimonial.author }}</td>
+                    <td>{{ content_item.id }}</td>
+                    <td>{{ content_item.image_data }}</td>
+                    <td>{{ content_item.heading }}</td>
+                    <td>{{ content_item.text1 }}</td>
+                    <td>{{ content_item.text2 }}</td>
+                    <td>{{ content_item.iframe }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         </div>
 
-        <h2>Images</h2>
+        <h2>News</h2>
         <div class="table-container">
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Filename</th>
+                    <th>Img</th>
+                    <th>Datum</th>
+                    <th>Heading</th>
+                    <th>info</th>
+                    <th>span</th>
                 </tr>
             </thead>
             <tbody>
-                {% for image in images %}
+                {% for about_text in about_texts %}
                 <tr>
-                    <td>{{ image.id }}</td>
-                    <td>{{ image.filename }}</td>
+                    <td>{{ content_item.id }}</td>
+                    <td>{{ content_item.image_data }}</td>
+                    <td>{{ content_item.date }}</td>
+                    <td>{{ content_item.heading }}</td>
+                    <td>{{ content_item.info }}</td>
+                    <td>{{ content_item.span }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         </div>
+
     </div>
 </body>
 </html>
