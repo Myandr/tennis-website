@@ -851,8 +851,11 @@
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
-    max-width: 1200px;
+    max-width: 600px;
     margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
   }
 
   .cm-input,
@@ -862,14 +865,15 @@
 
   .cm-button {
     padding: 10px;
-    background-color: #007bff;
+    background-color: #000000;
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 10px;
   }
 
   .cm-button:hover {
-    background-color: #0056b3;
+    background-color: #424242;
   }
 
   .cm-content-container {
@@ -920,7 +924,7 @@
   }
 
   .cm-drop-area.cm-highlight {
-    border-color: #007bff;
+    border-color: #000000;
     background-color: #f0f8ff;
   }
 
@@ -929,7 +933,7 @@
   }
 
   .cm-drop-area label {
-    background-color: #007bff;
+    background-color: #000000;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
@@ -937,7 +941,7 @@
   }
 
   .cm-drop-area label:hover {
-    background-color: #0056b3;
+    background-color: #494949;
   }
 
   .cm-drop-area p {
