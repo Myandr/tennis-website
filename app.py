@@ -672,10 +672,23 @@ def db_preview():
             users = User.query.all()
             termine = Termin.query.all()
             about_texts = AboutText.query.all()
-            content_item = ContentItem.query.all()
+            content_items = ContentItem.query.all()
+            for item in content_items:
+                if item.image_data:
+                    item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
+                else:
+                    item.image_data_base64 = None
+
+            for item in box:
+                if item.image_data:
+                    item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
+                else:
+                    item.image_data_base64 = None
+
             box = Box.query.all()
+
             return render_template('db_preview.html', users=users,
-                                   termine=termine, about_texts=about_texts, content_item=content_item, box=box)
+                                   termine=termine, about_texts=about_texts, content_item=content_items, box=box)
         else:
             return render_template('passwort.html', error="Falsches Passwort! Versuche es erneut.")
 
