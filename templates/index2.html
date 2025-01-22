@@ -19,12 +19,15 @@
     <meta name="robots" content="index, follow" />
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+    />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" type="text/css" href="../static/css/index2.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
 
     <title>hardter tv</title>
   </head>
@@ -159,41 +162,93 @@
       </div>
       <div class="locations-grid">
         <div class="location-card" onclick="expandCard(this)">
-                <img src="/static/images/tennis1.jpg" alt="Tennisplatz">
-                <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
-                <div class="location-info">
-                    <h3>Hardter Tennisplatz</h3>
-                    <div class="location-times">10:00 + 12:30 + 18:00</div>
-                    <div class="location-address">6767 Hauptstraße, Hardt, Deutschland</div>
-                </div>
+          <img src="/static/images/tennis1.jpg" alt="Tennisplatz" />
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h3>Hardter Tennisplatz</h3>
+            <div class="location-times">10:00 + 12:30 + 18:00</div>
+            <div class="location-address">
+              6767 Hauptstraße, Hardt, Deutschland
             </div>
-            <div class="location-card" onclick="expandCard(this)">
-                <img src="/static/images/paddle.jpg" alt="Tennis Club">
-                <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
-                <div class="location-info">
-                    <h3>Clubhaus Hardt</h3>
-                    <div class="location-times">10:30 + 12:30 + 18:00</div>
-                    <div class="location-address">6101 Tennisstraße, Hardt, Deutschland</div>
-                </div>
+          </div>
+          <div class="expanded-info">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
+              width="600"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        <div class="location-card" onclick="expandCard(this)">
+          <img src="/static/images/paddle.jpg" alt="Tennis Club" />
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h3>Clubhaus Hardt</h3>
+            <div class="location-times">10:30 + 12:30 + 18:00</div>
+            <div class="location-address">
+              6101 Tennisstraße, Hardt, Deutschland
             </div>
-            <div class="location-card" onclick="expandCard(this)">
-                <img src="/static/images/girl.jpg" alt="Tennis im Park">
-                <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
-                <div class="location-info">
-                    <h3>Tennis im Park</h3>
-                    <div class="location-times">10:30 + 12:30</div>
-                    <div class="location-address">77 Parkstraße, Hardt, Deutschland</div>
-                </div>
+          </div>
+          <div class="expanded-info">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
+              width="600"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        <div class="location-card" onclick="expandCard(this)">
+          <img src="/static/images/girl.jpg" alt="Tennis im Park" />
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h3>Tennis im Park</h3>
+            <div class="location-times">10:30 + 12:30</div>
+            <div class="location-address">
+              77 Parkstraße, Hardt, Deutschland
             </div>
-            <div class="location-card" onclick="expandCard(this)">
-                <img src="/static/images/sport.jpg" alt="Tennis im Garten">
-                <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
-                <div class="location-info">
-                    <h3>Tennisgarten Hardt</h3>
-                    <div class="location-times">10:30 + 12:30</div>
-                    <div class="location-address">17801 Sportstraße, Hardt, Deutschland</div>
-                </div>
+          </div>
+          <div class="expanded-info">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
+              width="600"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        <div class="location-card" onclick="expandCard(this)">
+          <img src="/static/images/sport.jpg" alt="Tennis im Garten" />
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h3>Tennisgarten Hardt</h3>
+            <div class="location-times">10:30 + 12:30</div>
+            <div class="location-address">
+              17801 Sportstraße, Hardt, Deutschland
             </div>
+          </div>
+          <div class="expanded-info">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
+              width="600"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
         {% for item in content_items %}
         <div class="location-card" onclick="expandCard(this)">
           {% if item.image_data_base64 %}
@@ -233,10 +288,7 @@
         <div class="container">
           <div class="about-content">
             <div class="about-image">
-              <img
-                src="/static/images/tennis3.jpg"
-                alt="Tennis Team"
-              />
+              <img src="/static/images/tennis3.jpg" alt="Tennis Team" />
             </div>
             <div class="about-text">
               <p>
@@ -451,10 +503,7 @@
       <div class="locations-grid">
         <div class="news-card">
           <div class="news-image">
-            <img
-              src="/static/images/tennis.jpg"
-              alt="Neuer Tennisplatz"
-            />
+            <img src="/static/images/tennis.jpg" alt="Neuer Tennisplatz" />
           </div>
           <div class="news-content">
             <div class="news-date">15. Mai 2025</div>
@@ -509,8 +558,8 @@
               Um allen Mitgliedern gerecht zu werden, bieten wir ab Juli
               erweiterte Trainingszeiten an. Dies umfasst auch neue Früh- und
               Abendkurse für Berufstätige.
-              <span class="hidden-text"
-                > Das Projekt wurde durch die großzügige Unterstützung unserer
+              <span class="hidden-text">
+                Das Projekt wurde durch die großzügige Unterstützung unserer
                 Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
                 den Platz zu besuchen und selbst auszuprobieren.</span
               >
@@ -524,9 +573,24 @@
     <div class="social-links1">
       <a href="#contact">KONTAKT</a>
       <span></span>
-      <a href="https://facebook.com" target="_blank" aria-label="Gehe zu Facebook"><i class="fab fa-facebook fa-1x"></i></a>
-      <a href="https://linkedin.com" target="_blank" aria-label="Gehe zu Linkedin"><i class="fab fa-linkedin fa-1x"></i></a>
-      <a href="https://instagram.com" target="_blank" aria-label="Gehe zu Instagram"><i class="fab fa-instagram fa-1x"></i></a>
+      <a
+        href="https://facebook.com"
+        target="_blank"
+        aria-label="Gehe zu Facebook"
+        ><i class="fab fa-facebook fa-1x"></i
+      ></a>
+      <a
+        href="https://linkedin.com"
+        target="_blank"
+        aria-label="Gehe zu Linkedin"
+        ><i class="fab fa-linkedin fa-1x"></i
+      ></a>
+      <a
+        href="https://instagram.com"
+        target="_blank"
+        aria-label="Gehe zu Instagram"
+        ><i class="fab fa-instagram fa-1x"></i
+      ></a>
     </div>
 
     <a href="#one" class="discover-button"
@@ -577,10 +641,24 @@
             alles rund um Tennis und Vereinsleben.
           </p>
           <div class="social-links">
-            <a href="https://facebook.com" target="_blank" aria-label="Gehe zu Facebook"><i class="fab fa-facebook fa-1x"></i></a>
-            <a href="https://instagram.com" target="_blank" aria-label="Gehe zu Instagram"><i class="fab fa-instagram fa-1x"></i></a>
-            <a href="https://linkedin.com" target="_blank" aria-label="Gehe zu Linkedin"><i class="fab fa-linkedinfa-1x"></i></a>
-
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              aria-label="Gehe zu Facebook"
+              ><i class="fab fa-facebook fa-1x"></i
+            ></a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              aria-label="Gehe zu Instagram"
+              ><i class="fab fa-instagram fa-1x"></i
+            ></a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              aria-label="Gehe zu Linkedin"
+              ><i class="fab fa-linkedinfa-1x"></i
+            ></a>
           </div>
         </div>
         <div class="footer-section">
@@ -625,69 +703,89 @@
       </div>
     </footer>
 
-<div id="cookieConsent" class="cookie-modal">
-        <div class="cookie-content">
-            <div class="cookie-header">
-                <h2>Cookie-Einstellungen</h2>
-                <button class="close-button" onclick="closeCookieConsent()">&times;</button>
-            </div>
-            
-            <p class="cookie-description">
-                Wir verwenden Cookies, um Ihnen die bestmögliche Erfahrung auf unserer Website zu bieten. 
-                Bitte akzeptieren Sie die Verwendung von Cookies oder passen Sie Ihre Einstellungen an.
-            </p>
-
-            <div class="cookie-actions">
-                <button class="button-primary" onclick="acceptAllCookies()">Alle akzeptieren</button>
-                <button class="button-secondary" onclick="toggleSettings()">Einstellungen anpassen</button>
-            </div>
-
-            <div id="cookieSettings" class="cookie-settings">
-                <h3>Cookie-Einstellungen anpassen</h3>
-                
-                <div class="cookie-options">
-                    <label class="cookie-option">
-                        <input type="checkbox" name="necessary" checked disabled>
-                        <span class="checkmark"></span>
-                        <div class="option-text">
-                            <span>Notwendige Cookies</span>
-                            <small>Diese Cookies sind für die Grundfunktionen der Website erforderlich</small>
-                        </div>
-                    </label>
-
-                    <label class="cookie-option">
-                        <input type="checkbox" name="functional">
-                        <span class="checkmark"></span>
-                        <div class="option-text">
-                            <span>Funktionale Cookies</span>
-                            <small>Ermöglichen erweiterte Funktionen und Personalisierung</small>
-                        </div>
-                    </label>
-
-                    <label class="cookie-option">
-                        <input type="checkbox" name="analytics">
-                        <span class="checkmark"></span>
-                        <div class="option-text">
-                            <span>Analyse-Cookies</span>
-                            <small>Helfen uns zu verstehen, wie Besucher mit der Website interagieren</small>
-                        </div>
-                    </label>
-
-                    <label class="cookie-option">
-                        <input type="checkbox" name="marketing">
-                        <span class="checkmark"></span>
-                        <div class="option-text">
-                            <span>Marketing-Cookies</span>
-                            <small>Werden verwendet, um Werbung relevanter zu gestalten</small>
-                        </div>
-                    </label>
-                </div>
-
-                <button class="button-primary save-button" onclick="saveCookieSettings()">
-                    Einstellungen speichern
-                </button>
-            </div>
+    <div id="cookieConsent" class="cookie-modal">
+      <div class="cookie-content">
+        <div class="cookie-header">
+          <h2>Cookie-Einstellungen</h2>
+          <button class="close-button" onclick="closeCookieConsent()">
+            &times;
+          </button>
         </div>
+
+        <p class="cookie-description">
+          Wir verwenden Cookies, um Ihnen die bestmögliche Erfahrung auf unserer
+          Website zu bieten. Bitte akzeptieren Sie die Verwendung von Cookies
+          oder passen Sie Ihre Einstellungen an.
+        </p>
+
+        <div class="cookie-actions">
+          <button class="button-primary" onclick="acceptAllCookies()">
+            Alle akzeptieren
+          </button>
+          <button class="button-secondary" onclick="toggleSettings()">
+            Einstellungen anpassen
+          </button>
+        </div>
+
+        <div id="cookieSettings" class="cookie-settings">
+          <h3>Cookie-Einstellungen anpassen</h3>
+
+          <div class="cookie-options">
+            <label class="cookie-option">
+              <input type="checkbox" name="necessary" checked disabled />
+              <span class="checkmark"></span>
+              <div class="option-text">
+                <span>Notwendige Cookies</span>
+                <small
+                  >Diese Cookies sind für die Grundfunktionen der Website
+                  erforderlich</small
+                >
+              </div>
+            </label>
+
+            <label class="cookie-option">
+              <input type="checkbox" name="functional" />
+              <span class="checkmark"></span>
+              <div class="option-text">
+                <span>Funktionale Cookies</span>
+                <small
+                  >Ermöglichen erweiterte Funktionen und Personalisierung</small
+                >
+              </div>
+            </label>
+
+            <label class="cookie-option">
+              <input type="checkbox" name="analytics" />
+              <span class="checkmark"></span>
+              <div class="option-text">
+                <span>Analyse-Cookies</span>
+                <small
+                  >Helfen uns zu verstehen, wie Besucher mit der Website
+                  interagieren</small
+                >
+              </div>
+            </label>
+
+            <label class="cookie-option">
+              <input type="checkbox" name="marketing" />
+              <span class="checkmark"></span>
+              <div class="option-text">
+                <span>Marketing-Cookies</span>
+                <small
+                  >Werden verwendet, um Werbung relevanter zu gestalten</small
+                >
+              </div>
+            </label>
+          </div>
+
+          <button
+            class="button-primary save-button"
+            onclick="saveCookieSettings()"
+          >
+            Einstellungen speichern
+          </button>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -777,7 +875,7 @@
 
         document.querySelector('.button-secondary').addEventListener('click', loadCookieSettings);
 
-      
+
       const hamburger = document.getElementById("hamburger");
       const menu = document.getElementById("menu");
       const menuToggle = document.getElementById("menuToggle");
@@ -800,7 +898,7 @@
         });
       });
 
-      
+
       document.addEventListener("DOMContentLoaded", () => {
         const readMoreButtons = document.querySelectorAll(".read-more");
 
@@ -820,8 +918,8 @@
       });
 
 
-      
-      
+
+
       document.addEventListener('DOMContentLoaded', function() {
         let dropArea = document.getElementById("cm-drop-area");
         let fileInput = document.getElementById("cm-fileElem");
@@ -879,7 +977,7 @@
             };
           }
 
-        } 
+        }
       });
 
       function expandCard(card) {
@@ -902,7 +1000,6 @@
           overlay.style.display = "none";
         }
       }
-
     </script>
   </body>
 </html>
