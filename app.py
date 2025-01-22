@@ -337,6 +337,12 @@ def delete_about_text(id):
 
 
 #login
+@app.before_request
+def before_request():
+    session.modified = True
+    if current_user.is_authenticated and not current_user.is_verified and request.endpoint != 'verify' and request.endpoint != 'resend_verification':
+        flash('Bitte verifizieren Sie zuerst Ihre E-Mail', 'error')
+        return redirect(url_for('verify'))
 
 
 @login_manager.user_loader
@@ -555,6 +561,30 @@ def delete_account():
         flash('Account erfolgreich gelöscht', 'success')
         return redirect(url_for('signup'))
     return redirect(url_for('login'))
+
+@app.route('/delete_user/<int:user_id>', methods=['POST'])
+@login_required
+def delete_user(user_id):
+    # Überprüfen, ob der aktuelle Benutzer ein Admin ist
+    if current_user.role != 'admin':
+        flash('Nur Administratoren können Benutzer löschen.', 'error')
+        return redirect(url_for('dashboard'))
+
+    # Suche den Benutzer in der Datenbank
+    user = User.query.get_or_404(user_id)
+    
+    # Stelle sicher, dass der Admin nicht sich selbst löscht
+    if user.id == current_user.id:
+        flash('Du kannst dein eigenes Konto nicht löschen.', 'error')
+        return redirect(url_for('dashboard'))
+
+    # Lösche den Benutzer
+    db.session.delete(user)
+    db.session.commit()
+
+    flash('Benutzer erfolgreich gelöscht.', 'success')
+    return redirect(url_for('dashboard'))
+
 
 @app.route('/edit_account', methods=['GET', 'POST'])
 @login_required

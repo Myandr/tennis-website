@@ -48,7 +48,7 @@
       messages %}
       <ul>
         {% for category, message in messages %}
-        <div class="flash {{ category }}-message">
+        <li class="flash {{ category }}-message">
           {% if category == 'success' %}
           <i class="fas fa-check-circle"></i>
           {% elif category == 'info' %}
@@ -58,7 +58,7 @@
           {% endif %}
           <p>{{ message }}</p>
           {% endfor %}
-        </div>
+        </li>
       </ul>
       {% endif %} {% endwith %}
     <nav class="navbar">

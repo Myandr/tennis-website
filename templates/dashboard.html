@@ -38,7 +38,7 @@
         border-radius: 1rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         width: 100%;
-        max-width: 600px;
+        max-width: 700px;
         margin-bottom: 10px;
       }
 
@@ -151,6 +151,19 @@
         color: #d32f2f;
       }
 
+      .btn-danger1 i {
+        color: #d32f2f;
+      }
+
+      .btn-danger1 {
+        margin: 0 auto;
+      }
+
+      .btn-danger1:hover, .btn-danger1:hover i {
+        background: #dc3545;
+        color: white;
+      }
+
       .error-message {
         background-color: #fff2f2;
         border: 1px solid #ffcfcf;
@@ -229,7 +242,7 @@
         border-radius: 5px;
       }
 
-      i {
+      .button-group i {
         margin-right: 5px;
       }
 
@@ -289,7 +302,7 @@
         transform: translateX(25px);
       }
 
-      @media screen and (max-width: 600px) {
+      @media screen and (max-width: 700px) {
         table,
         thead,
         tbody,
@@ -351,7 +364,7 @@
     messages %}
     <ul>
       {% for category, message in messages %}
-      <div class="{{ category }}-message">
+      <li class="{{ category }}-message">
         {% if category == 'success' %}
         <i class="fas fa-check-circle"></i>
         {% elif category == 'info' %}
@@ -361,7 +374,7 @@
         {% endif %}
         <p>{{ message }}</p>
         {% endfor %}
-      </div>
+      </li>
     </ul>
     {% endif %} {% endwith %}
     <div class="card">
@@ -450,6 +463,7 @@
               <th>Lastname</th>
               <th>Email</th>
               <th>Rolle</th>
+              <th>Aktionen</th>
             </tr>
           </thead>
           <tbody>
@@ -463,6 +477,14 @@
                 class="{% if i.role == 'admin' %}admin-role{% endif %}"
               >
                 {{ i.role }}
+              </td>
+              <td data-label="Aktionen">
+                <!-- Löschen-Formular für jeden Benutzer -->
+                <form action="{{ url_for('delete_user', user_id=i.id) }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du diesen Account löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
+                  <button type="submit" class="btn btn-danger1">
+                    <i class="fa fa-trash-alt"></i>
+                  </button>
+                </form>
               </td>
             </tr>
             {% endfor %}

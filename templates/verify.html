@@ -34,7 +34,7 @@
     messages %}
     <ul>
       {% for category, message in messages %}
-      <div class="{{ category }}-message">
+      <li class="{{ category }}-message">
         {% if category == 'success' %}
         <i class="fas fa-check-circle"></i>
         {% elif category == 'info' %}
@@ -44,7 +44,7 @@
         {% endif %}
         <p>{{ message }}</p>
         {% endfor %}
-      </div>
+      </li>
     </ul>
     {% endif %} {% endwith %}
     <div class="card">
@@ -74,9 +74,6 @@
       <p class="footer">
         Keinen Code erhalten?
         <a href="{{ url_for('resend_verification') }}">Code erneut senden</a>
-      </p>
-      <p class="footer">
-        Zurück zum Start <a href="{{ url_for('home') }}">Klicke hier</a>
       </p>
     </div>
 
