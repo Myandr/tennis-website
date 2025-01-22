@@ -1,204 +1,270 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <title>Profil von paul</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+      }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f5f5f5;
-            padding: 1rem;
-        }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+        padding: 1rem;
+      }
 
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-        }
+      .card {
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px;
+      }
 
-        .title {
-            font-size: 1.5rem;
-            color: #4666ff;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-        }
+      .title {
+        font-size: 1.5rem;
+        color: #4666ff;
+        font-weight: 500;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+      }
 
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
+      .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
 
+      .info-row {
+        display: flex;
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .info-label {
+        width: 180px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      .info-value {
+        flex: 1;
+        color: #333;
+      }
+
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ddd;
+        background: white;
+        color: #333;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn a {
+        text-decoration: none;
+        color: black;
+      }
+
+      .btn:hover {
+        background: #f5f5f5;
+      }
+
+      .btn-primary {
+        background: #4666ff;
+        border-color: #4666ff;
+        color: white;
+      }
+
+      .btn-primary a {
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #3451db;
+      }
+
+      .btn-danger {
+        background: white;
+        border-color: #dc3545;
+        color: #dc3545;
+        margin-top: 1rem;
+        width: 100%;
+      }
+
+      .btn-danger:hover {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover a {
+        color: white;
+      }
+
+      .btn i {
+        font-size: 1rem;
+        color: #555;
+      }
+
+      .btn-danger i {
+        color: #d32f2f;
+      }
+
+      .error-message {
+        background-color: #fff2f2;
+        border: 1px solid #ffcfcf;
+        border-radius: 0.5rem;
+        color: #d63301;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .info-message {
+        background-color: #f0f8ff;
+        border: 1px solid blue;
+        border-radius: 0.5rem;
+        color: blue;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .success-message {
+        background-color: #f0fff0;
+        border: 1px solid green;
+        border-radius: 0.5rem;
+        color: green;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      @media (max-width: 600px) {
         .info-row {
-            display: flex;
-            padding: 1rem 0;
-            border-bottom: 1px solid #eee;
+          flex-direction: column;
+          gap: 0.5rem;
         }
 
         .info-label {
-            width: 180px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .info-value {
-            flex: 1;
-            color: #333;
+          width: 100%;
         }
 
         .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
+          flex-direction: column;
         }
 
         .btn {
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #ddd;
-            background: white;
-            color: #333;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+          width: 100%;
+          justify-content: center;
         }
-
-        .btn a {
-            text-decoration: none;
-            color: black;
-        }
-
-        .btn:hover {
-            background: #f5f5f5;
-        }
-
-        .btn-primary {
-            background: #4666ff;
-            border-color: #4666ff;
-            color: white;
-        }
-
-        .btn-primary a {
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #3451db;
-        }
-
-        .btn-danger {
-            background: white;
-            border-color: #dc3545;
-            color: #dc3545;
-            margin-top: 1rem;
-            width: 100%;
-        }
-
-        .btn-danger:hover {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover a{
-            color: white;
-        }
-
-        .btn i {
-            font-size: 1rem;
-            color: #555;
-        }
-
-        .btn-danger i {
-            color: #d32f2f;
-        }
-
-        @media (max-width: 600px) {
-            .info-row {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .info-label {
-                width: 100%;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages(with_categories=True) %} {% if
+    messages %}
+    <ul>
+      {% for category, message in messages %}
+      <div class="{{ category }}-message">
+        {% if category == 'success' %}
+        <i class="fas fa-check-circle"></i>
+        {% elif category == 'info' %}
+        <i class="fas fa-info-circle"></i>
+        {% elif category == 'error' %}
+        <i class="fas fa-exclamation-circle"></i>
+        {% endif %}
+        <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    </ul>
+    {% endif %} {% endwith %}
     <div class="card">
-        <h1>{{ user.firstname }}</h1>
-        
-        <div class="profile-info">
-            <div class="info-row">
-                <div class="info-label">Firstname:</div>
-                <div class="info-value">{{ current_user.firstname }}</div>
-            </div>
+      <h1>{{ user.firstname }}</h1>
 
-            <div class="info-row">
-                <div class="info-label">Lastname:</div>
-                <div class="info-value">{{ current_user.lastname }}</div>
-            </div>
-
-            <div class="info-row">
-                <div class="info-label">E-Mail:</div>
-                <div class="info-value">{{ current_user.email }}</div>
-            </div>
-
-            <div class="info-row">
-                <div class="info-label">Rolle:</div>
-                <div class="info-value">{{ current_user.role }}</div>
-            </div>
-
+      <div class="profile-info">
+        <div class="info-row">
+          <div class="info-label">Firstname:</div>
+          <div class="info-value">{{ current_user.firstname }}</div>
         </div>
 
-        <div class="button-group">
-            <button class="btn">
-                <a href="/">Zurück zur Startseite</a>
-            </button>
-            <button class="btn">
-                <a href="{{ url_for('forgot_password') }}">Passwort ändern</a>
-            </button>
-            <button class="btn btn-primary">
-                <a href="{{ url_for('edit_account') }}">Account bearbeiten</a>
-            </button>
-            <button class="btn">
-                <a  href="{{ url_for('logout') }}">Logout</a>
-            </button>
-            
-                <form action="{{ url_for('delete_account') }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
-                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>Konto löschen</button>
-                </form>
+        <div class="info-row">
+          <div class="info-label">Lastname:</div>
+          <div class="info-value">{{ current_user.lastname }}</div>
         </div>
+
+        <div class="info-row">
+          <div class="info-label">E-Mail:</div>
+          <div class="info-value">{{ current_user.email }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Rolle:</div>
+          <div class="info-value">{{ current_user.role }}</div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button class="btn">
+          <a href="/">Zurück zur Startseite</a>
+        </button>
+        <button class="btn">
+          <a href="{{ url_for('forgot_password') }}">Passwort ändern</a>
+        </button>
+        <button class="btn btn-primary">
+          <a href="{{ url_for('edit_account') }}">Account bearbeiten</a>
+        </button>
+        <button class="btn">
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </button>
+
+        <form
+          action="{{ url_for('delete_account') }}"
+          method="POST"
+          onsubmit="return confirm('Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')"
+        >
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash-alt"></i>Konto löschen
+          </button>
+        </form>
+      </div>
     </div>
-</body>
+  </body>
 </html>

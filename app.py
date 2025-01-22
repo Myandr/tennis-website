@@ -405,6 +405,7 @@ def login():
         if user and bcrypt.check_password_hash(user.password_hash, password):
             if user.is_verified:
                 login_user(user, remember=remember)
+                flash('You are successfully logged in', 'success')
                 return redirect(url_for('dashboard'))
             else:
                 flash('Please verify your email first', 'error')
@@ -423,7 +424,8 @@ def dashboard():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    flash('You are successfully logged out', 'success')
+    return redirect(url_for('login'))
 
 @app.route('/resend_verification', methods=['GET', 'POST'])
 def resend_verification():
@@ -678,7 +680,7 @@ def db_preview():
                     item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
                 else:
                     item.image_data_base64 = None
-                    
+
             box = Box.query.all()
             
 
