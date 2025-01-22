@@ -690,7 +690,6 @@ def make_session_permanent():
 
 
 #mails
-
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
     email = request.form['email']  # E-Mail-Adresse vom Benutzer
@@ -700,7 +699,45 @@ def subscribe():
     # E-Mail senden
     msg = Message('Danke für deine Anmeldung zum Newsletter!',
                   recipients=[email])
-    msg.body = 'Willkommen! Du hast dich erfolgreich für unseren Newsletter angemeldet.'
+    msg.html = '''
+    <html>
+        <body style="font-family: Arial, sans-serif; color: #333;">
+            <table style="width: 100%; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+                <tr>
+                    <td style="text-align: center; padding-bottom: 20px;">
+                        <h1 style="color: #4CAF50;">Willkommen bei unserem Newsletter!</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p style="font-size: 16px; line-height: 1.6;">
+                            Vielen Dank, dass du dich für unseren Newsletter angemeldet hast! Du wirst nun regelmäßig mit den neuesten Updates, 
+                            exklusiven Angeboten und spannenden Neuigkeiten versorgt. Wir freuen uns, dich auf dieser Reise dabei zu haben!
+                        </p>
+                        <p style="font-size: 16px; line-height: 1.6;">
+                            In den kommenden Ausgaben erwarten dich unter anderem:
+                        </p>
+                        <ul style="font-size: 16px; line-height: 1.6;">
+                            <li>Exklusive Einblicke in kommende Produkte und Angebote</li>
+                            <li>Tipps und Tricks aus unserer Branche</li>
+                            <li>Besondere Rabatte und Aktionen nur für Newsletter-Abonnenten</li>
+                        </ul>
+                        <p style="font-size: 16px; line-height: 1.6;">
+                            Wir hoffen, dass du unsere Inhalte spannend findest und freuen uns auf dein Feedback. 
+                            Falls du dich irgendwann vom Newsletter abmelden möchtest, findest du dafür immer einen Link am Ende jeder E-Mail.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding-top: 20px;">
+                        <p style="font-size: 14px; color: #999;">Mit freundlichen Grüßen,<br>
+                        Dein Newsletter-Team</p>
+                    </td>
+                </tr>
+            </table>
+        </body>
+    </html>
+    '''
     
     try:
         mail.send(msg)  # E-Mail versenden
@@ -709,6 +746,7 @@ def subscribe():
         flash(f'Fehler beim Senden der E-Mail: {e}', 'error')
     
     return redirect(url_for('home'))
+
 
 
 # Mail-Objekt erstellen
