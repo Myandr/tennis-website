@@ -357,7 +357,7 @@ def signup():
 
         if role == 'admin':
             admin_password = request.form['admin_password']
-            if admin_password != os.environ.get('ADMIN_PASSWORD', '1234'):
+            if admin_password != os.environ.get('ADMIN_PASSWORD', 'hardter-tennis-tv-dorsten-admin'):
                 flash('Invalid admin password', 'error')
                 return redirect(url_for('signup'))
 
@@ -415,10 +415,25 @@ def login():
     
     return render_template('login.html')
 
+def mask_email(email):
+    username, domain = email.split('@')
+    if len(username) <= 4:
+        visible_part = len(username) // 2
+        masked_username = username[:visible_part] + '*' * (len(username) - visible_part)
+    else:
+        masked_username = username[:2] + '***' + username[-2:]
+    return f"{masked_username}@{domain}"
+
+@app.template_filter('mask_email')
+def mask_email_filter(email):
+    return mask_email(email)
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', user=current_user)
+    users = User.query.all()
+    
+    return render_template('dashboard.html', is_admin=current_user.is_authenticated and current_user.role == 'admin', user=current_user, users=users)
 
 @app.route('/logout')
 @login_required
