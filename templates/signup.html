@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registrieren</title>
     <link rel="stylesheet" type="text/css" href="../static/css/forms.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <script>
       function toggleAdminPassword() {
         var roleSelect = document.getElementById("role");
@@ -20,24 +24,24 @@
     </script>
   </head>
   <body>
+    {% with messages = get_flashed_messages(with_categories=True) %} {% if
+    messages %}
+    <ul>
+      {% for category, message in messages %}
+      <div class="{{ category }}-message">
+        {% if category == 'success' %}
+        <i class="fas fa-check-circle"></i>
+        {% elif category == 'info' %}
+        <i class="fas fa-info-circle"></i>
+        {% elif category == 'error' %}
+        <i class="fas fa-exclamation-circle"></i>
+        {% endif %}
+        <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    </ul>
+    {% endif %} {% endwith %}
     <div class="card">
-      {% with messages = get_flashed_messages(with_categories=True) %} {% if
-      messages %}
-      <ul>
-        {% for category, message in messages %}
-        <div class="{{ category }}-message">
-          {% if category == 'success' %}
-          <i class="fas fa-check-circle"></i>
-          {% elif category == 'info' %}
-          <i class="fas fa-info-circle"></i>
-          {% elif category == 'error' %}
-          <i class="fas fa-exclamation-circle"></i>
-          {% endif %}
-          <p>{{ message }}</p>
-          {% endfor %}
-        </div>
-      </ul>
-      {% endif %} {% endwith %}
       <div class="header">
         <div class="dot"></div>
         <h1 class="title">Registrieren</h1>

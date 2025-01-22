@@ -9,6 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     min-height: 100vh;
     background-color: #f5f5f5;
 }
@@ -87,6 +88,14 @@ body {
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
+    background-color: transparent;
+    padding: 0 0.25rem;
+    color: #666;
+    transition: all 0.2s;
+    pointer-events: none;
+}
+
+.label1 {
     background-color: transparent;
     padding: 0 0.25rem;
     color: #666;

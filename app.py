@@ -351,44 +351,59 @@ def signup():
             flash('E-Mail existiert bereits', 'error')
             return redirect(url_for('signup'))
 
-        if role == 'admin':
-            admin_password = request.form['admin_password']
-            if admin_password != os.environ.get('ADMIN_PASSWORD', 'hardter-tennis-tv-dorsten-admin'):
-                flash('Ungültiges Admin-Passwort', 'error')
-                return redirect(url_for('signup'))
-
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         verification_code = generate_verification_code()
-        new_user = User(firstname=firstname, lastname=lastname, email=email,
-                        password_hash=hashed_password, role=role, verification_code=verification_code)
-        
+        new_user = User(
+            firstname=firstname,
+            lastname=lastname,
+            email=email,
+            password_hash=hashed_password,
+            role=role,
+            verification_code=verification_code
+        )
+
         db.session.add(new_user)
         db.session.commit()
-        
+
         send_verification_email(email, verification_code)
         
+        # E-Mail in der Session speichern
+        session['email'] = email
+
         flash('Bitte überprüfen Sie Ihre E-Mails auf den Bestätigungscode', 'info')
         return redirect(url_for('verify'))
     
     return render_template('signup.html')
 
+
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
+    # Stelle sicher, dass die E-Mail in der Session vorhanden ist
+    email = session.get('email')
+    if not email:
+        flash('Es gibt kein Konto zur Verifizierung. Bitte melden Sie sich erneut an.', 'error')
+        return redirect(url_for('signup'))
+
     if request.method == 'POST':
-        email = request.form['email']
         code = request.form['code']
         
+        # Suche den Benutzer basierend auf der Session-E-Mail
         user = User.query.filter_by(email=email).first()
         if user and user.verification_code == code:
             user.is_verified = True
             user.verification_code = None
             db.session.commit()
-            flash('Ihr Konto wurde verifiziert', 'success')
+
+            # Entferne die E-Mail aus der Session nach erfolgreicher Verifizierung
+            session.pop('email', None)
+
+            flash('Ihr Konto wurde erfolgreich verifiziert!', 'success')
             return redirect(url_for('login'))
         else:
-            flash('Ungültige E-Mail oder Bestätigungscode', 'error')
+            flash('Ungültiger Bestätigungscode.', 'error')
     
-    return render_template('verify.html')
+    return render_template('verify.html', email=email)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -427,9 +442,15 @@ def mask_email_filter(email):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    users = User.query.all()
+    if not current_user.is_verified:
+        flash('Bitte verifizieren Sie zuerst Ihre E-Mail', 'error')
+        return redirect(url_for('verify'))
     
-    return render_template('dashboard.html', is_admin=current_user.is_authenticated and current_user.role == 'admin', user=current_user, users=users)
+    users = User.query.all()
+    return render_template('dashboard.html', 
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin', 
+                           user=current_user, 
+                           users=users)
 
 
 
@@ -560,20 +581,21 @@ def home():
         else:
             item.image_data_base64 = None
     
-    termine = Termin.query.all()  # Alle Termine aus der DB abfragen
+    termine = Termin.query.all()
 
-    # Check if necessary cookie is set
     cookie_consent = request.cookies.get('necessary') == 'true'
 
     return render_template('index2.html', 
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
                            is_admin=current_user.is_authenticated and current_user.role == 'admin',
+                           is_verified=current_user.is_authenticated and current_user.is_verified,
                            termine=termine,
                            about_texts=about_texts,
                            images=images,
                            content_items=content_items,
                            cookie_consent=cookie_consent)
+
 
 
 @app.route('/api/cookies/accept-all', methods=['POST'])

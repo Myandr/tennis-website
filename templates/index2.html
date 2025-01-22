@@ -107,7 +107,7 @@
         <a class="cta-button" href="{{ url_for('signup') }}"
           >Jetzt Account erstellen</a
         ><br /><br />
-        {% if logged_in %}
+        {% if logged_in and is_verified %}
         <a href="/dashboard" class="learn-more">Dein Account</a>
         {% else %}
         <a href="{{ url_for('login') }}" class="learn-more">Oder login →</a>
