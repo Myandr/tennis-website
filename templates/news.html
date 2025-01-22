@@ -50,7 +50,7 @@
     </nav>
 
     <section class="locations-section" id="news">
-      {% if is_admin_active %}
+      {% if is_admin %}
       <form
         class="cm-form"
         action="{{ url_for('news') }}"
