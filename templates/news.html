@@ -195,7 +195,7 @@
                 >{{ box.span | safe }}</span
               >
             <a href="#" class="read-more">Weiterlesen</a>
-            {% if is_admin_active %}
+            {% if is_admin %}
             <form
               action="{{ url_for('delete_box', box_id=box.id) }}"
               method="post"
