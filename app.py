@@ -573,6 +573,7 @@ def before_request():
     session.modified = True
 
 
+# Admin-Rechte in der Session speichern
 @app.route('/toggle_admin', methods=['POST'])
 @login_required
 def toggle_admin():
