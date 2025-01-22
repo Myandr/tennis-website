@@ -903,11 +903,11 @@
         // Suche nach allen Flash-Nachrichten
         const flashMessages = document.querySelectorAll('.flash');
 
-        // Wenn es Flash-Nachrichten gibt, verstecke sie nach 10 Sekunden
+        // Wenn es Flash-Nachrichten gibt, verstecke sie nach 3 Sekunden
         flashMessages.forEach(function(message) {
             setTimeout(function() {
                 message.style.display = 'none';  // Blende die Nachricht aus
-            }, 10000);  // 10000 Millisekunden = 10 Sekunden
+            }, 3000);  // 3000 Millisekunden = 3 Sekunden
         });
     }
 
