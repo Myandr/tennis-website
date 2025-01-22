@@ -506,14 +506,14 @@ def reset_password(token):
     return render_template('reset_password.html', token=token)
 
 @app.route('/delete_account', methods=['POST'])
-@login_required
 def delete_account():
-    user = current_user
-    logout_user()
-    db.session.delete(user)
-    db.session.commit()
-    flash('Ihr Konto wurde erfolgreich gelöscht.', 'success')
-    return redirect(url_for('home'))
+    if current_user.is_authenticated:
+        user = current_user._get_current_object()  # Ensure you get the actual object
+        db.session.delete(user)
+        db.session.commit()
+        flash('Account erfolgreich gelöscht', 'success')
+        return redirect(url_for('signup'))
+    return redirect(url_for('login'))
 
 @app.route('/edit_account', methods=['GET', 'POST'])
 @login_required
