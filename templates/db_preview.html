@@ -211,14 +211,14 @@ table {
                 </tr>
             </thead>
             <tbody>
-                {% for about_text in about_texts %}
+                {% for content in content_item %}
                 <tr>
-                    <td>{{ content_item.id }}</td>
-                    <td>{{ content_item.image_data }}</td>
-                    <td>{{ content_item.heading }}</td>
-                    <td>{{ content_item.text1 }}</td>
-                    <td>{{ content_item.text2 }}</td>
-                    <td>{{ content_item.iframe }}</td>
+                    <td>{{ content.id }}</td>
+                    <td>{{ content.image_data }}</td>
+                    <td>{{ content.heading }}</td>
+                    <td>{{ content.text1 }}</td>
+                    <td>{{ content.text2 }}</td>
+                    <td>{{ content.iframe }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -239,14 +239,14 @@ table {
                 </tr>
             </thead>
             <tbody>
-                {% for about_text in about_texts %}
+                {% for i in box %}
                 <tr>
-                    <td>{{ content_item.id }}</td>
-                    <td>{{ content_item.image_data }}</td>
-                    <td>{{ content_item.date }}</td>
-                    <td>{{ content_item.heading }}</td>
-                    <td>{{ content_item.info }}</td>
-                    <td>{{ content_item.span }}</td>
+                    <td>{{ i.id }}</td>
+                    <td>{{ i.image_data }}</td>
+                    <td>{{ i.date }}</td>
+                    <td>{{ i.heading }}</td>
+                    <td>{{ i.info }}</td>
+                    <td>{{ i.span }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
