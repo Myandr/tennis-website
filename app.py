@@ -350,6 +350,12 @@ def signup():
         if existing_user:
             flash('E-Mail existiert bereits', 'error')
             return redirect(url_for('signup'))
+        
+        if role == 'admin':
+            admin_password = request.form['admin_password']
+            if admin_password != os.environ.get('ADMIN_PASSWORD', 'hardter-tennis-tv-dorsten-admin'):
+                flash('Ungültiges Admin-Passwort', 'error')
+                return redirect(url_for('signup'))
 
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         verification_code = generate_verification_code()
