@@ -216,10 +216,15 @@
             background-color: orange;
             color: white;
             font-weight: bold;
+            border-radius: 5px;
         }
 
         i {
             margin-right: 5px;
+        }
+
+        a {
+            text-decoration: none;
         }
         @media screen and (max-width: 600px) {
             table, thead, tbody, th, td, tr {
@@ -320,18 +325,26 @@
       </div>
 
       <div class="button-group">
+        <a href="/">
         <button class="btn">
-          <a href="/"><i class="fa fa-home"></i>Zurück zur Startseite</a>
+          <i class="fa fa-home"></i>Zurück zur Startseite
         </button>
+        </a>
+        <a href="{{ url_for('forgot_password') }}">
         <button class="btn">
-          <a href="{{ url_for('forgot_password') }}"><i class="fa fa-key"></i>Passwort ändern</a>
+          <i class="fa fa-key"></i>Passwort ändern
         </button>
+        </a>
+        <a href="{{ url_for('edit_account') }}">
         <button class="btn btn-primary">
-          <a href="{{ url_for('edit_account') }}">Account bearbeiten</a>
+          Account bearbeiten
         </button>
+        </a>
+        <a href="{{ url_for('logout') }}">
         <button class="btn">
-          <a href="{{ url_for('logout') }}"><i class="fa fa-sign-out-alt"></i>Logout</a>
+          <i class="fa fa-sign-out-alt"></i>Logout
         </button>
+        </a>
 
         <form
           action="{{ url_for('delete_account') }}"
