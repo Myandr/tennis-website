@@ -1226,7 +1226,7 @@
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 850px) {
     .nav-links {
       display: none;
       flex-direction: column;
