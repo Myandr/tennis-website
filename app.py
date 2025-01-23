@@ -16,6 +16,8 @@ import base64
 from functools import wraps
 from flask_bcrypt import Bcrypt
 
+
+
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_n8v5_user:cuxgdv9h0nXv6w0qVopJ36Q1AayExu5h@dpg-cu8dhv9opnds73d4tf00-a.oregon-postgres.render.com/user_n8v5'
@@ -41,15 +43,45 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         "sslmode": "require"
     }
 }
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
+
+
+
+
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+
+
+
+
+
+
+
+#     __ __   ____  ____   ____   ____  ____   _        ___  ____  
+#    |  |  | /    ||    \ |    | /    ||    \ | |      /  _]|    \ 
+#    |  |  ||  o  ||  D  ) |  | |  o  ||  o  )| |     /  [_ |  _  |
+#    |  |  ||     ||    /  |  | |     ||     || |___ |    _]|  |  |
+#    |  :  ||  _  ||    \  |  | |  _  ||  O  ||     ||   [_ |  |  |
+#     \   / |  |  ||  .  \ |  | |  |  ||     ||     ||     ||  |  |
+#      \_/  |__|__||__|\_||____||__|__||_____||_____||_____||__|__|                                                    
+                                                                                                                                            
+
 
 
 db = SQLAlchemy(app)
+
 migrate = Migrate(app, db)
+
 bcrypt = Bcrypt(app)
+
 mail = Mail(app)
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.init_app(app)
+
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 login_manager.login_message = "Bitte melde dich an, um diese Seite zu sehen."
@@ -59,12 +91,30 @@ login_manager.refresh_message_category = "error"
 login_manager.needs_refresh_message = "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
 login_manager.needs_refresh_message_category = "error"
 
+
 design = 'design1'
 
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-#datebank
+
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+
+
+
+
+
+
+#    ___     ____  ______    ___  ____   ____    ____  ____   __  _ 
+#    |   \   /    ||      |  /  _]|    \ |    \  /    ||    \ |  |/ ]
+#    |    \ |  o  ||      | /  [_ |  _  ||  o  )|  o  ||  _  ||  ' / 
+#    |  D  ||     ||_|  |_||    _]|  |  ||     ||     ||  |  ||    \ 
+#    |     ||  _  |  |  |  |   [_ |  |  ||  O  ||  _  ||  |  ||     \
+#    |     ||  |  |  |  |  |     ||  |  ||     ||  |  ||  |  ||  .  |
+#    |_____||__|__|  |__|  |_____||__|__||_____||__|__||__|__||__|\_|
+
+
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -128,6 +178,34 @@ with app.app_context():
 
 
 
+
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+
+
+
+
+
+
+
+#    ____    ___   __ __  ______    ___  ____  
+#    |    \  /   \ |  |  ||      |  /  _]|    \ 
+#    |  D  )|     ||  |  ||      | /  [_ |  _  |
+#    |    / |  O  ||  |  ||_|  |_||    _]|  |  |
+#    |    \ |     ||  :  |  |  |  |   [_ |  |  |
+#    |  .  \|     ||     |  |  |  |     ||  |  |
+#    |__|\_| \___/  \__,_|  |__|  |_____||__|__|
+                                          
+
+
+
+
+
+
+
+
+# Nur für die Testversion um zwei Design anzeigen lassen zu können
+
 @app.route('/choose-design', methods=['GET', 'POST'])
 def choose_design():
     if request.method == 'POST':
@@ -139,7 +217,61 @@ def choose_design():
 
 
 
-#ADD
+@app.route('/newsletter')
+def newsletter():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
+    return render_template(f'{design}/newsletter.html')
+
+
+
+@app.before_request
+def before_request():
+    session.modified = True
+    if current_user.is_authenticated and not current_user.is_verified and request.endpoint != 'verify' and request.endpoint != 'resend_verification':
+        flash('Bitte verifizieren Sie zuerst Ihre E-Mail', 'error')
+        return redirect(url_for('verify'))
+    
+
+
+@app.before_request
+def before_request():
+    session.modified = True
+
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+
+
+
+
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+
+
+
+#      ____  ___    ___   
+#     /    ||   \  |   \  
+#    |  o  ||    \ |    \ 
+#    |     ||  D  ||  D  |
+#    |  _  ||     ||     |
+#    |  |  ||     ||     |
+#    |__|__||_____||_____|
+                    
+
+
+
+
+
+
+
+
+#     __ _  ____  _  _  ____ 
+#    (  ( \(  __)/ )( \/ ___)
+#    /    / ) _) \ /\ /\___ \
+#    \_)__)(____)(_/\_)(____/
 
 @app.route('/news', methods=['GET', 'POST'])
 def news():
@@ -185,17 +317,10 @@ def news():
     return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active, boxes=boxes)
 
 
-
-
-
-
-
-
-    
-
-
-
-
+#     ____  ____  __    ____  ____  ____ 
+#    (    \(  __)(  )  (  __)(_  _)(  __)
+#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#    (____/(____)\____/(____) (__) (____)
 
 @app.route('/delete/<int:box_id>', methods=['POST'])
 def delete_box(box_id):
@@ -211,6 +336,19 @@ def delete_box(box_id):
 
 
 
+
+
+
+
+
+
+
+
+
+#     __     __    ___   __   ____   __    __   __ _ 
+#    (  )   /  \  / __) / _\ (_  _) (  )  /  \ (  ( \
+#    / (_/\(  O )( (__ /    \  )(    )(  (  O )/    /
+#    \____/ \__/  \___)\_/\_/ (__)  (__)  \__/ \_)__)
 
 
 def allowed_file(filename):
@@ -242,6 +380,11 @@ def add_content():
     
     return redirect(url_for('home'))
 
+#     ____  ____  __    ____  ____  ____ 
+#    (    \(  __)(  )  (  __)(_  _)(  __)
+#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#    (____/(____)\____/(____) (__) (____)
+
 @app.route('/delete/<int:item_id>')
 def delete_content(item_id):
     item = ContentItem.query.get_or_404(item_id)
@@ -252,8 +395,6 @@ def delete_content(item_id):
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
-
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
@@ -270,8 +411,6 @@ def upload_image():
         db.session.commit()
     return redirect(url_for('home') + "#awards")
 
-
-
 @app.route('/delete_image/<int:image_id>', methods=['POST'])
 def delete_image(image_id):
     image = Image.query.get_or_404(image_id)
@@ -287,6 +426,16 @@ def delete_image(image_id):
 
 
 
+
+
+
+
+#     ____  ____  ____  _  _   __   __ _  ____ 
+#    (_  _)(  __)(  _ \( \/ ) (  ) (  ( \(  __)
+#      )(   ) _)  )   // \/ \  )(  /    / ) _) 
+#     (__) (____)(__\_)\_)(_/ (__) \_)__)(____)
+
+
 @app.route('/add_termin', methods=['POST'])
 def add_termin():
     datum = request.form['datum']
@@ -300,6 +449,10 @@ def add_termin():
     return redirect(url_for('home') + "#work")
 
 
+#     ____  ____  __    ____  ____  ____ 
+#    (    \(  __)(  )  (  __)(_  _)(  __)
+#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#    (____/(____)\____/(____) (__) (____)
 
 @app.route('/delete_termin/<int:termin_id>', methods=['POST'])
 def delete_termin(termin_id):
@@ -311,6 +464,16 @@ def delete_termin(termin_id):
 
 
 
+
+
+
+
+
+
+#      __   ____   __   _  _  ____ 
+#     / _\ (  _ \ /  \ / )( \(_  _)
+#    /    \ ) _ ((  O )) \/ (  )(  
+#    \_/\_/(____/ \__/ \____/ (__)
 
 
 @app.route("/add_about_text", methods=["POST"])
@@ -331,7 +494,10 @@ def add_about_text():
     db.session.commit()
     return redirect(url_for('home') + "#about")
 
-
+#     ____  ____  __    ____  ____  ____ 
+#    (    \(  __)(  )  (  __)(_  _)(  __)
+#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#    (____/(____)\____/(____) (__) (____)
 
 @app.route("/delete_about_text/<int:id>", methods=["POST"])
 def delete_about_text(id):
@@ -348,30 +514,61 @@ def delete_about_text(id):
 
 
 
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 
 
 
 
-#login
-@app.before_request
-def before_request():
-    session.modified = True
-    if current_user.is_authenticated and not current_user.is_verified and request.endpoint != 'verify' and request.endpoint != 'resend_verification':
-        flash('Bitte verifizieren Sie zuerst Ihre E-Mail', 'error')
-        return redirect(url_for('verify'))
+
+
+
+
+
+#     _       ___    ____  ____  ____  
+#    | |     /   \  /    ||    ||    \ 
+#    | |    |     ||   __| |  | |  _  |
+#    | |___ |  O  ||  |  | |  | |  |  |
+#    |     ||     ||  |_ | |  | |  |  |
+#    |     ||     ||     | |  | |  |  |
+#    |_____| \___/ |___,_||____||__|__|
+                                  
+
+
+
+
+
+
+
+
+
+
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
 def generate_verification_code():
     return ''.join(random.choices('0123456789', k=6))
+
 
 def send_verification_email(email, code):
     msg = Message('Verify Your Email', sender='your_email@gmail.com', recipients=[email])
     msg.body = f'Your verification code is: {code}'
     mail.send(msg)
+
+
+
+
+
+
+#     ____   __    ___  __ _  _  _  ____ 
+#    / ___) (  )  / __)(  ( \/ )( \(  _ \
+#    \___ \  )(  ( (_ \/    /) \/ ( ) __/
+#    (____/ (__)  \___/\_)__)\____/(__) 
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -422,6 +619,17 @@ def signup():
     return render_template(f'{design}/signup.html')
 
 
+
+
+
+
+#    _  _  ____  ____   __   ____  _  _ 
+#   / )( \(  __)(  _ \ (  ) (  __)( \/ )
+#   \ \/ / ) _)  )   /  )(   ) _)  )  / 
+#    \__/ (____)(__\_) (__) (__)  (__/
+
+
+
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
     design = session.get('design')
@@ -454,6 +662,15 @@ def verify():
     return render_template(f'{design}/verify.html', email=email)
 
 
+
+
+
+#     __     __    ___   __   __ _ 
+#    (  )   /  \  / __) (  ) (  ( \
+#    / (_/\(  O )( (_ \  )(  /    /
+#    \____/ \__/  \___/ (__) \_)__)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     design = session.get('design')
@@ -477,6 +694,18 @@ def login():
             flash('Ungültige E-Mail oder Passwort', 'error')
     
     return render_template(f'{design}/login.html')
+
+
+
+
+
+
+
+#     ____   __   ____  _  _  ____   __    __   ____  ____ 
+#    (    \ / _\ / ___)/ )( \(  _ \ /  \  / _\ (  _ \(    \
+#     ) D (/    \\___ \) __ ( ) _ ((  O )/    \ )   / ) D (
+#    (____/\_/\_/(____/\_)(_/(____/ \__/ \_/\_/(__\_)(____/
+
 
 def mask_email(email):
     username, domain = email.split('@')
@@ -509,12 +738,34 @@ def dashboard():
 
 
 
+
+
+#     __     __    ___   __   _  _  ____ 
+#    (  )   /  \  / __) /  \ / )( \(_  _)
+#    / (_/\(  O )( (_ \(  O )) \/ (  )(  
+#    \____/ \__/  \___/ \__/ \____/ (__)
+
+
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('Sie sind erfolgreich ausgeloggt', 'success')
     return redirect(url_for('login'))
+
+
+
+
+
+
+
+#     ____  ____  ____  ____  __ _  ____     _   ____   __   ____   ___   __   ____ 
+#    (  _ \(  __)/ ___)(  __)(  ( \(    \   / ) (  __) /  \ (  _ \ / __) /  \ (_  _)
+#     )   / ) _) \___ \ ) _) /    / ) D (  / /   ) _) (  O ) )   /( (_ \(  O )  )(  
+#    (__\_)(____)(____/(____)\_)__)(____/ (_/   (__)   \__/ (__\_) \___/ \__/  (__) 
+
+
 
 @app.route('/resend_verification', methods=['GET', 'POST'])
 def resend_verification():
@@ -544,6 +795,10 @@ def send_password_reset_email(user_email):
     msg.body = f'Um das Passwort zurück zu setzen, folge dem Link: {reset_url}'
     mail.send(msg)
 
+
+
+
+
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     design = session.get('design')
@@ -559,6 +814,10 @@ def forgot_password():
             flash('E-Mail-Adresse nicht gefunden', 'error')
         return redirect(url_for('login'))
     return render_template(f'{design}/forgot_password.html')
+
+
+
+
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -590,6 +849,17 @@ def reset_password(token):
     
     return render_template(f'{design}/reset_password.html', token=token)
 
+
+
+
+
+#     ____  ____  __    ____  ____  ____     _   ____  ____   __   ____ 
+#    (    \(  __)(  )  (  __)(_  _)(  __)   / ) (  __)(    \ (  ) (_  _)
+#     ) D ( ) _) / (_/\ ) _)   )(   ) _)   / /   ) _)  ) D (  )(    )(  
+#    (____/(____)\____/(____) (__) (____) (_/   (____)(____/ (__)  (__) 
+
+
+
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
     if current_user.is_authenticated:
@@ -599,6 +869,9 @@ def delete_account():
         flash('Account erfolgreich gelöscht', 'success')
         return redirect(url_for('signup'))
     return redirect(url_for('login'))
+
+
+
 
 @app.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
@@ -622,6 +895,9 @@ def delete_user(user_id):
 
     flash('Benutzer erfolgreich gelöscht.', 'success')
     return redirect(url_for('dashboard'))
+
+
+
 
 
 @app.route('/edit_account', methods=['GET', 'POST'])
@@ -651,9 +927,15 @@ def edit_account():
 
 
 
-@app.before_request
-def before_request():
-    session.modified = True
+
+
+
+
+
+#      __   ____  _  _   __   __ _ 
+#     / _\ (    \( \/ ) (  ) (  ( \
+#    /    \ ) D (/ \/ \  )(  /    /
+#    \_/\_/(____/\_)(_/ (__) \_)__)
 
 
 # Admin-Rechte in der Session speichern
@@ -669,7 +951,43 @@ def toggle_admin():
     return redirect(url_for('dashboard'))
 
 
-#home seite + cookies
+
+
+
+
+
+
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+
+
+
+
+
+
+
+
+
+#     __ __   ___   ___ ___    ___ 
+#    |  |  | /   \ |   |   |  /  _]
+#    |  |  ||     || _   _ | /  [_ 
+#    |  _  ||  O  ||  \_/  ||    _]
+#    |  |  ||     ||   |   ||   [_ 
+#    |  |  ||     ||   |   ||     |
+#    |__|__| \___/ |___|___||_____|
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/')
 def home():
@@ -701,6 +1019,16 @@ def home():
                            images=images,
                            content_items=content_items,
                            cookie_consent=cookie_consent)
+
+
+
+
+
+
+#      ___   __    __   __ _   __   ____  ____ 
+#     / __) /  \  /  \ (  / ) (  ) (  __)/ ___)
+#    ( (__ (  O )(  O ) )  (   )(   ) _) \___ \
+#     \___) \__/  \__/ (__\_) (__) (____)(____/
 
 
 
@@ -738,12 +1066,28 @@ def save_cookie_settings():
 
 
 
-@app.route('/newsletter')
-def newsletter():
-    design = session.get('design')
-    if not design:
-        return redirect(url_for('choose_design'))
-    return render_template(f'{design}/newsletter.html')
+
+
+
+
+
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+
+
+
+
+
+
+
+#     ___ ___   ____  ____  _       _____
+#    |   |   | /    ||    || |     / ___/
+#    | _   _ ||  o  | |  | | |    (   \_ 
+#    |  \_/  ||     | |  | | |___  \__  |
+#    |   |   ||  _  | |  | |     | /  \ |
+#    |   |   ||  |  | |  | |     | \    |
+#    |___|___||__|__||____||_____|  \___|
+                                   
 
 
 
@@ -752,19 +1096,14 @@ def newsletter():
 
 
 
-
-
-from datetime import timedelta
-
-
-@app.before_request
-def make_session_permanent():
-    session.permanent = True
+#     __ _  ____  _  _  ____  __    ____  ____  ____  ____  ____ 
+#    (  ( \(  __)/ )( \/ ___)(  )  (  __)(_  _)(_  _)(  __)(  _ \
+#    /    / ) _) \ /\ /\___ \/ (_/\ ) _)   )(    )(   ) _)  )   /
+#    \_)__)(____)(_/\_)(____/\____/(____) (__)  (__) (____)(__\_)
 
 
 
 
-#mails
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
     email = request.form['email']  # E-Mail-Adresse vom Benutzer
@@ -824,13 +1163,15 @@ def subscribe():
 
 
 
-# Mail-Objekt erstellen
 
 
-# Route für das Formular
+#     ____  ____  __ _  ____  ____  __ _ 
+#    / ___)(  __)(  ( \(    \(  __)(  ( \
+#    \___ \ ) _) /    / ) D ( ) _) /    /
+#    (____/(____)\_)__)(____/(____)\_)__)
 
-# Route zum Senden der E-Mail
-# Route zum Senden der E-Mail
+
+
 @app.route('/send_email', methods=['POST'])
 def send_email():
     design = session.get('design')
@@ -854,6 +1195,38 @@ def send_email():
         return f'Fehler beim Senden der E-Mail: {str(e)}'
 
 
+
+
+
+
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+
+
+
+
+
+
+
+
+#     _____  ___   ____    _____ ______  ____   ____    ___   _____
+#    / ___/ /   \ |    \  / ___/|      ||    | /    |  /  _] / ___/
+#   (   \_ |     ||  _  |(   \_ |      | |  | |   __| /  [_ (   \_ 
+#    \__  ||  O  ||  |  | \__  ||_|  |_| |  | |  |  ||    _] \__  |
+#    /  \ ||     ||  |  | /  \ |  |  |   |  | |  |_ ||   [_  /  \ |
+#    \    ||     ||  |  | \    |  |  |   |  | |     ||     | \    |
+#      \___| \___/ |__|__|  \___|  |__|  |____||___,_||_____|  \___|
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/downloads')
 def downloads():
     design = session.get('design')
@@ -865,6 +1238,9 @@ def downloads():
 def download_form():
     file_path = 'static/IMG_0001.jpeg' # Pfad zur Datei
     return send_file(file_path, as_attachment=True)
+
+
+
 
 
 
@@ -905,12 +1281,21 @@ def db_preview():
 
     return render_template(f'{design}/passwort.html', error=None)
 
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     design = session.get('design')
     if not design:
         return redirect(url_for('choose_design'))
     return render_template(f'{design}/404.html'), 404
+
+
+
+
+#  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+# (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+
 
 
 
