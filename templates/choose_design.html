@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design auswählen</title>
+    <style>
+        /* Allgemeine Stile */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            color: #333;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container */
+        .container {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        /* Titel */
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        /* Formular */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Label */
+        label {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        /* Dropdown-Menü */
+        select {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        select:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        /* Button */
+        button {
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background: #000000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #373737;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wähle ein Design</h1>
+        <form method="POST">
+            <label for="design">Design auswählen:</label>
+            <select name="design" id="design" required>
+                <option value="design1">Design 1</option>
+                <option value="design2">Design 2</option>
+            </select>
+            <button type="submit">Weiter</button>
+        </form>
+    </div>
+</body>
+</html>

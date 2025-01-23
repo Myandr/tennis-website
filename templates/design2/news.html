@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Box Hinzufügen und Löschen</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="logo">logo</a>
+      <div class="nav-links" id="navLinks">
+        <a href="/#home">STARTSEITE</a>
+        <a href="/#about">ÜBER UNS</a>
+        <a href="/#contact">KONTAKT</a>
+        <a href="/#termine">TERMINE</a>
+        <a href="/#trainer">TRAINER</a>
+        <a href="/#news">NEUIGKEITEN</a>
+      </div>
+
+      <div id="hamburger" class="hamburger">
+        <label class="hamburger">
+          <input type="checkbox" id="menuToggle" />
+          <svg viewBox="0 0 32 32">
+            <path
+              class="line line-top-bottom"
+              d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+            ></path>
+            <path class="line" d="M7 16 27 16"></path>
+          </svg>
+        </label>
+      </div>
+
+      <div class="menu" id="menu">
+        <ul>
+          <li><a href="/#home">STARTSEITE</a></li>
+          <li><a href="/#about">ÜBER UNS</a></li>
+          <li><a href="/#contact">KONTAKT</a></li>
+          <li><a href="/#termine">TERMINE</a></li>
+          <li><a href="/#trainer">TRAINER</a></li>
+          <li><a href="/#news">NEUIGKEITEN</a></li>
+          {% if logged_in %}
+          <li><a href="/dashboard">Dein Account</a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}">SIGNUP/LOGIN →</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <section class="locations-section" id="news">
+      {% if is_admin %}
+      <form
+        class="cm-form"
+        action="{{ url_for('news') }}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <div id="cm-drop-area" class="cm-drop-area">
+          <input
+            type="file"
+            name="image"
+            id="cm-fileElem"
+            class="cm-file-input"
+            accept="image/*"
+            required
+          />
+          <label class="cm-button" for="cm-fileElem"
+            >Select an image file</label
+          >
+          <p>or drag and drop here</p>
+          <div id="cm-preview" class="cm-preview"></div>
+        </div>
+        <input
+          type="date"
+          name="date"
+          class="cm-input"
+          placeholder="date"
+          required
+        />
+        <input
+          name="heading"
+          class="cm-textarea"
+          placeholder="Heading"
+          required
+        >
+        <textarea
+          name="info"
+          class="cm-textarea"
+          placeholder="Info"
+          required
+        ></textarea>
+        <textarea
+          type="text"
+          name="span"
+          class="cm-input"
+          placeholder="versteckter Text"
+          required
+        ></textarea>
+        <button type="submit" class="cm-button">Add Content</button>
+      </form>
+      {% endif %}
+      <div class="locations-header">
+        <h2>Aktuelle Neuigkeiten</h2>
+        <p>
+          Bleiben Sie auf dem Laufenden über die neuesten Entwicklungen in
+          unserem Verein
+        </p>
+        <a href="/#news" class="learn-more">Zurück zur Startseite →</a>
+      </div>
+      <div class="locations-grid">
+        <div class="news-card">
+          <div class="news-image">
+            <img
+              src="https://cdn.pixabay.com/photo/2020/04/08/19/04/tennis-5018589_960_720.jpg"
+              alt="Neuer Tennisplatz"
+            />
+          </div>
+          <div class="news-content">
+            <div class="news-date">15. Mai 2025</div>
+            <h3 class="news-title">Neuer Tennisplatz eröffnet</h3>
+            <p class="news-excerpt">
+              Unser Verein freut sich, die Eröffnung eines brandneuen,
+              state-of-the-art Tennisplatzes bekannt zu geben. Der Platz bietet
+              optimale Bedingungen für Spieler aller Niveaus.
+              <span class="hidden-text"
+                >Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image">
+            <img
+              src="https://cdn.pixabay.com/photo/2017/04/25/11/06/wilson-2259352_960_720.jpg"
+              alt="Jugendturnier"
+            />
+          </div>
+          <div class="news-content">
+            <div class="news-date">2. Juni 2025</div>
+            <h3 class="news-title">Jugendturnier ein voller Erfolg</h3>
+            <p class="news-excerpt">
+              Das diesjährige Sommerturnier für Jugendliche war ein
+              Rekorderfolg. Über 50 junge Talente zeigten ihr Können und
+              begeisterten Zuschauer und Trainer gleichermaßen.
+              <span class="hidden-text"
+                >Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image">
+            <img
+              src="https://cdn.pixabay.com/photo/2016/09/15/15/27/tennis-court-1671852_960_720.jpg"
+              alt="Neue Trainingszeiten"
+            />
+          </div>
+          <div class="news-content">
+            <div class="news-date">20. Juni 2025</div>
+            <h3 class="news-title">Neue Trainingszeiten ab Juli</h3>
+            <p class="news-excerpt">
+              Um allen Mitgliedern gerecht zu werden, bieten wir ab Juli
+              erweiterte Trainingszeiten an. Dies umfasst auch neue Früh- und
+              Abendkurse für Berufstätige.
+              <span class="hidden-text"
+                >Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+        {% for box in boxes %}
+        <div class="news-card">
+          <div class="news-image">
+          <img
+            src="data:image/jpeg;base64,{{ box.image_data_base64 }}"
+            alt="Content Image"
+          />
+          </div>
+          <div class="news-content">
+            <p class="news-date">{{ box.date.strftime('%d.%m.%Y') }}</p>
+            <h3 class="news-title">{{ box.heading }}</h3>
+            <p class="news-excerpt">{{ box.info }}</p>
+            <span class="hidden-text news-excerpt"
+                >{{ box.span | safe }}</span
+              >
+            <a href="#" class="read-more">Weiterlesen</a>
+            {% if is_admin %}
+            <form
+              action="{{ url_for('delete_box', box_id=box.id) }}"
+              method="post"
+              class="delete-form"
+            >
+              <button type="submit" class="delete-btn" style="margin-top: 20px; background-color: red; border-radius: 5px; padding: 5px 10px; border: none; color: white;">Löschen</button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3 class="footer-title">Tennis TV</h3>
+          <p>
+            Ihr Tennisverein für Sport, Spaß und Gemeinschaft – hier finden Sie
+            alles rund um Tennis und Vereinsleben.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Facebook"
+              ><i class="fa fa-facebook-f"></i
+            ></a>
+            <a href="#" class="social-link" aria-label="Instagram"
+              ><i class="fa fa-instagram"></i
+            ></a>
+            <a href="#" class="social-link" aria-label="Twitter"
+              ><i class="fa fa-twitter"></i
+            ></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Schnelle Links</h3>
+          <div class="footer-links">
+            <a href="/#home">Home</a>
+            <a href="/#about">Über uns</a>
+            <a href="/#termine">Termine</a>
+            <a href="/#trainer">Trainer</a>
+            <a href="/#contact">Kontakt</a>
+            <a href="/#news">Neuigkeiten</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Kontakt</h3>
+          <p>
+            Tennis TV Tennisverein<br />Tennis Str. 101<br />Viersen,
+            Nordrhein-Westfalen<br /><br />
+          </p>
+          <p>T: 02162 123456<br /><br /></p>
+          <p>E: info@tennistv.de</p>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Newsletter</h3>
+          <p>
+            Bleiben Sie auf dem Laufenden mit unseren neuesten Nachrichten und
+            Angeboten.
+          </p>
+          <form class="newsletter-form">
+            <input
+              type="email"
+              placeholder="Ihre E-Mail-Adresse"
+              class="newsletter-input"
+              required
+            />
+            <button type="submit" class="newsletter-btn">Abonnieren</button>
+          </form>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2024 Tennis TV. Alle Rechte vorbehalten.</p>
+      </div>
+    </footer>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+        let dropArea = document.getElementById("cm-drop-area");
+        let fileInput = document.getElementById("cm-fileElem");
+        let preview = document.getElementById("cm-preview");
+
+        if (dropArea && fileInput && preview) {
+          ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+          });
+
+          ["dragenter", "dragover"].forEach((eventName) => {
+            dropArea.addEventListener(eventName, highlight, false);
+          });
+
+          ["dragleave", "drop"].forEach((eventName) => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+          });
+
+          dropArea.addEventListener("drop", handleDrop, false);
+          fileInput.addEventListener("change", handleFiles, false);
+
+          function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+
+          function highlight(e) {
+            dropArea.classList.add("cm-highlight");
+          }
+
+          function unhighlight(e) {
+            dropArea.classList.remove("cm-highlight");
+          }
+
+          function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+
+            handleFiles(files);
+          }
+
+          function handleFiles(files) {
+            files = files.length ? files : this.files;
+            [...files].forEach(previewFile);
+          }
+
+          function previewFile(file) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+              let img = document.createElement("img");
+              img.src = reader.result;
+              preview.innerHTML = "";
+              preview.appendChild(img);
+            };
+          }
+
+        }
+      });
+      const hamburger = document.getElementById("hamburger");
+      const menu = document.getElementById("menu");
+      const menuToggle = document.getElementById("menuToggle");
+      const menuLinks = document.querySelectorAll("#menu a");
+
+      // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
+      menuToggle.addEventListener("change", () => {
+        if (menuToggle.checked) {
+          menu.classList.add("open");
+        } else {
+          menu.classList.remove("open");
+        }
+      });
+
+      // Schließt das Menü, wenn ein Link angeklickt wird
+      menuLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          menuToggle.checked = false; // Deaktiviert die Checkbox
+          menu.classList.remove("open"); // Schließt das Menü
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const readMoreButtons = document.querySelectorAll(".read-more");
+
+        readMoreButtons.forEach((button) => {
+          button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const newsCard = button.closest(".news-card");
+            newsCard.classList.toggle("expanded");
+
+            // Button-Text ändern
+            const isExpanded = newsCard.classList.contains("expanded");
+            button.textContent = isExpanded
+              ? "Weniger anzeigen"
+              : "Weiterlesen";
+          });
+        });
+      });
+
+    </script>
+  </body>
+</html>

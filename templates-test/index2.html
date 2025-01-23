@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-site-verification"
+      content="6xsGMDqxiB76xsj4GQvfk8HZy4khRbGKJ5Hsn89sVO0"
+    />
+    <meta
+      name="description"
+      content="Willkommen auf der offiziellen Website unseres Tennisvereins! Entdecke alles über unsere Mitglieder, Turniere und aktuelle Termine."
+    />
+    <meta
+      name="keywords"
+      content="Tennis, Tennisverein, Turniere, Mitgliedschaft, Tennisplatz, Sport, Tennisclub, Sportverein"
+    />
+    <meta name="author" content="Hardter TV Tennis" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+
+    <!-- 
+    
+                          _____   _______    ____     _____             _______
+        |    |     |     |     |     |      |        |     |               |       |       |
+        |____|    | |    |_____|     |      |____    |_____|    _____      |        |     |
+        |    |   |___|   |  |_       |      |        |  |_                 |         |   |
+        |    |  |     |  |    |_     |      |____    |    |_               |          |_|            
+        
+        
+        
+    -->
+
+    <title>hardter tv</title>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %}
+      <ul>
+        {% for category, message in messages %}
+        <li class="flash {{ category }}-message">
+          {% if category == 'success' %}
+          <i class="fas fa-check-circle"></i>
+          {% elif category == 'info' %}
+          <i class="fas fa-info-circle"></i>
+          {% elif category == 'error' %}
+          <i class="fas fa-exclamation-circle"></i>
+          {% endif %}
+          <p>{{ message }}</p>
+          {% endfor %}
+        </li>
+      </ul>
+      {% endif %} {% endwith %}
+    <nav class="navbar">
+      <a href="/" class="logo">logo</a>
+      <div class="nav-links" id="navLinks">
+        <a href="#home">STARTSEITE</a>
+        <a href="#about">ÜBER UNS</a>
+        <a href="#contact">KONTAKT</a>
+        <a href="#termine">TERMINE</a>
+        <a href="#trainer">TRAINER</a>
+        <a href="#news">NEUIGKEITEN</a>
+      </div>
+
+      <div id="hamburger" class="hamburger">
+        <label class="hamburger">
+          <input type="checkbox" id="menuToggle" />
+          <svg viewBox="0 0 32 32">
+            <path
+              class="line line-top-bottom"
+              d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+            ></path>
+            <path class="line" d="M7 16 27 16"></path>
+          </svg>
+        </label>
+      </div>
+
+      <div class="menu" id="menu">
+        <ul>
+          <li><a href="#home">STARTSEITE</a></li>
+          <li><a href="#about">ÜBER UNS</a></li>
+          <li><a href="#contact">KONTAKT</a></li>
+          <li><a href="#termine">TERMINE</a></li>
+          <li><a href="#trainer">TRAINER</a></li>
+          <li><a href="#news">NEUIGKEITEN</a></li>
+          {% if logged_in and is_verified%}
+          <li><a href="/dashboard">Dein Account</a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}">Signup/Login →</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content" id="home">
+      <div class="sermon-info">
+        <span>Hardter Tennisverein</span>
+        <span class="span"></span>
+        <span>SO 5.14.2023</span>
+      </div>
+      <h1 class="sermon-title">Willkommen beim Hardter Tennisverein</h1>
+      <div class="video-container">
+        <!-- Video-Placeholder -->
+      </div>
+    </main>
+
+    <section class="black-section">
+      <div class="black-section-content">
+        <h2>Werde Teil unserer Tennis-Community</h2>
+        <p>
+          Erlebe die Freude am Tennis und die Kraft der Gemeinschaft. Verbinde
+          dich mit Gleichgesinnten und wachse gemeinsam im Sport.
+        </p>
+        <a class="cta-button" href="{{ url_for('signup') }}"
+          >Jetzt Account erstellen</a
+        ><br /><br />
+        {% if logged_in and is_verified %}
+        <a href="/dashboard" class="learn-more">Dein Account</a>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="learn-more">Oder login →</a>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="locations-section" id="one">
+      {% if is_admin %}
+      <form
+        class="cm-form"
+        action="{{ url_for('add_content') }}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <div id="cm-drop-area" class="cm-drop-area">
+          <input
+            type="file"
+            name="image"
+            id="cm-fileElem"
+            class="cm-file-input"
+            accept="image/*"
+            required
+          />
+          <label class="cm-button" for="cm-fileElem"
+            >Select an image file</label
+          >
+          <p>or drag and drop here</p>
+          <div id="cm-preview" class="cm-preview"></div>
+        </div>
+        <input
+          type="text"
+          name="heading"
+          class="cm-input"
+          placeholder="Heading"
+          required
+        />
+        <textarea
+          name="text1"
+          class="cm-textarea"
+          placeholder="Text 1"
+          required
+        ></textarea>
+        <textarea
+          name="text2"
+          class="cm-textarea"
+          placeholder="Text 2"
+          required
+        ></textarea>
+        <input
+          type="text"
+          name="iframe"
+          class="cm-input"
+          placeholder="iframe"
+          required
+        />
+        <button type="submit" class="cm-button">Add Content</button>
+      </form>
+      {% endif %}
+      <div class="locations-header">
+        <h2>Besuche unseren Verein</h2>
+        <p>Besuche uns jeden Sonntag an einem unserer Standorte!</p>
+        <a href="/downloads" class="learn-more">Downloads →</a>
+      </div>
+      <div class="locations-grid">
+        <div class="location-card" onclick="expandCard(this)">
+          <img src="/static/images/tennis1.jpg" alt="Tennisplatz" />
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h3>Hardter Tennisplatz</h3>
+            <div class="location-times">10:00 + 12:30 + 18:00</div>
+            <div class="location-address">
+              6767 Hauptstraße, Hardt, Deutschland
+            </div>
+          </div>
+          <div class="expanded-info">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
+              width="600"
+              height="450"
+          title="iframe"
+          style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        <div class="location-card" onclick="expandCard(this)">
+          <img src="/static/images/paddle.jpg" alt="Tennis Club" />
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h3>Clubhaus Hardt</h3>
+            <div class="location-times">10:30 + 12:30 + 18:00</div>
+            <div class="location-address">
+              6101 Tennisstraße, Hardt, Deutschland
+            </div>
+          </div>
+          <div class="expanded-info">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
+              width="600"
+          title="iframe"
+          height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        <div class="location-card" onclick="expandCard(this)">
+          <img src="/static/images/girl.jpg" alt="Tennis im Park" />
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h3>Tennis im Park</h3>
+            <div class="location-times">10:30 + 12:30</div>
+            <div class="location-address">
+              77 Parkstraße, Hardt, Deutschland
+            </div>
+          </div>
+          <div class="expanded-info">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
+              width="600"
+              height="450"
+              style="border: 0"
+          title="iframe"
+          allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        <div class="location-card" onclick="expandCard(this)">
+          <img src="/static/images/sport.jpg" alt="Tennis im Garten" />
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h3>Tennisgarten Hardt</h3>
+            <div class="location-times">10:30 + 12:30</div>
+            <div class="location-address">
+              17801 Sportstraße, Hardt, Deutschland
+            </div>
+          </div>
+          <div class="expanded-info">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
+              width="600"
+          title="iframe"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        {% for item in content_items %}
+        <div class="location-card" onclick="expandCard(this)">
+          {% if item.image_data_base64 %}
+          <img
+            src="data:image/jpeg;base64,{{ item.image_data_base64 }}"
+            alt="Content Image"
+          />
+          {% else %}
+          <p>No image available</p>
+          {% endif %}
+          <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
+          <div class="location-info">
+            <h2>{{ item.heading }}</h2>
+            <p>{{ item.text1 }}</p>
+            <p>{{ item.text2 }}</p>
+          </div>
+          <div class="expanded-info">{{ item.iframe | safe }}</div>
+          {% if is_admin %}
+          <a
+            href="{{ url_for('delete_content', item_id=item.id) }}"
+            class="cm-delete-btn"
+            >Delete</a
+          >
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="locations-section" id="about">
+      <div class="locations-header">
+        <h2>Über uns</h2>
+        <p>Hier erfahren Sie alles über unseren Verein</p>
+        <a href="/newsletter" class="learn-more">Newsletter ansehen →</a>
+      </div>
+      <div class="locations-grid">
+        <div class="container">
+          <div class="about-content">
+            <div class="about-image">
+              <img src="/static/images/tennis3.jpg" alt="Tennis Team" />
+            </div>
+            <div class="about-text">
+              <p>
+                Unser Tennisverein besteht aus einer engagierten Gemeinschaft
+                von Spielern aller Altersgruppen. Wir bieten regelmäßige
+                Trainings, Turniere und ein aktives Vereinsleben. Unser Ziel ist
+                es, Tennis für alle zugänglich zu machen und ein Umfeld zu
+                schaffen, in dem sich jeder verbessern kann.
+              </p>
+              <p>
+                Wir legen besonderen Wert auf Teamgeist, Fairplay und Spaß am
+                Spiel. Kommen Sie vorbei und machen Sie mit!
+              </p>
+              {% for text in about_texts %} {% if text.type == "headline" %}
+              <br />
+              <h3>{{ text.content }}</h3>
+              <br />
+              {% else %}
+              <p>{{ text.content }}</p>
+              {% endif %} {% if is_admin %}
+              <form
+                action="/delete_about_text/{{ text.id }}"
+                method="POST"
+                style="display: inline"
+              >
+                <button
+                  class="delete"
+                  type="submit"
+                  onclick="return confirm('Möchten Sie diesen Text wirklich löschen?')"
+                >
+                  Löschen
+                </button>
+              </form>
+              {% endif %} {% endfor %} {% if is_admin%}
+              <form
+                class="about-form hidden"
+                action="/add_about_text"
+                method="POST"
+              >
+                <h3>Text hinzufügen</h3>
+                <label for="text-type">Texttyp:</label>
+                <select id="text-type" name="text_type" required>
+                  <option value="headline">Überschrift</option>
+                  <option value="normal">Normaler Text</option>
+                </select>
+                <br /><br /><label for="about-content">Textinhalt:</label>
+                <textarea
+                  id="about-content"
+                  name="about_content"
+                  rows="10"
+                  required
+                ></textarea>
+                <button type="submit">Hinzufügen</button>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="locations-section" id="termine">
+      <div class="locations-header">
+        <h2>Termine</h2>
+        <p>Hier erfahren Sie alles über kommende Termine und Veranstaltungen</p>
+      </div>
+      <div class="locations-grid">
+        <div class="container">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Veranstaltung</th>
+                <th>Uhrzeit</th>
+                <th>Ort</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for termin in termine %}
+              <tr>
+                <td>{{ termin.datum }}</td>
+                <td>{{ termin.veranstaltung }}</td>
+                <td>{{ termin.uhrzeit }}</td>
+                <td>{{ termin.ort }}</td>
+                {% if is_admin %}
+                <td>
+                  <form
+                    action="/delete_termin/{{ termin.id }}"
+                    method="POST"
+                    style="display: inline"
+                  >
+                    <button
+                      class="delete"
+                      type="submit"
+                      onclick="return confirm('Möchten Sie diesen Termin wirklich löschen?')"
+                    >
+                      Löschen
+                    </button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {% if is_admin %}
+
+      <!-- Formular zum Hinzufügen eines neuen Termins -->
+      <form class="termin-form hidden" action="/add_termin" method="POST">
+        <h3>Neuen Termin hinzufügen</h3>
+        <label for="datum">Datum:</label>
+        <input type="date" id="datum" name="datum" required />
+        <label for="veranstaltung">Veranstaltung:</label>
+        <input type="text" id="veranstaltung" name="veranstaltung" required />
+        <label for="uhrzeit">Uhrzeit:</label>
+        <input type="time" id="uhrzeit" name="uhrzeit" required />
+        <label for="ort">Ort:</label>
+        <input type="text" id="ort" name="ort" required />
+        <button type="submit">Hinzufügen</button>
+      </form>
+
+      {% endif %}
+    </section>
+
+    <section class="locations-section" id="trainer">
+      <div class="locations-header">
+        <h2>Unsere Trainer</h2>
+        <p>
+          Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen
+        </p>
+      </div>
+      <div class="locations-grid">
+        <div class="trainer-card">
+          <div class="trainer-image">
+            <img
+              src="/static/images/man-2604149_960_720.jpg"
+              alt="Max Mustermann"
+            />
+            <div class="trainer-overlay">
+              <p>
+                "Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."
+              </p>
+            </div>
+          </div>
+          <div class="trainer-info">
+            <h3 class="trainer-name">Max Mustermann</h3>
+            <div class="trainer-title">Haupttrainer</div>
+            <p class="trainer-description">
+              Mit 15 Jahren Erfahrung bringt Max eine Fülle von Wissen und
+              Leidenschaft in jede Trainingseinheit ein. Spezialisiert auf
+              Fortgeschrittene und Wettkampfspieler.
+            </p>
+          </div>
+        </div>
+        <div class="trainer-card">
+          <div class="trainer-image">
+            <img
+              src="/static/images/training-828726_960_720.jpg"
+              alt="Anna Schmidt"
+            />
+            <div class="trainer-overlay">
+              <p>"Jeder Schlag ist eine Chance, besser zu werden."</p>
+            </div>
+          </div>
+          <div class="trainer-info">
+            <h3 class="trainer-name">Anna Schmidt</h3>
+            <div class="trainer-title">Jugendtrainerin</div>
+            <p class="trainer-description">
+              Anna hat eine besondere Gabe, junge Talente zu fördern. In ihren
+              10 Jahren als Trainerin hat sie zahlreiche Jugendspieler zu
+              Erfolgen geführt.
+            </p>
+          </div>
+        </div>
+        <div class="trainer-card">
+          <div class="trainer-image">
+            <img
+              src="/static/images/woman-2592247_960_720.jpg"
+              alt="Thomas Weber"
+            />
+            <div class="trainer-overlay">
+              <p>"Technik ist wichtig, aber mentale Stärke gewinnt Matches."</p>
+            </div>
+          </div>
+          <div class="trainer-info">
+            <h3 class="trainer-name">Thomas Weber</h3>
+            <div class="trainer-title">Leistungstrainer</div>
+            <p class="trainer-description">
+              Thomas' 20-jährige Erfahrung im Leistungssport macht ihn zum
+              Experten für Spieler, die ihre Fähigkeiten auf ein neues Level
+              bringen wollen.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="locations-section" id="news">
+      <div class="locations-header">
+        <h2>Aktuelle Neuigkeiten</h2>
+        <p>
+          Bleiben Sie auf dem Laufenden über die neuesten Entwicklungen in
+          unserem Verein
+        </p>
+        <a href="/news" class="learn-more">Alle Neuigkeiten ansehen →</a>
+      </div>
+      <div class="locations-grid">
+        <div class="news-card">
+          <div class="news-image">
+            <img src="/static/images/tennis.jpg" alt="Neuer Tennisplatz" />
+          </div>
+          <div class="news-content">
+            <div class="news-date">15. Mai 2025</div>
+            <h3 class="news-title">Neuer Tennisplatz eröffnet</h3>
+            <p class="news-excerpt">
+              Unser Verein freut sich, die Eröffnung eines brandneuen,
+              state-of-the-art Tennisplatzes bekannt zu geben. Der Platz bietet
+              optimale Bedingungen für Spieler aller Niveaus.
+              <span class="hidden-text"
+                >Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image">
+            <img
+              src="/static/images/wilson-2259352_960_720.jpg"
+              alt="Jugendturnier"
+            />
+          </div>
+          <div class="news-content">
+            <div class="news-date">2. Juni 2025</div>
+            <h3 class="news-title">Jugendturnier ein voller Erfolg</h3>
+            <p class="news-excerpt">
+              Das diesjährige Sommerturnier für Jugendliche war ein
+              Rekorderfolg. Über 50 junge Talente zeigten ihr Können und
+              begeisterten Zuschauer und Trainer gleichermaßen.
+              <span class="hidden-text"
+                >Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image">
+            <img
+              src="/static/images/tennis-court-1671852_960_720.jpg"
+              alt="Neue Trainingszeiten"
+            />
+          </div>
+          <div class="news-content">
+            <div class="news-date">20. Juni 2025</div>
+            <h3 class="news-title">Neue Trainingszeiten ab Juli</h3>
+            <p class="news-excerpt">
+              Um allen Mitgliedern gerecht zu werden, bieten wir ab Juli
+              erweiterte Trainingszeiten an. Dies umfasst auch neue Früh- und
+              Abendkurse für Berufstätige.
+              <span class="hidden-text">
+                Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="social-links1">
+      <a href="#contact">KONTAKT</a>
+      <span></span>
+      <a
+        href="https://facebook.com"
+        target="_blank"
+        aria-label="Gehe zu Facebook"
+        ><i class="fab fa-facebook fa-1x"></i
+      ></a>
+      <a
+        href="https://linkedin.com"
+        target="_blank"
+        aria-label="Gehe zu Linkedin"
+        ><i class="fab fa-linkedin fa-1x"></i
+      ></a>
+      <a
+        href="https://instagram.com"
+        target="_blank"
+        aria-label="Gehe zu Instagram"
+        ><i class="fab fa-instagram fa-1x"></i
+      ></a>
+    </div>
+
+    <a href="#one" class="discover-button"
+      ><i class="fa fa-arrow-left"></i>Entdecken</a
+    >
+
+    <section class="locations-section" id="contact">
+      <div class="locations-header">
+        <h2>Schreibe uns direkt</h2>
+        <p>Nehme über usere Seite direkt Kontakt mit uns auf!</p>
+      </div>
+      <div class="locations-grid">
+        <form class="contact-form" action="/send_email" method="POST">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          <button type="submit" class="learn-more">Nachricht senden →</button>
+        </form>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959200775651!2d6.927527713413548!3d51.6605833717312!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737024831814!5m2!1sde!2sde"
+          width="600"
+          title="iframe"
+          height="450"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          alt="stantort des Vereins"
+        ></iframe>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3 class="footer-title">Tennis TV</h3>
+          <p>
+            Ihr Tennisverein für Sport, Spaß und Gemeinschaft – hier finden Sie
+            alles rund um Tennis und Vereinsleben.
+          </p>
+          <div class="social-links">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              aria-label="Gehe zu Facebook"
+              ><i class="fab fa-facebook "></i
+            ></a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              aria-label="Gehe zu Instagram"
+              ><i class="fab fa-instagram "></i
+            ></a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              aria-label="Gehe zu Linkedin"
+              ><i class="fab fa-linkedin "></i
+            ></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Schnelle Links</h3>
+          <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#about">Über uns</a>
+            <a href="#termine">Termine</a>
+            <a href="#trainer">Trainer</a>
+            <a href="#contact">Kontakt</a>
+            <a href="#news">Neuigkeiten</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Kontakt</h3>
+          <p>
+            Tennis TV Tennisverein<br />Tennis Str. 101<br />Viersen,
+            Nordrhein-Westfalen<br /><br />
+          </p>
+          <p>T: 02162 123456<br /><br /></p>
+          <p>E: info@tennistv.de</p>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Newsletter</h3>
+          <p>
+            Bleiben Sie auf dem Laufenden mit unseren neuesten Nachrichten und
+            Angeboten.
+          </p>
+          <form action="/subscribe" method="POST" class="newsletter-form">
+            <input
+              type="email"
+              placeholder="Ihre E-Mail-Adresse"
+              class="newsletter-input"
+              required
+              name="email"
+              id="email"
+            />
+            <button type="submit" class="newsletter-btn">Abonnieren</button>
+          </form>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2024 Tennis TV. Alle Rechte vorbehalten.</p>
+      </div>
+    </footer>
+
+    <div id="cookieConsent" class="cookie-modal">
+      <div class="cookie-content">
+        <div class="cookie-header">
+          <h2>Cookie-Einstellungen</h2>
+          <button class="close-button" onclick="closeCookieConsent()">
+            &times;
+          </button>
+        </div>
+
+        <p class="cookie-description">
+          Wir verwenden Cookies, um Ihnen die bestmögliche Erfahrung auf unserer
+          Website zu bieten. Bitte akzeptieren Sie die Verwendung von Cookies
+          oder passen Sie Ihre Einstellungen an.
+        </p>
+
+        <div class="cookie-actions">
+          <button class="button-primary" onclick="acceptAllCookies()">
+            Alle akzeptieren
+          </button>
+          <button class="button-secondary" onclick="toggleSettings()">
+            Einstellungen anpassen
+          </button>
+        </div>
+
+        <div id="cookieSettings" class="cookie-settings">
+          <h3>Cookie-Einstellungen anpassen</h3>
+
+          <div class="cookie-options">
+            <label class="cookie-option">
+              <input type="checkbox" name="necessary" checked disabled />
+              <span class="checkmark"></span>
+              <div class="option-text">
+                <span>Notwendige Cookies</span>
+                <small
+                  >Diese Cookies sind für die Grundfunktionen der Website
+                  erforderlich</small
+                >
+              </div>
+            </label>
+
+            <label class="cookie-option">
+              <input type="checkbox" name="functional" />
+              <span class="checkmark"></span>
+              <div class="option-text">
+                <span>Funktionale Cookies</span>
+                <small
+                  >Ermöglichen erweiterte Funktionen und Personalisierung</small
+                >
+              </div>
+            </label>
+
+            <label class="cookie-option">
+              <input type="checkbox" name="analytics" />
+              <span class="checkmark"></span>
+              <div class="option-text">
+                <span>Analyse-Cookies</span>
+                <small
+                  >Helfen uns zu verstehen, wie Besucher mit der Website
+                  interagieren</small
+                >
+              </div>
+            </label>
+          </div>
+
+          <button
+            class="button-primary save-button"
+            onclick="saveCookieSettings()"
+            onclick="acceptAllCookies()"
+          >
+            Einstellungen speichern
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!{{ cookie_consent|tojson }}) {
+                document.getElementById('cookieConsent').style.display = 'block';
+            }
+            document.getElementById('cookieSettings').style.display = 'none';
+        });
+
+        function closeCookieConsent() {
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+
+        function toggleSettings() {
+            const settings = document.getElementById('cookieSettings');
+            if (settings.style.display === 'none' || settings.style.display === '') {
+                settings.style.display = 'block';
+            } else {
+                settings.style.display = 'none';
+            }
+        }
+
+        async function acceptAllCookies() {
+            try {
+                const response = await fetch('/api/cookies/accept-all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    closeCookieConsent();
+                    window.location.reload();
+                } else {
+                    console.error('Failed to save cookie settings');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function saveCookieSettings() {
+            const settings = {
+                functional: document.querySelector('input[name="functional"]').checked,
+                analytics: document.querySelector('input[name="analytics"]').checked,
+                marketing: document.querySelector('input[name="marketing"]').checked
+            };
+
+            try {
+                const response = await fetch('/api/cookies/save-settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(settings)
+                });
+
+                if (response.ok) {
+                    closeCookieConsent();
+                    window.location.reload();
+                } else {
+                    console.error('Failed to save cookie settings');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function loadCookieSettings() {
+            const cookieTypes = ['functional', 'analytics', 'marketing'];
+            cookieTypes.forEach(type => {
+                const checkbox = document.querySelector(`input[name="${type}"]`);
+                if (checkbox) {
+                    checkbox.checked = getCookie(type) === 'true';
+                }
+            });
+        }
+
+        document.querySelector('.button-secondary').addEventListener('click', loadCookieSettings);
+
+      
+      window.onload = function() {
+        // Suche nach allen Flash-Nachrichten
+        const flashMessages = document.querySelectorAll('.flash');
+
+        // Wenn es Flash-Nachrichten gibt, verstecke sie nach 3 Sekunden
+        flashMessages.forEach(function(message) {
+            setTimeout(function() {
+                message.style.display = 'none';  // Blende die Nachricht aus
+            }, 3000);  // 3000 Millisekunden = 3 Sekunden
+        });
+    }
+
+
+      const hamburger = document.getElementById("hamburger");
+      const menu = document.getElementById("menu");
+      const menuToggle = document.getElementById("menuToggle");
+      const menuLinks = document.querySelectorAll("#menu a");
+
+      // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
+      menuToggle.addEventListener("change", () => {
+        if (menuToggle.checked) {
+          menu.classList.add("open");
+        } else {
+          menu.classList.remove("open");
+        }
+      });
+
+      // Schließt das Menü, wenn ein Link angeklickt wird
+      menuLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          menuToggle.checked = false; // Deaktiviert die Checkbox
+          menu.classList.remove("open"); // Schließt das Menü
+        });
+      });
+
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const readMoreButtons = document.querySelectorAll(".read-more");
+
+        readMoreButtons.forEach((button) => {
+          button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const newsCard = button.closest(".news-card");
+            newsCard.classList.toggle("expanded");
+
+            // Button-Text ändern
+            const isExpanded = newsCard.classList.contains("expanded");
+            button.textContent = isExpanded
+              ? "Weniger anzeigen"
+              : "Weiterlesen";
+          });
+        });
+      });
+
+
+
+
+      document.addEventListener('DOMContentLoaded', function() {
+        let dropArea = document.getElementById("cm-drop-area");
+        let fileInput = document.getElementById("cm-fileElem");
+        let preview = document.getElementById("cm-preview");
+
+        if (dropArea && fileInput && preview) {
+          ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+          });
+
+          ["dragenter", "dragover"].forEach((eventName) => {
+            dropArea.addEventListener(eventName, highlight, false);
+          });
+
+          ["dragleave", "drop"].forEach((eventName) => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+          });
+
+          dropArea.addEventListener("drop", handleDrop, false);
+          fileInput.addEventListener("change", handleFiles, false);
+
+          function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+
+          function highlight(e) {
+            dropArea.classList.add("cm-highlight");
+          }
+
+          function unhighlight(e) {
+            dropArea.classList.remove("cm-highlight");
+          }
+
+          function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+
+            handleFiles(files);
+          }
+
+          function handleFiles(files) {
+            files = files.length ? files : this.files;
+            [...files].forEach(previewFile);
+          }
+
+          function previewFile(file) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+              let img = document.createElement("img");
+              img.src = reader.result;
+              preview.innerHTML = "";
+              preview.appendChild(img);
+            };
+          }
+
+        }
+      });
+
+      function expandCard(card) {
+        card.classList.toggle("expanded");
+
+        let overlay = document.querySelector(".overlay");
+        if (!overlay) {
+          overlay = document.createElement("div");
+          overlay.className = "overlay";
+          document.body.appendChild(overlay);
+        }
+
+        if (card.classList.contains("expanded")) {
+          overlay.style.display = "block";
+          overlay.onclick = function () {
+            card.classList.remove("expanded");
+            overlay.style.display = "none";
+          };
+        } else {
+          overlay.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>

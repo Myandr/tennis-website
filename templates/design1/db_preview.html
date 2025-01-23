@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenbank Vorschau</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --text-color: #333;
+            --border-color: #bdc3c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login {
+            overflow: scroll;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    min-width: 600px; /* Ensure table doesn't shrink too much on small screens */
+}
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        td img {
+            max-width: 200px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+            transition: background-color 0.3s ease;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                font-size: 0.8em;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Datenbank Vorschau</h1>
+
+        <h2>Benutzer (User)</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Email</th>
+                        <th>Rolle</th>
+                        <th>Verifiziert</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>{{ user.is_verified }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Termine</h2>
+        <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Datum</th>
+                    <th>Veranstaltung</th>
+                    <th>Uhrzeit</th>
+                    <th>Ort</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for termin in termine %}
+                <tr>
+                    <td>{{ termin.id }}</td>
+                    <td>{{ termin.datum }}</td>
+                    <td>{{ termin.veranstaltung }}</td>
+                    <td>{{ termin.uhrzeit }}</td>
+                    <td>{{ termin.ort }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        <h2>About Texte</h2>
+        <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Content</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for about_text in about_texts %}
+                <tr>
+                    <td>{{ about_text.id }}</td>
+                    <td>{{ about_text.content }}</td>
+                    <td>{{ about_text.type }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        
+        <h2>Standorte</h2>
+        <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Img</th>
+                    <th>Heading</th>
+                    <th>Text1</th>
+                    <th>Text2</th>
+                    <th>Iframe</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for content in content_item %}
+                <tr>
+                    <td>{{ content.id }}</td>
+                    <td>{% if content.image_data_base64 %}
+                        <img
+                          src="data:image/jpeg;base64,{{ content.image_data_base64 }}"
+                          alt="Content Image"
+                        />
+                        {% else %}
+                        <p>No image available</p>
+                        {% endif %}</td>
+                    <td>{{ content.heading }}</td>
+                    <td>{{ content.text1 }}</td>
+                    <td>{{ content.text2 }}</td>
+                    <td>{{ content.iframe }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        <h2>News</h2>
+        <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Img</th>
+                    <th>Datum</th>
+                    <th>Heading</th>
+                    <th>info</th>
+                    <th>span</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in box %}
+                <tr>
+                    <td>{{ i.id }}</td>
+                    <td>{% if i.image_data_base64 %}
+                        <img
+                          src="data:image/jpeg;base64,{{ i.image_data_base64 }}"
+                          alt="Content Image"
+                        />
+                        {% else %}
+                        <p>No image available</p>
+                        {% endif %}</td>
+                    <td>{{ i.date }}</td>
+                    <td>{{ i.heading }}</td>
+                    <td>{{ i.info }}</td>
+                    <td>{{ i.span }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+</body>
+</html>

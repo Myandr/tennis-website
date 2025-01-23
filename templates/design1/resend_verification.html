@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifizierung erneut senden</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/forms.css">
+</head>
+<body>
+    <div class="card">
+          {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+          <ul>
+              {% for category, message in messages %}
+                <li class="{{ category }}-message">
+                {% if category == 'success' %}
+                    <i class="fas fa-check-circle"></i>
+                {% elif category == 'info' %}
+                    <i class="fas fa-info-circle"></i>
+                {% elif category == 'error' %}
+                    <i class="fas fa-exclamation-circle"></i>
+                {% endif %}
+                  <p>{{ message }}</p>
+              {% endfor %}
+                </li>
+        </ul>
+          {% endif %}
+        {% endwith %}
+        <div class="header">
+            <div class="dot"></div>
+            <h1 class="title">Verifizierung erneut senden</h1>
+        </div>
+        <p class="subtitle">Du solltest eine E-Mail mit dem Verifizierungscode erhalten haben</p>
+        <form class="form" method="POST">
+            <div class="input-group">
+                <input type="email" class="input" id="email" name="email" placeholder=" " required>
+                <label for="email" class="label">E-Mail</label>
+            </div>
+            <button type="submit" class="submit" >Absenden</button>
+        </form>
+    </div>
+
+</body>
+</html>

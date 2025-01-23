@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registrieren</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/forms.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script>
+      function toggleAdminPassword() {
+        var roleSelect = document.getElementById("role");
+        var adminPasswordField = document.getElementById(
+          "admin-password-field"
+        );
+        if (roleSelect.value === "admin") {
+          adminPasswordField.style.display = "block";
+        } else {
+          adminPasswordField.style.display = "none";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages(with_categories=True) %} {% if
+    messages %}
+    <ul>
+      {% for category, message in messages %}
+      <li class="{{ category }}-message">
+        {% if category == 'success' %}
+        <i class="fas fa-check-circle"></i>
+        {% elif category == 'info' %}
+        <i class="fas fa-info-circle"></i>
+        {% elif category == 'error' %}
+        <i class="fas fa-exclamation-circle"></i>
+        {% endif %}
+        <p>{{ message }}</p>
+        {% endfor %}
+      </li>
+    </ul>
+    {% endif %} {% endwith %}
+    <div class="card">
+      <div class="header">
+        <div class="dot"></div>
+        <h1 class="title">Registrieren</h1>
+      </div>
+      <p class="subtitle">
+        Jetzt registrieren und vollen Zugriff auf unsere Seite erhalten.
+      </p>
+      <form class="form" method="POST">
+        <div class="name-group">
+          <div class="input-group">
+            <input
+              type="text"
+              name="firstname"
+              class="input"
+              id="firstname"
+              placeholder=" "
+              required
+            />
+            <label for="firstname" class="label">Vorname</label>
+          </div>
+          <div class="input-group">
+            <input
+              type="text"
+              name="lastname"
+              class="input"
+              id="lastname"
+              placeholder=" "
+              required
+            />
+            <label for="lastname" class="label">Nachname</label>
+          </div>
+        </div>
+        <div class="input-group">
+          <input
+            type="email"
+            class="input"
+            id="email"
+            name="email"
+            placeholder=" "
+            required
+          />
+          <label for="email" class="label">E-Mail</label>
+        </div>
+        <div class="input-group">
+          <input
+            type="password"
+            class="input"
+            id="password"
+            name="password"
+            placeholder=" "
+            required
+          />
+          <label for="password" class="label">Passwort</label>
+        </div>
+        <div class="input-group">
+          <select
+            class="input"
+            id="role"
+            name="role"
+            onchange="toggleAdminPassword()"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <div id="admin-password-field" style="display: none">
+            <input
+              class="input"
+              type="password"
+              id="admin_password"
+              name="admin_password"
+            />
+            <label class="label" for="admin_password">Admin Password:</label>
+          </div>
+        </div>
+        <button type="submit" value="Sign Up" class="submit">Absenden</button>
+      </form>
+      <p class="footer">
+        Hast du bereits ein Konto? <a href="{{ url_for('login') }}">Login</a>
+      </p>
+    </div>
+  </body>
+</html>

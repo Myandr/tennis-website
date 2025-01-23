@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=DM+Serif+Text:ital@0;1&family=Fugaz+One&family=Funnel+Display:wght@300..800&family=Orbitron:wght@400..900&display=swap');
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        header {
+            padding-left: 10%;
+            padding-right: 10%;
+            margin-bottom: 20px;
+            position: relative;
+            top: -10px;
+            height: 80px;
+            font-family: "Funnel Display";
+            background-color: white;
+            z-index: 1;
+        }
+
+        nav {
+            height: 80px;
+            position: fixed;
+            width: 80%;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid rgb(177, 177, 177);
+            transition: all 0.5s;
+            justify-content: space-between;
+        }
+
+        nav.scrolled {
+            background-color: rgb(255, 255, 255); /* Weißer Hintergrund beim Scrollen */
+            height: 60px;
+        }
+
+        nav a {
+            margin-right: 40px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .logo {
+            margin-left: 20px;
+        }
+        
+        main {
+            padding-left: 10%;
+            padding-right: 10%;
+            font-family: "Funnel Display";
+        }
+
+        .hero {
+            display: flex;
+            margin-bottom: 200px;
+            flex-direction: row;
+        }
+
+        .main-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 50%;
+        }
+
+        .main-left h5 {
+            font-weight: lighter;
+            font-size: medium;
+        }
+
+        .main-left h4 {
+            font-weight: lighter;
+            letter-spacing: 2px;
+            word-spacing: 5px;
+            font-size: small;
+        }
+
+        .main-left h1 {
+            font-weight: 400;
+            font-size: 40px;
+            margin-top: 40px;
+        }
+
+        .main-btn {
+            margin-top: 20px;
+        }
+        
+        .main-right {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bottom-text {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            min-width: 700px;
+        }
+
+        .scroll {
+            display: flex;
+            align-items: center;
+        }
+
+        .scroll p {
+            margin-left: 10px;
+        }
+
+        .orb {
+            z-index: 0;
+        }
+
+        #main-img {
+            position: relative;
+            overflow: hidden;
+            min-width: 800px;
+            height: 700px;
+            z-index: 0;
+            border-radius: 350px;
+        }
+
+        .cssbuttons-io-button {
+            background: #000000;
+            color: white;
+            font-family: inherit;
+            padding: 0.35em;
+            padding-left: 1.2em;
+            font-size: 17px;
+            font-weight: 500;
+            border-radius: 0.9em;
+            border: none;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: inset 0 0 1.6em -0.6em #ffffff;
+            overflow: hidden;
+            position: relative;
+            height: 2.8em;
+            padding-right: 3.3em;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        .cssbuttons-io-button .icon {
+            background: white;
+            margin-left: 1em;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 2.2em;
+            width: 2.2em;
+            border-radius: 0.7em;
+            box-shadow: 0.1em 0.1em 0.6em 0.2em rgba(255, 255, 255, 0.5);
+            right: 0.3em;
+            transition: all 0.3s;
+        }
+
+        .cssbuttons-io-button:hover .icon {
+            width: calc(100% - 0.6em);
+        }
+
+        .cssbuttons-io-button .icon svg {
+            width: 1.1em;
+            transition: transform 0.3s;
+            color: #000000;
+        }
+
+        .cssbuttons-io-button:hover .icon svg {
+            transform: translateX(0.1em);
+        }
+
+        .cssbuttons-io-button:active .icon {
+            transform: scale(0.95);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h4 {
+            font-weight: lighter;
+            letter-spacing: 2px;
+            word-spacing: 5px;
+            font-size: small;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 40px;
+            font-weight: 400;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 0;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-card i {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 0;
+            background-color: rgb(238, 238, 238);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: #666;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 100px 0;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        .contact-info {
+            padding-right: 40px;
+        }
+
+        .contact-info h3 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .contact-details {
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-item i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+        }
+
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .contact-form button {
+            width: 20%;
+        }
+
+        .portfolio {
+            padding: 100px 0;
+            background-color: #ffffff;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            height: 260px;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .portfolio-overlay h3 {
+            margin-bottom: 10px;
+        }
+
+        .portfolio-overlay p {
+            margin-bottom: 20px;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .testimonial-slider {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .testimonial-item {
+            text-align: center;
+            padding: 0 50px;
+        }
+
+        .testimonial-item p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .testimonial-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .testimonial-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .testimonial-control {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #000;
+            cursor: pointer;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .testimonial-control:hover {
+            color: var(--secondary-color);
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 100px 0;
+            background-color: #ffffff;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: rgb(226, 226, 226);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: #f0f0f0;
+        }
+
+        .faq-question h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-question {
+            background-color: #ffffff;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(45deg);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+            padding: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-item {
+                padding: 0 20px;
+            }
+
+            .faq-container {
+                padding: 0 20px;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                padding-right: 0;
+            }
+
+            .section-header h2 {
+                font-size: 32px;
+            }
+        }
+
+        @media screen and (max-width: 1450px) {
+            .main-left {
+                width: 400px;
+            }
+        }
+
+        @media screen and (max-width: 1250px) {
+            .main-left {
+                width: 250px;
+            }
+
+            .main-left h1 {
+                font-size: 30px;
+            }
+        }
+
+        @media screen and (max-width: 1100px) {
+            .hero {
+                flex-direction: column;
+            }
+
+            .main-left {
+                width: 600px;
+            }
+
+            .main-left h1 {
+                font-size: 40px;
+            }
+
+            .bottom-text {
+                display: none;
+            }
+        }
+
+        
+
+
+
+
+
+    </style>
+
+
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.54/build/spline-viewer.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="logo"><img src="" alt="Logo"></div>
+                <div class="nav-right">
+                    <a href="#">Über uns</a>
+                    <a href="#services">Dienstleistungen</a>
+                    <a href="#projects">Projekte</a>
+                    <a href="#testimonial">Kundenmeinungen</a>
+                    <button class="cssbuttons-io-button">
+                        Kontakt
+                        <div class="icon">
+                          <svg
+                            height="24"
+                            width="24"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path
+                              d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </div>
+                      </button>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="main-left">
+                    <div class="main-left-top">
+                        <h5>Ihr Partner für DevOps- und Cloud-Lösungen</h5>
+                    </div>
+                    <div class="main-left-bottom">
+                        <h4>INNOVATION BEI JEDEM SCHRITT</h4>
+                        <h1>Wir bieten erfolgreiche Strategien für die Umsetzung von Softwareentwicklung und innovative Lösungen für jede Herausforderung die Sie meistern müssen</h1>
+                        <button class="cssbuttons-io-button">
+                            Work
+                            <div class="icon">
+                              <svg
+                                height="24"
+                                width="24"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M0 0h24v24H0z" fill="none"></path>
+                                <path
+                                  d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                                  fill="currentColor"
+                                ></path>
+                              </svg>
+                            </div>
+                          </button>
+                    </div>
+                </div>         
+                <div class="main-right">
+                    <div id="main-img">
+                        <spline-viewer class="orb" url="https://prod.spline.design/xsQLGoG7aBNmBPHc/scene.splinecode"></spline-viewer>                    
+                    </div>
+                    <div class="bottom-text">
+                        <div class="scroll"><i class="fa fa-arrow-down"></i><p>Scrollen<br>um mehr zu entdecken</p></div>
+                        <div class="text-right-main"><p>Automatisierungslösungen<br>innerhalb weniger Tage</p></div>
+                    </div>
+                </div>        
+            </section>
+
+            <section class="about">
+
+            </section>
+
+            <!-- Add these sections before the closing </main> tag -->
+
+<section class="services" id="services">
+    <div class="section-header">
+        <h4>UNSERE DIENSTLEISTUNGEN</h4>
+        <h2>Was wir Ihnen bieten können</h2>
+    </div>
+    <div class="services-grid">
+        <div class="service-card">
+            <i class="fas fa-cloud"></i>
+            <h3>Cloud Solutions</h3>
+            <p>Optimierte Cloud-Infrastrukturen für maximale Effizienz</p>
+            <button class="cssbuttons-io-button">
+                Mehr erfahren
+                <div class="icon">
+                    <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
+            </button>
+        </div>
+        <div class="service-card">
+            <i class="fas fa-code"></i>
+            <h3>DevOps</h3>
+            <p>Automatisierte Entwicklungs- und Bereitstellungsprozesse</p>
+            <button class="cssbuttons-io-button">
+                Mehr erfahren
+                <div class="icon">
+                    <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
+            </button>
+        </div>
+        <div class="service-card">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Security</h3>
+            <p>Umfassende Sicherheitslösungen für<br>Ihre Systeme</p>
+            <button class="cssbuttons-io-button">
+                Mehr erfahren
+                <div class="icon">
+                    <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <h3>100+</h3>
+            <p>Erfolgreiche Projekte</p>
+        </div>
+        <div class="stat-item">
+            <h3>50+</h3>
+            <p>Zufriedene Kunden</p>
+        </div>
+        <div class="stat-item">
+            <h3>24/7</h3>
+            <p>Support & Betreuung</p>
+        </div>
+    </div>
+</section>
+
+<!-- Add these sections before the closing </main> tag -->
+
+<section class="portfolio" id="projects">
+    <div class="section-header">
+        <h4>UNSERE PROJEKTE</h4>
+        <h2>Entdecken Sie unsere Erfolgsgeschichten</h2>
+    </div>
+    <div class="portfolio-grid">
+        <div class="portfolio-item">
+            <img src="https://cdn.pixabay.com/photo/2021/11/25/05/20/cloud-storage-6822673_1280.png" alt="Project 1">
+            <div class="portfolio-overlay">
+                <h3>Cloud Migration</h3>
+                <p>Erfolgreiche Migration einer Infrastruktur in die Cloud</p>
+                <button class="cssbuttons-io-button">Details
+                    <div class="icon">
+                        <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <div class="portfolio-item">
+            <img src="https://cdn.pixabay.com/photo/2022/04/04/16/42/technology-7111801_1280.jpg" alt="Project 2">
+            <div class="portfolio-overlay">
+                <h3>DevOps Automation</h3>
+                <p>Vollständig automatisierte CI/CD-Pipeline</p>
+                <button class="cssbuttons-io-button">Details
+                    <div class="icon">
+                        <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <div class="portfolio-item">
+            <img src="https://cdn.pixabay.com/photo/2018/05/29/10/59/blockchain-3438501_1280.jpg" alt="Project 3">
+            <div class="portfolio-overlay">
+                <h3> Enhancement</h3>
+                <p>Umfassende Sicherheitsoptimierung für ein Fintech-Unternehmen</p>
+                <button class="cssbuttons-io-button">Details
+                    <div class="icon">
+                        <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials" id="testimonial">
+    <div class="section-header">
+        <h4>KUNDENSTIMMEN</h4>
+        <h2>Was unsere Kunden über uns sagen</h2>
+    </div>
+    <div class="testimonial-slider">
+        <div class="testimonial-item">
+            <p>"Die Zusammenarbeit war hervorragend. Das Team hat unsere Erwartungen übertroffen und unsere Systeme signifikant verbessert."</p>
+            <div class="testimonial-author">
+                <img src="https://cdn.pixabay.com/photo/2021/05/23/00/21/woman-6274879_640.png" alt="Author 1">
+                <div>
+                    <h4>Max Mustermann</h4>
+                    <p>CTO, TechCorp GmbH</p>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-item">
+            <p>"Dank der implementierten DevOps-Lösungen konnten wir unsere Entwicklungszyklen um 50% verkürzen."</p>
+            <div class="testimonial-author">
+                <img src="https://cdn.pixabay.com/photo/2021/05/23/00/21/woman-6274879_640.png" alt="Author 2">
+                <div>
+                    <h4>Anna Schmidt</h4>
+                    <p>Lead Developer, InnoSoft AG</p>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-item">
+            <p>"Die Cloud-Migration verlief reibungslos und hat unsere Betriebskosten erheblich reduziert. Absolut empfehlenswert!"</p>
+            <div class="testimonial-author">
+                <img src="https://cdn.pixabay.com/photo/2021/05/23/00/21/woman-6274879_640.png" alt="Author 3">
+                <div>
+                    <h4>Thomas Weber</h4>
+                    <p>CEO, CloudNine Solutions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="testimonial-controls">
+        <button id="prevTestimonial" class="testimonial-control"><i class="fas fa-chevron-left"></i></button>
+        <button id="nextTestimonial" class="testimonial-control"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</section>
+
+<section class="faq">
+    <div class="section-header">
+        <h4>FAQ</h4>
+        <h2>Häufig gestellte Fragen</h2>
+    </div>
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3>Was sind die Vorteile von DevOps?</h3>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-answer">
+                <p>DevOps verbessert die Zusammenarbeit zwischen Entwicklung und Betrieb, beschleunigt die Bereitstellung von Software und erhöht die Stabilität und Zuverlässigkeit von Systemen.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3>Wie lange dauert eine typische Cloud-Migration?</h3>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Die Dauer einer Cloud-Migration hängt von der Komplexität der Infrastruktur ab. Typischerweise kann es von einigen Wochen bis zu mehreren Monaten dauern.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3>Welche Sicherheitsmaßnahmen implementieren Sie?</h3>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Wir implementieren mehrschichtige Sicherheitsmaßnahmen, darunter Verschlüsselung, Zugriffskontrollen, Netzwerksegmentierung und kontinuierliches Monitoring.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contact">
+    <div class="section-header">
+        <h4>KONTAKT</h4>
+        <h2>Lassen Sie uns zusammenarbeiten</h2>
+    </div>
+    <div class="contact-container">
+        <div class="contact-info">
+            <h3>Kontaktieren Sie uns</h3>
+            <p>Wir freuen uns darauf, von Ihnen zu hören</p>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <p>info@example.com</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <p>+49 123 456 789</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-location-dot"></i>
+                    <p>Berlin, Deutschland</p>
+                </div>
+            </div>
+        </div>
+        <form class="contact-form">
+            <input type="text" placeholder="Name" required>
+            <input type="email" placeholder="E-Mail" required>
+            <textarea placeholder="Ihre Nachricht" required></textarea>
+            <button class="cssbuttons-io-button">
+                Senden
+                <div class="icon">
+                    <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
+            </button>
+        </form>
+    </div>
+</section>
+        </main>
+    </div>
+</body>
+
+    </div>
+
+    <script>
+        // Beobachte Scroll-Position
+        window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('nav');
+        
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled'); // Klasse hinzufügen, wenn gescrollt wird
+        } else {
+            navbar.classList.remove('scrolled'); // Klasse entfernen, wenn oben
+        }
+        });
+
+        // Add this to your existing script.js file or in a <script> tag at the end of your HTML body
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Testimonial Slider
+            const testimonials = document.querySelectorAll('.testimonial-item');
+            let currentTestimonial = 0;
+
+            function showTestimonial(index) {
+                testimonials.forEach((testimonial, i) => {
+                    testimonial.style.display = i === index ? 'block' : 'none';
+                });
+            }
+
+            document.getElementById('nextTestimonial').addEventListener('click', () => {
+                currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+                showTestimonial(currentTestimonial);
+            });
+
+            document.getElementById('prevTestimonial').addEventListener('click', () => {
+                currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+                showTestimonial(currentTestimonial);
+            });
+
+            showTestimonial(currentTestimonial);
+
+            // FAQ Accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    faqItems.forEach(faqItem => faqItem.classList.remove('active'));
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+
+            // Portfolio Item Hover Effect
+            const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+            portfolioItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    item.querySelector('.portfolio-overlay').style.opacity = '1';
+                    item.querySelector('img').style.transform = 'scale(1.1)';
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    item.querySelector('.portfolio-overlay').style.opacity = '0';
+                    item.querySelector('img').style.transform = 'scale(1)';
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>

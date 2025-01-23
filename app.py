@@ -56,7 +56,7 @@ login_manager.refresh_message_category = "error"
 login_manager.needs_refresh_message = "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
 login_manager.needs_refresh_message_category = "error"
 
-
+design = 'design1'
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -125,11 +125,25 @@ with app.app_context():
 
 
 
+@app.route('/choose-design', methods=['GET', 'POST'])
+def choose_design():
+    if request.method == 'POST':
+        # Ausgewähltes Design speichern
+        session['design'] = request.form.get('design')
+        return redirect(url_for('home'))  # Weiterleitung zur Anmeldeseite
+
+    return render_template('choose_design.html')
+
+
 
 #ADD
 
 @app.route('/news', methods=['GET', 'POST'])
 def news():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
+    
     if request.method == 'POST':
         image = request.files['image']
         date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
@@ -165,8 +179,7 @@ def news():
             box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
 
 
-    return render_template('news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin', boxes=boxes, is_admin_active=is_admin_active)
-
+    return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin', boxes=boxes, is_admin_active=is_admin_active)
 
 
 
@@ -359,6 +372,10 @@ def send_verification_email(email, code):
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
+    
     if request.method == 'POST':
         firstname = request.form['firstname']
         lastname = request.form['lastname']
@@ -399,11 +416,14 @@ def signup():
         flash('Bitte überprüfen Sie Ihre E-Mails auf den Bestätigungscode', 'info')
         return redirect(url_for('verify'))
     
-    return render_template('signup.html')
+    return render_template(f'{design}/signup.html')
 
 
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     # Stelle sicher, dass die E-Mail in der Session vorhanden ist
     email = session.get('email')
     if not email:
@@ -428,11 +448,14 @@ def verify():
         else:
             flash('Ungültiger Bestätigungscode.', 'error')
     
-    return render_template('verify.html', email=email)
+    return render_template(f'{design}/verify.html', email=email)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -450,7 +473,7 @@ def login():
         else:
             flash('Ungültige E-Mail oder Passwort', 'error')
     
-    return render_template('login.html')
+    return render_template(f'{design}/login.html')
 
 def mask_email(email):
     username, domain = email.split('@')
@@ -468,12 +491,15 @@ def mask_email_filter(email):
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     if not current_user.is_verified:
         flash('Bitte verifizieren Sie zuerst Ihre E-Mail', 'error')
         return redirect(url_for('verify'))
     
     users = User.query.all()
-    return render_template('dashboard.html', 
+    return render_template(f'{design}/dashboard.html', 
                            is_admin=current_user.is_authenticated and current_user.role == 'admin', 
                            user=current_user, 
                            users=users)
@@ -489,6 +515,9 @@ def logout():
 
 @app.route('/resend_verification', methods=['GET', 'POST'])
 def resend_verification():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     if request.method == 'POST':
         email = request.form['email']
         user = User.query.filter_by(email=email).first()
@@ -501,7 +530,7 @@ def resend_verification():
             return redirect(url_for('verify'))
         else:
             flash('Ungültige E-Mail oder Konto bereits verifiziert', 'error')
-    return render_template('resend_verification.html')
+    return render_template(f'{design}/resend_verification.html')
 
 def send_password_reset_email(user_email):
     token = serializer.dumps(user_email, salt='password-reset-salt')
@@ -514,6 +543,9 @@ def send_password_reset_email(user_email):
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     if request.method == 'POST':
         email = request.form['email']
         user = User.query.filter_by(email=email).first()
@@ -523,10 +555,13 @@ def forgot_password():
         else:
             flash('E-Mail-Adresse nicht gefunden', 'error')
         return redirect(url_for('login'))
-    return render_template('forgot_password.html')
+    return render_template(f'{design}/forgot_password.html')
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     try:
         email = serializer.loads(token, salt='password-reset-salt', max_age=3600)
     except:
@@ -543,14 +578,14 @@ def reset_password(token):
         confirm_password = request.form['confirm_password']
         if password != confirm_password:
             flash(' Passwörter stimmen nicht überein', 'error')
-            return render_template('reset_password.html', token=token)
+            return render_template(f'{design}/reset_password.html', token=token)
         
         user.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         db.session.commit()
         flash('Ihr Passwort wurde aktualisiert!', 'success')
         return redirect(url_for('login'))
     
-    return render_template('reset_password.html', token=token)
+    return render_template(f'{design}/reset_password.html', token=token)
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
@@ -589,6 +624,9 @@ def delete_user(user_id):
 @app.route('/edit_account', methods=['GET', 'POST'])
 @login_required
 def edit_account():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     if request.method == 'POST':
         firstname = request.form.get('firstname')
         lastname = request.form.get('lastname')
@@ -606,7 +644,7 @@ def edit_account():
         flash('Ihr Konto wurde erfolgreich aktualisiert.', 'success')
         return redirect(url_for('dashboard'))
 
-    return render_template('edit_account.html', user=current_user)
+    return render_template(f'{design}/edit_account.html', user=current_user)
 
 
 
@@ -632,6 +670,9 @@ def toggle_admin():
 
 @app.route('/')
 def home():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     images = Image.query.all()
     about_texts = AboutText.query.all()
     content_items = ContentItem.query.all()
@@ -647,7 +688,7 @@ def home():
 
     is_admin_active = session.get('is_admin_active', True)
 
-    return render_template('index2.html', 
+    return render_template(f'{design}/index.html', 
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
                            is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
@@ -697,7 +738,10 @@ def save_cookie_settings():
 
 @app.route('/newsletter')
 def newsletter():
-    return render_template('newsletter.html')
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
+    return render_template(f'{design}/newsletter.html')
 
 
 
@@ -787,6 +831,9 @@ def subscribe():
 # Route zum Senden der E-Mail
 @app.route('/send_email', methods=['POST'])
 def send_email():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     name = request.form['name']  # Name des Benutzers
     user_email = request.form['email']  # E-Mail des Benutzers
     message = request.form['message']  # Nachricht des Benutzers
@@ -800,14 +847,17 @@ def send_email():
     # E-Mail senden
     try:
         mail.send(msg)
-        return render_template("email-sent.html")
+        return render_template(f'{design}/email-sent.html')
     except Exception as e:
         return f'Fehler beim Senden der E-Mail: {str(e)}'
 
 
 @app.route('/downloads')
 def downloads():
-    return render_template('downloads.html')
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
+    return render_template(f'{design}/downloads.html')
 
 @app.route('/download-form')
 def download_form():
@@ -820,6 +870,9 @@ DB_PASSWORD = "1234"  # Ersetze dies durch ein starkes Passwort
 
 @app.route('/db-preview', methods=['GET', 'POST'])
 def db_preview():
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
     if request.method == 'POST':
         if request.form['password'] == DB_PASSWORD:
             # Daten aus der Datenbank holen
@@ -843,21 +896,19 @@ def db_preview():
                     item.image_data_base64 = None
 
 
-            return render_template('db_preview.html', users=users,
+            return render_template(f'{design}/db_preview.html', users=users,
                                    termine=termine, about_texts=about_texts, content_item=content_items, box=box)
         else:
-            return render_template('passwort.html', error="Falsches Passwort! Versuche es erneut.")
+            return render_template(f'{design}/passwort.html', error="Falsches Passwort! Versuche es erneut.")
 
-    return render_template('passwort.html', error=None)
+    return render_template(f'{design}/passwort.html', error=None)
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
-
-@app.route('/test')
-def schule():
-    return render_template('test.html')
-
+    design = session.get('design')
+    if not design:
+        return redirect(url_for('choose_design'))
+    return render_template(f'{design}/404.html'), 404
 
 
 
@@ -865,4 +916,4 @@ def schule():
 
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
