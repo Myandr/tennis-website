@@ -618,6 +618,7 @@
           id="about-content"
           name="about_content"
           rows="10"
+          placeholder="Textinhalt"
           required
         ></textarea>
         <button type="submit">Hinzufügen</button>
@@ -717,13 +718,13 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
       <form class="termin-form hidden" action="/add_termin" method="POST">
         <h3>Neuen Termin hinzufügen</h3>
         <label for="datum">Datum:</label>
-        <input type="date" id="datum" name="datum" required />
+        <input type="date" id="datum" name="datum" placeholder="Datum" required />
         <label for="veranstaltung">Veranstaltung:</label>
-        <input type="text" id="veranstaltung" name="veranstaltung" required />
+        <input type="text" id="veranstaltung" name="veranstaltung" placeholder="Veranstaltung" required />
         <label for="uhrzeit">Uhrzeit:</label>
-        <input type="time" id="uhrzeit" name="uhrzeit" required />
+        <input type="time" id="uhrzeit" placeholder="Uhrzeit" name="uhrzeit" required />
         <label for="ort">Ort:</label>
-        <input type="text" id="ort" name="ort" required />
+        <input type="text" id="ort" placeholder="Ort" name="ort" required />
         <button type="submit">Hinzufügen</button>
       </form>
 

@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>Box Hinzufügen und Löschen</title>
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    rel="stylesheet"
+  />
+    <title>News</title>
   </head>
   <body>
     <nav class="navbar">
@@ -50,57 +54,7 @@
     </nav>
 
     <section class="locations-section" id="news">
-      {% if is_admin %}
-      <form
-        class="cm-form"
-        action="{{ url_for('news') }}"
-        method="post"
-        enctype="multipart/form-data"
-      >
-        <div id="cm-drop-area" class="cm-drop-area">
-          <input
-            type="file"
-            name="image"
-            id="cm-fileElem"
-            class="cm-file-input"
-            accept="image/*"
-            required
-          />
-          <label class="cm-button" for="cm-fileElem"
-            >Select an image file</label
-          >
-          <p>or drag and drop here</p>
-          <div id="cm-preview" class="cm-preview"></div>
-        </div>
-        <input
-          type="date"
-          name="date"
-          class="cm-input"
-          placeholder="date"
-          required
-        />
-        <input
-          name="heading"
-          class="cm-textarea"
-          placeholder="Heading"
-          required
-        >
-        <textarea
-          name="info"
-          class="cm-textarea"
-          placeholder="Info"
-          required
-        ></textarea>
-        <textarea
-          type="text"
-          name="span"
-          class="cm-input"
-          placeholder="versteckter Text"
-          required
-        ></textarea>
-        <button type="submit" class="cm-button">Add Content</button>
-      </form>
-      {% endif %}
+      
       <div class="locations-header">
         <h2>Aktuelle Neuigkeiten</h2>
         <p>
@@ -208,6 +162,58 @@
         </div>
         {% endfor %}
       </div>
+      {% if is_admin %}
+      <form
+        class="cm-form"
+        action="{{ url_for('news') }}"
+        method="post"
+        enctype="multipart/form-data"
+        style="margin-top: 70px;"
+      >
+        <div id="cm-drop-area" class="cm-drop-area">
+          <input
+            type="file"
+            name="image"
+            id="cm-fileElem"
+            class="cm-file-input"
+            accept="image/*"
+            required
+          />
+          <label class="cm-button" for="cm-fileElem"
+            >Select an image file</label
+          >
+          <p>or drag and drop here</p>
+          <div id="cm-preview" class="cm-preview"></div>
+        </div>
+        <input
+          type="date"
+          name="date"
+          class="cm-input"
+          placeholder="date"
+          required
+        />
+        <input
+          name="heading"
+          class="cm-textarea"
+          placeholder="Heading"
+          required
+        >
+        <textarea
+          name="info"
+          class="cm-textarea"
+          placeholder="Info"
+          required
+        ></textarea>
+        <textarea
+          type="text"
+          name="span"
+          class="cm-input"
+          placeholder="versteckter Text"
+          required
+        ></textarea>
+        <button type="submit" class="cm-button">Add Content</button>
+      </form>
+      {% endif %}
     </section>
 
     <footer>
@@ -219,14 +225,23 @@
             alles rund um Tennis und Vereinsleben.
           </p>
           <div class="social-links">
-            <a href="#" class="social-link" aria-label="Facebook"
-              ><i class="fa fa-facebook-f"></i
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              aria-label="Gehe zu Facebook"
+              ><i class="fab fa-facebook "></i
             ></a>
-            <a href="#" class="social-link" aria-label="Instagram"
-              ><i class="fa fa-instagram"></i
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              aria-label="Gehe zu Instagram"
+              ><i class="fab fa-instagram "></i
             ></a>
-            <a href="#" class="social-link" aria-label="Twitter"
-              ><i class="fa fa-twitter"></i
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              aria-label="Gehe zu Linkedin"
+              ><i class="fab fa-linkedin "></i
             ></a>
           </div>
         </div>
