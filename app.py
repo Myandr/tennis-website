@@ -378,7 +378,7 @@ def add_content():
         db.session.add(new_item)
         db.session.commit()
     
-    return redirect(url_for('home'))
+    return redirect(url_for('home') + "#one")
 
 #     ____  ____  __    ____  ____  ____ 
 #    (    \(  __)(  )  (  __)(_  _)(  __)
@@ -390,7 +390,7 @@ def delete_content(item_id):
     item = ContentItem.query.get_or_404(item_id)
     db.session.delete(item)
     db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(url_for('home') + '#one')
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -446,7 +446,7 @@ def add_termin():
     neuer_termin = Termin(datum=datum, veranstaltung=veranstaltung, uhrzeit=uhrzeit, ort=ort)
     db.session.add(neuer_termin)
     db.session.commit()
-    return redirect(url_for('home') + "#work")
+    return redirect(url_for('home') + "#termine")
 
 
 #     ____  ____  __    ____  ____  ____ 
@@ -459,7 +459,7 @@ def delete_termin(termin_id):
     termin = Termin.query.get_or_404(termin_id)
     db.session.delete(termin)
     db.session.commit()
-    return redirect(url_for('home') + "#work")
+    return redirect(url_for('home') + "#termine")
 
 
 
