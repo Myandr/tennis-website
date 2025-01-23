@@ -803,7 +803,6 @@
           <button
             class="button-primary save-button"
             onclick="saveCookieSettings()"
-            onclick="acceptAllCookies()"
           >
             Einstellungen speichern
           </button>
@@ -857,7 +856,6 @@
             const settings = {
                 functional: document.querySelector('input[name="functional"]').checked,
                 analytics: document.querySelector('input[name="analytics"]').checked,
-                marketing: document.querySelector('input[name="marketing"]').checked
             };
 
             try {
@@ -887,7 +885,7 @@
         }
 
         function loadCookieSettings() {
-            const cookieTypes = ['functional', 'analytics', 'marketing'];
+            const cookieTypes = ['functional', 'analytics'];
             cookieTypes.forEach(type => {
                 const checkbox = document.querySelector(`input[name="${type}"]`);
                 if (checkbox) {

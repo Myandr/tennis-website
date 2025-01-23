@@ -33,6 +33,9 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['REMEMBER_COOKIE_DURATION'] = 2592000  # 30 days
+app.config["SESSION_COOKIE_SECURE"] = True  # Nur über HTTPS senden
+app.config["SESSION_COOKIE_HTTPONLY"] = True  # Nicht per JavaScript zugänglich
+app.config["SESSION_COOKIE_SAMESITE"] = "Strict"  # Cross-Site-Angriffe verhindern
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     "connect_args": {
         "sslmode": "require"
@@ -179,7 +182,7 @@ def news():
             box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
 
 
-    return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin', boxes=boxes, is_admin_active=is_admin_active)
+    return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active, boxes=boxes)
 
 
 
@@ -681,14 +684,14 @@ def home():
             item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
         else:
             item.image_data_base64 = None
-    
+
     termine = Termin.query.all()
 
     cookie_consent = request.cookies.get('necessary') == 'true'
 
     is_admin_active = session.get('is_admin_active', True)
 
-    return render_template(f'{design}/index.html', 
+    return render_template(f'{design}/index.html',
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
                            is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
@@ -711,7 +714,6 @@ def accept_all_cookies():
     response.set_cookie('necessary', 'true', expires=expires, secure=True, httponly=True)
     response.set_cookie('functional', 'true', expires=expires, secure=True)
     response.set_cookie('analytics', 'true', expires=expires, secure=True)
-    response.set_cookie('marketing', 'true', expires=expires, secure=True)
     
     return response
 
@@ -916,4 +918,4 @@ def page_not_found(e):
 
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
