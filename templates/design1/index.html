@@ -1221,6 +1221,63 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
       }
 
 
+
+      function initMap() {
+            const mapOptions = {
+                center: { lat: 48.13743, lng: 11.57549 }, // Beispielkoordinaten (München)
+                zoom: 12,
+                styles: [ // Dunkles Styling
+                    {
+                        "elementType": "geometry",
+                        "stylers": [{ "color": "#212121" }]
+                    },
+                    {
+                        "elementType": "labels.icon",
+                        "stylers": [{ "visibility": "off" }]
+                    },
+                    {
+                        "elementType": "labels.text.fill",
+                        "stylers": [{ "color": "#757575" }]
+                    },
+                    {
+                        "elementType": "labels.text.stroke",
+                        "stylers": [{ "color": "#212121" }]
+                    },
+                    {
+                        "featureType": "administrative",
+                        "elementType": "geometry",
+                        "stylers": [{ "color": "#757575" }]
+                    },
+                    {
+                        "featureType": "landscape",
+                        "stylers": [{ "color": "#212121" }]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "geometry",
+                        "stylers": [{ "color": "#303030" }]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "geometry",
+                        "stylers": [{ "color": "#383838" }]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "geometry",
+                        "stylers": [{ "color": "#000000" }]
+                    }
+                ]
+            };
+
+            // Erstelle die Karte
+            const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        }
+
+        // Lade die Karte, sobald die Seite geladen ist
+        window.onload = initMap;
+
+
         const hamburger = document.getElementById("hamburger");
         const menu = document.getElementById("menu");
         const menuToggle = document.getElementById("menuToggle");
