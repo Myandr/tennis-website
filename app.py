@@ -673,6 +673,11 @@ def verify():
 def login():
     design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
 #design
+
+    if current_user.is_authenticated:
+        flash('Du bist bereits eingeloggt. Bitte melde dich ab, um mit einem neuen Account dich einzuloggen.', 'info')
+        return redirect(url_for('dashboard'))
+    
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
