@@ -572,6 +572,8 @@ def send_verification_email(email, code):
 def signup():
     design = session.get('design')
 #design
+    if current_user in session:
+        redirect(url_for('signup'))
     
     if request.method == 'POST':
         firstname = request.form['firstname']
