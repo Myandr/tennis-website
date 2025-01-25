@@ -206,21 +206,20 @@ with app.app_context():
 
 # Nur für die Testversion um zwei Design anzeigen lassen zu können
 
-#@app.route('/choose-design', methods=['GET', 'POST'])
-#def choose_design():
-#    if request.method == 'POST':
-#        # Ausgewähltes Design speichern
-#        session['design'] = request.form.get('design')
-#        return redirect(url_for('home'))  # Weiterleitung zur Anmeldeseite
-#
-#    return render_template('choose_design.html')
+@app.route('/choose-design', methods=['GET', 'POST'])
+def choose_design():
+    if request.method == 'POST':
+        # Ausgewähltes Design speichern
+        session['design'] = request.form.get('design')
+        return redirect(url_for('home'))  # Weiterleitung zur Anmeldeseite
 
-design = "design1"
+    return render_template('choose_design.html')
 
 
 
 @app.route('/newsletter')
 def newsletter():
+    design = session.get('design')
 #design
     return render_template(f'{design}/newsletter.html')
 
@@ -275,6 +274,7 @@ def make_session_permanent():
 
 @app.route('/news', methods=['GET', 'POST'])
 def news():
+    design = session.get('design')
 #design
     
     if request.method == 'POST':
@@ -570,6 +570,7 @@ def send_verification_email(email, code):
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    design = session.get('design')
 #design
     
     if request.method == 'POST':
@@ -628,6 +629,7 @@ def signup():
 
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
+    design = session.get('design')
 #design
     # Stelle sicher, dass die E-Mail in der Session vorhanden ist
     email = session.get('email')
@@ -667,6 +669,7 @@ def verify():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    design = session.get('design')
 #design
     if request.method == 'POST':
         email = request.form['email']
@@ -715,7 +718,8 @@ def mask_email_filter(email):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-#design#design
+    design = session.get('design')
+#design
     if not current_user.is_verified:
         flash('Bitte verifizieren Sie zuerst Ihre E-Mail', 'error')
         return redirect(url_for('verify'))
@@ -759,6 +763,7 @@ def logout():
 
 @app.route('/resend_verification', methods=['GET', 'POST'])
 def resend_verification():
+    design = session.get('design')
 #design
     if request.method == 'POST':
         email = request.form['email']
@@ -789,6 +794,7 @@ def send_password_reset_email(user_email):
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
+    design = session.get('design')
 #design
     if request.method == 'POST':
         email = request.form['email']
@@ -807,6 +813,7 @@ def forgot_password():
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
+    design = session.get('design')
 #design
     try:
         email = serializer.loads(token, salt='password-reset-salt', max_age=3600)
@@ -887,6 +894,7 @@ def delete_user(user_id):
 @app.route('/edit_account', methods=['GET', 'POST'])
 @login_required
 def edit_account():
+    design = session.get('design')
 #design
     if request.method == 'POST':
         firstname = request.form.get('firstname')
@@ -973,6 +981,7 @@ def toggle_admin():
 
 @app.route('/')
 def home():
+    design = session.get('design')
 #design
     images = Image.query.all()
     about_texts = AboutText.query.all()
@@ -1154,6 +1163,7 @@ def subscribe():
 
 @app.route('/send_email', methods=['POST'])
 def send_email():
+    design = session.get('design')
 #design
     name = request.form['name']  # Name des Benutzers
     user_email = request.form['email']  # E-Mail des Benutzers
@@ -1207,6 +1217,7 @@ def send_email():
 
 @app.route('/downloads')
 def downloads():
+    design = session.get('design')
 #design
     return render_template(f'{design}/downloads.html')
 
@@ -1224,6 +1235,7 @@ DB_PASSWORD = "1234"  # Ersetze dies durch ein starkes Passwort
 
 @app.route('/db-preview', methods=['GET', 'POST'])
 def db_preview():
+    design = session.get('design')
 #design
     if request.method == 'POST':
         if request.form['password'] == DB_PASSWORD:
@@ -1259,6 +1271,7 @@ def db_preview():
 
 @app.errorhandler(404)
 def page_not_found(e):
+    design = session.get('design')
 #design
     return render_template(f'{design}/404.html'), 404
 
