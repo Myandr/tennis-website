@@ -572,7 +572,7 @@ def send_verification_email(email, code):
 def signup():
     design = session.get('design')
 #design
-    if current_user in session:
+    if current_user.email in session:
         flash('Logout um neuen Account zu erstellen', 'Info')
         redirect(url_for('dashboard'))
     
