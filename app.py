@@ -275,7 +275,6 @@ def make_session_permanent():
 @app.route('/news', methods=['GET', 'POST'])
 def news():
     design = session.get('design')
-#design
     
     if request.method == 'POST':
         image = request.files['image']
