@@ -573,7 +573,8 @@ def signup():
     design = session.get('design')
 #design
     if current_user in session:
-        redirect(url_for('signup'))
+        flash('Logout um neuen Account zu erstellen', 'Info')
+        redirect(url_for('dashboard'))
     
     if request.method == 'POST':
         firstname = request.form['firstname']
