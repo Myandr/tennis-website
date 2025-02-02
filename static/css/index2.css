@@ -59,6 +59,7 @@
 
 .card {
     min-width: calc(33.333% - 1rem); /* Show 3 cards at a time */
+    max-width: 300px
     height: 280px;
     position: relative;
     scroll-snap-align: start;
