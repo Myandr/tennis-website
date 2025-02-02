@@ -576,6 +576,92 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
 -->
     </section>
 
+
+<!--
+
+  __  _  _   __    ___  ____  ____ 
+ (  )( \/ ) / _\  / __)(  __)/ ___)
+  )( / \/ \/    \( (_ \ ) _) \___ \
+ (__)\_)(_/\_/\_/ \___/(____)(____/
+
+-->
+
+<section class="locations-section">
+  <div class="locations-header">
+    <h2>Bilder</h2>
+    <p>Sehen sie wie unser Verein aussieht</p>
+  </div>
+
+  <div class="image-grid">
+    <div class="slider-wrapper">
+        <button class="nav-button prev" onclick="slideLeft()"><i class="fa fa-arrow-left"></i></button>
+        <button class="nav-button next" onclick="slideRight()"><i class="fa fa-arrow-right"></i></button>
+        <div class="slider-container">
+            <div class="card location-card" onclick="expandImg(this)">
+                <img src="/static/images/paddle.jpg" alt="Hardter Tennisplatz">
+            </div>
+
+            <div class="card location-card" onclick="expandImg(this)">
+                <img src="/static/images/tennis.jpg" alt="Clubhaus Hardt">
+            </div>
+
+            <div class="card location-card" onclick="expandImg(this)">
+                <img src="/static/images/tennis-court-1671852_960_720.jpg" alt="Tennis im Park">
+            </div>
+
+            <div class="card location-card" onclick="expandImg(this)">
+                <img src="/static/images/sport.jpg" alt="Tennisgarten Hardt">
+            </div>
+
+            <div class="card location-card" onclick="expandImg(this)">
+              <img src="/static/images/girl.jpg" alt="Tennisgarten Hardt">
+            </div>
+
+            <div class="card location-card" onclick="expandImg(this)">
+              <img src="/static/images/tennis1.jpg" alt="Tennisgarten Hardt">
+            </div>
+
+            <div class="card location-card" onclick="expandImg(this)">
+              <img src="/static/images/tennis3.jpg" alt="Tennisgarten Hardt">
+            </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const slider = document.querySelector('.slider-container');
+  const prevButton = document.querySelector('.nav-button.prev');
+  const nextButton = document.querySelector('.nav-button.next');
+  const cardWidth = document.querySelector('.card').offsetWidth + 16; // 16 is the gap
+
+  function slideRight() {
+      slider.scrollLeft += cardWidth;
+      updateButtonVisibility();
+  }
+
+  function slideLeft() {
+      slider.scrollLeft -= cardWidth;
+      updateButtonVisibility();
+  }
+
+  function updateButtonVisibility() {
+      // Hide/show prev button
+      prevButton.classList.toggle('hidden', slider.scrollLeft <= 0);
+      
+      // Hide/show next button
+      nextButton.classList.toggle('hidden', 
+          slider.scrollLeft >= slider.scrollWidth - slider.clientWidth - 10);
+  }
+
+  // Initial button visibility
+  updateButtonVisibility();
+
+  // Update button visibility on scroll
+  slider.addEventListener('scroll', updateButtonVisibility);
+</script>
+
+
     <!--
  ____  ____  ____  _  _   __   __ _  ____ 
 (_  _)(  __)(  _ \( \/ ) (  ) (  ( \(  __)
@@ -1396,6 +1482,27 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
             overlay.style.display = "block";
             overlay.onclick = function () {
               card.classList.remove("expanded");
+              overlay.style.display = "none";
+            };
+          } else {
+            overlay.style.display = "none";
+          }
+        }
+
+        function expandImg(card) {
+          card.classList.toggle("expanded-img");
+
+          let overlay = document.querySelector(".overlay");
+          if (!overlay) {
+            overlay = document.createElement("div");
+            overlay.className = "overlay";
+            document.body.appendChild(overlay);
+          }
+
+          if (card.classList.contains("expanded-img")) {
+            overlay.style.display = "block";
+            overlay.onclick = function () {
+              card.classList.remove("expanded-img");
               overlay.style.display = "none";
             };
           } else {
