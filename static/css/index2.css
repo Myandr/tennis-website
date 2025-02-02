@@ -73,7 +73,7 @@
 }
 
 .card img {
-    width: 50%;
+    width: 100%;
     height: 100%;
     object-fit: cover;
 }
@@ -167,7 +167,7 @@
 
 @media (max-width: 768px) {
     .card {
-        min-width: calc(100% - 1rem); /* Show 1 card at a time */
+        min-width: calc(50% - 1rem); /* Show 1 card at a time */
     }
 }
 
