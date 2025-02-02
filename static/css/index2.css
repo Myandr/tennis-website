@@ -167,7 +167,7 @@
 
 @media (max-width: 768px) {
     .card {
-        min-width: calc(50% - 1rem); /* Show 1 card at a time */
+        min-width: calc(200% - 1rem); /* Show 1 card at a time */
     }
 }
 
