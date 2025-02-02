@@ -58,12 +58,14 @@
 }
 
 .card {
-    aspect-ratio: 4/3;
-    position: relative;
-    scroll-snap-align: start;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
+  min-width: calc(33.333% - 1rem); /* Show 3 cards at a time */
+  height: 280px;
+  position: relative;
+  scroll-snap-align: start;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  flex: 0 0 auto;
 }
 
 .card:hover {
@@ -160,12 +162,14 @@
 @media (max-width: 1200px) {
     .card {
         min-width: calc(50% - 1rem); /* Show 2 cards at a time */
+        aspect-ratio: 4/3;
     }
 }
 
 @media (max-width: 768px) {
     .card {
         min-width: calc(100% - 1rem); /* Show 1 card at a time */
+        aspect-ratio: 4/3;
     }
 }
 
