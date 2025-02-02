@@ -586,7 +586,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
 
 -->
 
-<section class="locations-section">
+<section id="img" class="locations-section">
   <div class="locations-header">
     <h2>Bilder</h2>
     <p>Sehen sie wie unser Verein aussieht</p>
@@ -597,36 +597,99 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
         <button class="nav-button prev" onclick="slideLeft()"><i class="fa fa-arrow-left"></i></button>
         <button class="nav-button next" onclick="slideRight()"><i class="fa fa-arrow-right"></i></button>
         <div class="slider-container">
-            <div class="card location-card" onclick="expandImg(this)">
+            <div class="card " onclick="expandImg(this)">
                 <img src="/static/images/paddle.jpg" alt="Hardter Tennisplatz">
             </div>
 
-            <div class="card location-card" onclick="expandImg(this)">
+            <div class="card " onclick="expandImg(this)">
                 <img src="/static/images/tennis.jpg" alt="Clubhaus Hardt">
             </div>
 
-            <div class="card location-card" onclick="expandImg(this)">
+            <div class="card " onclick="expandImg(this)">
                 <img src="/static/images/tennis-court-1671852_960_720.jpg" alt="Tennis im Park">
             </div>
 
-            <div class="card location-card" onclick="expandImg(this)">
+            <div class="card " onclick="expandImg(this)">
                 <img src="/static/images/sport.jpg" alt="Tennisgarten Hardt">
             </div>
 
-            <div class="card location-card" onclick="expandImg(this)">
+            <div class="card " onclick="expandImg(this)">
               <img src="/static/images/girl.jpg" alt="Tennisgarten Hardt">
             </div>
 
-            <div class="card location-card" onclick="expandImg(this)">
+            <div class="card " onclick="expandImg(this)">
               <img src="/static/images/tennis1.jpg" alt="Tennisgarten Hardt">
             </div>
 
-            <div class="card location-card" onclick="expandImg(this)">
-              <img src="/static/images/tennis3.jpg" alt="Tennisgarten Hardt">
+            <div class="card " onclick="expandImg(this)">
+              <img src="/static/images/tennis.jpg" alt="Tennisgarten Hardt">
             </div>
+            {% for img in image %}
+            <div class="card " onclick="expandImg(this)">
+              {% if is_admin %}
+              <a
+                href="{{ url_for('delete_img', img_id=img.id) }}"
+                class="cm-delete-btn"
+                >Delete</a
+              >
+            {% endif %}
+              {% if img.image_data_base64 %}
+              <img 
+                src="data:image/jpeg;base64,{{ img.image_data_base64 }}"
+                alt="Content Image"
+              />
+              {% else %}
+              <p>No image available</p>
+              {% endif %}
+            </div>
+
+            {% endfor %}
         </div>
     </div>
   </div>
+
+        <!--
+ ___                  
+|  _| ___  ___  _____ 
+|  _|| . ||  _||     |
+|_|  |___||_|  |_|_|_|
+                    
+      -->
+
+      {% if is_admin %}
+      <form
+        class="cm-form"
+        action="{{ url_for('add_img') }}"
+        method="post"
+        enctype="multipart/form-data"
+        style="margin-top: 70px; text-align: center;"
+      >
+      <h2 style="color: black;">Bild hizufügen</h2>
+        <div id="cm-drop-area2" class="cm-drop-area">
+          <input
+            type="file"
+            name="image"
+            id="cm-fileElem2"
+            class="cm-file-input"
+            accept="image/*"
+            required
+          />
+          <label class="cm-button" for="cm-fileElem2"
+            >Select an image file</label
+          >
+          <p>or drag and drop here</p>
+          <div id="cm-preview2" class="cm-preview"></div>
+        </div>
+        <button type="submit" class="cm-button">Add Content</button>
+      </form>
+      {% endif %}
+
+      <!--
+                                             
+ ___  ___  ___  ___  ___  ___  ___  ___  ___ 
+|___||___||___||___||___||___||___||___||___|
+                                            
+   -->
 </section>
 
 <script>
@@ -1412,6 +1475,66 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
           let dropArea = document.getElementById("cm-drop-area");
           let fileInput = document.getElementById("cm-fileElem");
           let preview = document.getElementById("cm-preview");
+
+          if (dropArea && fileInput && preview) {
+            ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+              dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            ["dragenter", "dragover"].forEach((eventName) => {
+              dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ["dragleave", "drop"].forEach((eventName) => {
+              dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            dropArea.addEventListener("drop", handleDrop, false);
+            fileInput.addEventListener("change", handleFiles, false);
+
+            function preventDefaults(e) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+
+            function highlight(e) {
+              dropArea.classList.add("cm-highlight");
+            }
+
+            function unhighlight(e) {
+              dropArea.classList.remove("cm-highlight");
+            }
+
+            function handleDrop(e) {
+              let dt = e.dataTransfer;
+              let files = dt.files;
+
+              handleFiles(files);
+            }
+
+            function handleFiles(files) {
+              files = files.length ? files : this.files;
+              [...files].forEach(previewFile);
+            }
+
+            function previewFile(file) {
+              let reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onloadend = function () {
+                let img = document.createElement("img");
+                img.src = reader.result;
+                preview.innerHTML = "";
+                preview.appendChild(img);
+              };
+            }
+
+          }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+          let dropArea = document.getElementById("cm-drop-area2");
+          let fileInput = document.getElementById("cm-fileElem2");
+          let preview = document.getElementById("cm-preview2");
 
           if (dropArea && fileInput && preview) {
             ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {

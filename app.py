@@ -170,6 +170,10 @@ class Box(db.Model):
     heading = db.Column(db.String(100), nullable=False)
     info = db.Column(db.Text, nullable=False)
     span = db.Column(db.Text, nullable=False)
+ 
+class Img(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image = db.Column(db.LargeBinary)
 
 # Erstellen Sie die Tabellen in der Datenbank
 with app.app_context():
@@ -462,8 +466,36 @@ def delete_termin(termin_id):
 
 
 
+@app.route('/add_img', methods=["POST"])
+def add_img():
+    if 'image' not in request.files:
+        return redirect(url_for('home'))
+    
+    file = request.files['image']
+    
+    if file.filename == '':
+        return redirect(url_for('home'))
+    
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        # Bild in Binärdaten umwandeln
+        image = file.read()
+        new_item = Img(
+            image=image,
+
+        )
+        db.session.add(new_item)
+        db.session.commit()
+    return redirect(url_for('home') + "#img")
 
 
+@app.route('/delete_img/<int:img_id>')
+def delete_img(img_id):
+    image = Img.query.get_or_404(img_id)
+    db.session.delete(image)
+    db.session.commit()
+    return redirect(url_for('home') + "#img")
 
 
 
@@ -991,6 +1023,7 @@ def home():
     design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
 #design
     images = Image.query.all()
+    image = Img.query.all()
     about_texts = AboutText.query.all()
     content_items = ContentItem.query.all()
     for item in content_items:
@@ -999,11 +1032,19 @@ def home():
         else:
             item.image_data_base64 = None
 
+    for img in image:
+        if img.image:
+            img.image_data_base64 = base64.b64encode(img.image).decode('utf-8')
+        else:
+            img.image_data_base64 = None
+
     termine = Termin.query.all()
 
     cookie_consent = request.cookies.get('necessary') == 'true'
 
     is_admin_active = session.get('is_admin_active', True)
+
+
 
     return render_template(f'{design}/index.html',
                            logged_in=current_user.is_authenticated,
@@ -1014,7 +1055,8 @@ def home():
                            about_texts=about_texts,
                            images=images,
                            content_items=content_items,
-                           cookie_consent=cookie_consent)
+                           cookie_consent=cookie_consent,
+                           image=image)
 
 
 
