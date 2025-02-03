@@ -281,6 +281,83 @@
       </div>
     </section>
 
+
+
+
+    <section class="brand-section">
+      <div class="brand-wheel" id="brandWheel"></div>
+  </section>
+  
+  <script>
+      const brandWheel = document.getElementById('brandWheel');
+      const logos = [
+          "https://cdn.pixabay.com/photo/2017/02/15/00/48/logo-2067396_1280.png",
+          "https://cdn.pixabay.com/photo/2015/11/18/09/25/gym-1048852_1280.png",
+          "https://cdn.pixabay.com/photo/2016/09/20/10/28/fractal-1682196_1280.png",
+          "https://cdn.pixabay.com/photo/2014/04/03/00/43/wildcat-309222_1280.png",
+          "https://cdn.pixabay.com/photo/2016/12/23/07/00/game-1926905_1280.png",
+          "https://cdn.pixabay.com/photo/2016/09/28/09/33/circular-saw-1700037_1280.png",
+          "https://cdn.pixabay.com/photo/2017/06/18/15/14/logo-2416101_1280.png",
+          "https://cdn.pixabay.com/photo/2016/06/14/02/35/pineapple-1455590_1280.png",
+          "https://cdn.pixabay.com/photo/2016/09/20/10/30/sea-1682198_1280.png",
+          "https://cdn.pixabay.com/photo/2016/01/16/08/04/aperture-1142967_1280.png"
+      ];
+      const logoCount = logos.length;
+      const radius = 400;
+      let angle = 0;
+      let rotationSpeed = 0.01;
+      let targetRotationSpeed = 0.01;
+  
+      function createLogo(index) {
+          const logo = document.createElement('div');
+          logo.className = 'brand-logo';
+          const img = document.createElement('img');
+          img.src = logos[index]; // Nimmt das Bild aus der Liste
+          img.alt = `Brand ${index + 1}`;
+          logo.appendChild(img);
+          return logo;
+      }
+  
+      function positionLogo(logo, index, rotationAngle) {
+          const angle = ((index / logoCount) * Math.PI * 2) + rotationAngle;
+          const x = Math.sin(angle) * radius;
+          const z = Math.cos(angle) * radius;
+          const scale = (z + radius) / (radius * 2);
+          const opacity = Math.max(0, Math.min(1, (z + radius) / (radius * 1.5)));
+  
+          logo.style.transform = `translate(-50%, -50%) translateX(${x}px) translateZ(${z}px) scale(${scale})`;
+          logo.style.opacity = opacity;
+      }
+  
+      function createWheel() {
+          for (let i = 0; i < logoCount; i++) {
+              const logo = createLogo(i);
+              brandWheel.appendChild(logo);
+          }
+      }
+  
+      function rotateWheel() {
+          rotationSpeed += (targetRotationSpeed - rotationSpeed) * 0.1;
+          angle += rotationSpeed;
+          Array.from(brandWheel.children).forEach((logo, index) => {
+              positionLogo(logo, index, angle);
+          });
+          requestAnimationFrame(rotateWheel);
+      }
+  
+      createWheel();
+      rotateWheel();
+  
+      brandWheel.addEventListener('mouseenter', () => { 
+          targetRotationSpeed = 0.002;
+      });
+  
+      brandWheel.addEventListener('mouseleave', () => { 
+          targetRotationSpeed = 0.01;
+      });
+  </script>
+  
+
     <!--
  ____  ____   __   __ _  ____   __   ____  ____  ____ 
 / ___)(_  _) / _\ (  ( \(    \ /  \ (  _ \(_  _)(  __)
