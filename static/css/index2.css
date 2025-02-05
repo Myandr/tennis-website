@@ -38,6 +38,7 @@
     height: 400px;
     position: relative;
     perspective: 1000px;
+    overflow: hidden;
 }
 .brand-wheel {
     width: 100%;
