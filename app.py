@@ -206,7 +206,6 @@ with app.app_context():
 
 
 
-
 # Nur für die Testversion um zwei Design anzeigen lassen zu können
 
 @app.route('/choose-design', methods=['GET', 'POST'])
@@ -220,6 +219,10 @@ def choose_design():
     return render_template('choose_design.html')
 
 
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('.', 'sitemap.xml', mimetype='application/xml')
 
 @app.route('/newsletter')
 def newsletter():
