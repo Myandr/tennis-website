@@ -220,7 +220,7 @@ def choose_design():
 
 
 
-@app.route('/sitemap.xml')
+@app.route('/sitemap')
 def sitemap():
     return send_from_directory('.', 'sitemap.xml', mimetype='application/xml')
 
