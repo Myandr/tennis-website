@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_ol70_user:Iemh9b66adgjQKhtZZ95Kx54FR3so2Te@dpg-curmnspu0jms73c0ba1g-a.oregon-postgres.render.com/user_ol70'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_tuxj_user:n8Iy81pCRKYh0GCc1cbqYzbQhAseN3Fe@dpg-cutmst5ds78s7391hpe0-a.oregon-postgres.render.com/user_tuxj'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -29,7 +29,7 @@ app.config['MAIL_USE_TLS'] = True  # TLS aktivieren
 app.config['MAIL_USE_SSL'] = False  # SSL nicht verwenden
 app.config['MAIL_USERNAME'] = 'myandr180709@gmail.com'  # Deine Gmail-Adresse
 app.config['MAIL_DEFAULT_SENDER'] = 'myandr180709@gmail.com'
-app.config['MAIL_PASSWORD'] = 'tkkl szsh ybkj vprx'  # Dein App-Passwort
+app.config['MAIL_PASSWORD'] = 'jcyx ozgy hjll hzyl'  # Dein App-Passwort
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
