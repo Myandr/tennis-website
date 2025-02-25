@@ -184,16 +184,82 @@
       -->
 
       <nav class="navbar">
-        <img src="../../static/favicon.ico" style="width: 40px;" alt="Dribbble" class="logo">
+        <img src="../../static/favicon.ico" style="width: 40px;"  class="logo">
         
         <div class="search-container">
-            <input type="text" placeholder="Suche..." class="search-input">
-            <button class="search-button">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.5 14.5L10 10M11.3333 6.66667C11.3333 9.244 9.244 11.3333 6.66667 11.3333C4.08934 11.3333 2 9.244 2 6.66667C2 4.08934 4.08934 2 6.66667 2C9.244 2 11.3333 4.08934 11.3333 6.66667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        </div>
+          <input type="text" id="search-input" placeholder="Suche..." class="search-input">
+          <button class="search-button" onclick="performSearch()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.5 14.5L10 10M11.3333 6.66667C11.3333 9.244 9.244 11.3333 6.66667 11.3333C4.08934 11.3333 2 9.244 2 6.66667C2 4.08934 4.08934 2 6.66667 2C9.244 2 11.3333 4.08934 11.3333 6.66667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+          </button>
+          <div id="search-results"></div>
+      </div>
+  
+      <script>
+          let searchTimeout;
+          const searchInput = document.getElementById('search-input');
+          const searchResults = document.getElementById('search-results');
+  
+          function performSearch() {
+              const query = searchInput.value;
+              if (query.length < 2) {
+                  searchResults.classList.remove('active');
+                  return;
+              }
+  
+              fetch(`/search?query=${encodeURIComponent(query)}`)
+                  .then(response => response.json())
+                  .then(data => {
+                      searchResults.innerHTML = '';
+                      if (Object.keys(data).length === 0) {
+                          searchResults.innerHTML = '<div class="no-results">Keine Ergebnisse gefunden</div>';
+                      } else {
+                          for (const [key, value] of Object.entries(data)) {
+                              const link = document.createElement('a');
+                              link.href = value;
+                              link.className = 'search-result-item';
+                              link.textContent = key;
+                              searchResults.appendChild(link);
+                          }
+                      }
+                      searchResults.classList.add('active');
+                  })
+                  .catch(error => {
+                      console.error('Error:', error);
+                      searchResults.innerHTML = '<div class="no-results">Ein Fehler ist aufgetreten</div>';
+                      searchResults.classList.add('active');
+                  });
+          }
+  
+          // Live search with debouncing
+          searchInput.addEventListener('input', () => {
+              clearTimeout(searchTimeout);
+              searchTimeout = setTimeout(performSearch, 300);
+          });
+  
+          // Close search results when clicking outside
+          document.addEventListener('click', (e) => {
+              if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                  searchResults.classList.remove('active');
+              }
+          });
+  
+          // Handle Enter key
+          searchInput.addEventListener('keypress', (e) => {
+              if (e.key === 'Enter') {
+                  performSearch();
+              }
+          });
+  
+          // Close on Escape key
+          document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') {
+                  searchResults.classList.remove('active');
+              }
+          });
+      </script>
+
 
         <div class="nav-links">
             <div class="nav-item">

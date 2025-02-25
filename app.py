@@ -180,8 +180,6 @@ with app.app_context():
     db.create_all()
 
 
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 
@@ -198,12 +196,49 @@ with app.app_context():
 #    |    \ |     ||  :  |  |  |  |   [_ |  |  |
 #    |  .  \|     ||     |  |  |  |     ||  |  |
 #    |__|\_| \___/  \__,_|  |__|  |_____||__|__|
-                                          
 
+website_content = {
+    # Main Navigation
+    "Home": "/",
+    "Standorte": "/#one",
+    "Über uns": "/#about",
+    "Bilder": "/#img",
+    "Termine": "/#termine",
+    "Trainer": "/#trainer",
+    "Neuigkeiten": "/#news",
+    "Kontakt": "/#contact",
+    
+    # News Section
+    "News": "/news",
+    "Aktuelle Neuigkeiten": "/news",
+    "Vereinsnachrichten": "/news",
+    "Turnierberichte": "/news",
+    
+    # Training Section
+    "Training": "/#trainer",
+    "Trainingszeiten": "/#trainer",
+    "Trainingsgruppen": "/#trainer",
+    "Tennistraining": "/#trainer",
+    
+    # Other Pages
+    "Downloads": "/downloads",
+    "Blog": "/newsletter",
+    "Account": "/dashboard",
+    "Login": "/login",
+    "Mitgliedschaft": "/signup"
+}                                 
 
-
-
-
+@app.route('/search')
+def search():
+    query = request.args.get('query', '').lower()
+    if not query:
+        return jsonify({})
+    
+    results = {
+        k: v for k, v in website_content.items() 
+        if query in k.lower()
+    }
+    return jsonify(results)
 
 
 # Nur für die Testversion um zwei Design anzeigen lassen zu können
