@@ -197,40 +197,43 @@
       </div>
   
       <script>
-          let searchTimeout;
-          const searchInput = document.getElementById('search-input');
-          const searchResults = document.getElementById('search-results');
-  
-          function performSearch() {
-              const query = searchInput.value;
-              if (query.length < 2) {
-                  searchResults.classList.remove('active');
-                  return;
-              }
-  
-              fetch(`/search?query=${encodeURIComponent(query)}`)
-                  .then(response => response.json())
-                  .then(data => {
-                      searchResults.innerHTML = '';
-                      if (Object.keys(data).length === 0) {
-                          searchResults.innerHTML = '<div class="no-results">Keine Ergebnisse gefunden</div>';
-                      } else {
-                          for (const [key, value] of Object.entries(data)) {
-                              const link = document.createElement('a');
-                              link.href = value;
-                              link.className = 'search-result-item';
-                              link.textContent = key;
-                              searchResults.appendChild(link);
-                          }
-                      }
-                      searchResults.classList.add('active');
-                  })
-                  .catch(error => {
-                      console.error('Error:', error);
-                      searchResults.innerHTML = '<div class="no-results">Ein Fehler ist aufgetreten</div>';
-                      searchResults.classList.add('active');
-                  });
-          }
+    let searchTimeout;
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    function performSearch() {
+        const query = searchInput.value;
+        if (query.length < 2) {
+            searchResults.classList.remove('active');
+            return;
+        }
+
+        fetch(`/search?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                searchResults.innerHTML = '';
+                if (Object.keys(data).length === 0) {
+                    searchResults.innerHTML = '<div class="no-results">Keine Ergebnisse gefunden</div>';
+                } else {
+                    for (const [key, value] of Object.entries(data)) {
+                        const link = document.createElement('a');
+                        link.href = value.url;
+                        link.className = 'search-result-item';
+                        link.innerHTML = `
+                            <div class="search-result-title">${key}</div>
+                            <div class="search-result-description">${value.description}</div>
+                        `;
+                        searchResults.appendChild(link);
+                    }
+                }
+                searchResults.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                searchResults.innerHTML = '<div class="no-results">Ein Fehler ist aufgetreten</div>';
+                searchResults.classList.add('active');
+            });
+    }
   
           // Live search with debouncing
           searchInput.addEventListener('input', () => {

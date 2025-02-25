@@ -198,35 +198,124 @@ with app.app_context():
 #    |__|\_| \___/  \__,_|  |__|  |_____||__|__|
 
 website_content = {
-    # Main Navigation
-    "Home": "/",
-    "Standorte": "/#one",
-    "Über uns": "/#about",
-    "Bilder": "/#img",
-    "Termine": "/#termine",
-    "Trainer": "/#trainer",
-    "Neuigkeiten": "/#news",
-    "Kontakt": "/#contact",
-    
-    # News Section
-    "News": "/news",
-    "Aktuelle Neuigkeiten": "/news",
-    "Vereinsnachrichten": "/news",
-    "Turnierberichte": "/news",
+    # Main Navigation & Home Sections
+    "Startseite": {
+        "url": "/#home",
+        "description": "Willkommen beim Hardter Tennisverein"
+    },
+    "Standorte": {
+        "url": "/#one",
+        "description": "Unsere Tennisplätze und Trainingsstandorte"
+    },
+    "Über uns": {
+        "url": "/#about",
+        "description": "Geschichte und Information über den Hardter Tennisverein"
+    },
+    "Bilder": {
+        "url": "/#img",
+        "description": "Fotogalerie unserer Anlage und Veranstaltungen"
+    },
+    "Termine": {
+        "url": "/#termine",
+        "description": "Aktuelle Turniere und Veranstaltungstermine"
+    },
     
     # Training Section
-    "Training": "/#trainer",
-    "Trainingszeiten": "/#trainer",
-    "Trainingsgruppen": "/#trainer",
-    "Tennistraining": "/#trainer",
+    "Trainer": {
+        "url": "/#trainer",
+        "description": "Unsere qualifizierten Tennistrainer"
+    },
+    "Tennistraining": {
+        "url": "/#trainer",
+        "description": "Professionelles Training für alle Altersgruppen"
+    },
+    "Trainingsgruppen": {
+        "url": "/#trainer",
+        "description": "Jugend-, Erwachsenen- und Leistungstraining"
+    },
+    "Trainingszeiten": {
+        "url": "/#trainer",
+        "description": "Aktuelle Trainingszeiten und Platzbelegung"
+    },
     
-    # Other Pages
-    "Downloads": "/downloads",
-    "Blog": "/newsletter",
-    "Account": "/dashboard",
-    "Login": "/login",
-    "Mitgliedschaft": "/signup"
-}                                 
+    # News Section
+    "Neuigkeiten": {
+        "url": "/#news",
+        "description": "Aktuelle Nachrichten und Ankündigungen"
+    },
+    "News": {
+        "url": "/news",
+        "description": "Vereinsnachrichten und Turnierberichte"
+    },
+    "Turnierberichte": {
+        "url": "/news",
+        "description": "Aktuelle Ergebnisse und Spielberichte"
+    },
+    "Vereinsnachrichten": {
+        "url": "/news",
+        "description": "Wichtige Informationen für Vereinsmitglieder"
+    },
+    
+    # Contact & Support
+    "Kontakt": {
+        "url": "/#contact",
+        "description": "Kontaktieren Sie uns - Hardter Tennisverein"
+    },
+    "Downloads": {
+        "url": "/downloads",
+        "description": "Formulare, Dokumente und Informationsmaterial"
+    },
+    "Blog": {
+        "url": "/newsletter",
+        "description": "Tennis-Blog und Newsletter"
+    },
+    
+    # Account Management
+    "Account": {
+        "url": "/dashboard",
+        "description": "Ihr persönlicher Mitgliederbereich"
+    },
+    "Login": {
+        "url": "/login",
+        "description": "Anmeldung für Mitglieder"
+    },
+    "Registrierung": {
+        "url": "/signup",
+        "description": "Neues Mitgliedskonto erstellen"
+    },
+    
+    # Additional Club Information
+    "Mitgliedschaft": {
+        "url": "/#about",
+        "description": "Informationen zur Vereinsmitgliedschaft"
+    },
+    "Platzreservierung": {
+        "url": "/#termine",
+        "description": "Online Tennisplatz buchen"
+    },
+    "Jugendförderung": {
+        "url": "/#trainer",
+        "description": "Jugendtraining und Nachwuchsförderung"
+    },
+    "Tenniskurse": {
+        "url": "/#trainer",
+        "description": "Anfänger- und Fortgeschrittenenkurse"
+    },
+    
+    # Events & Activities
+    "Vereinsturniere": {
+        "url": "/#termine",
+        "description": "Interne Turniere und Wettkämpfe"
+    },
+    "Mannschaften": {
+        "url": "/news",
+        "description": "Unsere Mannschaften und Spielergebnisse"
+    },
+    "Veranstaltungen": {
+        "url": "/#termine",
+        "description": "Soziale Events und Clubveranstaltungen"
+    }
+}                              
 
 @app.route('/search')
 def search():
@@ -234,10 +323,14 @@ def search():
     if not query:
         return jsonify({})
     
-    results = {
-        k: v for k, v in website_content.items() 
-        if query in k.lower()
-    }
+    results = {}
+    for key, data in website_content.items():
+        if (query in key.lower() or 
+            query in data['description'].lower()):
+            results[key] = {
+                'url': data['url'],
+                'description': data['description']
+            }
     return jsonify(results)
 
 

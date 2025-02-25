@@ -244,6 +244,27 @@
   font-size: 14px;
 }
 
+.search-result-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e7e7e9;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-title {
+  color: #0d0c22;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.search-result-description {
+  color: #6e6d7a;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
