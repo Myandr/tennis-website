@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTrack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            background: white;
+            border-bottom: 1px solid #e7e7e9;
+            max-height: 80px;
+        }
+
+        .logo {
+            width: 76px;
+            margin-right: 24px;
+        }
+
+        .search-container {
+            position: relative;
+            margin-right: 24px;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #f3f3f4;
+            font-size: 14px;
+        }
+
+        .search-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #252525;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-right: auto;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #6e6d7a;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: #0d0c22;
+        }
+
+        .chevron-down {
+            border: solid #6e6d7a;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 2px;
+            transform: rotate(45deg);
+            margin-top: -2px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-link.active .chevron-down {
+            transform: rotate(-135deg);
+            margin-top: 2px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 8px 0;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(8px);
+        }
+
+        .dropdown-item {
+            padding: 8px 16px;
+            color: #6e6d7a;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+        }
+
+        .dropdown-item:hover {
+            background: #f3f3f4;
+            color: #0d0c22;
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sign-up {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            background: none;
+            color: #6e6d7a;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .log-in {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            background: #0d0c22;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: #fafafa;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .hero-content h1 span {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .hero-content p {
+            font-size: 1.125rem;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 2rem;
+            max-width: 480px;
+        }
+
+        /* Form Styles */
+        .email-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 3rem;
+            max-width: 400px;
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e2e2;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            background-color: #4ade80;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background-color: #22c55e;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat {
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: #4ade80;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        /* App Showcase */
+        .app-showcase {
+            background-color: #fafafa;
+        }
+
+        .device-mockup {
+            position: relative;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
+        .device-mockup img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #111;
+            color: #fff;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .email-form {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        .footer {
+            padding: 64px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 32px;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 20px;
+            color: #111827;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-links a {
+            color: #4B5563;
+        }
+
+        .tagline {
+            color: #4B5563;
+            margin: 24px 0;
+        }
+
+        .copyright {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .footer-nav h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+
+        .footer-nav ul {
+            list-style: none;
+        }
+
+        .footer-nav li {
+            margin-bottom: 12px;
+        }
+
+        .footer-nav a {
+            color: #4B5563;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-nav a:hover {
+            color: #111827;
+        }
+
+        .new-badge {
+            background-color: #F3F4F6;
+            color: #111827;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 16px;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <img src="logo.png" style="width: 70px;" alt="Dribbble" class="logo">
+        
+        <div class="search-container">
+            <input type="text" placeholder="What are you looking for?" class="search-input">
+            <button class="search-button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.5 14.5L10 10M11.3333 6.66667C11.3333 9.244 9.244 11.3333 6.66667 11.3333C4.08934 11.3333 2 9.244 2 6.66667C2 4.08934 4.08934 2 6.66667 2C9.244 2 11.3333 4.08934 11.3333 6.66667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="nav-links">
+            <div class="nav-item">
+                <div class="nav-link">
+                    Shots
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Popular</a>
+                    <a href="#" class="dropdown-item">Recent</a>
+                    <a href="#" class="dropdown-item">Following</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link">
+                    Explore
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Trending</a>
+                    <a href="#" class="dropdown-item">Categories</a>
+                    <a href="#" class="dropdown-item">Collections</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link">
+                    Hire a Designer
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Browse Designers</a>
+                    <a href="#" class="dropdown-item">Post a Job</a>
+                    <a href="#" class="dropdown-item">Design Services</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link">Find Jobs</a>
+            <a href="#" class="nav-link">Blog</a>
+        </div>
+
+        <div class="auth-buttons">
+            <button class="sign-up">Sign up</button>
+            <button class="log-in">Log in</button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Put <span>people</span> first</h1>
+                    <p>Fast, user-friendly and engaging - turn HR into people and culture and streamline your daily operations with your own branded app.</p>
+                    
+                    <form class="email-form">
+                        <input type="email" placeholder="Enter work email" class="email-input" required>
+                        <button type="submit" class="button">Book a demo</button>
+                    </form>
+    
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-number">75.2%</div>
+                            <div class="stat-label">Average daily activity</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">~20k</div>
+                            <div class="stat-label">Average daily users</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="device-mockup">
+                    <img src="protecting the environment-bro.svg" alt="HR platform interface illustration">
+                </div>
+            </div>
+        </section>
+    
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h2>Powerful Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"></div>
+                        <h3>Employee Management</h3>
+                        <p>Streamline your HR processes with our intuitive employee management system.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"></div>
+                        <h3>Time Tracking</h3>
+                        <p>Track attendance and working hours with automated time tracking features.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"></div>
+                        <h3>Performance Reviews</h3>
+                        <p>Conduct and manage performance reviews efficiently with our tools.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- App Showcase -->
+        <section class="app-showcase">
+            <div class="container">
+                <h2>Experience the App</h2>
+                <div class="device-mockup">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-afdAtXyexCOKeoJx31wwwLNs1iC7lR.png" alt="App interface showcase">
+                </div>
+            </div>
+        </section>
+    
+        <!-- Contact Section -->
+        <section class="contact">
+            <div class="container">
+                <h2>Get Started Today</h2>
+                <p>Transform your HR operations with our platform</p>
+                
+                <form class="contact-form">
+                    <div class="input-group">
+                        <input type="text" placeholder="Company name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" placeholder="Work email" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="tel" placeholder="Phone number" required>
+                    </div>
+                    <div class="input-group">
+                        <textarea placeholder="Tell us about your needs" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="button">Request Demo</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="brand">
+                <div class="logo">
+                    <img src="logo.png" alt="Untitled UI Logo">
+                    Untitled UI
+                </div>
+                <div class="social-links">
+                    <a href="#"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+                    <a href="#"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                </div>
+                <p class="tagline">Move faster with Untitled UI<br>Save countless hours of design and ship great looking designs faster.</p>
+                <p class="copyright">© 2017 Untitled UI. All rights reserved.</p>
+            </div>
+
+            <nav class="footer-nav">
+                <h3>Product</h3>
+                <ul>
+                    <li><a href="#">Overview</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Solutions <span class="new-badge">New</span></a></li>
+                    <li><a href="#">Tutorials</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Releases</a></li>
+                </ul>
+            </nav>
+
+            <nav class="footer-nav">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Media kit</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+
+            <nav class="footer-nav">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Newsletter</a></li>
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">Help centre</a></li>
+                    <li><a href="#">Tutorials</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        // Get all nav links with dropdowns
+        const navLinks = document.querySelectorAll('.nav-item .nav-link');
+
+        // Function to close all dropdowns
+        function closeAllDropdowns() {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                link.nextElementSibling?.classList.remove('active');
+            });
+        }
+
+        // Add click event listeners to nav links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent click from bubbling to document
+                
+                // Get the dropdown menu
+                const dropdown = link.nextElementSibling;
+                
+                // If this link has a dropdown menu
+                if (dropdown && dropdown.classList.contains('dropdown-menu')) {
+                    // Close other dropdowns
+                    navLinks.forEach(otherLink => {
+                        if (otherLink !== link) {
+                            otherLink.classList.remove('active');
+                            otherLink.nextElementSibling?.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current dropdown
+                    link.classList.toggle('active');
+                    dropdown.classList.toggle('active');
+                }
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-item')) {
+                closeAllDropdowns();
+            }
+        });
+
+        // Close dropdowns when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAllDropdowns();
+            }
+        });
+    </script>
+</body>
+</html>
