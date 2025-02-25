@@ -441,7 +441,7 @@
 
 @media (max-width: 1200px) {
     .card {
-        min-width: calc(30% - 1rem); /* Show 2 cards at a time */
+        max-width: calc(30% - 1rem); /* Show 2 cards at a time */
         aspect-ratio: 4/3;
     }
 }
