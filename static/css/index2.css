@@ -746,6 +746,7 @@
 
   /* Video Container */
   .video-container {
+    margin: 0 20px;
     position: relative;
     background-image: url("../images/tennis.jpg");
     background-repeat: no-repeat;
