@@ -197,6 +197,83 @@ with app.app_context():
 #    |  .  \|     ||     |  |  |  |     ||  |  |
 #    |__|\_| \___/  \__,_|  |__|  |_____||__|__|
 
+
+
+
+@app.route('/mannschaften')
+def mannschaften():
+    return render_template('design1/mannschaften.html')
+
+@app.route('/mannschaften/damen-1')
+def damen_1():
+    return render_template('design1/mannschaften/damen-1.html')
+
+@app.route('/mannschaften/damen-2')
+def damen_2():
+    return render_template('design1/mannschaften/damen-2.html')
+
+@app.route('/mannschaften/herren-1')
+def herren_1():
+    return render_template('design1/mannschaften/herren-1.html')
+
+@app.route('/mannschaften/herren-2')
+def herren_2():
+    return render_template('design1/mannschaften/herren-2.html')
+
+@app.route('/mannschaften/herren-30')
+def herren_30():
+    return render_template('design1/mannschaften/herren-30.html')
+
+@app.route('/mannschaften/damen-40')
+def damen_40():
+    return render_template('design1/mannschaften/damen-40.html')
+
+@app.route('/mannschaften/herren-40-1')
+def herren_40_1():
+    return render_template('design1/mannschaften/herren-40-1.html')
+
+@app.route('/mannschaften/herren-40-2')
+def herren_40_2():
+    return render_template('design1/mannschaften/herren-40-2.html')
+
+@app.route('/mannschaften/damen-50')
+def damen_50():
+    return render_template('design1/mannschaften/damen-50.html')
+
+@app.route('/mannschaften/herren-55')
+def herren_55():
+    return render_template('design1/mannschaften/herren-55.html')
+
+@app.route('/mannschaften/herren-60')
+def herren_60():
+    return render_template('design1/mannschaften/herren-60.html')
+
+@app.route('/mannschaften/damen-doppel-40')
+def damen_doppel_40():
+    return render_template('design1/mannschaften/damen-doppel-40.html')
+
+@app.route('/mannschaften/herren-doppel-60')
+def herren_doppel_60():
+    return render_template('design1/mannschaften/herren-doppel-60.html')
+
+@app.route('/mannschaften/gemischt-1')
+def gemischt_1():
+    return render_template('design1/mannschaften/gemischt-1.html')
+
+@app.route('/mannschaften/gemischt-2')
+def gemischt_2():
+    return render_template('design1/mannschaften/gemischt-2.html')
+
+@app.route('/mannschaften/mixed-50-doppel')
+def mixed_50_doppel():
+    return render_template('design1/mannschaften/mixed-50-doppel.html')
+
+
+
+
+
+
+
 website_content = {
     # Main Navigation & Home Sections
     "Startseite": {

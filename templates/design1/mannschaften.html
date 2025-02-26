@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mannschaften - Hardter Tennisverein</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: #90EE90;
+            border-radius: 50%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .team-image {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            object-fit: cover;
+        }
+
+        .team-info {
+            padding: 1.5rem;
+        }
+
+        .team-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .team-info p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo"></div>
+    </nav>
+
+    <div class="container">
+        <div class="section-header">
+            <h1>Unsere Mannschaften</h1>
+            <p>Alle aktiven Teams des Hardter Tennisverein in der Übersicht</p>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="https://sjc.microlink.io/Iz2JKuiNUIYIbcVaNECdou4Zj_2uWltReWRP0a8hGB-ZDwCZQdjuXtKi-mYh3heu-YhWwfU44Vcn-x-_-XecHw.jpeg" alt="Herren 1" class="team-image">
+                <div class="team-info">
+                    <h3>Herren 1</h3>
+                    <p>Bezirksklasse A</p>
+                    <p>Trainer: Max Mustermann</p>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <img src="https://sjc.microlink.io/Iz2JKuiNUIYIbcVaNECdou4Zj_2uWltReWRP0a8hGB-ZDwCZQdjuXtKi-mYh3heu-YhWwfU44Vcn-x-_-XecHw.jpeg" alt="Damen 1" class="team-image">
+                <div class="team-info">
+                    <h3>Damen 1</h3>
+                    <p>Bezirksliga</p>
+                    <p>Trainer: Anna Schmidt</p>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <img src="https://sjc.microlink.io/Iz2JKuiNUIYIbcVaNECdou4Zj_2uWltReWRP0a8hGB-ZDwCZQdjuXtKi-mYh3heu-YhWwfU44Vcn-x-_-XecHw.jpeg" alt="Herren 40" class="team-image">
+                <div class="team-info">
+                    <h3>Herren 40</h3>
+                    <p>Bezirksklasse B</p>
+                    <p>Trainer: Peter Weber</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
