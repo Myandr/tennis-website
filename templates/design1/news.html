@@ -161,16 +161,16 @@
 
       <div class="menu" id="menu">
         <ul>
-          <li><a href="/#home">STARTSEITE</a></li>
-          <li><a href="/#about">ÜBER UNS</a></li>
-          <li><a href="/#contact">KONTAKT</a></li>
-          <li><a href="/#termine">TERMINE</a></li>
-          <li><a href="/#trainer">TRAINER</a></li>
-          <li><a href="/#news">NEUIGKEITEN</a></li>
+          <a href="/#home" class="nav-link">Startseite</a>
+          <a href="/news" class="nav-link">News</a>
+          <a href="/training" class="nav-link">Training</a>
+          <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
+          <a href="/galerie" class="nav-link">Galerie</a>
+          <a href="/mannschaften" class="nav-link">Mannschaften</a>
           {% if logged_in %}
           <li><a href="/dashboard">Dein Account</a></li>
           {% else %}
-          <li><a href="{{ url_for('login') }}">SIGNUP/LOGIN →</a></li>
+          <li><a href="{{ url_for('login') }}">Signup/Login →</a></li>
           {% endif %}
         </ul>
       </div>

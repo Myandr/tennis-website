@@ -28,7 +28,7 @@ body {
 
 .team-image {
     width: 100%;
-    height: 400px;
+    height: 300px;
     border: 1px solid rgb(153, 153, 153);
     object-fit: cover;
     border-radius: 8px;
@@ -120,5 +120,21 @@ h1, h2, h3 {
         grid-template-columns: 1fr;
         gap: 2rem;
         margin-bottom: 3rem;
+    }
+
+    .stat-card h3 {
+        font-size: 12px;
+    }
+
+    .stat-card {
+        padding: 0.5rem;
+    }
+
+    .team-stats {
+        gap: 5px;
+    }
+
+    .team-info {
+        padding: 1rem;
     }
 }
