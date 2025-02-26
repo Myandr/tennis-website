@@ -294,15 +294,16 @@
             </div>
             <div class="nav-item">
                 <div class="nav-link">
-                    <a href="/shop">Shop</a>
+                    <a href="/mannschaften">Mannschaften</a>
                     <span class="chevron-down"></span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Kleidung</a>
-                    <a href="#" class="dropdown-item">Accessoires</a>
+                    <a href="#" class="dropdown-item">Jugend</a>
+                    <a href="#" class="dropdown-item">Frauen</a>
+                    <a href="#" class="dropdown-item">Männer</a>
                 </div>
             </div>
-            <a href="/mannschaften" class="nav-link">Mannschaften</a>
+            <a href="/shop" class="nav-link">Shop</a>
             <a href="/galerie" class="nav-link">Galerie</a>
         </div>
 
@@ -992,6 +993,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
       <div class="locations-header" data-aos="fade-right">
         <h2>Termine</h2>
         <p>Hier erfahren Sie alles über kommende Termine und Veranstaltungen</p>
+        <a href="/termine" class="learn-more">Kalender →</a>
       </div>
       <div class="locations-grid">
         <div class="container">
@@ -1050,7 +1052,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
         <h3>Neuen Termin hinzufügen</h3>
         <label for="datum">Datum:</label>
         <input
-          type="date"
+          type="text"
           id="datum"
           name="datum"
           placeholder="Datum"
@@ -1066,11 +1068,10 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
         />
         <label for="uhrzeit">Uhrzeit:</label>
         <input
-          type="time"
+          type="text"
           id="uhrzeit"
           placeholder="Uhrzeit"
           name="uhrzeit"
-          required
         />
         <label for="ort">Ort:</label>
         <input type="text" id="ort" placeholder="Ort" name="ort" required />
@@ -1094,148 +1095,79 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
  (__) (__\_)\_/\_/ (__) \_)__)(____)(__\_)
 -->
 
-<style>
-
-
-        .trainer {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            justify-items: center;
-        }
-
-        .card1 {
-            width: 200px;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card1:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .profile-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #4b4b4b;
-            transition: transform 0.3s ease;
-        }
-
-        .card1:hover .profile-img {
-            transform: scale(1.05);
-        }
-
-        .name {
-            margin: 10px 0 5px;
-            color: #333;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .role {
-            margin: 0 0 10px;
-            color: #565656;
-            font-size: 14px;
-        }
-
-        .contact {
-            font-size: 12px;
-            color: #666;
-            margin: 5px 0;
-        }
-
-        .divider {
-            width: 50px;
-            height: 2px;
-            background: #3c3c3c;
-            margin: 10px auto;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .trainer {
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            }
-
-            .card1 {
-                width: 160px;
-            }
-
-            .profile-img {
-                width: 70px;
-                height: 70px;
-            }
-
-            .name {
-                font-size: 14px;
-            }
-
-            .role {
-                font-size: 12px;
-            }
-
-            .contact {
-                font-size: 11px;
-            }
-        }
-</style>
-
 <section class="locations-section" id="trainer">
-  <div class="locations-header" data-aos="fade-right">
-      <h2>Unser Vorstand</h2>
-      <p>Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen</p>
+  <div class="locations-header" data-aos="fade-right" >
+    <h2>Unser Vorstand</h2>
+    <p>
+      Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen
+    </p>
+    <a href="/vorsitzende" class="learn-more">Alle Vorsitzenden sehen →</a>
+
   </div>
   <div class="locations-grid">
-      <div class="trainer">
-          <div class="card1">
-              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
-              <h2 class="name">John Smith</h2>
-              <p class="role">Tennis Instructor</p>
-              <div class="divider"></div>
-              <p class="contact">📧 john@tennis.club</p>
-              <p class="contact">📱 (555) 123-4567</p>
-          </div>
-          <div class="card1">
-              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
-              <h2 class="name">John Smith</h2>
-              <p class="role">Tennis Instructor</p>
-              <div class="divider"></div>
-              <p class="contact">📧 john@tennis.club</p>
-              <p class="contact">📱 (555) 123-4567</p>
-          </div>
-          <div class="card1">
-              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
-              <h2 class="name">John Smith</h2>
-              <p class="role">Tennis Instructor</p>
-              <div class="divider"></div>
-              <p class="contact">📧 john@tennis.club</p>
-              <p class="contact">📱 (555) 123-4567</p>
-          </div>
-          <div class="card1">
-              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
-              <h2 class="name">John Smith</h2>
-              <p class="role">Tennis Instructor</p>
-              <div class="divider"></div>
-              <p class="contact">📧 john@tennis.club</p>
-              <p class="contact">📱 (555) 123-4567</p>
-          </div>
-          <div class="card1">
-              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
-              <h2 class="name">John Smith</h2>
-              <p class="role">Tennis Instructor</p>
-              <div class="divider"></div>
-              <p class="contact">📧 john@tennis.club</p>
-              <p class="contact">📱 (555) 123-4567</p>
-          </div>
+    <div class="trainer-card" data-aos="flip-up" >
+      <div class="trainer-image">
+        <img
+          src="/static/images/oliver.png"
+          alt="Max Mustermann"
+        />
+        <div class="trainer-overlay">
+          <p>
+            "Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."
+          </p>
+        </div>
       </div>
+      <div class="trainer-info">
+        <h3 class="trainer-name">Oliver Wiegand</h3>
+        <div class="trainer-title" style="border-bottom: 1px solid grey; padding-bottom: 15px;">1. Vorsitzender</div>
+        <p class="trainer-description">
+          <strong>Email:</strong> 1.vorsitzender@hardt-tennis.de<br>
+          <strong>Tel. Nr.:</strong> 0172 25 80 209
+        </p>
+      </div>
+    </div>
+    <div class="trainer-card" data-aos="flip-up" >
+      <div class="trainer-image">
+        <img
+          src="/static/images/holger.png"
+          alt="Max Mustermann"
+        />
+        <div class="trainer-overlay">
+          <p>
+            "Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."
+          </p>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <h3 class="trainer-name">Holger Arlt</h3>
+        <div class="trainer-title" style="border-bottom: 1px solid grey; padding-bottom: 15px;">1. Geschäftsführer</div>
+        <p class="trainer-description">
+          <strong>Email:</strong> woodworm4u@gmail.com<br>
+          <strong>Tel. Nr.:</strong> 0151 70 09 01 37
+        </p>
+      </div>
+    </div>
+    <div class="trainer-card" data-aos="flip-up" >
+      <div class="trainer-image">
+        <img
+          src="/static/images/volker.png"
+          alt="Max Mustermann"
+        />
+        <div class="trainer-overlay">
+          <p>
+            "Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."
+          </p>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <h3 class="trainer-name">Volker Schuhmacher</h3>
+        <div class="trainer-title" style="border-bottom: 1px solid grey; padding-bottom: 15px;">Schatzmeister</div>
+        <p class="trainer-description">
+          <strong>Email:</strong> schatzmeister@hardt-tennis.de<br>
+          <strong>Tel. Nr.:</strong> 0160 99 78 94 11
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 

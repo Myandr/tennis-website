@@ -137,7 +137,7 @@ class Termin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datum = db.Column(db.String(10), nullable=False)
     veranstaltung = db.Column(db.String(100), nullable=False)
-    uhrzeit = db.Column(db.String(5), nullable=False)
+    uhrzeit = db.Column(db.String(100), nullable=False)
     ort = db.Column(db.String(50), nullable=False)
 
 class AboutText(db.Model):
