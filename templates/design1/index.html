@@ -276,7 +276,7 @@
                     <a href="/#about" class="dropdown-item">Über uns</a>
                     <a href="/#img" class="dropdown-item">Bilder</a>
                     <a href="/#termine" class="dropdown-item">Termine</a>
-                    <a href="/#trainer" class="dropdown-item">Trainer</a>
+                    <a href="/#trainer" class="dropdown-item">Vorstand</a>
                     <a href="/#news" class="dropdown-item">Neuigkeiten</a>
                     <a href="/#contact" class="dropdown-item">Kontakt</a>
                 </div>
@@ -287,24 +287,23 @@
                     <span class="chevron-down"></span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="/news" class="dropdown-item">placeholder</a>
-                    <a href="/news" class="dropdown-item">placeholder</a>
-                    <a href="/news" class="dropdown-item">placeholder</a>
+                    <a href="/news" class="dropdown-item">Aktuelle Infos</a>
+                    <a href="/newsletter" class="dropdown-item">Artikel</a>
+                    <a href="/news" class="dropdown-item">Spielberichte</a>
                 </div>
             </div>
             <div class="nav-item">
                 <div class="nav-link">
-                    <a href="/#trainer">Training</a>
+                    <a href="/shop">Shop</a>
                     <span class="chevron-down"></span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">placeholder</a>
-                    <a href="#" class="dropdown-item">placeholder</a>
-                    <a href="#" class="dropdown-item">placeholder</a>
+                    <a href="#" class="dropdown-item">Kleidung</a>
+                    <a href="#" class="dropdown-item">Accessoires</a>
                 </div>
             </div>
-            <a href="/downloads" class="nav-link">Downloads</a>
-            <a href="/newsletter" class="nav-link">Blog</a>
+            <a href="/mannschaften" class="nav-link">Mannschaften</a>
+            <a href="/galerie" class="nav-link">Galerie</a>
         </div>
 
         <div class="auth-buttons">
@@ -561,8 +560,8 @@ document.addEventListener('keydown', (e) => {
           <img  src="/static/images/tennis1.jpg" alt="Tennisplatz" />
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3>Hardter Tennisplatz</h3>
-            <div class="location-times">10:00 + 12:30 + 18:00</div>
+            <h3>6 Ascheplätze</h3>
+            <div class="location-times">Zwei mit Flutlichtanlage</div>
             <div class="location-address">
               6767 Hauptstraße, Hardt, Deutschland
             </div>
@@ -584,8 +583,8 @@ document.addEventListener('keydown', (e) => {
           <img  src="/static/images/paddle.jpg" alt="Tennis Club" />
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3>Clubhaus Hardt</h3>
-            <div class="location-times">10:30 + 12:30 + 18:00</div>
+            <h3>Clubheim Hardt</h3>
+            <div class="location-times">Vermietung nur an Mitglieder<br>Gastronomie</div>
             <div class="location-address">
               6101 Tennisstraße, Hardt, Deutschland
             </div>
@@ -607,7 +606,7 @@ document.addEventListener('keydown', (e) => {
           <img src="/static/images/girl.jpg" alt="Tennis im Park" />
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3>Tennis im Park</h3>
+            <h3>Kletter- und Spielgerüst</h3>
             <div class="location-times">10:30 + 12:30</div>
             <div class="location-address">
               77 Parkstraße, Hardt, Deutschland
@@ -630,7 +629,7 @@ document.addEventListener('keydown', (e) => {
           <img src="/static/images/sport.jpg" alt="Tennis im Garten" />
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3>Tennisgarten Hardt</h3>
+            <h3>Kleinfeldplatz inkl. Tenniswand</h3>
             <div class="location-times">10:30 + 12:30</div>
             <div class="location-address">
               17801 Sportstraße, Hardt, Deutschland
@@ -767,15 +766,10 @@ document.addEventListener('keydown', (e) => {
             </div>
             <div class="about-text" data-aos="fade-up">
               <p>
-                Unser Tennisverein besteht aus einer engagierten Gemeinschaft
-                von Spielern aller Altersgruppen. Wir bieten regelmäßige
-                Trainings, Turniere und ein aktives Vereinsleben. Unser Ziel ist
-                es, Tennis für alle zugänglich zu machen und ein Umfeld zu
-                schaffen, in dem sich jeder verbessern kann.
-              </p>
+                Gerne zeigen wir Ihnen unsere 6-Platzanlage mit Clubhaus direkt am Kanal gelegen. Die Anlage ist im Normalfall von Ende April bis Ende September geöffnet. Bei uns kann Tennis als Hobby-, Mannschafts- oder Leistungssport betrieben werden
+              </p><br>
               <p>
-                Wir legen besonderen Wert auf Teamgeist, Fairplay und Spaß am
-                Spiel. Kommen Sie vorbei und machen Sie mit!
+                Zum gemütlichen Beisammensein vor und nach dem Tennisspielen lädt die gut geführte Gastronomie in unserem Vereinsheim mit großzügig angelegter Terrasse ein. Von dieser aus können Sie die gesamte Anlage überblicken und sie ist zu einem beliebten Treffpunkt geworden.
               </p>
               {% for text in about_texts %} {% if text.type == "headline" %}
               <br />
@@ -1100,78 +1094,150 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
  (__) (__\_)\_/\_/ (__) \_)__)(____)(__\_)
 -->
 
-    <section class="locations-section" id="trainer">
-      <div class="locations-header" data-aos="fade-right" >
-        <h2>Unsere Trainer</h2>
-        <p>
-          Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen
-        </p>
+<style>
+
+
+        .trainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .card1 {
+            width: 200px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card1:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4b4b4b;
+            transition: transform 0.3s ease;
+        }
+
+        .card1:hover .profile-img {
+            transform: scale(1.05);
+        }
+
+        .name {
+            margin: 10px 0 5px;
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .role {
+            margin: 0 0 10px;
+            color: #565656;
+            font-size: 14px;
+        }
+
+        .contact {
+            font-size: 12px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .divider {
+            width: 50px;
+            height: 2px;
+            background: #3c3c3c;
+            margin: 10px auto;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .trainer {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            }
+
+            .card1 {
+                width: 160px;
+            }
+
+            .profile-img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .name {
+                font-size: 14px;
+            }
+
+            .role {
+                font-size: 12px;
+            }
+
+            .contact {
+                font-size: 11px;
+            }
+        }
+</style>
+
+<section class="locations-section" id="trainer">
+  <div class="locations-header" data-aos="fade-right">
+      <h2>Unser Vorstand</h2>
+      <p>Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen</p>
+  </div>
+  <div class="locations-grid">
+      <div class="trainer">
+          <div class="card1">
+              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
+              <h2 class="name">John Smith</h2>
+              <p class="role">Tennis Instructor</p>
+              <div class="divider"></div>
+              <p class="contact">📧 john@tennis.club</p>
+              <p class="contact">📱 (555) 123-4567</p>
+          </div>
+          <div class="card1">
+              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
+              <h2 class="name">John Smith</h2>
+              <p class="role">Tennis Instructor</p>
+              <div class="divider"></div>
+              <p class="contact">📧 john@tennis.club</p>
+              <p class="contact">📱 (555) 123-4567</p>
+          </div>
+          <div class="card1">
+              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
+              <h2 class="name">John Smith</h2>
+              <p class="role">Tennis Instructor</p>
+              <div class="divider"></div>
+              <p class="contact">📧 john@tennis.club</p>
+              <p class="contact">📱 (555) 123-4567</p>
+          </div>
+          <div class="card1">
+              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
+              <h2 class="name">John Smith</h2>
+              <p class="role">Tennis Instructor</p>
+              <div class="divider"></div>
+              <p class="contact">📧 john@tennis.club</p>
+              <p class="contact">📱 (555) 123-4567</p>
+          </div>
+          <div class="card1">
+              <img src="../../static/images/oliver.png" alt="Profile photo" class="profile-img">
+              <h2 class="name">John Smith</h2>
+              <p class="role">Tennis Instructor</p>
+              <div class="divider"></div>
+              <p class="contact">📧 john@tennis.club</p>
+              <p class="contact">📱 (555) 123-4567</p>
+          </div>
       </div>
-      <div class="locations-grid">
-        <div class="trainer-card" data-aos="flip-up" >
-          <div class="trainer-image">
-            <img
-              src="/static/images/man-2604149_960_720.jpg"
-              alt="Max Mustermann"
-            />
-            <div class="trainer-overlay">
-              <p>
-                "Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."
-              </p>
-            </div>
-          </div>
-          <div class="trainer-info">
-            <h3 class="trainer-name">Max Mustermann</h3>
-            <div class="trainer-title">Haupttrainer</div>
-            <p class="trainer-description">
-              Mit 15 Jahren Erfahrung bringt Max eine Fülle von Wissen und
-              Leidenschaft in jede Trainingseinheit ein. Spezialisiert auf
-              Fortgeschrittene und Wettkampfspieler.
-            </p>
-          </div>
-        </div>
-        <div class="trainer-card" data-aos="flip-up">
-          <div class="trainer-image">
-            <img
-              src="/static/images/training-828726_960_720.jpg"
-              alt="Anna Schmidt"
-            />
-            <div class="trainer-overlay">
-              <p>"Jeder Schlag ist eine Chance, besser zu werden."</p>
-            </div>
-          </div>
-          <div class="trainer-info">
-            <h3 class="trainer-name">Anna Schmidt</h3>
-            <div class="trainer-title">Jugendtrainerin</div>
-            <p class="trainer-description">
-              Anna hat eine besondere Gabe, junge Talente zu fördern. In ihren
-              10 Jahren als Trainerin hat sie zahlreiche Jugendspieler zu
-              Erfolgen geführt.
-            </p>
-          </div>
-        </div>
-        <div class="trainer-card" data-aos="flip-up" >
-          <div class="trainer-image">
-            <img
-              src="/static/images/woman-2592247_960_720.jpg"
-              alt="Thomas Weber"
-            />
-            <div class="trainer-overlay">
-              <p>"Technik ist wichtig, aber mentale Stärke gewinnt Matches."</p>
-            </div>
-          </div>
-          <div class="trainer-info">
-            <h3 class="trainer-name">Thomas Weber</h3>
-            <div class="trainer-title">Leistungstrainer</div>
-            <p class="trainer-description">
-              Thomas' 20-jährige Erfahrung im Leistungssport macht ihn zum
-              Experten für Spieler, die ihre Fähigkeiten auf ein neues Level
-              bringen wollen.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+  </div>
+</section>
 
     <!--
  __ _  ____  _  _  ____ 
@@ -1394,10 +1460,11 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
         <div class="footer-section">
           <h3 class="footer-title">Kontakt</h3>
           <p>
-            Tennis TV Tennisverein<br />Tennis Str. 101<br />Viersen,
-            Nordrhein-Westfalen<br /><br />
+            Hardter TV<br />Gahlener Str. 204<br />46284 Dorsten<br /><br />
           </p>
-          <p>T: 02162 123456<br /><br /></p>
+          <p>Vorsitzender: <strong>0172 25 80 209</strong><br></p>
+          <p>Sportwart: <strong>0151 53 55 33 55</strong><br></p>
+          <p>Geschäftsführer: <strong>0151 70 09 01 37</strong><br><br></p>
           <p>E: info@tennistv.de</p>
         </div>
         <div class="footer-section">
