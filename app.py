@@ -272,7 +272,9 @@ def mixed_50_doppel():
 def impressum():
     return render_template("design1/impressum.html")
 
-
+@app.route("/vorstand")
+def vorstand():
+    return render_template("design1/vorstand.html")
 
 
 

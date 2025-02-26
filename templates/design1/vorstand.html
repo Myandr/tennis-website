@@ -6,86 +6,56 @@
 <title>Mannschaften - Hardter Tennisverein</title>
 <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
 <style>
-.container {
-    max-width: 1000px;
-    position: relative;
-    top: 100px;
-    margin: 0 auto;
-    padding: 20px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-.teams-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+        .board-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
 
-.team-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    text-align: center;
-    text-decoration: none;
-    color: black;
-    display: block;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+        .member-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-.team-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
+        .member-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: #f0f0f0;
+            object-fit: cover;
+        }
 
-.team-image {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-bottom: 1px solid #ccc;
-}
+        .member-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            color: black;
+        }
 
-.team-name {
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    padding: 8px 0;
-    margin: 0;
-    background-color: #f0f0f0;
-}
+        .member-info p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
 
-.placeholder-image {
-    background-color: #00BFFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 120px;
-}
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
 
-.placeholder-icon {
-    width: 30px;
-    height: 30px;
-    background-color: white;
-    border-radius: 50%;
-}
-
-@media (max-width: 800px) {
-    .teams-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 600px) {
-    .teams-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 400px) {
-    .teams-grid {
-        grid-template-columns: 1fr;
-    }
-}
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
 </style>
 </head>
 <body>
@@ -311,103 +281,121 @@ document.addEventListener('keydown', (e) => {
 });
 
   </script>
-<div class="locations-section" style="background-color: white;" id="one">
-    <div class="locations-header" style="color: black;" data-aos="fade-right">
-      <h2>Unsere Mannschaften</h2>
-      <p>Hier siehst du all unsere Mannschaften</p>
+
+
+
+
+
+
+
+
+
+<div class="locations-section">
+    <div class="locations-header">
+        <h2>Unser Vorstand</h2>
+        <p>Das Team hinter dem Hardter Tennisverein</p>
+        <a href="/#trainer"  class="learn-more">← Zurück</a>
+
     </div>
-        <div class="teams-grid">
-            <a href="/mannschaften/damen-1" class="team-card">
-                <img src="../../../static/images/damen-1.jpg" alt="Damen 1" class="team-image">
-                <h2 class="team-name">Damen 1</h2>
-            </a>
-            
-            <a href="/mannschaften/damen-2" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Damen 2</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-1" class="team-card">
-                <img src="../../static/images/Herren_1_B1.jpg" alt="Herren 1" class="team-image">
-                <h2 class="team-name">Herren 1</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-2" class="team-card">
-                <img src="../../static/images/Herren_2_B2.JPG" alt="Herren 2" class="team-image">
-                <h2 class="team-name">Herren 2</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-30" class="team-card">
-                <img src="../../static/images/Herren30_B2.JPG" alt="Herren 30" class="team-image">
-                <h2 class="team-name">Herren 30</h2>
-            </a>
-        
-            <a href="/mannschaften/damen-40" class="team-card">
-                <img src="../../static/images/Herren_1_B1.jpg" alt="Damen 40" class="team-image">
-                <h2 class="team-name">Damen 40</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-40-1" class="team-card">
-                <img src="../../static/images/Herren40_1_B3.JPG" alt="Herren 40/1" class="team-image">
-                <h2 class="team-name">Herren 40/1</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-40-2" class="team-card">
-                <img src="../../static/images/Herren40_2_B3.JPG" alt="Herren 40/2" class="team-image">
-                <h2 class="team-name">Herren 40/2</h2>
-            </a>
-        
-            <a href="/mannschaften/damen-50" class="team-card">
-                <img src="../../static/images/Damen50_B1.JPG" alt="Damen 50" class="team-image">
-                <h2 class="team-name">Damen 50</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-55" class="team-card">
-                <img src="../../static/images/Herren55_B2.JPG" alt="Herren 55" class="team-image">
-                <h2 class="team-name">Herren 55</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-60" class="team-card">
-                <img src="../../static/images/Herren60_B2.JPG" alt="Herren 60" class="team-image">
-                <h2 class="team-name">Herren 60</h2>
-            </a>
-        
-            <a href="/mannschaften/damen-doppel-40" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Damen Doppel 40</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-doppel-60" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Herren Doppel 60</h2>
-            </a>
-        
-            <a href="/mannschaften/gemischt-1" class="team-card">
-                <img src="../../static/images/Gemischt_B5.jpg" alt="Gemischt 1" class="team-image">
-                <h2 class="team-name">Gemischt 1</h2>
-            </a>
-        
-            <a href="/mannschaften/gemischt-2" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Gemischt 2</h2>
-            </a>
-        
-            <a href="/mannschaften/mixed-50-doppel" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Mixed 50 Doppel</h2>
-            </a>
+    <div class="locations-grid">
+
+    <div class="board-members">
+        <div class="member-card">
+            <img src="../../static/images/Andre Albert_1.JPG" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Dr. Michael Schmidt</h3>
+                <p>1. Vorsitzender</p>
+                <p>michael.schmidt@hardter-tv.de</p>
+            </div>
         </div>
+
+        <div class="member-card">
+            <img src="../../static/images/Dieter Schlott_1.jpg" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Sandra Meyer</h3>
+                <p>2. Vorsitzende</p>
+                <p>sandra.meyer@hardter-tv.de</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <img src="../../static/images/Florian Gröbel_1.JPG" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Thomas Weber</h3>
+                <p>Kassenwart</p>
+                <p>thomas.weber@hardter-tv.de</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <img src="../../static/images/Foto Person fehlt.png" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Thomas Weber</h3>
+                <p>Kassenwart</p>
+                <p>thomas.weber@hardter-tv.de</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <img src="../../static/images/Hendrick Büncker_1.jpg" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Thomas Weber</h3>
+                <p>Kassenwart</p>
+                <p>thomas.weber@hardter-tv.de</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <img src="../../static/images/Holger Arlt_1.jpg" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Thomas Weber</h3>
+                <p>Kassenwart</p>
+                <p>thomas.weber@hardter-tv.de</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <img src="../../static/images/Jürgen Mertens_1.jpg" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Thomas Weber</h3>
+                <p>Kassenwart</p>
+                <p>thomas.weber@hardter-tv.de</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <img src="../../static/images/Oliver 1JPG.jpg" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Thomas Weber</h3>
+                <p>Kassenwart</p>
+                <p>thomas.weber@hardter-tv.de</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <img src="../../static/images/Volker Schumacher_1.JPG" alt="Vorstandsmitglied" class="member-image">
+            <div class="member-info">
+                <h3>Thomas Weber</h3>
+                <p>Kassenwart</p>
+                <p>thomas.weber@hardter-tv.de</p>
+            </div>
+        </div>
+        </div>
+    </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
     const hamburger = document.getElementById("hamburger");
         const menu = document.getElementById("menu");
