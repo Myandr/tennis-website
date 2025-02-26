@@ -6,20 +6,15 @@
 }
 
 body {
-    background-color: #000;
-    color: #fff;
+    background-color: #ffffff;
+    color: #000000;
 }
 
-.navbar {
-    display: flex;
-    align-items: center;
-    padding: 1rem 2rem;
-    background: #111;
-    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
-}
 
 .container {
     max-width: 1200px;
+    position: relative;
+    top: 100px;
     margin: 0 auto;
     padding: 2rem;
 }
@@ -34,13 +29,15 @@ body {
 .team-image {
     width: 100%;
     height: 400px;
+    border: 1px solid rgb(153, 153, 153);
     object-fit: cover;
     border-radius: 8px;
 }
 
 .team-info {
     padding: 2rem;
-    background: #111;
+    background: #ffffff;
+    border: 1px solid rgb(153, 153, 153);
     border-radius: 8px;
 }
 
@@ -52,7 +49,8 @@ body {
 }
 
 .stat-card {
-    background: #222;
+    background: #ffffff;
+    border: 1px solid rgb(153, 153, 153);
     padding: 1rem;
     border-radius: 8px;
     text-align: center;
@@ -66,8 +64,9 @@ body {
 }
 
 .player-card {
-    background: #111;
+    background: #ffffff;
     border-radius: 8px;
+    border: 1px solid rgb(153, 153, 153);
     overflow: hidden;
     transition: transform 0.3s;
 }
@@ -79,6 +78,7 @@ body {
 .player-image {
     width: 100%;
     height: 200px;
+    border-bottom: 1px solid rgb(153, 153, 153);
     object-fit: cover;
 }
 
@@ -88,7 +88,7 @@ body {
 
 .matches-list {
     margin-top: 3rem;
-    background: #111;
+    background: #ffffff;
     border-radius: 8px;
     overflow: hidden;
 }
@@ -97,7 +97,7 @@ body {
     display: grid;
     grid-template-columns: 2fr 1fr 2fr;
     padding: 1rem;
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid #000000;
 }
 
 .match-item:last-child {
@@ -105,11 +105,20 @@ body {
 }
 
 h1, h2, h3 {
-    color: #fff;
+    color: #000000;
 }
 
 .section-title {
     margin: 2rem 0;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid #919191;
+}
+
+@media (max-width: 750px) {
+    .team-header {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
 }

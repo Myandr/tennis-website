@@ -1,123 +1,413 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mannschaften - Hardter Tennisverein</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mannschaften - Hardter Tennisverein</title>
+<link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+<style>
+.container {
+    max-width: 1000px;
+    position: relative;
+    top: 100px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-        .navbar {
-            display: flex;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-        .logo {
-            width: 40px;
-            height: 40px;
-            background: #90EE90;
-            border-radius: 50%;
-        }
+.team-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+.team-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
+.team-image {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-bottom: 1px solid #ccc;
+}
 
-        .team-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+.team-name {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    padding: 8px 0;
+    margin: 0;
+    background-color: #f0f0f0;
+}
 
-        .team-image {
-            width: 100%;
-            height: 200px;
-            background: #f0f0f0;
-            object-fit: cover;
-        }
+.placeholder-image {
+    background-color: #00BFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+}
 
-        .team-info {
-            padding: 1.5rem;
-        }
+.placeholder-icon {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 50%;
+}
 
-        .team-info h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.25rem;
-        }
+@media (max-width: 800px) {
+    .teams-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
 
-        .team-info p {
-            color: #666;
-            line-height: 1.5;
-        }
+@media (max-width: 600px) {
+    .teams-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-    </style>
+@media (max-width: 400px) {
+    .teams-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo"></div>
+        <img src="../../static/images/logo1.png" style="width: 100px;"  class="logo">
+        
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Suche..." class="search-input">
+          <button class="search-button" onclick="performSearch()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.5 14.5L10 10M11.3333 6.66667C11.3333 9.244 9.244 11.3333 6.66667 11.3333C4.08934 11.3333 2 9.244 2 6.66667C2 4.08934 4.08934 2 6.66667 2C9.244 2 11.3333 4.08934 11.3333 6.66667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+          </button>
+          <div id="search-results"></div>
+      </div>
+  
+      <script>
+    let searchTimeout;
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    function performSearch() {
+        const query = searchInput.value;
+        if (query.length < 2) {
+            searchResults.classList.remove('active');
+            return;
+        }
+
+        fetch(`/search?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                searchResults.innerHTML = '';
+                if (Object.keys(data).length === 0) {
+                    searchResults.innerHTML = '<div class="no-results">Keine Ergebnisse gefunden</div>';
+                } else {
+                    for (const [key, value] of Object.entries(data)) {
+                        const link = document.createElement('a');
+                        link.href = value.url;
+                        link.className = 'search-result-item';
+                        link.innerHTML = `
+                            <div class="search-result-title">${key}</div>
+                            <div class="search-result-description">${value.description}</div>
+                        `;
+                        searchResults.appendChild(link);
+                    }
+                }
+                searchResults.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                searchResults.innerHTML = '<div class="no-results">Ein Fehler ist aufgetreten</div>';
+                searchResults.classList.add('active');
+            });
+    }
+  
+          // Live search with debouncing
+          searchInput.addEventListener('input', () => {
+              clearTimeout(searchTimeout);
+              searchTimeout = setTimeout(performSearch, 300);
+          });
+  
+          // Close search results when clicking outside
+          document.addEventListener('click', (e) => {
+              if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                  searchResults.classList.remove('active');
+              }
+          });
+  
+          // Handle Enter key
+          searchInput.addEventListener('keypress', (e) => {
+              if (e.key === 'Enter') {
+                  performSearch();
+              }
+          });
+  
+          // Close on Escape key
+          document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') {
+                  searchResults.classList.remove('active');
+              }
+          });
+      </script>
+
+
+        <div class="nav-links">
+            <div class="nav-item">
+                <div class="nav-link">
+                    <a href="/#home">Home</a>
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="/#home" class="dropdown-item">Home</a>
+                    <a href="/#one" class="dropdown-item">Standorte</a>
+                    <a href="/#about" class="dropdown-item">Über uns</a>
+                    <a href="/#img" class="dropdown-item">Bilder</a>
+                    <a href="/#termine" class="dropdown-item">Termine</a>
+                    <a href="/#trainer" class="dropdown-item">Vorstand</a>
+                    <a href="/#news" class="dropdown-item">Neuigkeiten</a>
+                    <a href="/#contact" class="dropdown-item">Kontakt</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link">
+                    <a href="/news">News</a>
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="/news" class="dropdown-item">Aktuelle Infos</a>
+                    <a href="/newsletter" class="dropdown-item">Artikel</a>
+                    <a href="/news" class="dropdown-item">Spielberichte</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link">
+                  <a href="/training" class="nav-link">Training</a>
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Jugend</a>
+                    <a href="#" class="dropdown-item">Frauen</a>
+                    <a href="#" class="dropdown-item">Männer</a>
+                </div>
+            </div>
+            <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
+            <a href="/galerie" class="nav-link">Galerie</a>
+            <a href="/mannschaften" class="nav-link">Mannschaften</a>
+        </div>
+
+        <div class="auth-buttons">
+            {% if logged_in %}
+            <a href="/dashboard"><button class="log-in"><i class="fa fa-user" style="color: white;"></i>Account</button></a>
+            {% else %}
+            <a href="/signup"><button class="sign-up">Sign up</button></a>
+            <a href="/login"><button class="log-in">Log in</button></a>
+            {% endif %}
+        </div>
+
+        <div id="hamburger" class="hamburger">
+          <label class="hamburger">
+            <input type="checkbox" id="menuToggle" />
+            <svg viewBox="0 0 32 32">
+              <path
+                class="line line-top-bottom"
+                d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+              ></path>
+              <path class="line" d="M7 16 27 16"></path>
+            </svg>
+          </label>
+        </div>
+  
+        <div class="menu" id="menu">
+          <ul>
+            <li><a href="/#home">STARTSEITE</a></li>
+            <li><a href="/#about">ÜBER UNS</a></li>
+            <li><a href="/#contact">KONTAKT</a></li>
+            <li><a href="/#termine">TERMINE</a></li>
+            <li><a href="/#trainer">TRAINER</a></li>
+            <li><a href="/#news">NEUIGKEITEN</a></li>
+            {% if logged_in %}
+            <li><a href="/dashboard">Dein Account</a></li>
+            {% else %}
+            <li><a href="{{ url_for('login') }}">SIGNUP/LOGIN →</a></li>
+            {% endif %}
+          </ul>
+        </div>
     </nav>
 
-    <div class="container">
-        <div class="section-header">
-            <h1>Unsere Mannschaften</h1>
-            <p>Alle aktiven Teams des Hardter Tennisverein in der Übersicht</p>
-        </div>
+    <script>
+     // Alle Navigationslinks mit Dropdown abrufen
+const navLinks = document.querySelectorAll('.nav-item .nav-link');
 
-        <div class="team-grid">
-            <div class="team-card">
-                <img src="https://sjc.microlink.io/Iz2JKuiNUIYIbcVaNECdou4Zj_2uWltReWRP0a8hGB-ZDwCZQdjuXtKi-mYh3heu-YhWwfU44Vcn-x-_-XecHw.jpeg" alt="Herren 1" class="team-image">
-                <div class="team-info">
-                    <h3>Herren 1</h3>
-                    <p>Bezirksklasse A</p>
-                    <p>Trainer: Max Mustermann</p>
-                </div>
-            </div>
+// Funktion zum Schließen aller Dropdowns
+function closeAllDropdowns() {
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        link.nextElementSibling?.classList.remove('active');
+    });
+}
 
-            <div class="team-card">
-                <img src="https://sjc.microlink.io/Iz2JKuiNUIYIbcVaNECdou4Zj_2uWltReWRP0a8hGB-ZDwCZQdjuXtKi-mYh3heu-YhWwfU44Vcn-x-_-XecHw.jpeg" alt="Damen 1" class="team-image">
-                <div class="team-info">
-                    <h3>Damen 1</h3>
-                    <p>Bezirksliga</p>
-                    <p>Trainer: Anna Schmidt</p>
-                </div>
-            </div>
+// Öffnen bei Hover oder Klick
+navLinks.forEach(link => {
+    const dropdown = link.nextElementSibling;
 
-            <div class="team-card">
-                <img src="https://sjc.microlink.io/Iz2JKuiNUIYIbcVaNECdou4Zj_2uWltReWRP0a8hGB-ZDwCZQdjuXtKi-mYh3heu-YhWwfU44Vcn-x-_-XecHw.jpeg" alt="Herren 40" class="team-image">
-                <div class="team-info">
-                    <h3>Herren 40</h3>
-                    <p>Bezirksklasse B</p>
-                    <p>Trainer: Peter Weber</p>
-                </div>
-            </div>
-        </div>
+    if (dropdown && dropdown.classList.contains('dropdown-menu')) {
+        // Öffnen beim Hover
+        link.addEventListener('mouseover', () => {
+            closeAllDropdowns();
+            link.classList.add('active');
+            dropdown.classList.add('active');
+        });
+
+        // Öffnen beim Klick
+        link.addEventListener('click', (e) => {
+            e.preventDefault(); // Verhindert das Springen des Links
+            e.stopPropagation(); // Verhindert das Schließen durch das Dokument-Event
+            closeAllDropdowns();
+            link.classList.add('active');
+            dropdown.classList.add('active');
+        });
+
+        // Schließen, wenn Maus den Bereich verlässt
+        link.parentElement.addEventListener('mouseleave', () => {
+            setTimeout(() => {
+                if (!dropdown.matches(':hover')) {
+                    link.classList.remove('active');
+                    dropdown.classList.remove('active');
+                }
+            }, 300); // Verzögerung für besseres Nutzererlebnis
+        });
+    }
+});
+
+// Schließen beim Klicken außerhalb des Menüs
+document.addEventListener('click', () => {
+    closeAllDropdowns();
+});
+
+// Escape-Taste zum Schließen
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeAllDropdowns();
+    }
+});
+
+  </script>
+<div class="locations-section" style="background-color: white;" id="one">
+    <div class="locations-header" style="color: black;" data-aos="fade-right">
+      <h2>Unsere Mannschaften</h2>
+      <p>Hier siehst du all unsere Mannschaften</p>
     </div>
+        <div class="teams-grid">
+            <a href="/mannschaften/damen-1" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-JzP8xQGJ21OOvwqmhXIgTKEC3K9ia3.png" alt="Damen 1" class="team-image">
+                <h2 class="team-name">Damen 1</h2>
+            </a>
+            
+            <a href="/mannschaften/damen-2" class="team-card">
+                <div class="placeholder-image">
+                    <div class="placeholder-icon"></div>
+                </div>
+                <h2 class="team-name">Damen 2</h2>
+            </a>
+        
+            <a href="/mannschaften/herren-1" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-JzP8xQGJ21OOvwqmhXIgTKEC3K9ia3.png" alt="Herren 1" class="team-image">
+                <h2 class="team-name">Herren 1</h2>
+            </a>
+        
+            <a href="/mannschaften/herren-2" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-JzP8xQGJ21OOvwqmhXIgTKEC3K9ia3.png" alt="Herren 2" class="team-image">
+                <h2 class="team-name">Herren 2</h2>
+            </a>
+        
+            <a href="/mannschaften/herren-30" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-JzP8xQGJ21OOvwqmhXIgTKEC3K9ia3.png" alt="Herren 30" class="team-image">
+                <h2 class="team-name">Herren 30</h2>
+            </a>
+        
+            <a href="/mannschaften/damen-40" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-JzP8xQGJ21OOvwqmhXIgTKEC3K9ia3.png" alt="Damen 40" class="team-image">
+                <h2 class="team-name">Damen 40</h2>
+            </a>
+        
+            <a href="/mannschaften/herren-40-1" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-JzP8xQGJ21OOvwqmhXIgTKEC3K9ia3.png" alt="Herren 40/1" class="team-image">
+                <h2 class="team-name">Herren 40/1</h2>
+            </a>
+        
+            <a href="/mannschaften/herren-40-2" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-JzP8xQGJ21OOvwqmhXIgTKEC3K9ia3.png" alt="Herren 40/2" class="team-image">
+                <h2 class="team-name">Herren 40/2</h2>
+            </a>
+        
+            <a href="/mannschaften/damen-50" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-xJtldtE8sq0FQvOfxrQQb9fk6Hjg3c.png" alt="Damen 50" class="team-image">
+                <h2 class="team-name">Damen 50</h2>
+            </a>
+        
+            <a href="/mannschaften/herren-55" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-xJtldtE8sq0FQvOfxrQQb9fk6Hjg3c.png" alt="Herren 55" class="team-image">
+                <h2 class="team-name">Herren 55</h2>
+            </a>
+        
+            <a href="/mannschaften/herren-60" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-xJtldtE8sq0FQvOfxrQQb9fk6Hjg3c.png" alt="Herren 60" class="team-image">
+                <h2 class="team-name">Herren 60</h2>
+            </a>
+        
+            <a href="/mannschaften/damen-doppel-40" class="team-card">
+                <div class="placeholder-image">
+                    <div class="placeholder-icon"></div>
+                </div>
+                <h2 class="team-name">Damen Doppel 40</h2>
+            </a>
+        
+            <a href="/mannschaften/herren-doppel-60" class="team-card">
+                <div class="placeholder-image">
+                    <div class="placeholder-icon"></div>
+                </div>
+                <h2 class="team-name">Herren Doppel 60</h2>
+            </a>
+        
+            <a href="/mannschaften/gemischt-1" class="team-card">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-xJtldtE8sq0FQvOfxrQQb9fk6Hjg3c.png" alt="Gemischt 1" class="team-image">
+                <h2 class="team-name">Gemischt 1</h2>
+            </a>
+        
+            <a href="/mannschaften/gemischt-2" class="team-card">
+                <div class="placeholder-image">
+                    <div class="placeholder-icon"></div>
+                </div>
+                <h2 class="team-name">Gemischt 2</h2>
+            </a>
+        
+            <a href="/mannschaften/mixed-50-doppel" class="team-card">
+                <div class="placeholder-image">
+                    <div class="placeholder-icon"></div>
+                </div>
+                <h2 class="team-name">Mixed 50 Doppel</h2>
+            </a>
+        </div>
+</div>
 </body>
 </html>
+

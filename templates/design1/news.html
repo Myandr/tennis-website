@@ -13,7 +13,7 @@
   </head>
   <body>
     <nav class="navbar">
-      <img src="../../static/favicon.ico" style="width: 40px;" alt="Dribbble" class="logo">
+      <img src="../../static/images/logo1.png" style="width: 100px;"  class="logo">
       
       <div class="search-container">
         <input type="text" id="search-input" placeholder="Suche..." class="search-input">
@@ -26,40 +26,43 @@
     </div>
 
     <script>
-        let searchTimeout;
-        const searchInput = document.getElementById('search-input');
-        const searchResults = document.getElementById('search-results');
+  let searchTimeout;
+  const searchInput = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
 
-        function performSearch() {
-            const query = searchInput.value;
-            if (query.length < 2) {
-                searchResults.classList.remove('active');
-                return;
-            }
+  function performSearch() {
+      const query = searchInput.value;
+      if (query.length < 2) {
+          searchResults.classList.remove('active');
+          return;
+      }
 
-            fetch(`/search?query=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => {
-                    searchResults.innerHTML = '';
-                    if (Object.keys(data).length === 0) {
-                        searchResults.innerHTML = '<div class="no-results">Keine Ergebnisse gefunden</div>';
-                    } else {
-                        for (const [key, value] of Object.entries(data)) {
-                            const link = document.createElement('a');
-                            link.href = value;
-                            link.className = 'search-result-item';
-                            link.textContent = key;
-                            searchResults.appendChild(link);
-                        }
-                    }
-                    searchResults.classList.add('active');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    searchResults.innerHTML = '<div class="no-results">Ein Fehler ist aufgetreten</div>';
-                    searchResults.classList.add('active');
-                });
-        }
+      fetch(`/search?query=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(data => {
+              searchResults.innerHTML = '';
+              if (Object.keys(data).length === 0) {
+                  searchResults.innerHTML = '<div class="no-results">Keine Ergebnisse gefunden</div>';
+              } else {
+                  for (const [key, value] of Object.entries(data)) {
+                      const link = document.createElement('a');
+                      link.href = value.url;
+                      link.className = 'search-result-item';
+                      link.innerHTML = `
+                          <div class="search-result-title">${key}</div>
+                          <div class="search-result-description">${value.description}</div>
+                      `;
+                      searchResults.appendChild(link);
+                  }
+              }
+              searchResults.classList.add('active');
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              searchResults.innerHTML = '<div class="no-results">Ein Fehler ist aufgetreten</div>';
+              searchResults.classList.add('active');
+          });
+  }
 
         // Live search with debouncing
         searchInput.addEventListener('input', () => {
@@ -89,6 +92,7 @@
         });
     </script>
 
+
       <div class="nav-links">
           <div class="nav-item">
               <div class="nav-link">
@@ -101,7 +105,7 @@
                   <a href="/#about" class="dropdown-item">Über uns</a>
                   <a href="/#img" class="dropdown-item">Bilder</a>
                   <a href="/#termine" class="dropdown-item">Termine</a>
-                  <a href="/#trainer" class="dropdown-item">Trainer</a>
+                  <a href="/#trainer" class="dropdown-item">Vorstand</a>
                   <a href="/#news" class="dropdown-item">Neuigkeiten</a>
                   <a href="/#contact" class="dropdown-item">Kontakt</a>
               </div>
@@ -112,24 +116,25 @@
                   <span class="chevron-down"></span>
               </div>
               <div class="dropdown-menu">
-                  <a href="#" class="dropdown-item">placeholder</a>
-                  <a href="#" class="dropdown-item">placeholder</a>
-                  <a href="#" class="dropdown-item">placeholder</a>
+                  <a href="/news" class="dropdown-item">Aktuelle Infos</a>
+                  <a href="/newsletter" class="dropdown-item">Artikel</a>
+                  <a href="/news" class="dropdown-item">Spielberichte</a>
               </div>
           </div>
           <div class="nav-item">
               <div class="nav-link">
-                  <a href="/#trainer">Training</a>
+                <a href="/training" class="nav-link">Training</a>
                   <span class="chevron-down"></span>
               </div>
               <div class="dropdown-menu">
-                  <a href="#" class="dropdown-item">placeholder</a>
-                  <a href="#" class="dropdown-item">placeholder</a>
-                  <a href="#" class="dropdown-item">placeholder</a>
+                  <a href="#" class="dropdown-item">Jugend</a>
+                  <a href="#" class="dropdown-item">Frauen</a>
+                  <a href="#" class="dropdown-item">Männer</a>
               </div>
           </div>
-          <a href="/downloads" class="nav-link">Downloads</a>
-          <a href="/newsletter" class="nav-link">Blog</a>
+          <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
+          <a href="/galerie" class="nav-link">Galerie</a>
+          <a href="/mannschaften" class="nav-link">Mannschaften</a>
       </div>
 
       <div class="auth-buttons">
@@ -229,7 +234,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 </script>
-
     <section class="locations-section" id="news">
       
       <div class="locations-header">

@@ -3,150 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Damen 1 - Hardter Tennisverein</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        }
+<link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+<title>Damen 1 - Hardter Tennisverein</title>
+    <link rel="stylesheet" type="text/css" href="../../../static/css/mannschaften.css" />
 
-        body {
-            background-color: #000;
-            color: #fff;
-        }
-
-        .navbar {
-            display: flex;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: #111;
-            box-shadow: 0 2px 4px rgba(255,255,255,0.1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .team-header {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .team-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .team-info {
-            padding: 2rem;
-            background: #111;
-            border-radius: 8px;
-        }
-
-        .team-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .stat-card {
-            background: #222;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .player-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .player-card {
-            background: #111;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .player-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .player-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .player-info {
-            padding: 1rem;
-        }
-
-        .matches-list {
-            margin-top: 3rem;
-            background: #111;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .match-item {
-            display: grid;
-            grid-template-columns: 2fr 1fr 2fr;
-            padding: 1rem;
-            border-bottom: 1px solid #222;
-        }
-
-        .match-item:last-child {
-            border-bottom: none;
-        }
-
-        h1, h2, h3 {
-            color: #fff;
-        }
-
-        .section-title {
-            margin: 2rem 0;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #fff;
-        }
-
-        .buy-button {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: #fff;
-            color: #000;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-top: 1rem;
-            transition: background-color 0.3s;
-        }
-
-        .buy-button:hover {
-            background: #e0e0e0;
-        }
-    </style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo"></div>
+        <img src="../../static/images/logo1.png" style="width: 100px;"  class="logo">
+        
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Suche..." class="search-input">
+          <button class="search-button" onclick="performSearch()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.5 14.5L10 10M11.3333 6.66667C11.3333 9.244 9.244 11.3333 6.66667 11.3333C4.08934 11.3333 2 9.244 2 6.66667C2 4.08934 4.08934 2 6.66667 2C9.244 2 11.3333 4.08934 11.3333 6.66667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+          </button>
+          <div id="search-results"></div>
+      </div>
+  
+      <script>
+    let searchTimeout;
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    function performSearch() {
+        const query = searchInput.value;
+        if (query.length < 2) {
+            searchResults.classList.remove('active');
+            return;
+        }
+
+        fetch(`/search?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                searchResults.innerHTML = '';
+                if (Object.keys(data).length === 0) {
+                    searchResults.innerHTML = '<div class="no-results">Keine Ergebnisse gefunden</div>';
+                } else {
+                    for (const [key, value] of Object.entries(data)) {
+                        const link = document.createElement('a');
+                        link.href = value.url;
+                        link.className = 'search-result-item';
+                        link.innerHTML = `
+                            <div class="search-result-title">${key}</div>
+                            <div class="search-result-description">${value.description}</div>
+                        `;
+                        searchResults.appendChild(link);
+                    }
+                }
+                searchResults.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                searchResults.innerHTML = '<div class="no-results">Ein Fehler ist aufgetreten</div>';
+                searchResults.classList.add('active');
+            });
+    }
+  
+          // Live search with debouncing
+          searchInput.addEventListener('input', () => {
+              clearTimeout(searchTimeout);
+              searchTimeout = setTimeout(performSearch, 300);
+          });
+  
+          // Close search results when clicking outside
+          document.addEventListener('click', (e) => {
+              if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                  searchResults.classList.remove('active');
+              }
+          });
+  
+          // Handle Enter key
+          searchInput.addEventListener('keypress', (e) => {
+              if (e.key === 'Enter') {
+                  performSearch();
+              }
+          });
+  
+          // Close on Escape key
+          document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') {
+                  searchResults.classList.remove('active');
+              }
+          });
+      </script>
+
+
+        <div class="nav-links">
+            <div class="nav-item">
+                <div class="nav-link">
+                    <a href="/#home">Home</a>
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="/#home" class="dropdown-item">Home</a>
+                    <a href="/#one" class="dropdown-item">Standorte</a>
+                    <a href="/#about" class="dropdown-item">Über uns</a>
+                    <a href="/#img" class="dropdown-item">Bilder</a>
+                    <a href="/#termine" class="dropdown-item">Termine</a>
+                    <a href="/#trainer" class="dropdown-item">Vorstand</a>
+                    <a href="/#news" class="dropdown-item">Neuigkeiten</a>
+                    <a href="/#contact" class="dropdown-item">Kontakt</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link">
+                    <a href="/news">News</a>
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="/news" class="dropdown-item">Aktuelle Infos</a>
+                    <a href="/newsletter" class="dropdown-item">Artikel</a>
+                    <a href="/news" class="dropdown-item">Spielberichte</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link">
+                  <a href="/training" class="nav-link">Training</a>
+                    <span class="chevron-down"></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Jugend</a>
+                    <a href="#" class="dropdown-item">Frauen</a>
+                    <a href="#" class="dropdown-item">Männer</a>
+                </div>
+            </div>
+            <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
+            <a href="/galerie" class="nav-link">Galerie</a>
+            <a href="/mannschaften" class="nav-link">Mannschaften</a>
+        </div>
+
+        <div class="auth-buttons">
+            {% if logged_in %}
+            <a href="/dashboard"><button class="log-in"><i class="fa fa-user" style="color: white;"></i>Account</button></a>
+            {% else %}
+            <a href="/signup"><button class="sign-up">Sign up</button></a>
+            <a href="/login"><button class="log-in">Log in</button></a>
+            {% endif %}
+        </div>
+
+        <div id="hamburger" class="hamburger">
+          <label class="hamburger">
+            <input type="checkbox" id="menuToggle" />
+            <svg viewBox="0 0 32 32">
+              <path
+                class="line line-top-bottom"
+                d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+              ></path>
+              <path class="line" d="M7 16 27 16"></path>
+            </svg>
+          </label>
+        </div>
+  
+        <div class="menu" id="menu">
+          <ul>
+            <li><a href="/#home">STARTSEITE</a></li>
+            <li><a href="/#about">ÜBER UNS</a></li>
+            <li><a href="/#contact">KONTAKT</a></li>
+            <li><a href="/#termine">TERMINE</a></li>
+            <li><a href="/#trainer">TRAINER</a></li>
+            <li><a href="/#news">NEUIGKEITEN</a></li>
+            {% if logged_in %}
+            <li><a href="/dashboard">Dein Account</a></li>
+            {% else %}
+            <li><a href="{{ url_for('login') }}">SIGNUP/LOGIN →</a></li>
+            {% endif %}
+          </ul>
+        </div>
     </nav>
+
+    <script>
+     // Alle Navigationslinks mit Dropdown abrufen
+const navLinks = document.querySelectorAll('.nav-item .nav-link');
+
+// Funktion zum Schließen aller Dropdowns
+function closeAllDropdowns() {
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        link.nextElementSibling?.classList.remove('active');
+    });
+}
+
+// Öffnen bei Hover oder Klick
+navLinks.forEach(link => {
+    const dropdown = link.nextElementSibling;
+
+    if (dropdown && dropdown.classList.contains('dropdown-menu')) {
+        // Öffnen beim Hover
+        link.addEventListener('mouseover', () => {
+            closeAllDropdowns();
+            link.classList.add('active');
+            dropdown.classList.add('active');
+        });
+
+        // Öffnen beim Klick
+        link.addEventListener('click', (e) => {
+            e.preventDefault(); // Verhindert das Springen des Links
+            e.stopPropagation(); // Verhindert das Schließen durch das Dokument-Event
+            closeAllDropdowns();
+            link.classList.add('active');
+            dropdown.classList.add('active');
+        });
+
+        // Schließen, wenn Maus den Bereich verlässt
+        link.parentElement.addEventListener('mouseleave', () => {
+            setTimeout(() => {
+                if (!dropdown.matches(':hover')) {
+                    link.classList.remove('active');
+                    dropdown.classList.remove('active');
+                }
+            }, 300); // Verzögerung für besseres Nutzererlebnis
+        });
+    }
+});
+
+// Schließen beim Klicken außerhalb des Menüs
+document.addEventListener('click', () => {
+    closeAllDropdowns();
+});
+
+// Escape-Taste zum Schließen
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeAllDropdowns();
+    }
+});
+
+  </script>
 
     <div class="container">
         <div class="team-header">
             <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-u9R0As2PSSXVxlGkxWD3K873kpmcgW.png" alt="Damen 1 Mannschaftsfoto" class="team-image">
             <div class="team-info">
-                <h1>Damen 1</h1>
+                <h1>Herren 2</h1>
                 <p>Bezirksliga</p>
                 <div class="team-stats">
                     <div class="stat-card">
