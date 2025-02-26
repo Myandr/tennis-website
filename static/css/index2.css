@@ -730,6 +730,79 @@
     color: #333;
   }
 
+  .logo-section {
+    background-color: black;
+  }
+
+  .logo-slider {
+    position: relative;
+    overflow: hidden;
+    padding: 20px 0;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.logo-slide-track {
+    gap: 40px;
+    display: flex;
+    width: calc(200px * 12); /* Logo width * number of logos */
+    animation: scroll 30s linear infinite;
+}
+
+.logo-slide {
+    width: 200px;
+    height: 100px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-slide img {
+    max-width: 100%;
+    max-height: 100px;
+    filter: grayscale(60%);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.logo-slide img:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-200px * 6)); /* Half the total width */
+    }
+}
+
+/* Pause animation on hover */
+.logo-slider:hover .logo-slide-track {
+    animation-play-state: paused;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .logo-slide {
+        width: 160px;
+    }
+    .logo-slide-track {
+        width: calc(160px * 12);
+    }
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(calc(-160px * 6));
+        }
+    }
+}
+
   .sermon-info .span {
     display: inline-block;
     background-color: var(--black);

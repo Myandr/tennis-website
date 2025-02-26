@@ -268,7 +268,9 @@ def gemischt_2():
 def mixed_50_doppel():
     return render_template('design1/mannschaften/mixed-50-doppel.html')
 
-
+@app.route("/impressum")
+def impressum():
+    return render_template("design1/impressum.html")
 
 
 
