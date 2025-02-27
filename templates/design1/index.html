@@ -1091,7 +1091,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
               {% for termin in termine %}
               <tr>
                 <td>{{ termin.datum }}</td>
-                <td>{{ termin.veranstaltung }}</td>
+                <td><strong>{{ termin.veranstaltung }}</strong></td>
                 <td>{{ termin.uhrzeit }}</td>
                 <td>{{ termin.ort }}</td>
                 {% if is_admin %}
