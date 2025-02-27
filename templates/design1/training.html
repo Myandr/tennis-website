@@ -1,94 +1,135 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mannschaften - Hardter Tennisverein</title>
-<link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
-<style>
-.container {
-    max-width: 1000px;
-    position: relative;
-    top: 100px;
-    margin: 0 auto;
-    padding: 20px;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training - Hardter Tennisverein</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-.teams-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+        body {
+            background-color: #fff;
+            color: #333;
+        }
 
-.team-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    text-align: center;
-    text-decoration: none;
-    color: black;
-    display: block;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+    
 
-.team-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
 
-.team-image {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-bottom: 1px solid #ccc;
-}
+        /* Training sections */
+        .training-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;
+        }
 
-.team-name {
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    padding: 8px 0;
-    margin: 0;
-    background-color: #f0f0f0;
-}
+        .training-section {
+            margin-bottom: 60px;
+        }
 
-.placeholder-image {
-    background-color: #00BFFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 120px;
-}
+        .training-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #1d2939;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3d3d3d;
+        }
 
-.placeholder-icon {
-    width: 30px;
-    height: 30px;
-    background-color: white;
-    border-radius: 50%;
-}
+        .training-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
 
-@media (max-width: 800px) {
-    .teams-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+        .training-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-@media (max-width: 600px) {
-    .teams-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+        .training-card:hover {
+            transform: translateY(-5px);
+        }
 
-@media (max-width: 400px) {
-    .teams-grid {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
+        .training-card-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .training-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .training-card:hover .training-card-image img {
+            transform: scale(1.05);
+        }
+
+        .training-card-content {
+            padding: 20px;
+        }
+
+        .training-card-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #1d2939;
+        }
+
+        .training-card-content p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .training-details {
+            margin-top: 15px;
+        }
+
+        .training-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .training-detail strong {
+            width: 100px;
+            color: #333;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #000000;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background-color: #363636;
+        }
+
+     
+    </style>
 </head>
 <body>
+
+
    <!--
  ____    ____  __ __  ____   ____   ____  ______  ____   ___   ____  
 |    \  /    ||  |  ||    | /    | /    ||      ||    | /   \ |    \ 
@@ -458,130 +499,242 @@
 -->
 
 
-
-
-
-
-<div class="locations-section" style="background-color: white;" id="one">
-    <div class="locations-header" style="color: black;" data-aos="fade-right">
-      <h2>Unsere Mannschaften</h2>
-      <p>Hier siehst du all unsere Mannschaften</p>
+<section class="locations-section" style="background-color: white; color: black;" id="training">
+    <div class="locations-header">
+        <h2>Training</h2>
+        <p>Trainingsangebote für alle Altersklassen und Spielstärken</p>
     </div>
-        <div class="teams-grid">
-            <a href="/mannschaften/damen-1" class="team-card">
-                <img src="../../../static/images/damen-1.jpg" alt="Damen 1" class="team-image">
-                <h2 class="team-name">Damen 1</h2>
-            </a>
-            
-            <a href="/mannschaften/damen-2" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Damen 2</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-1" class="team-card">
-                <img src="../../static/images/Herren_1_B1.jpg" alt="Herren 1" class="team-image">
-                <h2 class="team-name">Herren 1</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-2" class="team-card">
-                <img src="../../static/images/Herren_2_B2.JPG" alt="Herren 2" class="team-image">
-                <h2 class="team-name">Herren 2</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-30" class="team-card">
-                <img src="../../static/images/Herren30_B2.JPG" alt="Herren 30" class="team-image">
-                <h2 class="team-name">Herren 30</h2>
-            </a>
-        
-            <a href="/mannschaften/damen-40" class="team-card">
-                <img src="../../static/images/Herren_1_B1.jpg" alt="Damen 40" class="team-image">
-                <h2 class="team-name">Damen 40</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-40-1" class="team-card">
-                <img src="../../static/images/Herren40_1_B3.JPG" alt="Herren 40/1" class="team-image">
-                <h2 class="team-name">Herren 40/1</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-40-2" class="team-card">
-                <img src="../../static/images/Herren40_2_B3.JPG" alt="Herren 40/2" class="team-image">
-                <h2 class="team-name">Herren 40/2</h2>
-            </a>
-        
-            <a href="/mannschaften/damen-50" class="team-card">
-                <img src="../../static/images/Damen50_B1.JPG" alt="Damen 50" class="team-image">
-                <h2 class="team-name">Damen 50</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-55" class="team-card">
-                <img src="../../static/images/Herren55_B2.JPG" alt="Herren 55" class="team-image">
-                <h2 class="team-name">Herren 55</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-60" class="team-card">
-                <img src="../../static/images/Herren60_B2.JPG" alt="Herren 60" class="team-image">
-                <h2 class="team-name">Herren 60</h2>
-            </a>
-        
-            <a href="/mannschaften/damen-doppel-40" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Damen Doppel 40</h2>
-            </a>
-        
-            <a href="/mannschaften/herren-doppel-60" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Herren Doppel 60</h2>
-            </a>
-        
-            <a href="/mannschaften/gemischt-1" class="team-card">
-                <img src="../../static/images/Gemischt_B5.jpg" alt="Gemischt 1" class="team-image">
-                <h2 class="team-name">Gemischt 1</h2>
-            </a>
-        
-            <a href="/mannschaften/gemischt-2" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Gemischt 2</h2>
-            </a>
-        
-            <a href="/mannschaften/mixed-50-doppel" class="team-card">
-                <div class="placeholder-image">
-                    <div class="placeholder-icon"></div>
-                </div>
-                <h2 class="team-name">Mixed 50 Doppel</h2>
-            </a>
-        </div>
-</div>
-<script>
-    const hamburger = document.getElementById("hamburger");
-        const menu = document.getElementById("menu");
-        const menuToggle = document.getElementById("menuToggle");
-        const menuLinks = document.querySelectorAll("#menu a");
 
-        // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
-        menuToggle.addEventListener("change", () => {
-          if (menuToggle.checked) {
-            menu.classList.add("open");
-          } else {
-            menu.classList.remove("open");
-          }
-        });
+    <!-- Main Content -->
+    <main class="training-container">
+        <!-- Jugend Section -->
+        <section class="training-section" id="jugend">
+            <h2>Jugendtraining</h2>
+            <div class="training-cards">
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="../../static/images/sport.jpg" alt="Kinder Tennis">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Kinder (5-10 Jahre)</h3>
+                        <p>Spielerisches Erlernen der Grundlagen des Tennissports mit altersgerechten Übungen und speziellen Kinderschlägern.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainer:</strong> Michael Schmidt
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Montag & Mittwoch, 15:00 - 16:30 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Plätze 1-3
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
 
-        // Schließt das Menü, wenn ein Link angeklickt wird
-        menuLinks.forEach((link) => {
-          link.addEventListener("click", () => {
-            menuToggle.checked = false; // Deaktiviert die Checkbox
-            menu.classList.remove("open"); // Schließt das Menü
-          });
-        });
-</script>
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="../../static/images/tennis-court-1671852_960_720.jpg" alt="Jugend Tennis">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Jugend (11-14 Jahre)</h3>
+                        <p>Weiterentwicklung der Technik und Taktik mit altersgerechtem Training und ersten Wettkampferfahrungen.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainer:</strong> Sarah Müller
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Dienstag & Donnerstag, 16:00 - 17:30 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Plätze 4-6
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
+
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Jugend Leistungstraining">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Jugend Leistung (15-18 Jahre)</h3>
+                        <p>Intensives Training für ambitionierte Jugendspieler mit Turniererfahrung und Mannschaftsspielen.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainer:</strong> Thomas Weber
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Montag & Freitag, 17:30 - 19:30 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Center Court
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Männer Section -->
+        <section class="training-section" id="männer">
+            <h2>Männertraining</h2>
+            <div class="training-cards">
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Anfänger Training">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Anfänger & Wiedereinsteiger</h3>
+                        <p>Grundlagentraining für Anfänger und Wiedereinsteiger mit Fokus auf Technik und Spielverständnis.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainer:</strong> Andreas Klein
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Montag, 19:00 - 20:30 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Plätze 7-9
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
+
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="../../static/images/tennis1.jpg" alt="Fortgeschrittene">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Fortgeschrittene</h3>
+                        <p>Training für Spieler mit Erfahrung zur Verbesserung von Technik, Taktik und Spielstrategie.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainer:</strong> Markus Becker
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Mittwoch, 19:00 - 20:30 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Plätze 4-6
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
+
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="https://images.unsplash.com/photo-1599586120429-48281b6f0ece?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Mannschaftstraining">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Mannschaftstraining</h3>
+                        <p>Spezielles Training für Mannschaftsspieler mit Fokus auf Wettkampfvorbereitung und Teamtaktik.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainer:</strong> Christian Hoffmann
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Freitag, 19:00 - 21:00 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Center Court
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Frauen Section -->
+        <section class="training-section" id="frauen">
+            <h2>Frauentraining</h2>
+            <div class="training-cards">
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="https://images.unsplash.com/photo-1560012057-4372e14c5085?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Anfängerinnen">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Anfängerinnen & Wiedereinsteigerinnen</h3>
+                        <p>Einsteigerfreundliches Training in entspannter Atmosphäre mit Fokus auf Grundtechniken und Spielspaß.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainerin:</strong> Julia Wagner
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Dienstag, 18:00 - 19:30 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Plätze 7-9
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
+
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="../../static/images/tennis.jpg" alt="Fortgeschrittene Frauen">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Fortgeschrittene</h3>
+                        <p>Training für Spielerinnen mit Erfahrung zur Verbesserung von Technik, Taktik und Spielstrategie.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainerin:</strong> Nicole Fischer
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Donnerstag, 18:00 - 19:30 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Plätze 4-6
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
+
+                <div class="training-card">
+                    <div class="training-card-image">
+                        <img src="https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Mannschaftstraining Frauen">
+                    </div>
+                    <div class="training-card-content">
+                        <h3>Mannschaftstraining</h3>
+                        <p>Spezielles Training für Mannschaftsspielerinnen mit Fokus auf Wettkampfvorbereitung und Teamtaktik.</p>
+                        <div class="training-details">
+                            <div class="training-detail">
+                                <strong>Trainerin:</strong> Sabine Meyer
+                            </div>
+                            <div class="training-detail">
+                                <strong>Zeit:</strong> Samstag, 10:00 - 12:00 Uhr
+                            </div>
+                            <div class="training-detail">
+                                <strong>Ort:</strong> Center Court
+                            </div>
+                        </div>
+                        <a href="#" class="btn">Anmelden</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</section>
+
+    <!--
+ _____   ___    ___   ______    ___  ____  
+|     | /   \  /   \ |      |  /  _]|    \ 
+|   __||     ||     ||      | /  [_ |  D  )
+|  |_  |  O  ||  O  ||_|  |_||    _]|    / 
+|   _] |     ||     |  |  |  |   [_ |    \ 
+|  |   |     ||     |  |  |  |     ||  .  \
+|__|    \___/  \___/   |__|  |_____||__|\_|
+                                              
+-->
 
 <footer>
     <div class="footer-content">
@@ -656,6 +809,11 @@
       <a href="/datenschutz" style="color: white;">Datenschutz</a> | <a href="/impressum" style="color: white;">Impressum</a><br><br><p>&copy; 2024 Tennis TV. Alle Rechte vorbehalten.</p>
     </div>
   </footer>
+
+  <!--
+____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+-->
+
 </body>
 </html>
-

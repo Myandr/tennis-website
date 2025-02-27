@@ -12,7 +12,7 @@
     <title>News</title>
   </head>
   <body>
-      <!--
+   <!--
  ____    ____  __ __  ____   ____   ____  ______  ____   ___   ____  
 |    \  /    ||  |  ||    | /    | /    ||      ||    | /   \ |    \ 
 |  _  ||  o  ||  |  | |  | |   __||  o  ||      | |  | |     ||  _  |
@@ -131,7 +131,7 @@
                 <div class="dropdown-menu">
                     <a href="/news" class="dropdown-item">Aktuelle Infos</a>
                     <a href="/newsletter" class="dropdown-item">Artikel</a>
-                    <a href="/news" class="dropdown-item">Spielberichte</a>
+                    <a href="/news#berichte" class="dropdown-item">Spielberichte</a>
                 </div>
             </div>
             <div class="nav-item">
@@ -140,9 +140,9 @@
                     <span class="chevron-down"></span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Jugend</a>
-                    <a href="#" class="dropdown-item">Frauen</a>
-                    <a href="#" class="dropdown-item">Männer</a>
+                    <a href="/training#jugend" class="dropdown-item">Jugend</a>
+                    <a href="/training#frauen" class="dropdown-item">Frauen</a>
+                    <a href="/training#männer" class="dropdown-item">Männer</a>
                 </div>
             </div>
             <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
@@ -280,7 +280,7 @@
                     <a href="/newsletter" class="dropdown-item">Artikel</a>
                   </li>
                   <li class="dropdown-item1">
-                    <a href="/news" class="dropdown-item">Spielberichte</a>
+                    <a href="/news#berichte" class="dropdown-item">Spielberichte</a>
                   </li>
                 </ul>
               </li>
@@ -290,13 +290,13 @@
                 <label for="dropdown3" class="nav-link1 has-dropdown1">Training</label>
                 <ul class="dropdown-content1">
                   <li class="dropdown-item1">
-                    <a href="#" class="dropdown-item">Jugend</a>
+                    <a href="/training#jugend" class="dropdown-item">Jugend</a>
                   </li>
                   <li class="dropdown-item1">
-                    <a href="#" class="dropdown-item">Frauen</a>
+                    <a href="/training#frauen" class="dropdown-item">Frauen</a>
                   </li>
                   <li class="dropdown-item1">
-                    <a href="#" class="dropdown-item">Männer</a>
+                    <a href="/training#männer" class="dropdown-item">Männer</a>
                   </li>
                 </ul>
               </li>
@@ -379,6 +379,7 @@
   ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
  (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 -->
+
 
 
 
@@ -546,6 +547,88 @@
         <button type="submit" class="cm-button">Add Content</button>
       </form>
       {% endif %}
+    </section>
+
+    <section class="locations-section" id="berichte">
+      
+      <div class="locations-header">
+        <h2>Spielberichte</h2>
+        <p>
+          Hier alle Spielberichte sehen
+        </p>
+        <a href="/#news" class="learn-more">Zurück zur Startseite →</a>
+      </div>
+      <div class="locations-grid">
+        <div class="news-card">
+          <div class="news-image">
+            <img
+              src="https://cdn.pixabay.com/photo/2020/04/08/19/04/tennis-5018589_960_720.jpg"
+              alt="Neuer Tennisplatz"
+            />
+          </div>
+          <div class="news-content">
+            <div class="news-date">15. Mai 2025</div>
+            <h3 class="news-title">Neuer Tennisplatz eröffnet</h3>
+            <p class="news-excerpt">
+              Unser Verein freut sich, die Eröffnung eines brandneuen,
+              state-of-the-art Tennisplatzes bekannt zu geben. Der Platz bietet
+              optimale Bedingungen für Spieler aller Niveaus.
+              <span class="hidden-text"
+                >Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image">
+            <img
+              src="https://cdn.pixabay.com/photo/2017/04/25/11/06/wilson-2259352_960_720.jpg"
+              alt="Jugendturnier"
+            />
+          </div>
+          <div class="news-content">
+            <div class="news-date">2. Juni 2025</div>
+            <h3 class="news-title">Jugendturnier ein voller Erfolg</h3>
+            <p class="news-excerpt">
+              Das diesjährige Sommerturnier für Jugendliche war ein
+              Rekorderfolg. Über 50 junge Talente zeigten ihr Können und
+              begeisterten Zuschauer und Trainer gleichermaßen.
+              <span class="hidden-text"
+                >Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image">
+            <img
+              src="https://cdn.pixabay.com/photo/2016/09/15/15/27/tennis-court-1671852_960_720.jpg"
+              alt="Neue Trainingszeiten"
+            />
+          </div>
+          <div class="news-content">
+            <div class="news-date">20. Juni 2025</div>
+            <h3 class="news-title">Neue Trainingszeiten ab Juli</h3>
+            <p class="news-excerpt">
+              Um allen Mitgliedern gerecht zu werden, bieten wir ab Juli
+              erweiterte Trainingszeiten an. Dies umfasst auch neue Früh- und
+              Abendkurse für Berufstätige.
+              <span class="hidden-text"
+                >Das Projekt wurde durch die großzügige Unterstützung unserer
+                Mitglieder und Förderer ermöglicht. Wir laden Sie herzlich ein,
+                den Platz zu besuchen und selbst auszuprobieren.</span
+              >
+            </p>
+            <a href="#" class="read-more">Weiterlesen</a>
+          </div>
+        </div>
+      </div>
     </section>
 
     <footer>

@@ -1,15 +1,96 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mannschaften - Hardter Tennisverein</title>
 <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
-<title>Damen 2 - Hardter Tennisverein</title>
-    <link rel="stylesheet" type="text/css" href="../../../static/css/mannschaften.css" />
+<style>
+.container {
+    max-width: 1000px;
+    position: relative;
+    top: 100px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.team-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 300px;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.team-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.team-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 1px solid #ccc;
+}
+
+.team-name {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    padding: 8px 0;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.placeholder-image {
+    background-color: #00BFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+}
+
+.placeholder-icon {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+@media (max-width: 800px) {
+    .teams-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .teams-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 400px) {
+    .teams-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 </head>
 <body>
-    <!--
+   <!--
  ____    ____  __ __  ____   ____   ____  ______  ____   ___   ____  
 |    \  /    ||  |  ||    | /    | /    ||      ||    | /   \ |    \ 
 |  _  ||  o  ||  |  | |  | |   __||  o  ||      | |  | |     ||  _  |
@@ -376,99 +457,175 @@
   ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
  (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 -->
-    <div class="container">
-        <a href="/mannschaften" style="background-color: white; color: black; border-bottom: 1px solid black; margin-bottom: 40px;" class="learn-more">← Zurück</a>
-        <div class="team-header">
-            <img src="../../static/images/Herren_1_B1.jpg" alt="Damen 2 Mannschaftsfoto" class="team-image">
-            <div class="team-info">
-                <h1>Mixed 50 Doppel</h1>
-                <p>Bezirksklasse A</p>
-                <div class="team-stats">
-                    <div class="stat-card">
-                        <h3>Tabellenplatz</h3>
-                        <p>3.</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Siege</h3>
-                        <p>6</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Punkte</h3>
-                        <p>12</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <h2 class="section-title">Spielerinnen</h2>
-        <div class="player-grid">
-            <div class="player-card">
-                <img src="../../static/images/Herren_1_B1.jpg" alt="Spielerin" class="player-image">
-                <div class="player-info">
-                    <h3>Sarah Müller</h3>
-                    <p>LK: 15</p>
-                    <p>Position: 1</p>
-                </div>
-            </div>
-            <div class="player-card">
-                <img src="../../static/images/Herren_1_B1.jpg" alt="Spielerin" class="player-image">
-                <div class="player-info">
-                    <h3>Laura Klein</h3>
-                    <p>LK: 16</p>
-                    <p>Position: 2</p>
-                </div>
-            </div>
-            <div class="player-card">
-                <img src="../../static/images/Herren_1_B1.jpg" alt="Spielerin" class="player-image">
-                <div class="player-info">
-                    <h3>Marie Schmidt</h3>
-                    <p>LK: 17</p>
-                    <p>Position: 3</p>
-                </div>
-            </div>
-        </div>
 
-        <h2 class="section-title">Nächste Spiele</h2>
-        <div class="matches-list">
-            <div class="match-item">
-                <div>TC Schwarz-Weiß</div>
-                <div>vs</div>
-                <div>Hardter TV</div>
-            </div>
-            <div class="match-item">
-                <div>Hardter TV</div>
-                <div>vs</div>
-                <div>TC Gold-Weiß</div>
-            </div>
-            <div class="match-item">
-                <div>TC Silber</div>
-                <div>vs</div>
-                <div>Hardter TV</div>
-            </div>
-        </div>
+
+
+
+
+<div class="locations-section" style="background-color: white;" id="one">
+    <div class="locations-header" style="color: black;" data-aos="fade-right">
+      <h2>Bilder</h2>
+      <p>Hier siehst du den Verein in Bildern</p>
     </div>
-    <script>
-        const hamburger = document.getElementById("hamburger");
-            const menu = document.getElementById("menu");
-            const menuToggle = document.getElementById("menuToggle");
-            const menuLinks = document.querySelectorAll("#menu a");
+        <div class="teams-grid">
+            <div  class="team-card">
+                <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+                <h2 class="team-name">Bildbeschreibung</h2>
+            </div>
+            <div  class="team-card">
+              <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+              <h2 class="team-name">Bildbeschreibung</h2>
+          </div>
+          <div  class="team-card">
+            <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+            <h2 class="team-name">Bildbeschreibung</h2>
+        </div>
+        <div  class="team-card">
+          <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+          <h2 class="team-name">Bildbeschreibung</h2>
+      </div>
+      <div  class="team-card">
+        <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+        <h2 class="team-name">Bildbeschreibung</h2>
+    </div>
+    <div  class="team-card">
+      <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+      <h2 class="team-name">Bildbeschreibung</h2>
+  </div>
+  <div  class="team-card">
+    <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+    <h2 class="team-name">Bildbeschreibung</h2>
+</div>
+<div  class="team-card">
+  <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+  <h2 class="team-name">Bildbeschreibung</h2>
+</div>
+<div  class="team-card">
+  <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+  <h2 class="team-name">Bildbeschreibung</h2>
+</div>
+<div  class="team-card">
+  <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+  <h2 class="team-name">Bildbeschreibung</h2>
+</div>
+<div  class="team-card">
+  <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+  <h2 class="team-name">Bildbeschreibung</h2>
+</div>
+<div  class="team-card">
+  <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+  <h2 class="team-name">Bildbeschreibung</h2>
+</div>
+<div  class="team-card">
+  <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+  <h2 class="team-name">Bildbeschreibung</h2>
+</div>
+<div  class="team-card">
+  <img src="../../static/images/tennis.jpg" alt="Bild" class="team-image">
+  <h2 class="team-name">Bildbeschreibung</h2>
+</div>
+            
     
-            // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
-            menuToggle.addEventListener("change", () => {
-              if (menuToggle.checked) {
-                menu.classList.add("open");
-              } else {
-                menu.classList.remove("open");
-              }
-            });
-    
-            // Schließt das Menü, wenn ein Link angeklickt wird
-            menuLinks.forEach((link) => {
-              link.addEventListener("click", () => {
-                menuToggle.checked = false; // Deaktiviert die Checkbox
-                menu.classList.remove("open"); // Schließt das Menü
-              });
-            });
-    </script>
+        </div>
+</div>
+<script>
+    const hamburger = document.getElementById("hamburger");
+        const menu = document.getElementById("menu");
+        const menuToggle = document.getElementById("menuToggle");
+        const menuLinks = document.querySelectorAll("#menu a");
+
+        // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
+        menuToggle.addEventListener("change", () => {
+          if (menuToggle.checked) {
+            menu.classList.add("open");
+          } else {
+            menu.classList.remove("open");
+          }
+        });
+
+        // Schließt das Menü, wenn ein Link angeklickt wird
+        menuLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            menuToggle.checked = false; // Deaktiviert die Checkbox
+            menu.classList.remove("open"); // Schließt das Menü
+          });
+        });
+</script>
+
+<footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">Tennis TV</h3>
+        <p>
+          Ihr Tennisverein für Sport, Spaß und Gemeinschaft – hier finden Sie
+          alles rund um Tennis und Vereinsleben.
+        </p>
+        <div class="social-links">
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            aria-label="Gehe zu Facebook"
+            ><i class="fab fa-facebook"></i
+          ></a>
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            aria-label="Gehe zu Instagram"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            aria-label="Gehe zu Linkedin"
+            ><i class="fab fa-linkedin"></i
+          ></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3 class="footer-title">Schnelle Links</h3>
+        <div class="footer-links">
+          <a href="#home">Home</a>
+          <a href="#about">Über uns</a>
+          <a href="#termine">Termine</a>
+          <a href="#trainer">Trainer</a>
+          <a href="#contact">Kontakt</a>
+          <a href="#news">Neuigkeiten</a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3 class="footer-title">Kontakt</h3>
+        <p>
+          Hardter TV<br />Gahlener Str. 204<br />46284 Dorsten<br /><br />
+        </p>
+        <p>Vorsitzender: <strong>0172 25 80 209</strong><br></p>
+        <p>Sportwart: <strong>0151 53 55 33 55</strong><br></p>
+        <p>Geschäftsführer: <strong>0151 70 09 01 37</strong><br><br></p>
+        <p>E: info@tennistv.de</p>
+      </div>
+      <div class="footer-section">
+        <h3 class="footer-title">Newsletter</h3>
+        <p>
+          Bleiben Sie auf dem Laufenden mit unseren neuesten Nachrichten und
+          Angeboten.
+        </p>
+        <form action="/subscribe" method="POST" class="newsletter-form">
+          <input
+            type="email"
+            placeholder="Ihre E-Mail-Adresse"
+            class="newsletter-input"
+            required
+            name="email"
+            id="email"
+          />
+          <button type="submit" class="newsletter-btn">Abonnieren</button>
+        </form>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="/datenschutz" style="color: white;">Datenschutz</a> | <a href="/impressum" style="color: white;">Impressum</a><br><br><p>&copy; 2024 Tennis TV. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
 </body>
 </html>
+

@@ -276,6 +276,13 @@ def impressum():
 def vorstand():
     return render_template("design1/vorstand.html")
 
+@app.route("/training")
+def training():
+    return render_template("design1/training.html")
+
+@app.route('/galerie')
+def gallery():
+    return render_template('design1/gallery.html')
 
 
 website_content = {

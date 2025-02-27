@@ -920,7 +920,7 @@
         width: 160px;
     }
     .logo-slide-track {
-        width: calc(160px * 12);
+        width: calc(160px * 27);
     }
     @keyframes scroll {
         0% {
