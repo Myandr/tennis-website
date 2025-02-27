@@ -9,8 +9,20 @@
 
 </head>
 <body>
-    <nav class="navbar">
-        <img src="../../static/images/logo1.png" style="width: 100px;"  class="logo">
+       <!--
+ ____    ____  __ __  ____   ____   ____  ______  ____   ___   ____  
+|    \  /    ||  |  ||    | /    | /    ||      ||    | /   \ |    \ 
+|  _  ||  o  ||  |  | |  | |   __||  o  ||      | |  | |     ||  _  |
+|  |  ||     ||  |  | |  | |  |  ||     ||_|  |_| |  | |  O  ||  |  |
+|  |  ||  _  ||  :  | |  | |  |_ ||  _  |  |  |   |  | |     ||  |  |
+|  |  ||  |  | \   /  |  | |     ||  |  |  |  |   |  | |     ||  |  |
+|__|__||__|__|  \_/  |____||___,_||__|__|  |__|  |____| \___/ |__|__|
+                                                                    
+      
+      -->
+
+      <nav class="navbar">
+        <img src="../../static/images/Neues Logo HTV_1.JPG#" style="width: 100px;"  class="logo">
         
         <div class="search-container">
           <input type="text" id="search-input" placeholder="Suche..." class="search-input">
@@ -98,6 +110,7 @@
                 </div>
                 <div class="dropdown-menu">
                     <a href="/#home" class="dropdown-item">Home</a>
+                    <a href="/#mitgliedschaft" class="dropdown-item">Mitgliedschaft</a>
                     <a href="/#one" class="dropdown-item">Standorte</a>
                     <a href="/#about" class="dropdown-item">Über uns</a>
                     <a href="/#img" class="dropdown-item">Bilder</a>
@@ -155,82 +168,214 @@
             </svg>
           </label>
         </div>
+        <script>
+          // Alle Navigationslinks mit Dropdown abrufen
+     const navLinks = document.querySelectorAll('.nav-item .nav-link');
+     
+     // Funktion zum Schließen aller Dropdowns
+     function closeAllDropdowns() {
+         navLinks.forEach(link => {
+             link.classList.remove('active');
+             link.nextElementSibling?.classList.remove('active');
+         });
+     }
+     
+     // Öffnen bei Hover oder Klick
+     navLinks.forEach(link => {
+         const dropdown = link.nextElementSibling;
+     
+         if (dropdown && dropdown.classList.contains('dropdown-menu')) {
+             // Öffnen beim Hover
+             link.addEventListener('mouseover', () => {
+                 closeAllDropdowns();
+                 link.classList.add('active');
+                 dropdown.classList.add('active');
+             });
+     
+             // Öffnen beim Klick
+             link.addEventListener('click', (e) => {
+                 e.preventDefault(); // Verhindert das Springen des Links
+                 e.stopPropagation(); // Verhindert das Schließen durch das Dokument-Event
+                 closeAllDropdowns();
+                 link.classList.add('active');
+                 dropdown.classList.add('active');
+             });
+     
+             // Schließen, wenn Maus den Bereich verlässt
+             link.parentElement.addEventListener('mouseleave', () => {
+                 setTimeout(() => {
+                     if (!dropdown.matches(':hover')) {
+                         link.classList.remove('active');
+                         dropdown.classList.remove('active');
+                     }
+                 }, 300); // Verzögerung für besseres Nutzererlebnis
+             });
+         }
+     });
+     
+     // Schließen beim Klicken außerhalb des Menüs
+     document.addEventListener('click', () => {
+         closeAllDropdowns();
+     });
+     
+     // Escape-Taste zum Schließen
+     document.addEventListener('keydown', (e) => {
+         if (e.key === 'Escape') {
+             closeAllDropdowns();
+         }
+     });
+     
+       </script>
   
         <div class="menu" id="menu">
-            <ul>
-                <a href="/#home" class="nav-link">Startseite</a>
-                <a href="/news" class="nav-link">News</a>
-                <a href="/training" class="nav-link">Training</a>
-                <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
-                <a href="/galerie" class="nav-link">Galerie</a>
-                <a href="/mannschaften" class="nav-link">Mannschaften</a>
-                {% if logged_in %}
-                <li><a href="/dashboard">Dein Account</a></li>
-                {% else %}
-                <li><a href="{{ url_for('login') }}">Signup/Login →</a></li>
-                {% endif %}
-              </ul>
+          <div class="nav-container1">
+            <ul class="nav-links1">
+              <!-- Startseite -->
+              <li class="nav-item1">
+                <input type="checkbox" id="dropdown1" class="dropdown-toggle1">
+                <label for="dropdown1" class="nav-link1 has-dropdown1">Home</label>
+                <ul class="dropdown-content1">
+                  <li class="dropdown-item1">
+                    <a href="/#home" class="dropdown-item">Home</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/#mitgliedschaft" class="dropdown-item">Mitgliedschaft</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/#one" class="dropdown-item">Standorte</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/#about" class="dropdown-item">Über uns</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/#img" class="dropdown-item">Bilder</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/#termine" class="dropdown-item">Termine</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/#trainer" class="dropdown-item">Vorstand</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/#news" class="dropdown-item">Neuigkeiten</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/#contact" class="dropdown-item">Kontakt</a>
+                  </li>
+                </ul>
+              </li>
+              
+              <!-- Über Uns mit Dropdown -->
+              <li class="nav-item1">
+                <input type="checkbox" id="dropdown2" class="dropdown-toggle1">
+                <label for="dropdown2" class="nav-link1 has-dropdown1">News</label>
+                <ul class="dropdown-content1">
+                  <li class="dropdown-item1">
+                    <a href="/news" class="dropdown-item">Aktuelle Infos</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/newsletter" class="dropdown-item">Artikel</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="/news" class="dropdown-item">Spielberichte</a>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="nav-item1">
+                <input type="checkbox" id="dropdown3" class="dropdown-toggle1">
+                <label for="dropdown3" class="nav-link1 has-dropdown1">Training</label>
+                <ul class="dropdown-content1">
+                  <li class="dropdown-item1">
+                    <a href="#" class="dropdown-item">Jugend</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="#" class="dropdown-item">Frauen</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="#" class="dropdown-item">Männer</a>
+                  </li>
+                </ul>
+              </li>
+              
+              <!-- Produkte mit Dropdown und Sub-Dropdown 
+              <li class="nav-item1">
+                <input type="checkbox" id="dropdown2" class="dropdown-toggle1">
+                <label for="dropdown2" class="nav-link1 has-dropdown1">Training</label>
+                <ul class="dropdown-content1">
+                  <li class="dropdown-item1">
+                    <input type="checkbox" id="sub-dropdown1" class="sub-dropdown-toggle1">
+                    <label for="sub-dropdown1" class="dropdown-link1 has-sub-dropdown1">Kategorie A</label>
+                    <ul class="sub-dropdown-content1">
+                      <li class="sub-dropdown-item1">
+                        <a href="#" class="sub-dropdown-link1">Produkt A1</a>
+                      </li>
+                      <li class="sub-dropdown-item1">
+                        <a href="#" class="sub-dropdown-link1">Produkt A2</a>
+                      </li>
+                      <li class="sub-dropdown-item1">
+                        <a href="#" class="sub-dropdown-link1">Produkt A3</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="dropdown-item1">
+                    <input type="checkbox" id="sub-dropdown2" class="sub-dropdown-toggle1">
+                    <label for="sub-dropdown2" class="dropdown-link1 has-sub-dropdown1">Kategorie B</label>
+                    <ul class="sub-dropdown-content1">
+                      <li class="sub-dropdown-item1">
+                        <a href="#" class="sub-dropdown-link1">Produkt B1</a>
+                      </li>
+                      <li class="sub-dropdown-item1">
+                        <a href="#" class="sub-dropdown-link1">Produkt B2</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="#" class="dropdown-link1">Alle Produkte</a>
+                  </li>
+                </ul>
+              </li>
+              -->
+              
+              <!-- Dienstleistungen mit Dropdown 
+              <li class="nav-item1">
+                <input type="checkbox" id="dropdown4" class="dropdown-toggle1">
+                <label for="dropdown3" class="nav-link1 has-dropdown1">Dienstleistungen</label>
+                <ul class="dropdown-content1">
+                  <li class="dropdown-item1">
+                    <a href="#" class="dropdown-link1">Beratung</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="#" class="dropdown-link1">Support</a>
+                  </li>
+                  <li class="dropdown-item1">
+                    <a href="#" class="dropdown-link1">Schulungen</a>
+                  </li>
+                </ul>
+              </li>
+              -->
+              
+              <!-- Kontakt -->
+              <li class="nav-item1">
+                <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link1">Shop</a>
+              </li>
+              <li class="nav-item1">
+                <a href="/galerie" class="nav-link1">Galerie</a>
+              </li>
+              <li class="nav-item1">
+                <a href="/mannschaften" class="nav-link1">Mannschaften</a>
+              </li>
+            </ul>
+          </div>
         </div>
     </nav>
 
-    <script>
-     // Alle Navigationslinks mit Dropdown abrufen
-const navLinks = document.querySelectorAll('.nav-item .nav-link');
+   
 
-// Funktion zum Schließen aller Dropdowns
-function closeAllDropdowns() {
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        link.nextElementSibling?.classList.remove('active');
-    });
-}
-
-// Öffnen bei Hover oder Klick
-navLinks.forEach(link => {
-    const dropdown = link.nextElementSibling;
-
-    if (dropdown && dropdown.classList.contains('dropdown-menu')) {
-        // Öffnen beim Hover
-        link.addEventListener('mouseover', () => {
-            closeAllDropdowns();
-            link.classList.add('active');
-            dropdown.classList.add('active');
-        });
-
-        // Öffnen beim Klick
-        link.addEventListener('click', (e) => {
-            e.preventDefault(); // Verhindert das Springen des Links
-            e.stopPropagation(); // Verhindert das Schließen durch das Dokument-Event
-            closeAllDropdowns();
-            link.classList.add('active');
-            dropdown.classList.add('active');
-        });
-
-        // Schließen, wenn Maus den Bereich verlässt
-        link.parentElement.addEventListener('mouseleave', () => {
-            setTimeout(() => {
-                if (!dropdown.matches(':hover')) {
-                    link.classList.remove('active');
-                    dropdown.classList.remove('active');
-                }
-            }, 300); // Verzögerung für besseres Nutzererlebnis
-        });
-    }
-});
-
-// Schließen beim Klicken außerhalb des Menüs
-document.addEventListener('click', () => {
-    closeAllDropdowns();
-});
-
-// Escape-Taste zum Schließen
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeAllDropdowns();
-    }
-});
-
-  </script>
+    <!--
+  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
+ (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
+-->
     <div class="container">
         <a href="/mannschaften" style="background-color: white; color: black; border-bottom: 1px solid black; margin-bottom: 40px;" class="learn-more">← Zurück</a>
         <div class="team-header">
