@@ -112,7 +112,7 @@
                     <a href="/#one" class="dropdown-item">Standorte</a>
                     <a href="/#about" class="dropdown-item">Über uns</a>
                     <a href="/#img" class="dropdown-item">Bilder</a>
-                    <a href="/#termine" class="dropdown-item">Termine</a>
+                    <a href="/#termine" class="dropdown-item" style="display: inline-block;">Termine</a>|<a class="dropdown-item" style="display: inline;" href="/kalender">Kalender →</a>
                     <a href="/#trainer" class="dropdown-item">Vorstand</a>
                     <a href="/#news" class="dropdown-item">Neuigkeiten</a>
                     <a href="/#contact" class="dropdown-item">Kontakt</a>
@@ -129,17 +129,7 @@
                     <a href="/news#berichte" class="dropdown-item">Spielberichte</a>
                 </div>
             </div>
-            <div class="nav-item">
-                <div class="nav-link">
-                  <a href="/training" class="nav-link">Training</a>
-                    <span class="chevron-down"></span>
-                </div>
-                <div class="dropdown-menu">
-                    <a href="/training#jugend" class="dropdown-item">Jugend</a>
-                    <a href="/training#frauen" class="dropdown-item">Frauen</a>
-                    <a href="/training#männer" class="dropdown-item">Männer</a>
-                </div>
-            </div>
+            <a href="/training" class="nav-link">Training</a>
             <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
             <a href="/galerie" class="nav-link">Galerie</a>
             <a href="/mannschaften" class="nav-link">Mannschaften</a>
@@ -249,7 +239,7 @@
                     <a href="/#img" class="dropdown-item">Bilder</a>
                   </li>
                   <li class="dropdown-item1">
-                    <a href="/#termine" class="dropdown-item">Termine</a>
+                    <a href="/#termine" class="dropdown-item" style="display: inline-block;">Termine</a>|<a class="dropdown-item" style="display: inline;" href="/kalender">Kalender →</a>
                   </li>
                   <li class="dropdown-item1">
                     <a href="/#trainer" class="dropdown-item">Vorstand</a>
@@ -276,22 +266,6 @@
                   </li>
                   <li class="dropdown-item1">
                     <a href="/news#berichte" class="dropdown-item">Spielberichte</a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-item1">
-                <input type="checkbox" id="dropdown3" class="dropdown-toggle1">
-                <label for="dropdown3" class="nav-link1 has-dropdown1">Training</label>
-                <ul class="dropdown-content1">
-                  <li class="dropdown-item1">
-                    <a href="/training#jugend" class="dropdown-item">Jugend</a>
-                  </li>
-                  <li class="dropdown-item1">
-                    <a href="/training#frauen" class="dropdown-item">Frauen</a>
-                  </li>
-                  <li class="dropdown-item1">
-                    <a href="/training#männer" class="dropdown-item">Männer</a>
                   </li>
                 </ul>
               </li>
@@ -355,6 +329,9 @@
               
               <!-- Kontakt -->
               <li class="nav-item1">
+                <a href="/training"  class="nav-link1">Training</a>
+              </li>
+              <li class="nav-item1">
                 <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link1">Shop</a>
               </li>
               <li class="nav-item1">
@@ -368,34 +345,36 @@
         </div>
     </nav>
 
-    <script>
-        const hamburger = document.getElementById("hamburger");
-            const menu = document.getElementById("menu");
-            const menuToggle = document.getElementById("menuToggle");
-            const menuLinks = document.querySelectorAll("#menu a");
-    
-            // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
-            menuToggle.addEventListener("change", () => {
-              if (menuToggle.checked) {
-                menu.classList.add("open");
-              } else {
-                menu.classList.remove("open");
-              }
-            });
-    
-            // Schließt das Menü, wenn ein Link angeklickt wird
-            menuLinks.forEach((link) => {
-              link.addEventListener("click", () => {
-                menuToggle.checked = false; // Deaktiviert die Checkbox
-                menu.classList.remove("open"); // Schließt das Menü
-              });
-            });
-    </script>
+
    
 
     <!--
   ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
  (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 -->
+
+<script>
+  const hamburger = document.getElementById("hamburger");
+      const menu = document.getElementById("menu");
+      const menuToggle = document.getElementById("menuToggle");
+      const menuLinks = document.querySelectorAll("#menu a");
+
+      // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
+      menuToggle.addEventListener("change", () => {
+        if (menuToggle.checked) {
+          menu.classList.add("open");
+        } else {
+          menu.classList.remove("open");
+        }
+      });
+
+      // Schließt das Menü, wenn ein Link angeklickt wird
+      menuLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          menuToggle.checked = false; // Deaktiviert die Checkbox
+          menu.classList.remove("open"); // Schließt das Menü
+        });
+      });
+</script>
 </body>
 </html>
