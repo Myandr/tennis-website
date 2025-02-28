@@ -1736,7 +1736,7 @@
 
   .news-card.expanded {
     transition: all 0.3s ease;
-    max-height: 700px; /* Erhöhte Höhe */
+    max-height: 2000px; /* Erhöhte Höhe */
   }
 
   .hidden-text {
