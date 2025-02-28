@@ -1,170 +1,175 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mannschaften - Hardter Tennisverein</title>
-<link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
-<style>
-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.page-title {
-    text-align: center;
-    margin: 30px 0;
-}
-
-.page-title h1 {
-    font-size: 2.5rem;
-    color: #333;
-    position: relative;
-    display: inline-block;
-}
-
-.page-title h1::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
-    background-color: #8cc63f;
-}
-
-/* Gallery styles */
-.gallery-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 40px;
-}
-
-.gallery-item {
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
-
-.gallery-item:hover {
-    transform: translateY(-5px);
-}
-
-.gallery-img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    display: block;
-}
-
-.gallery-caption {
-    padding: 10px;
-    background-color: #fff;
-    text-align: center;
-    font-weight: 500;
-}
-
-/* Lightbox styles */
-.lightbox {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.lightbox-content {
-    position: relative;
-    max-width: 90%;
-    max-height: 80%;
-    display: flex;
-    align-items: center;
-}
-
-.lightbox-img {
-    max-width: 100%;
-    max-height: 80vh;
-    object-fit: contain;
-}
-
-.close-btn {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    color: white;
-    font-size: 40px;
-    cursor: pointer;
-    z-index: 1001;
-}
-
-.arrow {
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-    padding: 15px;
-    user-select: none;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    margin: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s;
-}
-
-.arrow:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-.lightbox-caption {
-    color: white;
-    text-align: center;
-    padding: 20px;
-    max-width: 80%;
-    font-size: 18px;
-}
-
-@media (max-width: 1308px) {
-    .gallery-container {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mannschaften - Hardter Tennisverein</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+  <style>
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
     }
-    
+
+    .page-title {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .page-title h1 {
+      font-size: 2.5rem;
+      color: #333;
+      position: relative;
+      display: inline-block;
+    }
+
+    .page-title h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background-color: #8cc63f;
+    }
+
+    /* Gallery styles */
+    .gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .gallery-img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-caption {
+      padding: 10px;
+      background-color: #fff;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    /* Lightbox styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 80%;
+      display: flex;
+      align-items: center;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
     .arrow {
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      padding: 15px;
+      user-select: none;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      margin: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .arrow:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .lightbox-caption {
+      color: white;
+      text-align: center;
+      padding: 20px;
+      max-width: 80%;
+      font-size: 18px;
+    }
+
+    @media (max-width: 1308px) {
+      .gallery-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+
+      .arrow {
         padding: 10px;
         font-size: 24px;
-        position: absolute; /* Position arrows absolutely */
-        top: 50%; /* Center vertically */
-        transform: translateY(-50%); /* Adjust for perfect centering */
+        position: absolute;
+        /* Position arrows absolutely */
+        top: 50%;
+        /* Center vertically */
+        transform: translateY(-50%);
+        /* Adjust for perfect centering */
         z-index: 1002;
         margin: 0;
         background-color: rgba(0, 0, 0, 0.7);
+      }
+
+      .prev-arrow {
+        left: 10px;
+        /* Fixed distance from left */
+      }
+
+      .next-arrow {
+        right: 10px;
+        /* Fixed distance from right */
+      }
+
+
     }
-
-    .prev-arrow {
-        left: 10px; /* Fixed distance from left */
-    }
-
-    .next-arrow {
-        right: 10px; /* Fixed distance from right */
-    }
-
-
-}
-
-
-</style>
+  </style>
 </head>
+
 <body>
   {% include 'design1/navbar.html' %}
 
@@ -173,66 +178,98 @@ main {
 
 
 
-<main class="locations-section" style="background-color: white; color: black;">
-  <div class="locations-header">
+  <main class="locations-section" style="background-color: white; color: black;">
+    <div class="locations-header">
       <h2>Tennis Galerie</h2>
       <p>Unser Verein in Bildern</p>
-  </div>
+    </div>
 
-  <div class="gallery-container">
+    <div class="gallery-container">
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Tennisplatz mit Spielern" class="gallery-img">
-          <div class="gallery-caption">Unser Hauptplatz bei einem Turnier</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_1.jpg" alt="Tennisplatz mit Spielern" class="gallery-img">
+        <div class="gallery-caption">Jahresrückblick 2024</div>
       </div>
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Tennisspieler beim Aufschlag" class="gallery-img">
-          <div class="gallery-caption">Perfekter Aufschlag</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_10.jpg" alt="Tennisspieler beim Aufschlag" class="gallery-img">
+        <div class="gallery-caption">Flutlicht Spaß</div>
       </div>
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Jugendtraining" class="gallery-img">
-          <div class="gallery-caption">Jugendtraining am Wochenende</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_11.jpg" alt="Jugendtraining" class="gallery-img">
+        <div class="gallery-caption">Abend mit kulinarischen Genüssen</div>
       </div>
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Doppelspiel" class="gallery-img">
-          <div class="gallery-caption">Spannendes Doppelspiel</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_12.jpg" alt="Doppelspiel" class="gallery-img">
+        <div class="gallery-caption">Petras kulinarischen Überraschungen</div>
       </div>
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Clubhaus" class="gallery-img">
-          <div class="gallery-caption">Unser renoviertes Clubhaus</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_13.jpg" alt="Clubhaus" class="gallery-img">
+        <div class="gallery-caption">HTV-Momente</div>
       </div>
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Tennisschläger und Bälle" class="gallery-img">
-          <div class="gallery-caption">Ausrüstung für das Training</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_14.jpg" alt="Tennisschläger und Bälle" class="gallery-img">
+        <div class="gallery-caption">Herbstputz</div>
       </div>
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Mannschaftsfoto" class="gallery-img">
-          <div class="gallery-caption">Unsere Herrenmannschaft</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_15.jpg" alt="Mannschaftsfoto" class="gallery-img">
+        <div class="gallery-caption">Saisonabschluss</div>
       </div>
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Damenmannschaft" class="gallery-img">
-          <div class="gallery-caption">Unsere Damenmannschaft</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_16.jpg" alt="Damenmannschaft" class="gallery-img">
+        <div class="gallery-caption">Winterfest Pestalozzi Park</div>
       </div>
       <div class="gallery-item">
-          <img src="../../static/images/tennis.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
-          <div class="gallery-caption">Luftaufnahme unserer Anlage</div>
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_17.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">Weihnachtliches Frühstück der Senioren</div>
       </div>
-  </div>
-</main>
+      <div class="gallery-item">
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_2.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">HTV Eisstock WM</div>
+      </div>
+      <div class="gallery-item">
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_3.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">Eisstock WM Teams</div>
+      </div>
+      <div class="gallery-item">
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_4.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">Frühjahrsputz</div>
+      </div>
+      <div class="gallery-item">
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_5.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">Saisoneröffnung</div>
+      </div>
+      <div class="gallery-item">
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_6.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">Mannschaften</div>
+      </div>
+      <div class="gallery-item">
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_7.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">Hobbytreff jeden Montag</div>
+      </div>
+      <div class="gallery-item">
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_8.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">Hobbytreff</div>
+      </div>
+      <div class="gallery-item">
+        <img src="../../static/images/Rückblick 2024/Rückblick 2024_9.jpg" alt="Tennisplätze aus der Luft" class="gallery-img">
+        <div class="gallery-caption">Ladies Day</div>
+      </div>
+    </div>
+  </main>
 
-<div class="lightbox" id="lightbox">
-  <span class="close-btn">&times;</span>
-  <div class="lightbox-content">
+  <div class="lightbox" id="lightbox">
+    <span class="close-btn">&times;</span>
+    <div class="lightbox-content">
       <div class="arrow prev-arrow">&#10094;</div>
       <img src="/placeholder.svg" alt="" class="lightbox-img" id="lightbox-img">
       <div class="arrow next-arrow">&#10095;</div>
+    </div>
+    <div class="lightbox-caption"></div>
   </div>
-  <div class="lightbox-caption"></div>
-</div>
 
-<!-- Keep the existing JavaScript and footer code -->
-<script>
-  // Pure CSS solution with minimal JavaScript for initialization
-  document.addEventListener('DOMContentLoaded', function() {
+  <!-- Keep the existing JavaScript and footer code -->
+  <script>
+    // Pure CSS solution with minimal JavaScript for initialization
+    document.addEventListener('DOMContentLoaded', function () {
       const galleryImages = document.querySelectorAll('.gallery-img');
       const lightbox = document.getElementById('lightbox');
       const lightboxImg = document.getElementById('lightbox-img');
@@ -240,76 +277,76 @@ main {
       const closeBtn = document.querySelector('.close-btn');
       const prevArrow = document.querySelector('.prev-arrow');
       const nextArrow = document.querySelector('.next-arrow');
-      
+
       let currentIndex = 0;
       const images = [];
       const captions = [];
-      
+
       // Collect all images and captions
       galleryImages.forEach((img, index) => {
-          images.push(img.src);
-          captions.push(img.nextElementSibling.textContent);
-          
-          // Add click event to open lightbox
-          img.addEventListener('click', function() {
-              openLightbox(index);
-          });
+        images.push(img.src);
+        captions.push(img.nextElementSibling.textContent);
+
+        // Add click event to open lightbox
+        img.addEventListener('click', function () {
+          openLightbox(index);
+        });
       });
-      
+
       function openLightbox(index) {
-          currentIndex = index;
-          lightboxImg.src = images[currentIndex];
-          lightboxCaption.textContent = captions[currentIndex];
-          lightbox.style.display = 'flex';
-          document.body.style.overflow = 'hidden';
+        currentIndex = index;
+        lightboxImg.src = images[currentIndex];
+        lightboxCaption.textContent = captions[currentIndex];
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
       }
-      
+
       function closeLightbox() {
-          lightbox.style.display = 'none';
-          document.body.style.overflow = 'auto';
+        lightbox.style.display = 'none';
+        document.body.style.overflow = 'auto';
       }
-      
+
       function showPrevImage() {
-          currentIndex = (currentIndex - 1 + images.length) % images.length;
-          lightboxImg.src = images[currentIndex];
-          lightboxCaption.textContent = captions[currentIndex];
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        lightboxImg.src = images[currentIndex];
+        lightboxCaption.textContent = captions[currentIndex];
       }
-      
+
       function showNextImage() {
-          currentIndex = (currentIndex + 1) % images.length;
-          lightboxImg.src = images[currentIndex];
-          lightboxCaption.textContent = captions[currentIndex];
+        currentIndex = (currentIndex + 1) % images.length;
+        lightboxImg.src = images[currentIndex];
+        lightboxCaption.textContent = captions[currentIndex];
       }
-      
+
       // Event listeners
       closeBtn.addEventListener('click', closeLightbox);
       prevArrow.addEventListener('click', showPrevImage);
       nextArrow.addEventListener('click', showNextImage);
-      
-      // Close lightbox when clicking outside the image
-      lightbox.addEventListener('click', function(e) {
-          if (e.target === lightbox) {
-              closeLightbox();
-          }
-      });
-      
-      // Keyboard navigation
-      document.addEventListener('keydown', function(e) {
-          if (lightbox.style.display === 'flex') {
-              if (e.key === 'Escape') {
-                  closeLightbox();
-              } else if (e.key === 'ArrowLeft') {
-                  showPrevImage();
-              } else if (e.key === 'ArrowRight') {
-                  showNextImage();
-              }
-          }
-      });
-  });
-</script>
 
-{% include 'design1/footer.html' %}
+      // Close lightbox when clicking outside the image
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function (e) {
+        if (lightbox.style.display === 'flex') {
+          if (e.key === 'Escape') {
+            closeLightbox();
+          } else if (e.key === 'ArrowLeft') {
+            showPrevImage();
+          } else if (e.key === 'ArrowRight') {
+            showNextImage();
+          }
+        }
+      });
+    });
+  </script>
+
+  {% include 'design1/footer.html' %}
 
 </body>
-</html>
 
+</html>
