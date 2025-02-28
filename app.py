@@ -284,6 +284,10 @@ def training():
 def gallery():
     return render_template('design1/gallery.html')
 
+@app.route('/kalender')
+def kalender():
+    return render_template('design1/kalender.html')
+
 
 website_content = {
     # Main Navigation & Home Sections
