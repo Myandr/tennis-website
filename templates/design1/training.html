@@ -725,6 +725,30 @@
     </main>
 </section>
 
+<script>
+    const hamburger = document.getElementById("hamburger");
+        const menu = document.getElementById("menu");
+        const menuToggle = document.getElementById("menuToggle");
+        const menuLinks = document.querySelectorAll("#menu a");
+
+        // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
+        menuToggle.addEventListener("change", () => {
+          if (menuToggle.checked) {
+            menu.classList.add("open");
+          } else {
+            menu.classList.remove("open");
+          }
+        });
+
+        // Schließt das Menü, wenn ein Link angeklickt wird
+        menuLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            menuToggle.checked = false; // Deaktiviert die Checkbox
+            menu.classList.remove("open"); // Schließt das Menü
+          });
+        });
+</script>
+
     <!--
  _____   ___    ___   ______    ___  ____  
 |     | /   \  /   \ |      |  /  _]|    \ 
