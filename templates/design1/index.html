@@ -1203,7 +1203,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
       </div>
       <div class="locations-grid">
         <div class="container">
-          <table class="clean-table" data-aos="fade-right">
+          <table class="clean-table" >
             <thead>
               <tr>
                 <th>Datum</th>
@@ -1214,7 +1214,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
             </thead>
             <tbody>
               {% for termin in termine %}
-              <tr>
+              <tr data-aos="fade-right">
                 <td>{{ termin.datum }}</td>
                 <td><strong>{{ termin.veranstaltung }}</strong></td>
                 <td>{{ termin.uhrzeit }}</td>
