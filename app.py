@@ -227,87 +227,213 @@ with app.app_context():
 
 @app.route('/mannschaften')
 def mannschaften():
-    return render_template('design1/mannschaften.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/damen-1')
 def damen_1():
-    return render_template('design1/mannschaften/damen-1.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/damen-1.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/damen-2')
 def damen_2():
-    return render_template('design1/mannschaften/damen-2.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/damen-2.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/herren-1')
 def herren_1():
-    return render_template('design1/mannschaften/herren-1.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/herren-1.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/herren-2')
 def herren_2():
-    return render_template('design1/mannschaften/herren-2.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/herren-2.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/herren-30')
 def herren_30():
-    return render_template('design1/mannschaften/herren-30.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/herren-30.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/damen-40')
 def damen_40():
-    return render_template('design1/mannschaften/damen-40.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/damen-40.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/herren-40-1')
 def herren_40_1():
-    return render_template('design1/mannschaften/herren-40-1.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/herren-40-1.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/herren-40-2')
 def herren_40_2():
-    return render_template('design1/mannschaften/herren-40-2.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/herren-40-2.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/damen-50')
 def damen_50():
-    return render_template('design1/mannschaften/damen-50.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/damen-50.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/herren-55')
 def herren_55():
-    return render_template('design1/mannschaften/herren-55.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/herren-55.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/herren-60')
 def herren_60():
-    return render_template('design1/mannschaften/herren-60.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/herren-60.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/damen-doppel-40')
 def damen_doppel_40():
-    return render_template('design1/mannschaften/damen-doppel-40.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/damen-doppel-40.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/herren-doppel-60')
 def herren_doppel_60():
-    return render_template('design1/mannschaften/herren-doppel-60.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/herren-doppel-60.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/gemischt-1')
 def gemischt_1():
-    return render_template('design1/mannschaften/gemischt-1.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/gemischt-1.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/gemischt-2')
 def gemischt_2():
-    return render_template('design1/mannschaften/gemischt-2.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/gemischt-2.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/mannschaften/mixed-50-doppel')
 def mixed_50_doppel():
-    return render_template('design1/mannschaften/mixed-50-doppel.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mannschaften/mixed-50-doppel.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route("/impressum")
 def impressum():
-    return render_template("design1/impressum.html")
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template("design1/impressum.html",
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route("/vorstand")
 def vorstand():
-    return render_template("design1/vorstand.html")
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template("design1/vorstand.html",
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route("/training")
 def training():
-    return render_template("design1/training.html")
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template("design1/training.html",
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/galerie')
 def gallery():
-    return render_template('design1/gallery.html')
+    is_admin_active = session.get('is_admin_active', True)
+    
+    return render_template('design1/gallery.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 
 

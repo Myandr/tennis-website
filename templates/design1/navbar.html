@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    rel="stylesheet"
+  />
     <title>Document</title>
 </head>
 <body>
@@ -135,9 +139,19 @@
         </div>
 
         <div class="auth-buttons">
-            {% if logged_in %}
-            <a href="/dashboard"><button class="log-in"><i class="fa fa-user" style="color: white;"></i>Account</button></a>
-            {% else %}
+          {% if logged_in %}
+          <div class="account-item">
+              <button class="log-in account-link">
+                  <i class="fa fa-user" style="color: white;"></i>
+                  Account
+              </button>
+              <div class="account-dropdown">
+                  <a href="/dashboard" class="account-dropdown-item">Dashboard</a>
+                  <a href="{{ url_for('edit_account') }}" class="account-dropdown-item">Settings</a>
+                  <a href="{{ url_for('logout') }}" class="account-dropdown-item logout">Logout</a>
+              </div>
+          </div>
+          {% else %}
             <a href="/signup"><button class="sign-up">Sign up</button></a>
             <a href="/login"><button class="log-in">Log in</button></a>
             {% endif %}
@@ -337,6 +351,28 @@
               <li class="nav-item1">
                 <a href="/mannschaften" class="nav-link1">Mannschaften</a>
               </li>
+              <li>
+              </li>
+              {% if logged_in %}
+              <li class="nav-item1" style="border-bottom: 0px solid white;">
+                <div class="account-item">
+                  <button class="log-in account-link" >
+                      <i class="fa fa-user" style="color: white;"></i>
+                      Account
+                  </button>
+                  <div class="account-dropdown" style="right: -70px;">
+                      <a href="/dashboard" class="account-dropdown-item">Dashboard</a>
+                      <a href="{{ url_for('edit_account') }}" class="account-dropdown-item">Settings</a>
+                      <a href="{{ url_for('logout') }}" class="account-dropdown-item logout">Logout</a>
+                  </div>
+              </div>
+              </li>
+              {% else %}
+              <li class="nav-item1" style="border-bottom: 0px solid white;">
+                <a href="/login"><button class="log-in">Log in</button></a>
+                <a href="/signup"><button class="sign-up">Sign up</button></a>
+              </li>
+              {% endif %}
             </ul>
           </div>
         </div>
