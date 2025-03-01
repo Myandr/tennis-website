@@ -227,6 +227,7 @@
 /* Modal */
 .modal {
     display: none;
+    overflow: scroll;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -295,7 +296,7 @@
 .form-group textarea {
     width: 100%;
     padding: 8px;
-    border: 1px solid black;
+    border: 1px solid rgb(0, 0, 0);
     border-radius: 5px;
     font-size: 1rem;
 }
@@ -449,19 +450,10 @@
         background: rgba(74, 124, 89, 0.1);
         border-radius: 3px;
     }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 10px;
-    }
+
 }
 
 @media (max-width: 800px) {
-    .event-form-modal {
-      max-height: 500px;
-      overflow: scroll;
-    }
-
     .calendar-container {
         padding: 7px;
         margin: 3px;
@@ -539,7 +531,7 @@
     
     .modal-content {
         padding: 12px;
-        margin: 25% auto;
+        margin: 10% auto;
     }
     
     .close {
@@ -688,18 +680,18 @@
                     
                     <div class="form-group">
                         <label for="title">Titel</label>
-                        <input type="text" id="title" name="title" required>
+                        <input style="border: 1px solid grey;" type="text" id="title" name="title" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="short_title">Kurztitel (für mobile Ansicht)</label>
-                        <input type="text" id="short_title" name="short_title" maxlength="20" required>
+                        <input style="border: 1px solid grey;" type="text" id="short_title" name="short_title" maxlength="20" required>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="date">Datum</label>
-                            <input type="date" id="date" name="date" required>
+                            <input style="border: 1px solid grey;" type="date" id="date" name="date" required>
                         </div>
                         
                         <div class="form-group">
@@ -716,23 +708,23 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="start_time">Startzeit</label>
-                            <input type="time" id="start_time" name="start_time" required>
+                            <input style="border: 1px solid grey;" type="time" id="start_time" name="start_time" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="end_time">Endzeit</label>
-                            <input type="time" id="end_time" name="end_time" required>
+                            <input style="border: 1px solid grey;" type="time" id="end_time" name="end_time" required>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="location">Ort</label>
-                        <input type="text" id="location" name="location" required>
+                        <input style="border: 1px solid grey;" type="text" id="location" name="location" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="description">Beschreibung</label>
-                        <textarea id="description" name="description"></textarea>
+                        <textarea style="border: 1px solid grey;" id="description" name="description"></textarea>
                     </div>
                     
                     <div class="form-actions">
