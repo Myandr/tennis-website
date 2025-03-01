@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hardter TV - Termine</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    rel="stylesheet"
+  />
     <style>
 :root {
     --primary-color: #363636;
@@ -32,6 +35,8 @@
     margin-bottom: 20px;
 }
 
+
+
 .calendar-header h1 {
     color: var(--primary-color);
     font-size: 2.2rem;
@@ -56,6 +61,7 @@
     font-size: 1rem;
     transition: background 0.3s;
 }
+
 
 #month-year {
     font-size: 1.5rem;
@@ -250,6 +256,7 @@
     margin: 5px 0;
 }
 
+
 .close {
     position: absolute;
     right: 20px;
@@ -257,109 +264,6 @@
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-}
-
-/* Add Event Form */
-.add-event-button {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.add-event-button i {
-    font-size: 1.2rem;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.form-group textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.form-row {
-    display: flex;
-    gap: 15px;
-}
-
-.form-row .form-group {
-    flex: 1;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.form-actions button {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-.btn-cancel {
-    background: var(--secondary-color);
-    color: var(--text-color);
-}
-
-.btn-submit {
-    background: var(--primary-color);
-    color: white;
-}
-
-.event-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.btn-edit, .btn-delete {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
-.btn-edit {
-    background: var(--event-color-training);
-    color: white;
-}
-
-.btn-delete {
-    background: var(--event-color-turnier);
-    color: white;
 }
 
 /* Utility Classes */
@@ -375,13 +279,21 @@
         padding: 10px;
     }
 
+
+
+
     .calendar-header h1 {
         font-size: 1.5rem;
     }
 
+
+
     #month-year {
         font-size: 1.2rem;
+
     }
+
+
 
     /* Show week navigation on mobile */
     .mobile-week-nav {
@@ -447,11 +359,6 @@
         background: rgba(74, 124, 89, 0.1);
         border-radius: 3px;
     }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 10px;
-    }
 }
 
 @media (max-width: 800px) {
@@ -459,6 +366,7 @@
         padding: 7px;
         margin: 3px;
     }
+    
     
     .calendar-header h1 {
         font-size: 1.5rem;
@@ -596,7 +504,8 @@
     }
 }
     </style>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index2.css') }}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+
 </head>
 <body>
     {% include 'design1/navbar.html' %}
@@ -606,11 +515,6 @@
         <div class="calendar-header">
             <h1>Termine</h1>
         </div>
-        {% if is_admin %}
-        <button id="add-event-btn" class="add-event-button">
-            <i class="fa fa-plus" style="color: white;"></i> Termin hinzufügen
-        </button>
-        {% endif %}
 
         <div class="calendar-navigation">
             <button id="prev-month"><i class="fa fa-arrow-left" style="color: white;"></i></button>
@@ -623,6 +527,8 @@
         </div>
 
         <div id="calendar-view" class="calendar-view">
+
+
             <div class="weekdays">
                 <div>Mo</div>
                 <div>Di</div>
@@ -651,7 +557,6 @@
             </div>
         </div>
 
-        <!-- Event Details Modal -->
         <div id="event-modal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -660,79 +565,6 @@
                 <p id="event-time"></p>
                 <p id="event-location"></p>
                 <p id="event-description"></p>
-                {% if is_admin %}
-                <div class="event-actions">
-                    <button id="edit-event-btn" class="btn-edit">Bearbeiten</button>
-                    <button id="delete-event-btn" class="btn-delete">Löschen</button>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-
-
-        <!-- Add/Edit Event Modal -->
-        <div id="event-form-modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h3 id="form-title">Termin hinzufügen</h3>
-                <form id="event-form">
-                    <input type="hidden" id="event-id" name="event_id">
-                    
-                    <div class="form-group">
-                        <label for="title">Titel</label>
-                        <input type="text" id="title" name="title" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="short_title">Kurztitel (für mobile Ansicht)</label>
-                        <input type="text" id="short_title" name="short_title" maxlength="20" required>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="date">Datum</label>
-                            <input type="date" id="date" name="date" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="category">Kategorie</label>
-                            <select id="category" name="category" required>
-                                <option value="">Bitte wählen</option>
-                                <option value="training">Training</option>
-                                <option value="turnier">Turnier</option>
-                                <option value="sonstiges">Sonstiges</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="start_time">Startzeit</label>
-                            <input type="time" id="start_time" name="start_time" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="end_time">Endzeit</label>
-                            <input type="time" id="end_time" name="end_time" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="location">Ort</label>
-                        <input type="text" id="location" name="location" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="description">Beschreibung</label>
-                        <textarea id="description" name="description"></textarea>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="button" class="btn-cancel" id="cancel-form">Abbrechen</button>
-                        <button type="submit" class="btn-submit">Speichern</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -740,8 +572,9 @@
 
 {% include 'design1/footer.html' %}
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+
+    <script>
+ document.addEventListener('DOMContentLoaded', function() {
     // DOM Elements
     const calendarDays = document.getElementById('calendar-days');
     const monthYear = document.getElementById('month-year');
@@ -754,23 +587,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const eventsList = document.getElementById('events-list');
     const eventCategoryFilter = document.getElementById('event-category');
     const modal = document.getElementById('event-modal');
-    const closeModal = modal.querySelector('.close');
+    const closeModal = document.querySelector('.close');
     const eventTitle = document.getElementById('event-title');
     const eventDate = document.getElementById('event-date');
     const eventTime = document.getElementById('event-time');
     const eventLocation = document.getElementById('event-location');
     const eventDescription = document.getElementById('event-description');
-    const editEventBtn = document.getElementById('edit-event-btn');
-    const deleteEventBtn = document.getElementById('delete-event-btn');
-    
-    // Add Event Form Elements
-    const addEventBtn = document.getElementById('add-event-btn');
-    const eventFormModal = document.getElementById('event-form-modal');
-    const closeFormModal = eventFormModal.querySelector('.close');
-    const cancelFormBtn = document.getElementById('cancel-form');
-    const eventForm = document.getElementById('event-form');
-    const formTitle = document.getElementById('form-title');
-    const eventIdInput = document.getElementById('event-id');
 
     // Current date
     let currentDate = new Date();
@@ -781,11 +603,86 @@ document.addEventListener('DOMContentLoaded', function() {
     let isMobile = window.innerWidth <= 480;
     let isSmallMobile = window.innerWidth <= 360;
 
-    // Store events data
-    let events = [];
-    
-    // Currently selected event (for edit/delete)
-    let selectedEvent = null;
+    // Sample events data (in a real application, this would come from a database)
+    const events = [
+        {
+            id: 1,
+            title: 'Jugendtraining',
+            shortTitle: 'Jugend',
+            date: new Date(2025, 1, 15), // Feb 15, 2025
+            startTime: '15:00',
+            endTime: '17:00',
+            location: 'Tennisplatz 1-3',
+            description: 'Wöchentliches Training für Jugendliche unter 18 Jahren.',
+            category: 'training'
+        },
+        {
+            id: 2,
+            title: 'Clubmeisterschaft',
+            shortTitle: 'Club-MS',
+            date: new Date(2025, 1, 22), // Feb 22, 2025
+            startTime: '09:00',
+            endTime: '18:00',
+            location: 'Alle Tennisplätze',
+            description: 'Jährliche Clubmeisterschaft für alle Mitglieder.',
+            category: 'turnier'
+        },
+        {
+            id: 3,
+            title: 'Erwachsenentraining',
+            shortTitle: 'Erw-Tr',
+            date: new Date(2025, 1, 18), // Feb 18, 2025
+            startTime: '19:00',
+            endTime: '21:00',
+            location: 'Tennisplatz 4-6',
+            description: 'Training für Erwachsene aller Spielstärken.',
+            category: 'training'
+        },
+        {
+            id: 4,
+            title: 'Vereinsversammlung',
+            shortTitle: 'Versamm',
+            date: new Date(2025, 1, 28), // Feb 28, 2025
+            startTime: '19:30',
+            endTime: '21:30',
+            location: 'Clubheim Hardt',
+            description: 'Jährliche Mitgliederversammlung mit Vorstandswahlen.',
+            category: 'sonstiges'
+        },
+        {
+            id: 5,
+            title: 'Kinder-Spielfest',
+            shortTitle: 'Spielfest',
+            date: new Date(2025, 2, 5), // Mar 5, 2025
+            startTime: '14:00',
+            endTime: '17:00',
+            location: 'Kletter- und Spielgerüst',
+            description: 'Spielfest für Kinder mit verschiedenen Aktivitäten.',
+            category: 'sonstiges'
+        },
+        {
+            id: 6,
+            title: 'Freundschaftsspiel',
+            shortTitle: 'Freund-Sp',
+            date: new Date(2025, 2, 12), // Mar 12, 2025
+            startTime: '10:00',
+            endTime: '16:00',
+            location: 'Tennisplatz 1-6',
+            description: 'Freundschaftsspiel gegen TC Blau-Weiß.',
+            category: 'turnier'
+        },
+        {
+            id: 7,
+            title: 'Anfängertraining',
+            shortTitle: 'Anf-Tr',
+            date: new Date(2025, 1, 10), // Feb 10, 2025
+            startTime: '17:00',
+            endTime: '18:30',
+            location: 'Tennisplatz 1-2',
+            description: 'Training für Anfänger und Wiedereinsteiger.',
+            category: 'training'
+        }
+    ];
 
     // Month names in German
     const monthNames = [
@@ -810,8 +707,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check initial screen size
         checkScreenSize();
         
-        // Fetch events from the server
-        fetchEvents();
+        renderCalendar();
+        renderEventsList();
 
         // Event listeners
         prevMonthBtn.addEventListener('click', () => {
@@ -856,39 +753,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (event.target === modal) {
                 modal.style.display = 'none';
             }
-            if (event.target === eventFormModal) {
-                eventFormModal.style.display = 'none';
-            }
-        });
-        
-        // Add event form listeners
-        addEventBtn.addEventListener('click', () => {
-            openAddEventForm();
-        });
-        
-        closeFormModal.addEventListener('click', () => {
-            eventFormModal.style.display = 'none';
-        });
-        
-        cancelFormBtn.addEventListener('click', () => {
-            eventFormModal.style.display = 'none';
-        });
-        
-        eventForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            saveEvent();
-        });
-        
-        editEventBtn.addEventListener('click', () => {
-            if (selectedEvent) {
-                openEditEventForm(selectedEvent);
-            }
-        });
-        
-        deleteEventBtn.addEventListener('click', () => {
-            if (selectedEvent) {
-                deleteEvent(selectedEvent.id);
-            }
         });
         
         // Listen for screen size changes
@@ -904,113 +768,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 renderEventsList();
             }
         });
-    }
-    
-    // Fetch events from the server
-    function fetchEvents() {
-        fetch('/api/events')
-            .then(response => response.json())
-            .then(data => {
-                events = data.map(event => ({
-                    ...event,
-                    date: new Date(event.date)
-                }));
-                renderCalendar();
-                renderEventsList();
-            })
-            .catch(error => {
-                console.error('Error fetching events:', error);
-            });
-    }
-    
-    // Save event (create or update)
-    function saveEvent() {
-        const formData = new FormData(eventForm);
-        const eventId = formData.get('event_id');
-        
-        let url = '/api/events';
-        let method = 'POST';
-        
-        if (eventId && eventId !== '') {
-            url = `/api/events/${eventId}`;
-            method = 'PUT';
-        }
-        
-        fetch(url, {
-            method: method,
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            eventFormModal.style.display = 'none';
-            fetchEvents(); // Refresh events
-        })
-        .catch(error => {
-            console.error('Error saving event:', error);
-            alert('Fehler beim Speichern des Termins. Bitte versuchen Sie es erneut.');
-        });
-    }
-    
-    // Delete event
-    function deleteEvent(eventId) {
-        if (confirm('Sind Sie sicher, dass Sie diesen Termin löschen möchten?')) {
-            fetch(`/api/events/${eventId}`, {
-                method: 'DELETE'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                modal.style.display = 'none';
-                fetchEvents(); // Refresh events
-            })
-            .catch(error => {
-                console.error('Error deleting event:', error);
-                alert('Fehler beim Löschen des Termins. Bitte versuchen Sie es erneut.');
-            });
-        }
-    }
-    
-    // Open add event form
-    function openAddEventForm() {
-        formTitle.textContent = 'Termin hinzufügen';
-        eventForm.reset();
-        eventIdInput.value = '';
-        
-        // Set default date to today
-        const today = new Date();
-        const dateStr = today.toISOString().split('T')[0];
-        document.getElementById('date').value = dateStr;
-        
-        eventFormModal.style.display = 'block';
-    }
-    
-    // Open edit event form
-    function openEditEventForm(event) {
-        formTitle.textContent = 'Termin bearbeiten';
-        
-        // Fill form with event data
-        eventIdInput.value = event.id;
-        document.getElementById('title').value = event.title;
-        document.getElementById('short_title').value = event.shortTitle;
-        document.getElementById('date').value = event.date.toISOString().split('T')[0];
-        document.getElementById('start_time').value = event.startTime;
-        document.getElementById('end_time').value = event.endTime;
-        document.getElementById('location').value = event.location;
-        document.getElementById('description').value = event.description || '';
-        document.getElementById('category').value = event.category;
-        
-        // Hide event details modal and show form modal
-        modal.style.display = 'none';
-        eventFormModal.style.display = 'block';
     }
     
     // Check screen size for responsive adjustments
@@ -1274,8 +1031,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show event details in modal
     function showEventDetails(event) {
-        selectedEvent = event;
-        
         eventTitle.textContent = event.title;
         
         // Format date based on screen size
@@ -1289,7 +1044,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         eventTime.textContent = `Zeit: ${event.startTime} - ${event.endTime} Uhr`;
         eventLocation.textContent = `Ort: ${event.location}`;
-        eventDescription.textContent = event.description || '';
+        eventDescription.textContent = event.description;
         
         modal.style.display = 'block';
     }
@@ -1302,29 +1057,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the calendar
     initCalendar();
 });
-</script>
-<script>
-    const hamburger = document.getElementById("hamburger");
-        const menu = document.getElementById("menu");
-        const menuToggle = document.getElementById("menuToggle");
-        const menuLinks = document.querySelectorAll("#menu a");
-
-        // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
-        menuToggle.addEventListener("change", () => {
-          if (menuToggle.checked) {
-            menu.classList.add("open");
-          } else {
-            menu.classList.remove("open");
-          }
-        });
-
-        // Schließt das Menü, wenn ein Link angeklickt wird
-        menuLinks.forEach((link) => {
-          link.addEventListener("click", () => {
-            menuToggle.checked = false; // Deaktiviert die Checkbox
-            menu.classList.remove("open"); // Schließt das Menü
-          });
-        });
-</script>
+    </script>
+    <script>
+        const hamburger = document.getElementById("hamburger");
+            const menu = document.getElementById("menu");
+            const menuToggle = document.getElementById("menuToggle");
+            const menuLinks = document.querySelectorAll("#menu a");
+    
+            // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
+            menuToggle.addEventListener("change", () => {
+              if (menuToggle.checked) {
+                menu.classList.add("open");
+              } else {
+                menu.classList.remove("open");
+              }
+            });
+    
+            // Schließt das Menü, wenn ein Link angeklickt wird
+            menuLinks.forEach((link) => {
+              link.addEventListener("click", () => {
+                menuToggle.checked = false; // Deaktiviert die Checkbox
+                menu.classList.remove("open"); // Schließt das Menü
+              });
+            });
+    </script>
 </body>
 </html>

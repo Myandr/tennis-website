@@ -175,6 +175,31 @@ class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.LargeBinary)
 
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    short_title = db.Column(db.String(20), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    start_time = db.Column(db.String(5), nullable=False)  # Format: "HH:MM"
+    end_time = db.Column(db.String(5), nullable=False)    # Format: "HH:MM"
+    location = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    category = db.Column(db.String(20), nullable=False)   # 'training', 'turnier', 'sonstiges'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'shortTitle': self.short_title,
+            'date': self.date.strftime('%Y-%m-%d'),
+            'startTime': self.start_time,
+            'endTime': self.end_time,
+            'location': self.location,
+            'description': self.description or '',
+            'category': self.category
+        }
+
 # Erstellen Sie die Tabellen in der Datenbank
 with app.app_context():
     db.create_all()
@@ -284,9 +309,7 @@ def training():
 def gallery():
     return render_template('design1/gallery.html')
 
-@app.route('/kalender')
-def kalender():
-    return render_template('design1/kalender.html')
+
 
 
 website_content = {
@@ -561,12 +584,89 @@ def delete_box(box_id):
 
 
 
+@app.route('/kalender')
+def kalender():
+    is_admin_active = session.get('is_admin_active', True)
 
+    return render_template('design1/kalender.html',                            
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
+@app.route('/api/events', methods=['GET'])
+def get_events():
+    events = Event.query.all()
+    return jsonify([event.to_dict() for event in events])
 
+@app.route('/api/events', methods=['POST'])
+def create_event():
+    data = request.form
+    
+    # Validate required fields
+    required_fields = ['title', 'short_title', 'date', 'start_time', 'end_time', 'location', 'category']
+    for field in required_fields:
+        if field not in data or not data[field]:
+            return jsonify({'error': f'Field {field} is required'}), 400
+    
+    # Parse date
+    try:
+        date_obj = datetime.strptime(data['date'], '%Y-%m-%d').date()
+    except ValueError:
+        return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
+    
+    # Create new event
+    new_event = Event(
+        title=data['title'],
+        short_title=data['short_title'],
+        date=date_obj,
+        start_time=data['start_time'],
+        end_time=data['end_time'],
+        location=data['location'],
+        description=data.get('description', ''),
+        category=data['category']
+    )
+    
+    db.session.add(new_event)
+    db.session.commit()
+    
+    return jsonify(new_event.to_dict()), 201
 
+@app.route('/api/events/<int:event_id>', methods=['DELETE'])
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    db.session.delete(event)
+    db.session.commit()
+    return jsonify({'message': 'Event deleted successfully'}), 200
 
-
+@app.route('/api/events/<int:event_id>', methods=['PUT'])
+def update_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    data = request.form
+    
+    # Update fields if provided
+    if 'title' in data:
+        event.title = data['title']
+    if 'short_title' in data:
+        event.short_title = data['short_title']
+    if 'date' in data:
+        try:
+            event.date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+        except ValueError:
+            return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
+    if 'start_time' in data:
+        event.start_time = data['start_time']
+    if 'end_time' in data:
+        event.end_time = data['end_time']
+    if 'location' in data:
+        event.location = data['location']
+    if 'description' in data:
+        event.description = data['description']
+    if 'category' in data:
+        event.category = data['category']
+    
+    db.session.commit()
+    return jsonify(event.to_dict())
 
 
 #     __     __    ___   __   ____   __    __   __ _ 
