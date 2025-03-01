@@ -690,15 +690,15 @@ def update_event(event_id):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/add', methods=['POST'])
+@app.route('/add_content', methods=['POST'])
 def add_content():
     if 'image' not in request.files:
-        return redirect(url_for('home'))
+        return jsonify({'error': 'No image provided'}), 400
     
     file = request.files['image']
     
     if file.filename == '':
-        return redirect(url_for('home'))
+        return jsonify({'error': 'No selected file'}), 400
     
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -713,7 +713,17 @@ def add_content():
         )
         db.session.add(new_item)
         db.session.commit()
+        
+        # Check if it's an AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            # Return JSON response
+            return jsonify({
+                'success': True,
+                'message': 'Inhalt erfolgreich hinzugefügt!',
+                'item_id': new_item.id
+            })
     
+    # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#one")
 
 #     ____  ____  __    ____  ____  ____ 
@@ -721,11 +731,20 @@ def add_content():
 #     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
 #    (____/(____)\____/(____) (__) (____)
 
-@app.route('/delete/<int:item_id>')
+@app.route('/delete_content/<int:item_id>', methods=['GET', 'POST'])
 def delete_content(item_id):
     item = ContentItem.query.get_or_404(item_id)
     db.session.delete(item)
     db.session.commit()
+    
+    # Check if it's an AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'success': True,
+            'message': 'Inhalt erfolgreich gelöscht!'
+        })
+    
+    # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + '#one')
 
 @app.route('/uploads/<filename>')
@@ -782,6 +801,20 @@ def add_termin():
     neuer_termin = Termin(datum=datum, veranstaltung=veranstaltung, uhrzeit=uhrzeit, ort=ort)
     db.session.add(neuer_termin)
     db.session.commit()
+    
+    # Check if it's an AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'success': True,
+            'message': 'Termin erfolgreich hinzugefügt!',
+            'termin_id': neuer_termin.id,
+            'datum': datum,
+            'veranstaltung': veranstaltung,
+            'uhrzeit': uhrzeit,
+            'ort': ort
+        })
+    
+    # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#termine")
 
 
@@ -795,6 +828,15 @@ def delete_termin(termin_id):
     termin = Termin.query.get_or_404(termin_id)
     db.session.delete(termin)
     db.session.commit()
+    
+    # Check if it's an AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'success': True,
+            'message': 'Termin erfolgreich gelöscht!'
+        })
+    
+    # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#termine")
 
 
@@ -804,32 +846,54 @@ def delete_termin(termin_id):
 @app.route('/add_img', methods=["POST"])
 def add_img():
     if 'image' not in request.files:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'error': 'No image provided'}), 400
         return redirect(url_for('home'))
     
     file = request.files['image']
     
     if file.filename == '':
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'error': 'No selected file'}), 400
         return redirect(url_for('home'))
     
-
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         # Bild in Binärdaten umwandeln
         image = file.read()
         new_item = Img(
             image=image,
-
         )
         db.session.add(new_item)
         db.session.commit()
+        
+        # Check if it's an AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            # Return JSON response
+            return jsonify({
+                'success': True,
+                'message': 'Bild erfolgreich hinzugefügt!',
+                'item_id': new_item.id
+            })
+    
+    # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#img")
 
 
-@app.route('/delete_img/<int:img_id>')
+@app.route('/delete_img/<int:img_id>', methods=['GET', 'POST'])
 def delete_img(img_id):
     image = Img.query.get_or_404(img_id)
     db.session.delete(image)
     db.session.commit()
+    
+    # Check if it's an AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'success': True,
+            'message': 'Bild erfolgreich gelöscht!'
+        })
+    
+    # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#img")
 
 
@@ -846,8 +910,9 @@ def add_about_text():
     text_type = request.form["text_type"]
 
     if not text_content:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'error': 'No content provided'}), 400
         return redirect(url_for('home') + "#about")
-
     
     if text_type == "headline":
         new_text = AboutText(content=text_content, type="headline")
@@ -856,6 +921,18 @@ def add_about_text():
 
     db.session.add(new_text)
     db.session.commit()
+    
+    # Check if it's an AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'success': True,
+            'message': 'Text erfolgreich hinzugefügt!',
+            'text_id': new_text.id,
+            'content': text_content,
+            'type': text_type
+        })
+    
+    # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#about")
 
 #     ____  ____  __    ____  ____  ____ 
@@ -869,8 +946,19 @@ def delete_about_text(id):
     if text_to_delete:
         db.session.delete(text_to_delete)
         db.session.commit()
+        
+        # Check if it's an AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'success': True,
+                'message': 'Text erfolgreich gelöscht!'
+            })
     else:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'error': 'Text nicht gefunden'}), 404
         flash("Text nicht gefunden.", "error")
+    
+    # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#about")
 
 
@@ -1479,9 +1567,7 @@ def save_cookie_settings():
 
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
-    email = request.form['email']  # E-Mail-Adresse vom Benutzer
-    
-    # Hier kannst du die E-Mail-Adresse in einer Datenbank speichern, wenn gewünscht
+    email = request.form['email']
     
     # E-Mail senden
     msg = Message('Danke für deine Anmeldung zum Newsletter!',
@@ -1527,9 +1613,22 @@ def subscribe():
     '''
     
     try:
-        mail.send(msg)  # E-Mail versenden
+        mail.send(msg)
+        
+        # Check if it's an AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'success': True,
+                'message': 'E-Mail wurde erfolgreich versendet!'
+            })
+        
         flash('E-Mail wurde erfolgreich versendet!', 'success')
     except Exception as e:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'error': f'Fehler beim Senden der E-Mail: {str(e)}'
+            }), 500
+        
         flash(f'Fehler beim Senden der E-Mail: {e}', 'error')
     
     return redirect(url_for('home'))
@@ -1547,23 +1646,35 @@ def subscribe():
 
 @app.route('/send_email', methods=['POST'])
 def send_email():
-    design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
-#design
-    name = request.form['name']  # Name des Benutzers
-    user_email = request.form['email']  # E-Mail des Benutzers
-    message = request.form['message']  # Nachricht des Benutzers
+    design = session.get('design', 'design1')
+    name = request.form['name']
+    user_email = request.form['email']
+    message = request.form['message']
 
     # Nachricht erstellen
-    msg = Message('Nachricht von ' + name,  # Betreff: Name des Benutzers
-                  sender=user_email,  # Absender ist die E-Mail-Adresse des Benutzers
-                  recipients=['myandr180709@gmail.com'])  # E-Mail immer an deine Adresse
-    msg.body = f"Nachricht von: {name} ({user_email})\n\n{message}"  # E-Mail-Inhalt
+    msg = Message('Nachricht von ' + name,
+                  sender=user_email,
+                  recipients=['myandr180709@gmail.com'])
+    msg.body = f"Nachricht von: {name} ({user_email})\n\n{message}"
 
     # E-Mail senden
     try:
         mail.send(msg)
+        
+        # Check if it's an AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'success': True,
+                'message': 'Nachricht erfolgreich gesendet!'
+            })
+        
         return render_template(f'{design}/email-sent.html')
     except Exception as e:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'error': f'Fehler beim Senden der E-Mail: {str(e)}'
+            }), 500
+        
         return f'Fehler beim Senden der E-Mail: {str(e)}'
 
 

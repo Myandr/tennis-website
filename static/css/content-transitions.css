@@ -1,0 +1,82 @@
+/* Smooth transitions for content changes */
+.location-card,
+.card,
+.about-text p,
+.about-text h3,
+.clean-table tr {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Animation for new content */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.location-card.new,
+.card.new,
+.about-text p.new,
+.about-text h3.new,
+.clean-table tr.new {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* Notification animations */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  transform: translateX(120%);
+  transition: transform 0.3s ease;
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification i {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
+.notification.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.notification.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+.notification.info-message {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+/* Drag and drop area animations */
+.cm-drop-area {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.cm-drop-area.highlight {
+  background-color: rgba(0, 123, 255, 0.1);
+  border-color: #007bff;
+}
+

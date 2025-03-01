@@ -37,6 +37,7 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+    <script src="{{ url_for('static', filename='js/ajax-forms.js') }}"></script>
 
     <title>Hardter TV</title>
 
@@ -899,6 +900,7 @@
 
       {% if is_admin %}
       <form
+        id="content-form"
         class="cm-form"
         action="{{ url_for('add_content') }}"
         method="post"
@@ -1018,7 +1020,7 @@
       -->
 
       {% if is_admin%}
-      <form class="about-form hidden" action="/add_about_text" method="POST">
+      <form id="about-form" class="about-form hidden" action="/add_about_text" method="POST">
         <h3>Text hinzufügen</h3>
         <label for="text-type">Texttyp:</label>
         <select id="text-type" name="text_type" required>
@@ -1125,10 +1127,11 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
 |  _|| . ||  _||     |
 |_|  |___||_|  |_|_|_|
                     
-      -->
+
 
       {% if is_admin %}
       <form
+        id="image-form"
         class="cm-form"
         action="{{ url_for('add_img') }}"
         method="post"
@@ -1154,7 +1157,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
         <button type="submit" class="cm-button">Add Content</button>
       </form>
       {% endif %}
-
+      -->
       <!--
                                              
  ___  ___  ___  ___  ___  ___  ___  ___  ___ 
@@ -1222,7 +1225,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
             </thead>
             <tbody>
               {% for termin in termine %}
-              <tr data-aos="fade-right">
+              <tr>
                 <td>{{ termin.datum }}</td>
                 <td><strong>{{ termin.veranstaltung }}</strong></td>
                 <td>{{ termin.uhrzeit }}</td>
@@ -1262,7 +1265,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
       {% if is_admin %}
 
       <!-- Formular zum Hinzufügen eines neuen Termins -->
-      <form class="termin-form hidden" action="/add_termin" method="POST">
+      <form id="termin-form" class="termin-form hidden" action="/add_termin" method="POST">
         <h3>Neuen Termin hinzufügen</h3>
         <label for="datum">Datum:</label>
         <input
@@ -1530,7 +1533,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
         <p>Nehme über usere Seite direkt Kontakt mit uns auf!</p>
       </div>
       <div class="locations-grid">
-        <form class="contact-form" action="/send_email" method="POST">
+        <form id="contact-form" class="contact-form" action="/send_email" method="POST">
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required />
@@ -1631,7 +1634,7 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
             Bleiben Sie auf dem Laufenden mit unseren neuesten Nachrichten und
             Angeboten.
           </p>
-          <form action="/subscribe" method="POST" class="newsletter-form">
+          <form id="newsletter-form" action="/subscribe" method="POST" class="newsletter-form">
             <input
               type="email"
               placeholder="Ihre E-Mail-Adresse"
