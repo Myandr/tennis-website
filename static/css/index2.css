@@ -1261,8 +1261,17 @@
 
   .location-card.expanded iframe {
     width: 100%;
-    min-height: 200px;
-    max-height: 300px;
+    min-height: 150px;
+    height: 250px;
+  }
+
+  @media (max-width: 600px) {
+    .location-card.expanded iframe {
+      width: 100%;
+      min-height: 150px;
+      height: 150px;
+    }
+  
   }
 
   .overlay {
