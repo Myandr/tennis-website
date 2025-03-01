@@ -584,6 +584,18 @@ def delete_box(box_id):
 
 
 
+
+
+
+
+
+
+
+
+#kalender
+
+
+
 @app.route('/kalender')
 def kalender():
     is_admin_active = session.get('is_admin_active', True)
