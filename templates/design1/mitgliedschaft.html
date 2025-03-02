@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitgliedschaft - Hardter Tennisverein</title>
+    <style>
+        /* Mitgliedschaft Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.membership-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.main-heading {
+    font-size: 2.5rem;
+    color: #000;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.sub-heading {
+    font-size: 1.5rem;
+    color: #555;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: normal;
+}
+
+.membership-sections {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+@media (min-width: 768px) {
+    .membership-sections {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.membership-section {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.membership-section h3 {
+    color: #4a7c00;
+    font-size: 1.3rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.membership-section p {
+    flex-grow: 1;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.download-button {
+    display: inline-block;
+    background-color: #4a7c00;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.download-button:hover {
+    background-color: #3a6000;
+}
+    </style>
+</head>
+<body>
+    <div class="membership-container">
+        <h1 class="main-heading">Mitgliedschaft</h1>
+        <h2 class="sub-heading">Werden Sie Teil unserer Tennisgemeinschaft</h2>
+        
+        <div class="membership-sections">
+            <section class="membership-section">
+                <h3>Vorteile der Mitgliedschaft</h3>
+                <p>Als Mitglied des Hardter Tennisvereins profitieren Sie von zahlreichen Vorteilen. Sie erhalten unbegrenzten Zugang zu unseren Tennisplätzen, können an Vereinsturnieren teilnehmen und von vergünstigten Trainingsangeboten profitieren. Zudem bieten wir regelmäßige soziale Events und die Möglichkeit, Teil einer lebendigen Gemeinschaft zu werden.</p>
+                <a href="{{ url_for('download_file', filename='vorteile_mitgliedschaft.pdf') }}" class="download-button">Vorteile herunterladen</a>
+            </section>
+            
+            <section class="membership-section">
+                <h3>Mitgliedsbeiträge</h3>
+                <p>Unsere Mitgliedsbeiträge sind fair und transparent gestaltet. Wir bieten verschiedene Kategorien für Erwachsene, Familien, Jugendliche und Kinder an. Sonderkonditionen gibt es für Studenten, Auszubildende und Senioren. Die Mitgliedschaft kann jährlich oder monatlich bezahlt werden, mit Rabatten für Jahreszahlungen.</p>
+                <a href="{{ url_for('download_file', filename='beitraege.pdf') }}" class="download-button">Beitragsübersicht herunterladen</a>
+            </section>
+            
+            <section class="membership-section">
+                <h3>Anmeldung und Kontakt</h3>
+                <p>Die Anmeldung zur Mitgliedschaft ist einfach. Laden Sie das Anmeldeformular herunter, füllen Sie es aus und senden Sie es per E-Mail oder Post an uns zurück. Bei Fragen zur Mitgliedschaft steht Ihnen unser Mitgliederbeauftragter gerne zur Verfügung. Kontaktieren Sie uns unter mitgliedschaft@hardter-tennisverein.de oder telefonisch unter +49 123 456789.</p>
+                <a href="{{ url_for('download_file', filename='anmeldeformular.pdf') }}" class="download-button">Anmeldeformular herunterladen</a>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

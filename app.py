@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, jsonify, send_from_directory, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, jsonify, send_from_directory, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -44,7 +44,8 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     }
 }
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'downloads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 
@@ -435,7 +436,29 @@ def gallery():
                            is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
                            is_verified=current_user.is_authenticated and current_user.is_verified)
 
+@app.route('/mitgliedschaft')
+def mitgliedschaft():
+    return render_template('design1/mitgliedschaft.html')
 
+@app.route('/download/<filename>')
+def download_file(filename):
+    try:
+        return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
+
+# You'll need to create these PDF files and place them in the static/downloads folder
+# Example of how to create placeholder files:
+def create_placeholder_files():
+    files = ['vorteile_mitgliedschaft.pdf', 'beitraege.pdf', 'anmeldeformular.pdf']
+    for file in files:
+        file_path = os.path.join(UPLOAD_FOLDER, file)
+        if not os.path.exists(file_path):
+            with open(file_path, 'w') as f:
+                f.write(f"This is a placeholder for {file}")
+
+# Call this function when starting the app
+create_placeholder_files()
 
 
 website_content = {
