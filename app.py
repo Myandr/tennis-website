@@ -438,7 +438,13 @@ def gallery():
 
 @app.route('/mitgliedschaft')
 def mitgliedschaft():
-    return render_template('design1/mitgliedschaft.html')
+    is_admin_active = session.get('is_admin_active', True)
+
+    return render_template('design1/mitgliedschaft.html',
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
 
 @app.route('/download/<filename>')
 def download_file(filename):

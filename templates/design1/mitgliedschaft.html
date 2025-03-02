@@ -4,112 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mitgliedschaft - Hardter Tennisverein</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
     <style>
-        /* Mitgliedschaft Page Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-    color: #333;
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --text-color: #333;
+            --hover-color: #2980b9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            position: relative;
+            top: 100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: black;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .Btn {
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgb(151, 151, 151);
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.11);
 }
 
-.membership-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
+.svgIcon {
+  fill: rgb(70, 70, 70);
 }
 
-.main-heading {
-    font-size: 2.5rem;
-    color: #000;
-    text-align: center;
-    margin-bottom: 10px;
+.icon2 {
+  width: 18px;
+  height: 5px;
+  border-bottom: 2px solid rgb(70, 70, 70);
+  border-left: 2px solid rgb(70, 70, 70);
+  border-right: 2px solid rgb(70, 70, 70);
 }
 
-.sub-heading {
-    font-size: 1.5rem;
-    color: #555;
-    text-align: center;
-    margin-bottom: 40px;
-    font-weight: normal;
+.Btn:hover {
+  background-color: rgb(39, 39, 39);
+  transition-duration: 0.3s;
 }
 
-.membership-sections {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
+.Btn:hover .icon2 {
+  border-bottom: 2px solid rgb(235, 235, 235);
+  border-left: 2px solid rgb(235, 235, 235);
+  border-right: 2px solid rgb(235, 235, 235);
 }
 
-@media (min-width: 768px) {
-    .membership-sections {
-        grid-template-columns: repeat(3, 1fr);
-    }
+.Btn:hover .svgIcon {
+  fill: rgb(255, 255, 255);
+  animation: slide-in-top 1s linear infinite;
 }
 
-.membership-section {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 25px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
+@keyframes slide-in-top {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
 }
 
-.membership-section h3 {
-    color: #4a7c00;
-    font-size: 1.3rem;
-    margin-top: 0;
-    margin-bottom: 15px;
-}
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
 
-.membership-section p {
-    flex-grow: 1;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
+        .download-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid grey;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
 
-.download-button {
-    display: inline-block;
-    background-color: #4a7c00;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    text-align: center;
-    transition: background-color 0.3s;
-}
+        .download-item:hover {
+            transform: translateY(-5px);
+        }
 
-.download-button:hover {
-    background-color: #3a6000;
-}
+        .download-icon {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .download-title {
+            font-size: 1.2em;
+            padding-bottom: 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .download-description {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .download-button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        @media screen and (max-width: 600px) {
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="membership-container">
-        <h1 class="main-heading">Mitgliedschaft</h1>
-        <h2 class="sub-heading">Werden Sie Teil unserer Tennisgemeinschaft</h2>
+    {% include 'design1/navbar.html' %}
+
+    <div class="container">
+        <h1 class="main-heading">Mitglied werden
+        </h1>
         
-        <div class="membership-sections">
-            <section class="membership-section">
-                <h3>Vorteile der Mitgliedschaft</h3>
-                <p>Als Mitglied des Hardter Tennisvereins profitieren Sie von zahlreichen Vorteilen. Sie erhalten unbegrenzten Zugang zu unseren Tennisplätzen, können an Vereinsturnieren teilnehmen und von vergünstigten Trainingsangeboten profitieren. Zudem bieten wir regelmäßige soziale Events und die Möglichkeit, Teil einer lebendigen Gemeinschaft zu werden.</p>
-                <a href="{{ url_for('download_file', filename='vorteile_mitgliedschaft.pdf') }}" class="download-button">Vorteile herunterladen</a>
+        <div class="download-grid">
+            <section class="download-item">
+                <div class="download-icon">📄</div>
+                <h3 class="download-title">Mitglied werden</h3>
+                <p  class="download-description"class="download-description">Wir freuen uns immer über neue Gesichter in unserem Verein:
+                    Ob Jung, ob alt, ob „Profi“ oder Anfänger, ob Männlein oder Weiblein. Jeder ist willkommen. Ganz nach dem Motto unseres Vereins.  
+                    
+                    Normale Mitgliedschaft - einfach den Antrag herunterladen, ausdrucken, ausfüllen und per Mail an 1.vorsitzender@hardt-tennis.de.  
+                    </p>
+                <button class="Btn" onclick="window.location.href='{{ url_for('download_file', filename='vorteile_mitgliedschaft.pdf') }}'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="1em"
+                      viewBox="0 0 384 512"
+                      class="svgIcon"
+                    >
+                      <path
+                        d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+                      ></path>
+                    </svg>
+                    <span class="icon2"></span>
+                  </button>
             </section>
             
-            <section class="membership-section">
-                <h3>Mitgliedsbeiträge</h3>
-                <p>Unsere Mitgliedsbeiträge sind fair und transparent gestaltet. Wir bieten verschiedene Kategorien für Erwachsene, Familien, Jugendliche und Kinder an. Sonderkonditionen gibt es für Studenten, Auszubildende und Senioren. Die Mitgliedschaft kann jährlich oder monatlich bezahlt werden, mit Rabatten für Jahreszahlungen.</p>
-                <a href="{{ url_for('download_file', filename='beitraege.pdf') }}" class="download-button">Beitragsübersicht herunterladen</a>
+            <section class="download-item">
+                <div class="download-icon">📄</div>
+                <h3 class="download-title">HTV Schnuppercard
+                </h3>
+                <p class="download-description">Für alle diejenigen, die das Tennisspielen beim HTV einmal ausprobieren wollen, bieten wir die sogenannte Greencard an. Mit dieser kann Jeder erst einmal für wenig Geld eine gesamte Sommersaison schnuppern. Denn bevor Jemand Mitglied werden möchte, soll er sich sicher sein, dass der Tennissport und insbesondere der HTV genau das Richtige sind, um in der Freizeit aktiv zu sein.
+
+                    HTV Schnuppercard - einfach den Antrag herunterladen, ausdrucken, ausfüllen und per Mail an 1.vorsitzender@hardt-tennis.de.  
+                    </p>
+                <button class="Btn" onclick="window.location.href='{{ url_for('download_file', filename='beitraege.pdf') }}'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="1em"
+                      viewBox="0 0 384 512"
+                      class="svgIcon"
+                    >
+                      <path
+                        d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+                      ></path>
+                    </svg>
+                    <span class="icon2"></span>
+                  </button>
             </section>
             
-            <section class="membership-section">
-                <h3>Anmeldung und Kontakt</h3>
-                <p>Die Anmeldung zur Mitgliedschaft ist einfach. Laden Sie das Anmeldeformular herunter, füllen Sie es aus und senden Sie es per E-Mail oder Post an uns zurück. Bei Fragen zur Mitgliedschaft steht Ihnen unser Mitgliederbeauftragter gerne zur Verfügung. Kontaktieren Sie uns unter mitgliedschaft@hardter-tennisverein.de oder telefonisch unter +49 123 456789.</p>
-                <a href="{{ url_for('download_file', filename='anmeldeformular.pdf') }}" class="download-button">Anmeldeformular herunterladen</a>
+            <section class="download-item">
+                <div class="download-icon">📄</div>
+                <h3  class="download-title">Beitragsordnung
+                </h3>
+                <p  class="download-description">Informationen zu Beiträgen und Konditionen
+                </p>
+                <button class="Btn" onclick="window.location.href='{{ url_for('download_file', filename='anmeldeformular.pdf') }}'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="1em"
+                      viewBox="0 0 384 512"
+                      class="svgIcon"
+                    >
+                      <path
+                        d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+                      ></path>
+                    </svg>
+                    <span class="icon2"></span>
+                  </button>
             </section>
         </div>
     </div>
+    
 </body>
 </html>
