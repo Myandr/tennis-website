@@ -373,7 +373,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 8px 0;
-  min-width: 200px;
+  min-width: 210px;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
