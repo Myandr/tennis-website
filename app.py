@@ -446,6 +446,25 @@ def mitgliedschaft():
                            is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
                            is_verified=current_user.is_authenticated and current_user.is_verified)
 
+@app.route('/location1')
+def location1():
+    return render_template('design1/location1.html')
+
+@app.route('/location2')
+def location2():
+    return render_template('design1/location2.html')
+
+@app.route('/location3')
+def location3():
+    return render_template('design1/location3.html')
+
+@app.route('/location4')
+def location4():
+    return render_template('design1/location4.html')
+
+
+
+
 @app.route('/download/<filename>')
 def download_file(filename):
     try:
