@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tennis Club Locations</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #f0f0f0;
+      background-color: #000000;
+    }
+    
+    /* Hero section */
+    .hero-container {
+      width: 100%;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .hero {
+      width: 80%;
+      height: 400px;
+      background-image: url('https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      border-radius: 8px;
+    }
+    
+    /* Locations section */
+    .locations-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .location-intro {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .location-intro h2 {
+      font-size: 2.5rem;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+    
+    .location-intro p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      color: #cccccc;
+    }
+    
+    /* Court illustration */
+    .court-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    
+    .court-svg {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+    }
+    
+    .court-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12rem;
+      font-weight: bold;
+      color: #ffffff;
+      opacity: 0.3;
+      z-index: 1;
+    }
+    
+    /* Numbered list */
+    .location-list {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .location-list h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #ffffff;
+      margin-bottom: 30px;
+    }
+    
+    .numbered-list {
+      list-style-type: decimal;
+      padding-left: 30px;
+    }
+    
+    .numbered-list li {
+      margin-bottom: 25px;
+      padding-left: 10px;
+    }
+    
+    .numbered-list h3 {
+      color: #ffffff;
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+    
+    .numbered-list p {
+      color: #cccccc;
+    }
+    
+    .address {
+      font-style: italic;
+      color: #999999;
+      margin-top: 5px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero {
+        width: 90%;
+        height: 300px;
+      }
+      
+      .location-intro h2 {
+        font-size: 2rem;
+      }
+      
+      .court-number {
+        font-size: 8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-container">
+    <div class="hero"></div>
+  </div>
+  
+  <div class="locations-container">
+    <div class="location-intro">
+      <h2>Our Tennis Facilities</h2>
+      <p>Experience tennis at its finest with our premium facilities located throughout the city. Whether you're a beginner or a seasoned pro, we have the perfect court for your game.</p>
+    </div>
+    
+    <div class="court-container">
+      <div class="court-number">1</div>
+      <svg class="court-svg" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Court lines only -->
+        <rect x="20" y="20" width="560" height="360" fill="none" stroke="white" stroke-width="2" />
+        <line x1="300" y1="20" x2="300" y2="380" stroke="white" stroke-width="2" />
+        <rect x="170" y="20" width="260" height="360" fill="none" stroke="white" stroke-width="2" />
+        <rect x="170" y="140" width="260" height="120" fill="none" stroke="white" stroke-width="2" />
+        <!-- Service lines -->
+        <line x1="20" y1="110" x2="580" y2="110" stroke="white" stroke-width="2" />
+        <line x1="20" y1="290" x2="580" y2="290" stroke="white" stroke-width="2" />
+      </svg>
+    </div>
+    
+    <div class="location-list">
+      <h2>Our Locations</h2>
+      <ol class="numbered-list">
+        <li>
+          <h3>Downtown Tennis Center</h3>
+          <p>Our flagship facility featuring 8 courts, pro shop, and training facilities.</p>
+          <p class="address">123 Main Street, Downtown</p>
+        </li>
+        
+        <li>
+          <h3>Westside Tennis Club</h3>
+          <p>A premium facility with 10 courts and a members-only lounge with refreshments.</p>
+          <p class="address">456 West Avenue, Westside</p>
+        </li>
+        
+        <li>
+          <h3>Eastpark Tennis Complex</h3>
+          <p>Our newest location featuring championship courts with spectator seating.</p>
+          <p class="address">789 Park Boulevard, Eastside</p>
+        </li>
+        
+        <li>
+          <h3>Northgate Tennis Academy</h3>
+          <p>Specialized training facility with 6 courts and professional coaching staff.</p>
+          <p class="address">321 North Road, Northside</p>
+        </li>
+        
+        <li>
+          <h3>Riverside Tennis Gardens</h3>
+          <p>Scenic location with 4 courts overlooking the river, perfect for casual play.</p>
+          <p class="address">654 River Lane, Riverside</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</body>
+</html>
