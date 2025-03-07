@@ -1256,10 +1256,10 @@ ___  ___  ___  ___  ___  ___  ___  ___  ___
             <tbody>
               {% for termin in termine %}
               <tr>
-                <td>{{ termin.datum }}</td>
+                <td style="color: rgb(211, 211, 211)">{{ termin.datum }}</td>
                 <td><strong>{{ termin.veranstaltung }}</strong></td>
-                <td>{{ termin.uhrzeit }}</td>
-                <td>{{ termin.ort }}</td>
+                <td style="color: rgb(211, 211, 211)">{{ termin.uhrzeit }}</td>
+                <td  style="color: rgb(211, 211, 211)">{{ termin.ort }}</td>
                 {% if is_admin %}
                 <td>
                   <form
