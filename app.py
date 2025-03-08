@@ -462,7 +462,7 @@ def location3():
 def location4():
     return render_template('design1/location4.html')
 
-.route('/sitemap.xml')
+@app.route('/sitemap.xml')
 def sitemap():
     return send_from_directory('static', 'sitemap.xml')
 
