@@ -244,10 +244,12 @@
     background-color: white;
     margin: 10% auto;
     padding: 20px;
-    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     width: 80%;
-    max-width: 600px;
+    max-width: 1200px;
     position: relative;
+
 }
 
 .modal-content p {
@@ -534,7 +536,7 @@
     
     .modal-content {
         padding: 12px;
-        margin: 10% auto;
+        margin: 0 auto;
     }
     
     .close {
@@ -594,6 +596,461 @@
         margin-right: 2px;
     }
 }
+
+.event {
+    margin: 3px 0;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: white;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.event:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.event.training {
+    background-color: var(--event-color-training);
+    border-left: 3px solid #2a5a39;
+}
+
+.event.turnier {
+    background-color: var(--event-color-turnier);
+    border-left: 3px solid #a33026;
+}
+
+.event.sonstiges {
+    background-color: var(--event-color-sonstiges);
+    border-left: 3px solid #2a5a8a;
+}
+
+/* Enhanced Event Item Styling for List View */
+.event-item {
+    display: flex;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.event-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.event-date {
+    min-width: 80px;
+    text-align: center;
+    padding-right: 15px;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.event-day {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.event-month {
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+}
+
+.event-details {
+    flex-grow: 1;
+    padding-left: 15px;
+}
+
+.event-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.event-time, .event-location {
+    font-size: 0.9rem;
+    color: var(--light-text);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.event-time::before {
+    content: '⏰';
+    margin-right: 5px;
+    font-size: 0.9rem;
+}
+
+.event-location::before {
+    content: '📍';
+    margin-right: 5px;
+    font-size: 0.9rem;
+}
+
+.event-category {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: white;
+    margin-top: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.event-category.training {
+    background-color: var(--event-color-training);
+}
+
+.event-category.turnier {
+    background-color: var(--event-color-turnier);
+}
+
+.event-category.sonstiges {
+    background-color: var(--event-color-sonstiges);
+}
+
+/* Enhanced Modal Styling */
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-content p {
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--light-text);
+    transition: color 0.2s;
+}
+
+.close:hover {
+    color: var(--primary-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+    .event {
+        padding: 3px 5px;
+        font-size: 0.75rem;
+        border-left-width: 2px;
+    }
+    
+    .event-title {
+        font-size: 0.95rem;
+    }
+    
+    .event-day {
+        font-size: 1.5rem;
+    }
+    
+    .event-category {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .event-time::before, .event-location::before {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .event {
+        height: auto;
+        min-height: 16px;
+        padding: 2px 4px;
+        font-size: 0.7rem;
+        margin: 2px 0;
+        border-left-width: 2px;
+    }
+    
+    .event::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin-right: 3px;
+        background-color: white;
+    }
+    
+    .event-category {
+        padding: 2px 6px;
+        font-size: 0.65rem;
+        border-radius: 12px;
+    }
+    
+    .event-day {
+        font-size: 1.2rem;
+    }
+    
+    .event-month {
+        font-size: 0.8rem;
+    }
+}
+</style>
+<style>
+/* Enhanced Modal Styling for Event Details */
+.modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Event Title in Modal */
+#event-modal h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+/* Event Details in Modal */
+#event-modal p {
+    margin: 12px 0;
+    line-height: 1.6;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+}
+
+/* Event Date in Modal */
+#event-date {
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    padding-left: 28px;
+    position: relative;
+}
+
+#event-date::before {
+    content: '\f073';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+
+/* Event Time in Modal */
+#event-time {
+    padding-left: 28px;
+    position: relative;
+}
+
+#event-time::before {
+    content: '\f017';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: var(--event-color-training);
+}
+
+/* Event Location in Modal */
+#event-location {
+    padding-left: 28px;
+    position: relative;
+}
+
+#event-location::before {
+    content: '\f3c5';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: var(--event-color-turnier);
+}
+
+/* Event Description in Modal */
+#event-description {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+    font-style: italic;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* Empty description handling */
+#event-description:empty {
+    display: none;
+}
+
+/* Event Actions in Modal */
+.event-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-edit, .btn-delete {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-edit::before {
+    content: '\f044';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+.btn-delete::before {
+    content: '\f2ed';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+.btn-edit {
+    background: var(--event-color-training);
+    color: white;
+}
+
+.btn-edit:hover {
+    background: #3a6c49;
+    transform: translateY(-2px);
+}
+
+.btn-delete {
+    background: var(--event-color-turnier);
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #b74136;
+    transform: translateY(-2px);
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--light-text);
+    transition: color 0.2s, transform 0.2s;
+    z-index: 10;
+}
+
+.close:hover {
+    color: var(--primary-color);
+}
+
+/* Responsive adjustments for modal */
+@media (max-width: 800px) {
+    .modal-content {
+        padding: 20px;
+        width: 90%;
+    }
+    
+    #event-modal h2 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+    
+    #event-modal p {
+        font-size: 0.95rem;
+        margin: 10px 0;
+    }
+    
+    #event-description {
+        padding: 12px;
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 560px) {
+    .modal-content {
+        padding: 15px;
+        width: 95%;
+    }
+    
+    #event-modal h2 {
+        font-size: 1.3rem;
+        margin-right: 20px; /* Space for close button */
+    }
+    
+    #event-modal p {
+        font-size: 0.9rem;
+    }
+    
+    #event-date, #event-time, #event-location {
+        padding-left: 24px;
+    }
+    
+    .btn-edit, .btn-delete {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .close {
+        right: 15px;
+        top: 10px;
+        font-size: 24px;
+    }
+}
+</style>
     </style>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index2.css') }}" />
 </head>
@@ -651,10 +1108,10 @@
         </div>
 
         <!-- Event Details Modal -->
-        <div id="event-modal" class="modal">
-            <div class="modal-content">
+        <div id="event-modal" class="modal" style="overflow: scroll;">
+            <div class="modal-content" style="height: 50vh; top: 100%; transform: translate(0, -100%); margin: 0 auto; border-radius: 0; border-top-left-radius: 10px; border-top-right-radius: 10px;">
                 <span class="close">&times;</span>
-                <h3 id="event-title"></h3>
+                <h2 id="event-title"></h2>
                 <p id="event-date"></p>
                 <p id="event-time"></p>
                 <p id="event-location"></p>
