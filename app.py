@@ -639,10 +639,6 @@ def choose_design():
 
 
 
-@app.route('/sitemap')
-def sitemap():
-    return send_from_directory('.', 'sitemap.xml', mimetype='application/xml')
-
 @app.route('/newsletter')
 def newsletter():
     design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
