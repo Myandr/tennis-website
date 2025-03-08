@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tennisclub Standort</title>
+  <title>Tennisclub Standorte</title>
 </head>
 <body>
   {% include 'design1/navbar.html' %}
@@ -41,39 +41,60 @@
       border-radius: 8px;
     }
     
-    /* Standort Abschnitt */
-    .location-container {
-      max-width: 800px;
-      margin: 60px auto;
+    /* Standorte Abschnitt */
+    .locations-container {
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 40px 20px;
-      text-align: center;
+      position: relative;
+      top: 60px;
     }
     
-    .location-container h2 {
+    .location-intro {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .location-intro h2 {
       font-size: 2.5rem;
       color: #ffffff;
       margin-bottom: 20px;
     }
     
-    .location-container p {
+    .location-intro p {
       font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
       color: #cccccc;
-      margin-bottom: 10px;
     }
     
-    .highlight {
-      font-size: 1.5rem;
+    /* Platzillustration */
+    .court-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    
+    .court-svg {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+    }
+    
+    .court-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12rem;
       font-weight: bold;
       color: #ffffff;
-      margin-top: 20px;
+      opacity: 0.3;
+      z-index: 1;
     }
     
-    .address {
-      font-style: italic;
-      color: #999999;
-      margin-top: 10px;
-    }
-
     /* Nummerierte Liste */
     .location-list {
       max-width: 800px;
@@ -113,46 +134,70 @@
       color: #999999;
       margin-top: 5px;
     }
-
+    
+    /* Responsive Anpassungen */
     @media (max-width: 768px) {
       .hero {
         width: 350px;
         height: 300px;
       }
       
-      .location-container h2 {
+      .location-intro h2 {
         font-size: 2rem;
+      }
+      
+      .court-number {
+        font-size: 8rem;
       }
     }
   </style>
+  <div class="locations-container" style="background-color: black; color: #f0f0f0;">
+    <a href="/#one" style="margin-bottom: 30px;" class="learn-more">← Zurück</a>
+    <div class="location-intro">
+        
+        <h2>Unsere Tennisanlagen</h2>
+      <p>Erleben Sie Tennis vom Feinsten mit unseren erstklassigen Anlagen, die sich über die ganze Stadt verteilen. Egal, ob Anfänger oder erfahrener Profi, wir haben den perfekten Platz für Ihr Spiel.</p>
+    </div>
+    <div class="hero-container" style="background-color: black; color: #f0f0f0;">
+      <div class="hero"></div>
+    </div>
+    
 
-  <div class="location-container">
-    <a href="/#one" class="learn-more">← Zurück</a>
-    <h2>Tennisclub Dorsten</h2>
-    <p>Unsere Anlage bietet ideale Bedingungen für Tennisspieler aller Spielstärken.</p>
-    <p class="highlight">6 Ascheplätze</p>
-    <p class="highlight">2 davon mit Flutlichtanlage</p>
-    <p class="address">Gahlener Str. 204, 46284 Dorsten</p>
+    
+    <div class="location-list">
+      <h2>Unsere Standorte</h2>
+      <ol class="numbered-list">
+        <li>
+          <h3>Haupt-Tenniszentrum</h3>
+          <p>Unsere Hauptanlage mit 6 Plätzen, Pro-Shop und Trainingsmöglichkeiten.</p>
+          <p class="address">Beispielstraße 123, Innenstadt</p>
+        </li>
+        
+        <li>
+          <h3>Westside Tennisclub</h3>
+          <p>Eine Premium-Anlage mit 6 Plätzen und einer exklusiven Lounge für Mitglieder mit Erfrischungen.</p>
+          <p class="address">Weststraße 456, Westside</p>
+        </li>
+        
+        <li>
+          <h3>Eastpark Tennisanlage</h3>
+          <p>Unsere neueste Anlage mit Meisterschaftsplätzen und Zuschauertribünen.</p>
+          <p class="address">Parkallee 789, Eastside</p>
+        </li>
+        
+        <li>
+          <h3>Nordgate Tennisakademie</h3>
+          <p>Spezialisierte Trainingsanlage mit 6 Plätzen und professionellem Trainerstab.</p>
+          <p class="address">Nordstraße 321, Nordseite</p>
+        </li>
+        
+        <li>
+          <h3>Riverside Tennisgärten</h3>
+          <p>Malersicher Standort mit 6 Plätzen am Flussufer, ideal für Freizeitspiele.</p>
+          <p class="address">Flussweg 654, Riverside</p>
+        </li>
+      </ol>
+    </div>
   </div>
-
-  <div class="hero-container">
-    <div class="hero"></div>
-  </div>
-
-  <div class="location-list">
-    <h2>Unsere Plätze</h2>
-    <ol class="numbered-list">
-      <li>
-        <h3>Platz 1-4</h3>
-        <p>Vier hochwertige Ascheplätze für Freizeit- und Vereinsspiele.</p>
-      </li>
-      
-      <li>
-        <h3>Platz 5 & 6</h3>
-        <p>Zwei Wettkampf-Ascheplätze mit Flutlichtanlage für Abendspiele.</p>
-      </li>
-    </ol>
-  </div>
-
 </body>
 </html>
