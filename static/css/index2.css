@@ -76,14 +76,23 @@
     z-index: 100;
 }
 .admin-button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 10px;
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0.8em 0.9em 0.8em 0.9em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+  border: none;
+  letter-spacing: 0.05em;
+  border-radius: 16px;
 }
+
+
+
 .admin-button.save {
     background-color: #2ecc71;
 }
@@ -121,8 +130,8 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 6px solid #3498db;
-    border-color: #3498db transparent #3498db transparent;
+    border: 2px solid #707070;
+    border-color: #747474 transparent #777777 transparent;
     animation: spinner 1.2s linear infinite;
 }
 @keyframes spinner {

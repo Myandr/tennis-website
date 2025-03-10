@@ -38,11 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateUI(data) {
     document.getElementById("about-title").textContent = data.title
     document.getElementById("about-welcome-text").textContent = data.welcome_text
-    document.getElementById("about-club-title").textContent = data.club_title
     document.getElementById("about-club-text").textContent = data.club_text
-    document.getElementById("about-goals-title").textContent = data.goals_title
     document.getElementById("about-goals-text").textContent = data.goals_text
-    document.getElementById("about-membership-title").textContent = data.membership_title
     document.getElementById("about-membership-text").textContent = data.membership_text
     document.getElementById("about-image").src = data.image_path
   }

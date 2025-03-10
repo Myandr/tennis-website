@@ -36,7 +36,6 @@
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
     <script src="{{ url_for('static', filename='js/ajax-forms.js') }}"></script>
 
@@ -711,7 +710,9 @@
   {% if is_admin %}
   <!-- Admin controls -->
   <div class="admin-controls">
-      <button id="toggle-edit-mode" class="admin-button">Bearbeiten</button>
+      <button id="toggle-edit-mode" class="admin-button">
+        <span>Bearbeiten</span>
+      </button>
   </div>
   
   <!-- Edit overlay -->
