@@ -200,6 +200,37 @@ class Event(db.Model):
             'description': self.description or '',
             'category': self.category
         }
+    
+class AboutSection(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    welcome_text = db.Column(db.Text, nullable=False)
+    club_title = db.Column(db.String(100), nullable=False)
+    club_text = db.Column(db.Text, nullable=False)
+    goals_title = db.Column(db.String(100), nullable=False)
+    goals_text = db.Column(db.Text, nullable=False)
+    membership_title = db.Column(db.String(100), nullable=False)
+    membership_text = db.Column(db.Text, nullable=False)
+    image_path = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'welcome_text': self.welcome_text,
+            'club_title': self.club_title,
+            'club_text': self.club_text,
+            'goals_title': self.goals_title,
+            'goals_text': self.goals_text,
+            'membership_title': self.membership_title,
+            'membership_text': self.membership_text,
+            'image_path': self.image_path,
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+    
+
 
 # Erstellen Sie die Tabellen in der Datenbank
 with app.app_context():
@@ -681,84 +712,64 @@ def make_session_permanent():
 #    |  |  ||     ||     |
 #    |__|__||_____||_____|
                     
+def is_admin():
+    return current_user.is_authenticated and current_user.role == 'admin' and session.get('is_admin_active', True)
 
-
-
-
-
-
-
-
-#     __ _  ____  _  _  ____ 
-#    (  ( \(  __)/ )( \/ ___)
-#    /    / ) _) \ /\ /\___ \
-#    \_)__)(____)(_/\_)(____/
-
-@app.route('/news', methods=['GET', 'POST'])
-def news():
-    design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
-    
-    if request.method == 'POST':
-        image = request.files['image']
-        date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
-        heading = request.form['heading']
-        info = request.form['info']
-        span = request.form['span']
-
-        if image and allowed_file(image.filename):
-            # Bild in Binärdaten umwandeln
-            image_data = image.read()
-
-        # Box in der Datenbank speichern
-        new_box = Box(
-            image_data=image_data,  # Binärdaten des Bildes
-            date=date,
-            heading=heading,
-            info=info, 
-            span=span
+# API route to get about section data
+@app.route('/api/about', methods=['GET'])
+def get_about_data():
+    about_data = AboutSection.query.first()
+    if not about_data:
+        # Create default data if none exists
+        about_data = AboutSection(
+            title="Herzlich Willkommen!",
+            welcome_text="Herzlich willkommen auf der neu gestalteten Homepage des Hardter TV. Hier gibt es zukünftig alle wichtigen Infos und Termine rund um unseren Tennisverein.",
+            club_text="Und los geht es mit einer sehr erfreulichen Nachricht von der Stadt Dorsten. Der Antrag des HTV auf Mittel aus der Sportpauschale 2023 zur Anschaffung einer Flutlichtanlage für zwei Plätze wurde angenommen. Somit wird der HTV der erste Tennisverein in Dorsten sein, der über eine solche Anlage für zwei Tennisfelder verfügen wird.",
+            goals_text="Neben der dann möglichen Ausweitung der Trainingszeiten auch in die späten Abendstunden (sehr wichtig aufgrund der veränderten Arbeitswelt) sieht der HTV aber auch Chancen mit Nachturnieren eine Bereicherung des Vereinslebens zu erzielen. Und letztendlich mussten in der Vergangenheit auch das ein oder andere Meisterschafts- oder Turnierspiel bei sehr diffusen Lichtverhältnisse zu Ende gespielt. Aber das hat ab der nächsten Saison beim HTV nun ein Ende. Realisiert werden soll die Flutlichtanlage auf unseren Plätzen 5 und 6.",
+            membership_text=" ",
+            image_path="/static/images/Tennisball an Linie groß.jpg"
         )
-        db.session.add(new_box)
+        db.session.add(about_data)
         db.session.commit()
-
-        return redirect(url_for('news'))
     
-    # Abrufen der Boxen
-    boxes = Box.query.all()
-    is_admin_active = session.get('is_admin_active', True)
+    return jsonify(about_data.to_dict())
 
-
-    # Base64-Umwandlung für jedes Bild
-    for box in boxes:
-        if box.image_data:
-            box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
-
-
-    return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active, boxes=boxes)
-
-
-#     ____  ____  __    ____  ____  ____ 
-#    (    \(  __)(  )  (  __)(_  _)(  __)
-#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
-#    (____/(____)\____/(____) (__) (____)
-
-@app.route('/delete/<int:box_id>', methods=['POST'])
-def delete_box(box_id):
-    box = Box.query.get_or_404(box_id)
+# API route to update about section data
+@app.route('/api/about', methods=['PUT'])
+def update_about_data():
+    if not current_user.is_authenticated or current_user.role != 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+        
+    about_data = AboutSection.query.first()
+    if not about_data:
+        return jsonify({'error': 'About section data not found'}), 404
     
-
-    if box.image_data:
-        box.image_data = None  # Bild aus der Datenbank entfernen
+    data = request.form
     
-    db.session.delete(box)
+    # Update fields if provided
+    if 'title' in data:
+        about_data.title = data['title']
+    if 'welcome_text' in data:
+        about_data.welcome_text = data['welcome_text']
+    if 'club_text' in data:
+        about_data.club_text = data['club_text']
+    if 'goals_text' in data:
+        about_data.goals_text = data['goals_text']
+    if 'membership_text' in data:
+        about_data.membership_text = data['membership_text']
+    
+    # Handle image upload if provided
+    if 'image' in request.files:
+        image = request.files['image']
+        if image.filename:
+            # Save the image to the static folder
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.image_path = image_path
+    
     db.session.commit()
-    return redirect(url_for('news'))
-
-
-
-
-
-
-
+    return jsonify(about_data.to_dict())
 
 
 
