@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_oc5m_user:lOKql9DkDn8J8OrkERiKLgS87FCaIM82@dpg-cv8o7nin91rc738li7qg-a.oregon-postgres.render.com/database_oc5m'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_te5q_user:L38Hmt6bbDfyt0q7qXvgynfGO6gKVHwL@dpg-cv8pk0t6l47c73fqr8sg-a.oregon-postgres.render.com/database_te5q'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -204,12 +204,11 @@ class Event(db.Model):
 class AboutSection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    title_location = db.Column(db.String(100), nullable=False)
     welcome_text = db.Column(db.Text, nullable=False)
-    club_title = db.Column(db.String(100), nullable=False)
+    welcome_text_location = db.Column(db.Text, nullable=False)
     club_text = db.Column(db.Text, nullable=False)
-    goals_title = db.Column(db.String(100), nullable=False)
     goals_text = db.Column(db.Text, nullable=False)
-    membership_title = db.Column(db.String(100), nullable=False)
     membership_text = db.Column(db.Text, nullable=False)
     image_path = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -219,12 +218,11 @@ class AboutSection(db.Model):
         return {
             'id': self.id,
             'title': self.title,
+            'title_location': self.title_location,
             'welcome_text': self.welcome_text,
-            'club_title': self.club_title,
+            'welcome_text_location': self.welcome_text_location,
             'club_text': self.club_text,
-            'goals_title': self.goals_title,
             'goals_text': self.goals_text,
-            'membership_title': self.membership_title,
             'membership_text': self.membership_text,
             'image_path': self.image_path,
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S')
@@ -723,7 +721,9 @@ def get_about_data():
         # Create default data if none exists
         about_data = AboutSection(
             title="Herzlich Willkommen!",
+            title_location="Besuche unseren Verein",
             welcome_text="Herzlich willkommen auf der neu gestalteten Homepage des Hardter TV. Hier gibt es zukünftig alle wichtigen Infos und Termine rund um unseren Tennisverein.",
+            welcome_text_location="Besuche uns jeden Sonntag an einem unserer Standorte!",
             club_text="Und los geht es mit einer sehr erfreulichen Nachricht von der Stadt Dorsten. Der Antrag des HTV auf Mittel aus der Sportpauschale 2023 zur Anschaffung einer Flutlichtanlage für zwei Plätze wurde angenommen. Somit wird der HTV der erste Tennisverein in Dorsten sein, der über eine solche Anlage für zwei Tennisfelder verfügen wird.",
             goals_text="Neben der dann möglichen Ausweitung der Trainingszeiten auch in die späten Abendstunden (sehr wichtig aufgrund der veränderten Arbeitswelt) sieht der HTV aber auch Chancen mit Nachturnieren eine Bereicherung des Vereinslebens zu erzielen. Und letztendlich mussten in der Vergangenheit auch das ein oder andere Meisterschafts- oder Turnierspiel bei sehr diffusen Lichtverhältnisse zu Ende gespielt. Aber das hat ab der nächsten Saison beim HTV nun ein Ende. Realisiert werden soll die Flutlichtanlage auf unseren Plätzen 5 und 6.",
             membership_text=" ",
@@ -749,8 +749,12 @@ def update_about_data():
     # Update fields if provided
     if 'title' in data:
         about_data.title = data['title']
+    if 'title_location' in data:
+        about_data.title_location = data['title_location']
     if 'welcome_text' in data:
         about_data.welcome_text = data['welcome_text']
+    if 'welcome_text_location' in data:
+        about_data.welcome_text_location = data['welcome_text_location']
     if 'club_text' in data:
         about_data.club_text = data['club_text']
     if 'goals_text' in data:
