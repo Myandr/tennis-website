@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_n0td_user:fuATXptWKOwYKf6oWydotzEj7I7exCWY@dpg-cv889caj1k6c738k6cig-a.oregon-postgres.render.com/database_n0td'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_oc5m_user:lOKql9DkDn8J8OrkERiKLgS87FCaIM82@dpg-cv8o7nin91rc738li7qg-a.oregon-postgres.render.com/database_oc5m'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
