@@ -778,18 +778,6 @@
 
             </div>
           </div>
-          <div class="expanded-info">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
-              width="600"
-              height="450"
-              title="iframe"
-              style="border: 0"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
         </div>
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location2';">
           <img  src="/static/images/image copy 2.png" alt="Tennis Club" />
@@ -802,18 +790,6 @@
 46284 Dorsten
 
             </div>
-          </div>
-          <div class="expanded-info">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
-              width="600"
-              title="iframe"
-              height="450"
-              style="border: 0"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
           </div>
         </div>
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location3';">
@@ -828,18 +804,6 @@
 
             </div>
           </div>
-          <div class="expanded-info">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
-              width="600"
-              height="450"
-              style="border: 0"
-              title="iframe"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
         </div>
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location4';">
           <img src="/static/images/image.png" alt="Tennis im Garten" />
@@ -852,18 +816,6 @@
 46284 Dorsten
 
             </div>
-          </div>
-          <div class="expanded-info">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2474.959019017665!2d6.9275330770816765!3d51.66058669950048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8f26e657412d9%3A0x9088105a5549feb5!2sHardter%20TV!5e0!3m2!1sde!2sde!4v1737531043915!5m2!1sde!2sde"
-              width="600"
-              title="iframe"
-              height="450"
-              style="border: 0"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
           </div>
         </div>
         {% for item in content_items %}
@@ -1126,8 +1078,8 @@
 
     <section class="locations-section" id="termine">
       <div class="locations-header" data-aos="fade-right">
-        <h2>Termine</h2>
-        <p>Hier erfahren Sie alles über kommende Termine und Veranstaltungen</p>
+        <h2 class="editable" data-field="title_termin" id="termin-title">Termine</h2>
+        <p class="editable" data-field="welcome_text_termin" id="termin-welcome-text">Hier erfahren Sie alles über kommende Termine und Veranstaltungen</p>
         <a href="/kalender" class="learn-more">Kalender →</a>
       </div>
       <div class="locations-grid">
@@ -1178,11 +1130,10 @@
 |  _|| . ||  _||     |
 |_|  |___||_|  |_|_|_|
                     
-      -->
+
 
       {% if is_admin %}
 
-      <!-- Formular zum Hinzufügen eines neuen Termins -->
       <form id="termin-form" class="termin-form hidden" action="/add_termin" method="POST">
         <h3>Neuen Termin hinzufügen</h3>
         <label for="datum">Datum:</label>
@@ -1214,14 +1165,119 @@
       </form>
 
       {% endif %}
-    </section>
 
-    <!--
+  
                                              
  ___  ___  ___  ___  ___  ___  ___  ___  ___ 
 |___||___||___||___||___||___||___||___||___|
                                             
    -->
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to fetch events and populate the termine section
+        function populateTermineSection() {
+            // Get the table body in the termine section
+            const termineTableBody = document.querySelector('#termine .clean-table tbody');
+            
+            // Clear existing entries (except for the last row if it contains admin controls)
+            while (termineTableBody.firstChild) {
+                termineTableBody.removeChild(termineTableBody.firstChild);
+            }
+            
+            // Fetch events from the API
+            fetch('/api/events')
+                .then(response => response.json())
+                .then(events => {
+                    // Sort events by date
+                    events.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    
+                    // Add events to the table
+                    events.forEach(event => {
+                        // Create a new row
+                        const row = document.createElement('tr');
+                        
+                        // Format the date (assuming date is in ISO format)
+                        const eventDate = new Date(event.date);
+                        const formattedDate = `${eventDate.getDate().toString().padStart(2, '0')}.${(eventDate.getMonth() + 1).toString().padStart(2, '0')}.${eventDate.getFullYear()}`;
+                        
+                        // Create and append cells
+                        const dateCell = document.createElement('td');
+                        dateCell.style.color = 'rgb(211, 211, 211)';
+                        dateCell.textContent = formattedDate;
+                        row.appendChild(dateCell);
+                        
+                        const titleCell = document.createElement('td');
+                        const titleStrong = document.createElement('strong');
+                        titleStrong.textContent = event.title;
+                        titleCell.appendChild(titleStrong);
+                        row.appendChild(titleCell);
+                        
+                        const timeCell = document.createElement('td');
+                        timeCell.style.color = 'rgb(211, 211, 211)';
+                        timeCell.textContent = `${event.startTime} - ${event.endTime}`;
+                        row.appendChild(timeCell);
+                        
+                        const locationCell = document.createElement('td');
+                        locationCell.style.color = 'rgb(211, 211, 211)';
+                        locationCell.textContent = event.location;
+                        row.appendChild(locationCell);
+                        
+                        // Check if admin controls are needed
+                        if (window.is_admin) {
+                            const actionCell = document.createElement('td');
+                            
+                            // Create delete form
+                            const deleteForm = document.createElement('form');
+                            deleteForm.action = `/delete_termin/${event.id}`;
+                            deleteForm.method = 'POST';
+                            deleteForm.style.display = 'inline';
+                            
+                            const deleteButton = document.createElement('button');
+                            deleteButton.className = 'delete';
+                            deleteButton.type = 'submit';
+                            deleteButton.textContent = 'Löschen';
+                            deleteButton.onclick = function() {
+                                return confirm('Möchten Sie diesen Termin wirklich löschen?');
+                            };
+                            
+                            deleteForm.appendChild(deleteButton);
+                            actionCell.appendChild(deleteForm);
+                            row.appendChild(actionCell);
+                        }
+                        
+                        // Add the row to the table
+                        termineTableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                    
+                    // Display error message in the table
+                    const errorRow = document.createElement('tr');
+                    const errorCell = document.createElement('td');
+                    errorCell.colSpan = window.is_admin ? 5 : 4;
+                    errorCell.textContent = 'Fehler beim Laden der Termine. Bitte versuchen Sie es später erneut.';
+                    errorCell.style.textAlign = 'center';
+                    errorRow.appendChild(errorCell);
+                    termineTableBody.appendChild(errorRow);
+                });
+        }
+        
+        // Call the function to populate the termine section when the page loads
+        populateTermineSection();
+        
+        // Optional: Set up a refresh interval to keep the termine section updated
+        // Uncomment the following line if you want to refresh the data every 5 minutes
+        // setInterval(populateTermineSection, 5 * 60 * 1000);
+        
+        // Define a global variable to indicate if the user is an admin
+        // This should be set by your server-side code
+        window.is_admin = document.querySelector('#termine .delete') !== null;
+    });
+    </script>
+
 
     <!--
  ____  ____   __    __   __ _  ____  ____ 
@@ -1232,8 +1288,8 @@
 
 <section class="locations-section" id="trainer">
   <div class="locations-header" data-aos="fade-right" >
-    <h2>Unser Vorstand</h2>
-    <p>
+    <h2 class="editable" data-field="title_vorstand" id="vorstand-title">Unser Vorstand</h2>
+    <p class="editable" data-field="welcome_text_vorstand" id="vorstand-welcome-text">
       Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen
     </p>
     <a href="/vorstand" class="learn-more">Alle Vorsitzenden sehen →</a>
@@ -1246,11 +1302,6 @@
           src="/static/images/Oliver 1JPG.jpg"
           alt="Max Mustermann"
         />
-        <div class="trainer-overlay">
-          <p>
-            "Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."
-          </p>
-        </div>
       </div>
       <div class="trainer-info">
         <h3 class="trainer-name">Oliver Wiegand</h3>
@@ -1267,11 +1318,7 @@
           src="/static/images/Holger Arlt_1.jpg"
           alt="Max Mustermann"
         />
-        <div class="trainer-overlay">
-          <p>
-            "Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."
-          </p>
-        </div>
+
       </div>
       <div class="trainer-info">
         <h3 class="trainer-name">Holger Arlt</h3>
@@ -1288,11 +1335,7 @@
           src="/static/images/Volker Schumacher_1.JPG"
           alt="Max Mustermann"
         />
-        <div class="trainer-overlay">
-          <p>
-            "Tennis ist nicht nur ein Sport, es ist eine Lebenseinstellung."
-          </p>
-        </div>
+
       </div>
       <div class="trainer-info">
         <h3 class="trainer-name">Volker Schuhmacher</h3>
@@ -1315,8 +1358,8 @@
 
     <section class="locations-section" id="news">
       <div class="locations-header" data-aos="fade-right">
-        <h2>Aktuelle Neuigkeiten</h2>
-        <p>
+        <h2 class="editable" data-field="title_news" id="news-title">Aktuelle Neuigkeiten</h2>
+        <p class="editable" data-field="welcome_text_news" id="news-welcome-text">
           Bleiben Sie auf dem Laufenden über die neuesten Entwicklungen in
           unserem Verein
         </p>
@@ -1447,8 +1490,8 @@
 
     <section class="locations-section" id="contact">
       <div class="locations-header" data-aos="fade-right">
-        <h2>Schreibe uns direkt</h2>
-        <p>Nehme über usere Seite direkt Kontakt mit uns auf!</p>
+        <h2 class="editable" data-field="title_kontakt" id="kontakt-title">Schreibe uns direkt</h2>
+        <p class="editable" data-field="welcome_text_kontakt" id="kontakt-welcome-text">Nehme über usere Seite direkt Kontakt mit uns auf!</p>
       </div>
       <div class="locations-grid">
         <form id="contact-form" class="contact-form" action="/send_email" method="POST">
@@ -1528,8 +1571,16 @@
           function updateUI(data) {
               document.getElementById('about-title').textContent = data.title;
               document.getElementById('location-title').textContent = data.title_location;
+              document.getElementById('termin-title').textContent = data.title_termin;
+              document.getElementById('vorstand-title').textContent = data.title_vorstand;
+              document.getElementById('news-title').textContent = data.title_news;
+              document.getElementById('kontakt-title').textContent = data.title_kontakt;
               document.getElementById('about-welcome-text').textContent = data.welcome_text;
               document.getElementById('location-welcome-text').textContent = data.welcome_text_location;
+              document.getElementById('termin-welcome-text').textContent = data.welcome_text_termin;
+              document.getElementById('vorstand-welcome-text').textContent = data.welcome_text_vorstand;
+              document.getElementById('news-welcome-text').textContent = data.welcome_text_news;
+              document.getElementById('kontakt-welcome-text').textContent = data.welcome_text_kontakt;
               document.getElementById('about-club-text').textContent = data.club_text;
               document.getElementById('about-goals-text').textContent = data.goals_text;
               document.getElementById('about-membership-text').textContent = data.membership_text;

@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_te5q_user:L38Hmt6bbDfyt0q7qXvgynfGO6gKVHwL@dpg-cv8pk0t6l47c73fqr8sg-a.oregon-postgres.render.com/database_te5q'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_kup2_user:KJfUCfrnEMi6EuGuJPrkqaY8V79AV7NJ@dpg-cv8q77aj1k6c73fl5h80-a.oregon-postgres.render.com/database_kup2'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -205,8 +205,16 @@ class AboutSection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     title_location = db.Column(db.String(100), nullable=False)
+    title_termin = db.Column(db.String(100), nullable=False)
+    title_vorstand = db.Column(db.String(100), nullable=False)
+    title_news = db.Column(db.String(100), nullable=False)
+    title_kontakt = db.Column(db.String(100), nullable=False)
     welcome_text = db.Column(db.Text, nullable=False)
     welcome_text_location = db.Column(db.Text, nullable=False)
+    welcome_text_termin = db.Column(db.Text, nullable=False)
+    welcome_text_vorstand = db.Column(db.Text, nullable=False)
+    welcome_text_news = db.Column(db.Text, nullable=False)
+    welcome_text_kontakt = db.Column(db.Text, nullable=False)
     club_text = db.Column(db.Text, nullable=False)
     goals_text = db.Column(db.Text, nullable=False)
     membership_text = db.Column(db.Text, nullable=False)
@@ -219,8 +227,16 @@ class AboutSection(db.Model):
             'id': self.id,
             'title': self.title,
             'title_location': self.title_location,
+            'title_termin': self.title_termin,
+            'title_vorstand': self.title_vorstand,
+            'title_news': self.title_news,
+            'title_kontakt': self.title_kontakt,
             'welcome_text': self.welcome_text,
             'welcome_text_location': self.welcome_text_location,
+            'welcome_text_termin': self.welcome_text_termin,
+            'welcome_text_vorstand': self.welcome_text_vorstand,
+            'welcome_text_news': self.welcome_text_news,
+            'welcome_text_kontakt': self.welcome_text_kontakt,
             'club_text': self.club_text,
             'goals_text': self.goals_text,
             'membership_text': self.membership_text,
@@ -722,8 +738,16 @@ def get_about_data():
         about_data = AboutSection(
             title="Herzlich Willkommen!",
             title_location="Besuche unseren Verein",
+            title_termin="Termine",
+            title_vorstand="Unser Vorstand",
+            title_news="Aktuelle Neuigkeiten",
+            title_kontakt="Schreibe uns direkt",
             welcome_text="Herzlich willkommen auf der neu gestalteten Homepage des Hardter TV. Hier gibt es zukünftig alle wichtigen Infos und Termine rund um unseren Tennisverein.",
             welcome_text_location="Besuche uns jeden Sonntag an einem unserer Standorte!",
+            welcome_text_termin="Hier erfahren Sie alles über kommende Termine und Veranstaltungen",
+            welcome_text_vorstand="Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen",
+            welcome_text_news="Bleiben Sie auf dem Laufenden über die neuesten Entwicklungen in unserem Verein",
+            welcome_text_kontakt="Nehme über usere Seite direkt Kontakt mit uns auf!",
             club_text="Und los geht es mit einer sehr erfreulichen Nachricht von der Stadt Dorsten. Der Antrag des HTV auf Mittel aus der Sportpauschale 2023 zur Anschaffung einer Flutlichtanlage für zwei Plätze wurde angenommen. Somit wird der HTV der erste Tennisverein in Dorsten sein, der über eine solche Anlage für zwei Tennisfelder verfügen wird.",
             goals_text="Neben der dann möglichen Ausweitung der Trainingszeiten auch in die späten Abendstunden (sehr wichtig aufgrund der veränderten Arbeitswelt) sieht der HTV aber auch Chancen mit Nachturnieren eine Bereicherung des Vereinslebens zu erzielen. Und letztendlich mussten in der Vergangenheit auch das ein oder andere Meisterschafts- oder Turnierspiel bei sehr diffusen Lichtverhältnisse zu Ende gespielt. Aber das hat ab der nächsten Saison beim HTV nun ein Ende. Realisiert werden soll die Flutlichtanlage auf unseren Plätzen 5 und 6.",
             membership_text=" ",
@@ -751,10 +775,26 @@ def update_about_data():
         about_data.title = data['title']
     if 'title_location' in data:
         about_data.title_location = data['title_location']
+    if 'title_termin' in data:
+        about_data.title_termin = data['title_termin']
+    if 'title_vorstand' in data:
+        about_data.title_vorstand = data['title_vorstand']
+    if 'title_news' in data:
+        about_data.title_news = data['title_news']
+    if 'title_kontakt' in data:
+        about_data.title_kontakt = data['title_kontakt']
     if 'welcome_text' in data:
         about_data.welcome_text = data['welcome_text']
     if 'welcome_text_location' in data:
         about_data.welcome_text_location = data['welcome_text_location']
+    if 'welcome_text_termin' in data:
+        about_data.welcome_text_termin = data['welcome_text_termin']
+    if 'welcome_text_vorstand' in data:
+        about_data.welcome_text_vorstand = data['welcome_text_vorstand']
+    if 'welcome_text_news' in data:
+        about_data.welcome_text_news = data['welcome_text_news']
+    if 'welcome_text_kontakt' in data:
+        about_data.welcome_text_kontakt = data['welcome_text_kontakt']
     if 'club_text' in data:
         about_data.club_text = data['club_text']
     if 'goals_text' in data:
