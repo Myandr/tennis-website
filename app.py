@@ -908,6 +908,65 @@ def update_event(event_id):
     return jsonify(event.to_dict())
 
 
+@app.route('/news', methods=['GET', 'POST'])
+def news():
+    design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
+    
+    if request.method == 'POST':
+        image = request.files['image']
+        date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+        heading = request.form['heading']
+        info = request.form['info']
+        span = request.form['span']
+
+        if image and allowed_file(image.filename):
+            # Bild in Binärdaten umwandeln
+            image_data = image.read()
+
+        # Box in der Datenbank speichern
+        new_box = Box(
+            image_data=image_data,  # Binärdaten des Bildes
+            date=date,
+            heading=heading,
+            info=info, 
+            span=span
+        )
+        db.session.add(new_box)
+        db.session.commit()
+
+        return redirect(url_for('news'))
+    
+    # Abrufen der Boxen
+    boxes = Box.query.all()
+    is_admin_active = session.get('is_admin_active', True)
+
+
+    # Base64-Umwandlung für jedes Bild
+    for box in boxes:
+        if box.image_data:
+            box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
+
+
+    return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active, boxes=boxes)
+
+
+#     ____  ____  __    ____  ____  ____ 
+#    (    \(  __)(  )  (  __)(_  _)(  __)
+#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#    (____/(____)\____/(____) (__) (____)
+
+@app.route('/delete/<int:box_id>', methods=['POST'])
+def delete_box(box_id):
+    box = Box.query.get_or_404(box_id)
+    
+
+    if box.image_data:
+        box.image_data = None  # Bild aus der Datenbank entfernen
+    
+    db.session.delete(box)
+    db.session.commit()
+    return redirect(url_for('news'))
+
 #     __     __    ___   __   ____   __    __   __ _ 
 #    (  )   /  \  / __) / _\ (_  _) (  )  /  \ (  ( \
 #    / (_/\(  O )( (__ /    \  )(    )(  (  O )/    /
