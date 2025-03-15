@@ -2059,36 +2059,31 @@ DB_PASSWORD = "1234"  # Ersetze dies durch ein starkes Passwort
 
 @app.route('/db-preview', methods=['GET', 'POST'])
 def db_preview():
-    design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
-#design
+    design = session.get('design', 'design1')  # Default design if not in session
+    
     if request.method == 'POST':
         if request.form['password'] == DB_PASSWORD:
-            # Daten aus der Datenbank holen
+            # Fetch data from database based on your new models
             users = User.query.all()
-            termine = Termin.query.all()
-            about_texts = AboutText.query.all()
-            content_items = ContentItem.query.all()
-            for item in content_items:
-                if item.image_data:
-                    item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
-                else:
-                    item.image_data_base64 = None
-
-            box = Box.query.all()
+            events = Event.query.all()
+            about_sections = AboutSection.query.all()
             
-
-            for item in box:
-                if item.image_data:
-                    item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
-                else:
-                    item.image_data_base64 = None
-
-
-            return render_template(f'{design}/db_preview.html', users=users,
-                                   termine=termine, about_texts=about_texts, content_item=content_items, box=box)
+            # Get current time for the footer
+            now = datetime.now()
+            
+            # Render the database preview template with the data
+            return render_template(
+                f'{design}/db_preview.html',
+                users=users,
+                events=events,
+                about_sections=about_sections,
+                now=now
+            )
         else:
+            # If password is incorrect, show error
             return render_template(f'{design}/passwort.html', error="Falsches Passwort! Versuche es erneut.")
 
+    # If it's a GET request, show the password form
     return render_template(f'{design}/passwort.html', error=None)
 
 

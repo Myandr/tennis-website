@@ -6,11 +6,21 @@
     <title>Datenbank Vorschau</title>
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --background-color: #ecf0f1;
-            --text-color: #333;
-            --border-color: #bdc3c7;
+            --primary-color: #4361ee;
+            --primary-light: rgba(67, 97, 238, 0.1);
+            --secondary-color: #2b2d42;
+            --background-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #2b2d42;
+            --text-muted: #6c757d;
+            --border-color: #e9ecef;
+            --table-header: #f1f5f9;
+            --table-row-hover: #f8fafc;
+            --success-color: #06d6a0;
+            --warning-color: #ffbe0b;
+            --danger-color: #ef233c;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -20,7 +30,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--background-color);
@@ -30,70 +40,125 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
         }
         
-        .login {
-            overflow: scroll;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background-color: #3a56d4;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            background-color: var(--card-bg);
         }
 
         h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
+            color: var(--secondary-color);
+            font-size: 2.2em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         h2 {
             color: var(--secondary-color);
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.8em;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 24px;
+            background-color: var(--primary-color);
+            border-radius: 4px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
-            background-color: #fff;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+            background-color: var(--card-bg);
+            min-width: 600px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        
-        .table-container {
-    width: 100%;
-    overflow-x: auto;
-    margin-bottom: 30px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    min-width: 600px; /* Ensure table doesn't shrink too much on small screens */
-}
 
         th, td {
-            border: 1px solid var(--border-color);
-            padding: 12px;
+            padding: 14px 16px;
             text-align: left;
         }
-
+        
         th {
-            background-color: var(--primary-color);
-            color: #fff;
-            font-weight: bold;
-            text-transform: uppercase;
+            background-color: var(--table-header);
+            color: var(--secondary-color);
+            font-weight: 600;
             font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
         }
 
-        td img {
-            max-width: 200px;
+        tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        tr:last-child {
+            border-bottom: none;
         }
 
         tr:nth-child(even) {
@@ -101,176 +166,400 @@ table {
         }
 
         tr:hover {
-            background-color: #e9ecef;
-            transition: background-color 0.3s ease;
+            background-color: var(--table-row-hover);
         }
 
-        @media screen and (max-width: 600px) {
-            table {
-                font-size: 0.8em;
-            }
+        .truncate {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .truncate-cell {
+            max-width: 300px;
+        }
 
-            th, td {
-                padding: 8px;
-            }
+        .expand-btn {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 500;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
 
+        .expand-btn:hover {
+            background-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-success {
+            background-color: rgba(6, 214, 160, 0.2);
+            color: #06d6a0;
+        }
+        
+        .badge-warning {
+            background-color: rgba(255, 190, 11, 0.2);
+            color: #d68a06;
+        }
+        
+        .badge-danger {
+            background-color: rgba(239, 35, 60, 0.2);
+            color: #ef233c;
+        }
+        
+        .section-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background-color: var(--primary-light);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .section-body {
+            padding: 0;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        @media screen and (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 20px 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+            }
+            
+            th, td {
+                padding: 10px 12px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Datenbank Vorschau</h1>
-
-        <h2>Benutzer (User)</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Rolle</th>
-                        <th>Verifiziert</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.firstname }}</td>
-                        <td>{{ user.lastname }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.role }}</td>
-                        <td>{{ user.is_verified }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="header">
+            <h1>Datenbank Vorschau</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Drucken
+                </button>
+                <a href="{{ url_for('db_preview') }}" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2.5 2v6h6M21.5 22v-6h-6"></path>
+                        <path d="M22 11.5A10 10 0 0 0 3.2 7.2M2 12.5a10 10 0 0 0 18.8 4.2"></path>
+                    </svg>
+                    Aktualisieren
+                </a>
+            </div>
         </div>
 
-        <h2>Termine</h2>
-        <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Datum</th>
-                    <th>Veranstaltung</th>
-                    <th>Uhrzeit</th>
-                    <th>Ort</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for termin in termine %}
-                <tr>
-                    <td>{{ termin.id }}</td>
-                    <td>{{ termin.datum }}</td>
-                    <td>{{ termin.veranstaltung }}</td>
-                    <td>{{ termin.uhrzeit }}</td>
-                    <td>{{ termin.ort }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="section-card">
+            <div class="section-header">
+                <h2>Benutzer (User)</h2>
+            </div>
+            <div class="section-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Vorname</th>
+                                <th>Nachname</th>
+                                <th>Email</th>
+                                <th>Rolle</th>
+                                <th>Verifiziert</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.firstname }}</td>
+                                <td>{{ user.lastname }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.role == 'admin' %}
+                                    <span class="badge badge-danger">{{ user.role }}</span>
+                                    {% else %}
+                                    <span class="badge badge-success">{{ user.role }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.is_verified %}
+                                    <span class="badge badge-success">Ja</span>
+                                    {% else %}
+                                    <span class="badge badge-warning">Nein</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <h2>About Texte</h2>
-        <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Content</th>
-                    <th>Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for about_text in about_texts %}
-                <tr>
-                    <td>{{ about_text.id }}</td>
-                    <td>{{ about_text.content }}</td>
-                    <td>{{ about_text.type }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="section-card">
+            <div class="section-header">
+                <h2>Termine (Events)</h2>
+            </div>
+            <div class="section-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Titel</th>
+                                <th>Kurztitel</th>
+                                <th>Datum</th>
+                                <th>Zeit</th>
+                                <th>Ort</th>
+                                <th>Kategorie</th>
+                                <th>Beschreibung</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in events %}
+                            <tr>
+                                <td>{{ event.id }}</td>
+                                <td>{{ event.title }}</td>
+                                <td>{{ event.short_title }}</td>
+                                <td>{{ event.date.strftime('%d.%m.%Y') }}</td>
+                                <td>{{ event.start_time }} - {{ event.end_time }}</td>
+                                <td>{{ event.location }}</td>
+                                <td>
+                                    {% if event.category == 'training' %}
+                                    <span class="badge badge-success">Training</span>
+                                    {% elif event.category == 'turnier' %}
+                                    <span class="badge badge-danger">Turnier</span>
+                                    {% else %}
+                                    <span class="badge badge-warning">Sonstiges</span>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ event.description or "" }}</div>
+                                    {% if event.description and event.description|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        
-        <h2>Standorte</h2>
-        <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Img</th>
-                    <th>Heading</th>
-                    <th>Text1</th>
-                    <th>Text2</th>
-                    <th>Iframe</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for content in content_item %}
-                <tr>
-                    <td>{{ content.id }}</td>
-                    <td>{% if content.image_data_base64 %}
-                        <img
-                          src="data:image/jpeg;base64,{{ content.image_data_base64 }}"
-                          alt="Content Image"
-                        />
-                        {% else %}
-                        <p>No image available</p>
-                        {% endif %}</td>
-                    <td>{{ content.heading }}</td>
-                    <td>{{ content.text1 }}</td>
-                    <td>{{ content.text2 }}</td>
-                    <td>{{ content.iframe }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="section-card">
+            <div class="section-header">
+                <h2>About Section</h2>
+            </div>
+            <div class="section-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Haupttitel</th>
+                                <th>Mitgliedschaft</th>
+                                <th>Standort</th>
+                                <th>Termine</th>
+                                <th>Vorstand</th>
+                                <th>News</th>
+                                <th>Kontakt</th>
+                                <th>Training</th>
+                                <th>Aktualisiert</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for about in about_sections %}
+                            <tr>
+                                <td>{{ about.id }}</td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.title }}</div>
+                                    {% if about.title|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.title_mitgliedschaft }}</div>
+                                    {% if about.title_mitgliedschaft|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.title_location }}</div>
+                                    {% if about.title_location|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.title_termin }}</div>
+                                    {% if about.title_termin|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.title_vorstand }}</div>
+                                    {% if about.title_vorstand|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.title_news }}</div>
+                                    {% if about.title_news|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.title_kontakt }}</div>
+                                    {% if about.title_kontakt|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.title_training }}</div>
+                                    {% if about.title_training|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td>{{ about.updated_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <h2>News</h2>
-        <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Img</th>
-                    <th>Datum</th>
-                    <th>Heading</th>
-                    <th>info</th>
-                    <th>span</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in box %}
-                <tr>
-                    <td>{{ i.id }}</td>
-                    <td>{% if i.image_data_base64 %}
-                        <img
-                          src="data:image/jpeg;base64,{{ i.image_data_base64 }}"
-                          alt="Content Image"
-                        />
-                        {% else %}
-                        <p>No image available</p>
-                        {% endif %}</td>
-                    <td>{{ i.date }}</td>
-                    <td>{{ i.heading }}</td>
-                    <td>{{ i.info }}</td>
-                    <td>{{ i.span }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="section-card">
+            <div class="section-header">
+                <h2>About Section Details</h2>
+            </div>
+            <div class="section-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Willkommenstext</th>
+                                <th>Vereinstext</th>
+                                <th>Ziele</th>
+                                <th>Mitgliedschaft</th>
+                                <th>Bild-Pfad</th>
+                                <th>Training Texte</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for about in about_sections %}
+                            <tr>
+                                <td>{{ about.id }}</td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.welcome_text }}</div>
+                                    {% if about.welcome_text|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.club_text }}</div>
+                                    {% if about.club_text|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.goals_text }}</div>
+                                    {% if about.goals_text|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">{{ about.membership_text }}</div>
+                                    {% if about.membership_text|length > 100 %}
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                    {% endif %}
+                                </td>
+                                <td>{{ about.image_path }}</td>
+                                <td class="truncate-cell">
+                                    <div class="truncate">
+                                        <strong>1:</strong> {{ about.text_training_1 }}<br>
+                                        <strong>2:</strong> {{ about.text_training_2 }}<br>
+                                        <strong>3:</strong> {{ about.text_training_3 }}<br>
+                                        <strong>4:</strong> {{ about.text_training_4 }}
+                                    </div>
+                                    <button class="expand-btn" onclick="toggleText(this)">Mehr anzeigen</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
+        <div class="footer">
+            <p>Datenbank Vorschau • Letzte Aktualisierung: {{ now.strftime('%d.%m.%Y %H:%M') }}</p>
+        </div>
     </div>
+
+    <script>
+        function toggleText(button) {
+            const container = button.previousElementSibling;
+            if (container.classList.contains('truncate')) {
+                container.classList.remove('truncate');
+                button.textContent = 'Weniger anzeigen';
+            } else {
+                container.classList.add('truncate');
+                button.textContent = 'Mehr anzeigen';
+            }
+        }
+    </script>
 </body>
 </html>
