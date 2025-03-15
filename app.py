@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_kup2_user:KJfUCfrnEMi6EuGuJPrkqaY8V79AV7NJ@dpg-cv8q77aj1k6c73fl5h80-a.oregon-postgres.render.com/database_kup2'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_c407_user:CNN6np6kZ3q8jMOSiiKLL0B8htpoHoAJ@dpg-cvanqotumphs73ag143g-a.oregon-postgres.render.com/database_c407'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -203,22 +203,24 @@ class Event(db.Model):
     
 class AboutSection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    title_location = db.Column(db.String(100), nullable=False)
-    title_termin = db.Column(db.String(100), nullable=False)
-    title_vorstand = db.Column(db.String(100), nullable=False)
-    title_news = db.Column(db.String(100), nullable=False)
-    title_kontakt = db.Column(db.String(100), nullable=False)
-    welcome_text = db.Column(db.Text, nullable=False)
-    welcome_text_location = db.Column(db.Text, nullable=False)
-    welcome_text_termin = db.Column(db.Text, nullable=False)
-    welcome_text_vorstand = db.Column(db.Text, nullable=False)
-    welcome_text_news = db.Column(db.Text, nullable=False)
-    welcome_text_kontakt = db.Column(db.Text, nullable=False)
-    club_text = db.Column(db.Text, nullable=False)
-    goals_text = db.Column(db.Text, nullable=False)
-    membership_text = db.Column(db.Text, nullable=False)
-    image_path = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(100), nullable=True)
+    title_mitgliedschaft = db.Column(db.String(100), nullable=True)
+    title_location = db.Column(db.String(100), nullable=True)
+    title_termin = db.Column(db.String(100), nullable=True)
+    title_vorstand = db.Column(db.String(100), nullable=True)
+    title_news = db.Column(db.String(100), nullable=True)
+    title_kontakt = db.Column(db.String(100), nullable=True)
+    welcome_text = db.Column(db.Text, nullable=True)
+    welcome_text_location = db.Column(db.Text, nullable=True)
+    welcome_text_mitgliedschaft = db.Column(db.Text, nullable=True)
+    welcome_text_termin = db.Column(db.Text, nullable=True)
+    welcome_text_vorstand = db.Column(db.Text, nullable=True)
+    welcome_text_news = db.Column(db.Text, nullable=True)
+    welcome_text_kontakt = db.Column(db.Text, nullable=True)
+    club_text = db.Column(db.Text, nullable=True)
+    goals_text = db.Column(db.Text, nullable=True)
+    membership_text = db.Column(db.Text, nullable=True)
+    image_path = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -226,12 +228,14 @@ class AboutSection(db.Model):
         return {
             'id': self.id,
             'title': self.title,
+            'title_mitgliedschaft': self.title_mitgliedschaft,
             'title_location': self.title_location,
             'title_termin': self.title_termin,
             'title_vorstand': self.title_vorstand,
             'title_news': self.title_news,
             'title_kontakt': self.title_kontakt,
             'welcome_text': self.welcome_text,
+            'welcome_text_mitgliedschaft': self.welcome_text_mitgliedschaft,
             'welcome_text_location': self.welcome_text_location,
             'welcome_text_termin': self.welcome_text_termin,
             'welcome_text_vorstand': self.welcome_text_vorstand,
@@ -737,12 +741,14 @@ def get_about_data():
         # Create default data if none exists
         about_data = AboutSection(
             title="Herzlich Willkommen!",
+            title_mitgliedschaft="Werde Teil unserer Tennis-Community",
             title_location="Besuche unseren Verein",
             title_termin="Termine",
             title_vorstand="Unser Vorstand",
             title_news="Aktuelle Neuigkeiten",
             title_kontakt="Schreibe uns direkt",
             welcome_text="Herzlich willkommen auf der neu gestalteten Homepage des Hardter TV. Hier gibt es zukünftig alle wichtigen Infos und Termine rund um unseren Tennisverein.",
+            welcome_text_mitgliedschaft="Erlebe die Freude am Tennis und die Kraft der Gemeinschaft. Verbinde dich mit Gleichgesinnten und wachse gemeinsam im Sport.",
             welcome_text_location="Besuche uns jeden Sonntag an einem unserer Standorte!",
             welcome_text_termin="Hier erfahren Sie alles über kommende Termine und Veranstaltungen",
             welcome_text_vorstand="Lernen Sie unsere erfahrenen und qualifizierten Tennistrainer kennen",

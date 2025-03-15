@@ -585,8 +585,8 @@
 
     <section class="black-section"  id="mitgliedschaft">
       <div class="black-section-content" data-aos="fade-up" >
-        <h2>Werde Teil unserer Tennis-Community</h2>
-        <p>
+        <h2 class="editable" data-field="title_mitgliedschaft" id="mitgliedschaft-title">Werde Teil unserer Tennis-Community</h2>
+        <p class="editable" data-field="welcome_text_mitgliedschaft" id="mitgliedschaft-welcome-text">
           Erlebe die Freude am Tennis und die Kraft der Gemeinschaft. Verbinde
           dich mit Gleichgesinnten und wachse gemeinsam im Sport.
         </p>
@@ -852,7 +852,6 @@
 |  _|| . ||  _||     |
 |_|  |___||_|  |_|_|_|
                     
-      -->
 
       {% if is_admin %}
       <form
@@ -1569,12 +1568,14 @@
           }
           
           function updateUI(data) {
+              document.getElementById('mitgliedschaft-title').textContent = data.title_mitgliedschaft;
               document.getElementById('about-title').textContent = data.title;
               document.getElementById('location-title').textContent = data.title_location;
               document.getElementById('termin-title').textContent = data.title_termin;
               document.getElementById('vorstand-title').textContent = data.title_vorstand;
               document.getElementById('news-title').textContent = data.title_news;
               document.getElementById('kontakt-title').textContent = data.title_kontakt;
+              document.getElementById('mitgliedschaft-welcome-text').textContent = data.welcome_text_mitgliedschaft;
               document.getElementById('about-welcome-text').textContent = data.welcome_text;
               document.getElementById('location-welcome-text').textContent = data.welcome_text_location;
               document.getElementById('termin-welcome-text').textContent = data.welcome_text_termin;
