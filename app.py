@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_c407_user:CNN6np6kZ3q8jMOSiiKLL0B8htpoHoAJ@dpg-cvanqotumphs73ag143g-a.oregon-postgres.render.com/database_c407'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_ojow_user:I6AtrUWddI9vJvL8druQO1h0OPEo46hL@dpg-cvap0etumphs73agl43g-a.oregon-postgres.render.com/database_ojow'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -203,26 +203,33 @@ class Event(db.Model):
     
 class AboutSection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=True)
-    title_mitgliedschaft = db.Column(db.String(100), nullable=True)
-    title_location = db.Column(db.String(100), nullable=True)
-    title_termin = db.Column(db.String(100), nullable=True)
-    title_vorstand = db.Column(db.String(100), nullable=True)
-    title_news = db.Column(db.String(100), nullable=True)
-    title_kontakt = db.Column(db.String(100), nullable=True)
-    welcome_text = db.Column(db.Text, nullable=True)
-    welcome_text_location = db.Column(db.Text, nullable=True)
-    welcome_text_mitgliedschaft = db.Column(db.Text, nullable=True)
-    welcome_text_termin = db.Column(db.Text, nullable=True)
-    welcome_text_vorstand = db.Column(db.Text, nullable=True)
-    welcome_text_news = db.Column(db.Text, nullable=True)
-    welcome_text_kontakt = db.Column(db.Text, nullable=True)
-    club_text = db.Column(db.Text, nullable=True)
-    goals_text = db.Column(db.Text, nullable=True)
-    membership_text = db.Column(db.Text, nullable=True)
-    image_path = db.Column(db.String(255), nullable=True)
+    title = db.Column(db.Text, nullable=False)
+    title_mitgliedschaft = db.Column(db.Text, nullable=False)
+    title_location = db.Column(db.Text, nullable=False)
+    title_termin = db.Column(db.Text, nullable=False)
+    title_vorstand = db.Column(db.Text, nullable=False)
+    title_news = db.Column(db.Text, nullable=False)
+    title_kontakt = db.Column(db.Text, nullable=False)
+    welcome_text = db.Column(db.Text, nullable=False)
+    welcome_text_location = db.Column(db.Text, nullable=False)
+    welcome_text_mitgliedschaft = db.Column(db.Text, nullable=False)
+    welcome_text_termin = db.Column(db.Text, nullable=False)
+    welcome_text_vorstand = db.Column(db.Text, nullable=False)
+    welcome_text_news = db.Column(db.Text, nullable=False)
+    welcome_text_kontakt = db.Column(db.Text, nullable=False)
+    club_text = db.Column(db.Text, nullable=False)
+    goals_text = db.Column(db.Text, nullable=False)
+    membership_text = db.Column(db.Text, nullable=False)
+    image_path = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    title_training = db.Column(db.Text, nullable=False)
+    welcome_text_training = db.Column(db.Text, nullable=False)
+    text_training_1 = db.Column(db.Text, nullable=False)
+    text_training_2 = db.Column(db.Text, nullable=False)
+    text_training_3 = db.Column(db.Text, nullable=False)
+    text_training_4 = db.Column(db.Text, nullable=False)
+
 
     def to_dict(self):
         return {
@@ -245,7 +252,14 @@ class AboutSection(db.Model):
             'goals_text': self.goals_text,
             'membership_text': self.membership_text,
             'image_path': self.image_path,
-            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'title_training': self.title_training,
+            'welcome_text_training': self.welcome_text_training,
+            'text_training_1': self.text_training_1,
+            'text_training_2': self.text_training_2,
+            'text_training_3': self.text_training_3,
+            'text_training_4': self.text_training_4
+
         }
     
 
@@ -757,7 +771,14 @@ def get_about_data():
             club_text="Und los geht es mit einer sehr erfreulichen Nachricht von der Stadt Dorsten. Der Antrag des HTV auf Mittel aus der Sportpauschale 2023 zur Anschaffung einer Flutlichtanlage für zwei Plätze wurde angenommen. Somit wird der HTV der erste Tennisverein in Dorsten sein, der über eine solche Anlage für zwei Tennisfelder verfügen wird.",
             goals_text="Neben der dann möglichen Ausweitung der Trainingszeiten auch in die späten Abendstunden (sehr wichtig aufgrund der veränderten Arbeitswelt) sieht der HTV aber auch Chancen mit Nachturnieren eine Bereicherung des Vereinslebens zu erzielen. Und letztendlich mussten in der Vergangenheit auch das ein oder andere Meisterschafts- oder Turnierspiel bei sehr diffusen Lichtverhältnisse zu Ende gespielt. Aber das hat ab der nächsten Saison beim HTV nun ein Ende. Realisiert werden soll die Flutlichtanlage auf unseren Plätzen 5 und 6.",
             membership_text=" ",
-            image_path="/static/images/Tennisball an Linie groß.jpg"
+            image_path="/static/images/Tennisball an Linie groß.jpg",
+            title_training="Tennisschule André Albert",
+            welcome_text_training="Wir l(i)eben Tennis – das ist das Motto von André Albert und dem Team seiner Tennisschule, mit dem er seit 2005 unseren Verein betreut.",
+            text_training_1="André, Jahrgang 1982, ist bereits seit 2005 als selbständiger Tennistrainer tätig und besitzt die B-Trainer-Lizenz des Deutschen Tennisbundes. Als Aktiver hat er einige Siege bei deutschen Ranglistenturnieren errungen, war national die Nummer 330 im Ranking, und konnte sich gegen den einen oder anderen ATP-Ranglistenspieler durchsetzen.",
+            text_training_2="Ob jung oder alt, Anfänger oder Fortgeschrittener, in seiner Tennisschule bringt André jedem noch etwas bei. Dabei setzt er auf ein Team ebenfalls gut ausgebildeter und selbst als Spieler erfolgreicher Trainer, ein individuell auf jeden Spielertyp zugeschnittenes Training und vor allem eines: Motivation.",
+            text_training_3="Langsames Heranführen, regelmäßiges Einzel-, Gruppen- oder Mannschaftstraining, ein spezielles Matchtraining oder Turnier-begleitung? André und sein Team haben für jeden das richtige Angebot. Natürlich ist auch ein unverbindlicher Schnupperkurs möglich.",
+            text_training_4="Seit dem 01.10.2022 ist André der neue Pächter der Tennishalle Kirchhellen. Aktuell könnt ihr auf insgesamt vier Plätzen spielen. Dabei handelt es sich um drei Sandplätze und einen Platz mit Teppichbelag. Buchen könnt ihr die Plätze auf der neuen Website der Tennishalle www.tennishalle-kirchhellen.com oder auch direkt bei André."
+
         )
         db.session.add(about_data)
         db.session.commit()
@@ -779,6 +800,8 @@ def update_about_data():
     # Update fields if provided
     if 'title' in data:
         about_data.title = data['title']
+    if 'title_mitgliedschaft' in data:
+        about_data.title_mitgliedschaft = data['title_mitgliedschaft']
     if 'title_location' in data:
         about_data.title_location = data['title_location']
     if 'title_termin' in data:
@@ -791,6 +814,8 @@ def update_about_data():
         about_data.title_kontakt = data['title_kontakt']
     if 'welcome_text' in data:
         about_data.welcome_text = data['welcome_text']
+    if 'welcome_text_mitgliedschaft' in data:
+        about_data.welcome_text_mitgliedschaft = data['welcome_text_mitgliedschaft']
     if 'welcome_text_location' in data:
         about_data.welcome_text_location = data['welcome_text_location']
     if 'welcome_text_termin' in data:
@@ -803,6 +828,18 @@ def update_about_data():
         about_data.welcome_text_kontakt = data['welcome_text_kontakt']
     if 'club_text' in data:
         about_data.club_text = data['club_text']
+    if 'title_training' in data:
+        about_data.title_training = data['title_training']
+    if 'welcome_text_training' in data:
+        about_data.welcome_text_training = data['welcome_text_training']
+    if 'text_training_1' in data:
+        about_data.text_training_1 = data['text_training_1']
+    if 'text_training_2' in data:
+        about_data.text_training_2 = data['text_training_2']
+    if 'text_training_3' in data:
+        about_data.text_training_3 = data['text_training_3']
+    if 'text_training_4' in data:
+        about_data.text_training_4 = data['text_training_4']
     if 'goals_text' in data:
         about_data.goals_text = data['goals_text']
     if 'membership_text' in data:

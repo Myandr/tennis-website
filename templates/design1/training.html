@@ -138,8 +138,8 @@
 
   <section class="locations-section" style="background-color: white; color: black;" id="about1">
     <div class="locations-header" data-aos="fade-right">
-      <h2>Tennisschule André Albert <img src="/static/images/Logo TSA.jpg" style="width: 80px; position: relative; top: 20px;"></h2>
-      <p>Wir l(i)eben Tennis – das ist das Motto von André Albert und dem Team seiner Tennisschule, mit dem er seit 2005 unseren Verein betreut.</p>
+      <h2 class="editable" data-field="title_training" id="training-welcome-text">Tennisschule André Albert </h2>
+      <p class="editable" data-field="welcome_text_training" id="about-welcome-text">Wir l(i)eben Tennis – das ist das Motto von André Albert und dem Team seiner Tennisschule, mit dem er seit 2005 unseren Verein betreut.</p>
     </div>
     <div class="locations-grid">
       <div class="container">
@@ -150,16 +150,16 @@
             </p>
           </div>
           <div class="about-text" data-aos="fade-up" >
-            <p style="color: black;">
+            <p class="editable" data-field="text_training_1" id="training-text-1" style="color: black;">
                 André, Jahrgang 1982, ist bereits seit 2005 als selbständiger Tennistrainer tätig und besitzt die B-Trainer-Lizenz des Deutschen Tennisbundes. Als Aktiver hat er einige Siege bei deutschen Ranglistenturnieren errungen, war national die Nummer 330 im Ranking, und konnte sich gegen den einen oder anderen ATP-Ranglistenspieler durchsetzen.
             </p><br>
-            <p style="color: black;">
+            <p class="editable" data-field="text_training_2" id="training-text-2" style="color: black;">
                 Ob jung oder alt, Anfänger oder Fortgeschrittener, in seiner Tennisschule bringt André jedem noch etwas bei. Dabei setzt er auf ein Team ebenfalls gut ausgebildeter und selbst als Spieler erfolgreicher Trainer, ein individuell auf jeden Spielertyp zugeschnittenes Training und vor allem eines: Motivation.
             </p><br>
-            <p style="color: black;">
+            <p class="editable" data-field="text_training_3" id="training-text-3" style="color: black;">
                 Langsames Heranführen, regelmäßiges Einzel-, Gruppen- oder Mannschaftstraining, ein spezielles Matchtraining oder Turnier-begleitung? André und sein Team haben für jeden das richtige Angebot. Natürlich ist auch ein unverbindlicher Schnupperkurs möglich. 
             </p><br>
-            <p style="color: black;"> 
+            <p class="editable" data-field="text_training_4" id="training-text-4" style="color: black;"> 
                 Seit dem 01.10.2022 ist André der neue Pächter der Tennishalle Kirchhellen. Aktuell könnt ihr auf insgesamt vier Plätzen spielen. Dabei handelt es sich um drei Sandplätze und einen Platz mit Teppichbelag. Buchen könnt ihr die Plätze auf der neuen Website der Tennishalle <a href="https://www.tennishalle-kirchhellen.com" target="_blank">www.tennishalle-kirchhellen.com</a> oder auch direkt bei André.
             </p>
             <br />
@@ -168,6 +168,220 @@
       </div>
     </div>
   </section>
+
+  {% if is_admin %}
+  <!-- Admin controls -->
+  <div class="admin-controls">
+      <button id="toggle-edit-mode" class="admin-button">
+        <span>Bearbeiten</span>
+      </button>
+  </div>
+  
+  <!-- Edit overlay -->
+  <div id="edit-overlay" class="edit-overlay">
+      <div class="edit-form">
+          <h2>Bearbeiten</h2>
+          <form id="about-edit-form">
+              <input type="hidden" id="edit-field" name="field">
+              
+              <div class="form-group">
+                  <label for="edit-content">Inhalt</label>
+                  <textarea id="edit-content" name="content"></textarea>
+              </div>
+              
+              <div class="form-group" id="image-upload-group" style="display: none;">
+                  <label for="edit-image">Bild</label>
+                  <input type="file" id="edit-image" name="image" accept="image/*">
+              </div>
+              
+              <div class="form-buttons">
+                  <button type="button" id="cancel-edit" class="admin-button cancel">Abbrechen</button>
+                  <button type="submit" class="admin-button save">Speichern</button>
+              </div>
+          </form>
+      </div>
+  </div>
+  
+  <!-- Loading spinner -->
+  <div id="loading-spinner" class="loading-spinner"></div>
+  {% endif %}
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+      // Initialize AOS
+      AOS.init({
+          duration: 400,
+          easing: 'ease-in-out',
+          once: true
+      });
+      
+      {% if is_admin %}
+      // Admin edit functionality
+      document.addEventListener('DOMContentLoaded', function() {
+          const toggleEditModeButton = document.getElementById('toggle-edit-mode');
+          const editOverlay = document.getElementById('edit-overlay');
+          const editForm = document.getElementById('about-edit-form');
+          const cancelEditButton = document.getElementById('cancel-edit');
+          const editField = document.getElementById('edit-field');
+          const editContent = document.getElementById('edit-content');
+          const editImage = document.getElementById('edit-image');
+          const imageUploadGroup = document.getElementById('image-upload-group');
+          const loadingSpinner = document.getElementById('loading-spinner');
+          
+          const fieldToElementMap = {
+        'title_training': 'training-welcome-text',
+        'welcome_text_training': 'about-welcome-text',
+        'text_training_1': 'training-text-1',
+        'text_training_2': 'training-text-2',
+        'text_training_3': 'training-text-3',
+        'text_training_4': 'training-text-4'
+    };
+    
+    let aboutData = {};
+    let isEditMode = false;
+    
+    // Fetch about data
+    fetchAboutData();
+    
+    function fetchAboutData() {
+        loadingSpinner.style.display = 'flex';
+        
+        fetch('/api/about')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                aboutData = data;
+                updateUIWithData(data);
+                loadingSpinner.style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error fetching about data:', error);
+                loadingSpinner.style.display = 'none';
+                alert('Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.');
+            });
+    }
+    
+    // Update UI with data from API
+    function updateUIWithData(data) {
+        // Update each element with corresponding data
+        for (const [field, elementId] of Object.entries(fieldToElementMap)) {
+            const element = document.getElementById(elementId);
+            if (element && data[field]) {
+                element.textContent = data[field];
+            }
+        }
+    }
+    
+    // Toggle edit mode
+    toggleEditModeButton.addEventListener('click', function() {
+        isEditMode = !isEditMode;
+        document.body.classList.toggle('edit-mode', isEditMode);
+        toggleEditModeButton.textContent = isEditMode ? 'Beenden' : 'Bearbeiten';
+        
+        if (isEditMode) {
+            // Add click event listeners to editable elements
+            document.querySelectorAll('.editable').forEach(element => {
+                element.addEventListener('click', openEditForm);
+            });
+        } else {
+            // Remove click event listeners
+            document.querySelectorAll('.editable').forEach(element => {
+                element.removeEventListener('click', openEditForm);
+            });
+        }
+    });
+    
+    // Open edit form
+    function openEditForm(event) {
+        if (!isEditMode) return;
+        
+        const element = event.currentTarget;
+        const field = element.dataset.field;
+        
+        if (!field) return;
+        
+        editField.value = field;
+        
+        if (field === 'image_path') {
+            imageUploadGroup.style.display = 'block';
+            editContent.parentElement.style.display = 'none';
+        } else {
+            imageUploadGroup.style.display = 'none';
+            editContent.parentElement.style.display = 'block';
+            editContent.value = element.textContent.trim();
+        }
+        
+        editOverlay.style.display = 'flex';
+    }
+    
+    // Close edit form
+    cancelEditButton.addEventListener('click', function() {
+        editOverlay.style.display = 'none';
+    });
+    
+    // Submit edit form
+    editForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const field = editField.value;
+        const formData = new FormData();
+        
+        if (field === 'image_path') {
+            if (editImage.files.length > 0) {
+                formData.append('image', editImage.files[0]);
+            } else {
+                alert('Bitte wählen Sie ein Bild aus.');
+                return;
+            }
+        } else {
+            formData.append(field, editContent.value);
+        }
+        
+        loadingSpinner.style.display = 'flex';
+        
+        fetch('/api/about', {
+            method: 'PUT',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Update our local data
+            aboutData = data;
+            
+            // Update the element with the new content
+            if (field !== 'image_path') {
+                const elementId = fieldToElementMap[field];
+                if (elementId) {
+                    const element = document.getElementById(elementId);
+                    if (element && data[field]) {
+                        element.textContent = data[field];
+                    }
+                }
+            }
+            
+            // Close the edit form
+            editOverlay.style.display = 'none';
+            loadingSpinner.style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Error updating about data:', error);
+            loadingSpinner.style.display = 'none';
+            alert('Fehler beim Speichern der Daten. Bitte versuchen Sie es später erneut.');
+        });
+    });
+});
+      {% endif %}
+  </script>
 
 <!--
 <section class="locations-section" style="background-color: white; color: black;" id="training">
