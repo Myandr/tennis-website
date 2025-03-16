@@ -1185,107 +1185,141 @@
   </section>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Function to fetch events and populate the termine section
-        function populateTermineSection() {
-            // Get the table body in the termine section
-            const termineTableBody = document.querySelector('#termine .clean-table tbody');
-            
-            // Clear existing entries (except for the last row if it contains admin controls)
-            while (termineTableBody.firstChild) {
-                termineTableBody.removeChild(termineTableBody.firstChild);
-            }
-            
-            // Fetch events from the API
-            fetch('/api/events')
-                .then(response => response.json())
-                .then(events => {
-                    // Sort events by date
-                    events.sort((a, b) => new Date(a.date) - new Date(b.date));
-                    
-                    // Add events to the table
-                    events.forEach(event => {
-                        // Create a new row
-                        const row = document.createElement('tr');
-                        
-                        // Format the date (assuming date is in ISO format)
-                        const eventDate = new Date(event.date);
-                        const formattedDate = `${eventDate.getDate().toString().padStart(2, '0')}.${(eventDate.getMonth() + 1).toString().padStart(2, '0')}.${eventDate.getFullYear()}`;
-                        
-                        // Create and append cells
-                        const dateCell = document.createElement('td');
-                        dateCell.style.color = 'rgb(211, 211, 211)';
-                        dateCell.textContent = formattedDate;
-                        row.appendChild(dateCell);
-                        
-                        const titleCell = document.createElement('td');
-                        const titleStrong = document.createElement('strong');
-                        titleStrong.textContent = event.title;
-                        titleCell.appendChild(titleStrong);
-                        row.appendChild(titleCell);
-                        
-                        const timeCell = document.createElement('td');
-                        timeCell.style.color = 'rgb(211, 211, 211)';
-                        timeCell.textContent = `${event.startTime} - ${event.endTime}`;
-                        row.appendChild(timeCell);
-                        
-                        const locationCell = document.createElement('td');
-                        locationCell.style.color = 'rgb(211, 211, 211)';
-                        locationCell.textContent = event.location;
-                        row.appendChild(locationCell);
-                        
-                        // Check if admin controls are needed
-                        if (window.is_admin) {
-                            const actionCell = document.createElement('td');
-                            
-                            // Create delete form
-                            const deleteForm = document.createElement('form');
-                            deleteForm.action = `/delete_termin/${event.id}`;
-                            deleteForm.method = 'POST';
-                            deleteForm.style.display = 'inline';
-                            
-                            const deleteButton = document.createElement('button');
-                            deleteButton.className = 'delete';
-                            deleteButton.type = 'submit';
-                            deleteButton.textContent = 'Löschen';
-                            deleteButton.onclick = function() {
-                                return confirm('Möchten Sie diesen Termin wirklich löschen?');
-                            };
-                            
-                            deleteForm.appendChild(deleteButton);
-                            actionCell.appendChild(deleteForm);
-                            row.appendChild(actionCell);
-                        }
-                        
-                        // Add the row to the table
-                        termineTableBody.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error);
-                    
-                    // Display error message in the table
-                    const errorRow = document.createElement('tr');
-                    const errorCell = document.createElement('td');
-                    errorCell.colSpan = window.is_admin ? 5 : 4;
-                    errorCell.textContent = 'Fehler beim Laden der Termine. Bitte versuchen Sie es später erneut.';
-                    errorCell.style.textAlign = 'center';
-                    errorRow.appendChild(errorCell);
-                    termineTableBody.appendChild(errorRow);
-                });
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to fetch events and populate the termine section
+    function populateTermineSection() {
+        // Get the table body in the termine section
+        const termineTableBody = document.querySelector('#termine .clean-table tbody');
+        
+        // Clear existing entries (except for the last row if it contains admin controls)
+        while (termineTableBody.firstChild) {
+            termineTableBody.removeChild(termineTableBody.firstChild);
         }
         
-        // Call the function to populate the termine section when the page loads
-        populateTermineSection();
-        
-        // Optional: Set up a refresh interval to keep the termine section updated
-        // Uncomment the following line if you want to refresh the data every 5 minutes
-        // setInterval(populateTermineSection, 5 * 60 * 1000);
-        
-        // Define a global variable to indicate if the user is an admin
-        // This should be set by your server-side code
-        window.is_admin = document.querySelector('#termine .delete') !== null;
-    });
+        // Fetch events from the API
+        fetch('/api/events')
+            .then(response => response.json())
+            .then(events => {
+                // Sort events by date
+                events.sort((a, b) => new Date(a.date) - new Date(b.date));
+                
+                // Add events to the table
+                events.forEach(event => {
+                    // Create a new row
+                    const row = document.createElement('tr');
+                    const eventStartDate = new Date(event.startDate);
+                    const eventEndDate = event.endDate ? new Date(event.endDate) : null;
+
+                    // Überprüfen, ob das Startdatum gültig ist
+
+                    // Formatierte Startdatum
+                    const formattedStartDate = `${eventStartDate.getDate().toString().padStart(2, '0')}.${(eventStartDate.getMonth() + 1).toString().padStart(2, '0')}.${eventStartDate.getFullYear()}`;
+
+                    // Formatierte Enddatum, falls vorhanden
+                    let formattedEndDate = '';
+                    if (eventEndDate) {
+
+                        formattedEndDate = `${eventEndDate.getDate().toString().padStart(2, '0')}.${(eventEndDate.getMonth() + 1).toString().padStart(2, '0')}.${eventEndDate.getFullYear()}`;
+                    }
+
+                    // Wenn es mehrere Tage sind, zeige sowohl Start- als auch Enddatum
+                    const dateText = eventEndDate ? `${formattedStartDate} - ${formattedEndDate}` : formattedStartDate;
+
+                    // Hier kannst du dann das Datum anzeigen
+                    console.log(dateText);  // Beispiel für Debugging
+
+
+
+                    
+                    // Create and append cells
+                    const dateCell = document.createElement('td');
+                    dateCell.style.color = 'rgb(211, 211, 211)';
+                    dateCell.textContent = dateText;
+                    row.appendChild(dateCell);
+
+                    
+                    const titleCell = document.createElement('td');
+                    const titleStrong = document.createElement('strong');
+                    titleStrong.textContent = event.title;
+                    titleCell.appendChild(titleStrong);
+                    row.appendChild(titleCell);
+                    
+                    const timeCell = document.createElement('td');
+                    timeCell.style.color = 'rgb(211, 211, 211)';
+                    
+                    // Check if startTime and endTime are null, then display 'Ganztägig'
+                    if (event.startTime === null && event.endTime === null) {
+                        timeCell.textContent = 'Ganztägig';
+                    } else {
+                        // If there is no endTime, don't display the dash
+                        if (event.endTime === null) {
+                            timeCell.textContent = `${event.startTime}`;
+                        } else {
+                            // Only display the dash if both startTime and endTime exist
+                            timeCell.textContent = `${event.startTime}  ${event.endTime}`;
+                        }
+                    }
+                    row.appendChild(timeCell);
+                    
+                    const locationCell = document.createElement('td');
+                    locationCell.style.color = 'rgb(211, 211, 211)';
+                    locationCell.textContent = event.location;
+                    row.appendChild(locationCell);
+                    
+                    // Check if admin controls are needed
+                    if (window.is_admin) {
+                        const actionCell = document.createElement('td');
+                        
+                        // Create delete form
+                        const deleteForm = document.createElement('form');
+                        deleteForm.action = `/delete_termin/${event.id}`;
+                        deleteForm.method = 'POST';
+                        deleteForm.style.display = 'inline';
+                        
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'delete';
+                        deleteButton.type = 'submit';
+                        deleteButton.textContent = 'Löschen';
+                        deleteButton.onclick = function() {
+                            return confirm('Möchten Sie diesen Termin wirklich löschen?');
+                        };
+                        
+                        deleteForm.appendChild(deleteButton);
+                        actionCell.appendChild(deleteForm);
+                        row.appendChild(actionCell);
+                    }
+                    
+                    // Add the row to the table
+                    termineTableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+                
+                // Display error message in the table
+                const errorRow = document.createElement('tr');
+                const errorCell = document.createElement('td');
+                errorCell.colSpan = window.is_admin ? 5 : 4;
+                errorCell.textContent = 'Fehler beim Laden der Termine. Bitte versuchen Sie es später erneut.';
+                errorCell.style.textAlign = 'center';
+                errorRow.appendChild(errorCell);
+                termineTableBody.appendChild(errorRow);
+            });
+    }
+    
+    // Call the function to populate the termine section when the page loads
+    populateTermineSection();
+    
+    // Optional: Set up a refresh interval to keep the termine section updated
+    // Uncomment the following line if you want to refresh the data every 5 minutes
+    // setInterval(populateTermineSection, 5 * 60 * 1000);
+    
+    // Define a global variable to indicate if the user is an admin
+    // This should be set by your server-side code
+    window.is_admin = document.querySelector('#termine .delete') !== null;
+});
+
+
     </script>
 
 

@@ -181,9 +181,11 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     short_title = db.Column(db.String(20), nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    start_time = db.Column(db.String(5), nullable=False)  # Format: "HH:MM"
-    end_time = db.Column(db.String(5), nullable=False)    # Format: "HH:MM"
+    start_date = db.Column(db.Date, nullable=False)  # Renamed from date
+    end_date = db.Column(db.Date, nullable=True)     # New field for multi-day events
+    is_all_day = db.Column(db.Boolean, default=False)  # New field for all-day events
+    start_time = db.Column(db.String(5), nullable=True)  # Now nullable
+    end_time = db.Column(db.String(5), nullable=True)    # Now nullable
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
     category = db.Column(db.String(20), nullable=False)   # 'training', 'turnier', 'sonstiges'
@@ -194,7 +196,9 @@ class Event(db.Model):
             'id': self.id,
             'title': self.title,
             'shortTitle': self.short_title,
-            'date': self.date.strftime('%Y-%m-%d'),
+            'startDate': self.start_date.strftime('%Y-%m-%d'),
+            'endDate': self.end_date.strftime('%Y-%m-%d') if self.end_date else None,
+            'isAllDay': self.is_all_day,
             'startTime': self.start_time,
             'endTime': self.end_time,
             'location': self.location,
@@ -1464,24 +1468,32 @@ def create_event():
     data = request.form
     
     # Validate required fields
-    required_fields = ['title', 'short_title', 'date', 'start_time', 'end_time', 'location', 'category']
+    required_fields = ['title', 'short_title', 'start_date', 'location', 'category']
     for field in required_fields:
         if field not in data or not data[field]:
             return jsonify({'error': f'Field {field} is required'}), 400
     
-    # Parse date
+    # Parse dates
     try:
-        date_obj = datetime.strptime(data['date'], '%Y-%m-%d').date()
+        start_date_obj = datetime.strptime(data['start_date'], '%Y-%m-%d').date()
+        end_date_obj = None
+        if 'end_date' in data and data['end_date']:
+            end_date_obj = datetime.strptime(data['end_date'], '%Y-%m-%d').date()
     except ValueError:
         return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
+    
+    # Check if it's an all-day event
+    is_all_day = 'is_all_day' in data and data['is_all_day'] == 'true'
     
     # Create new event
     new_event = Event(
         title=data['title'],
         short_title=data['short_title'],
-        date=date_obj,
-        start_time=data['start_time'],
-        end_time=data['end_time'],
+        start_date=start_date_obj,
+        end_date=end_date_obj,
+        is_all_day=is_all_day,
+        start_time=None if is_all_day else data.get('start_time'),
+        end_time=None if is_all_day else data.get('end_time'),
         location=data['location'],
         description=data.get('description', ''),
         category=data['category']
@@ -1509,15 +1521,32 @@ def update_event(event_id):
         event.title = data['title']
     if 'short_title' in data:
         event.short_title = data['short_title']
-    if 'date' in data:
+    if 'start_date' in data:
         try:
-            event.date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+            event.start_date = datetime.strptime(data['start_date'], '%Y-%m-%d').date()
         except ValueError:
-            return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
-    if 'start_time' in data:
-        event.start_time = data['start_time']
-    if 'end_time' in data:
-        event.end_time = data['end_time']
+            return jsonify({'error': 'Invalid start date format. Use YYYY-MM-DD'}), 400
+    if 'end_date' in data and data['end_date']:
+        try:
+            event.end_date = datetime.strptime(data['end_date'], '%Y-%m-%d').date()
+        except ValueError:
+            return jsonify({'error': 'Invalid end date format. Use YYYY-MM-DD'}), 400
+    elif 'end_date' in data:
+        event.end_date = None
+        
+    # Update all-day status
+    event.is_all_day = 'is_all_day' in data and data['is_all_day'] == 'true'
+    
+    # Update time fields based on all-day status
+    if event.is_all_day:
+        event.start_time = None
+        event.end_time = None
+    else:
+        if 'start_time' in data:
+            event.start_time = data['start_time']
+        if 'end_time' in data:
+            event.end_time = data['end_time']
+            
     if 'location' in data:
         event.location = data['location']
     if 'description' in data:

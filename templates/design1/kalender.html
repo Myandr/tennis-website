@@ -1142,36 +1142,48 @@
                     
                     <div class="form-group">
                         <label for="short_title">Kurztitel (für mobile Ansicht)</label>
-                        <input style="border: 1px solid grey;" type="text" id="short_title" name="short_title" maxlength="20" required>
+                        <input style="border: 1px solid grey;" type="text" id="short_title" name="short_title" maxlength="5" required>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="date">Datum</label>
-                            <input style="border: 1px solid grey;" type="date" id="date" name="date" required>
+                            <label for="start_date">Startdatum</label>
+                            <input style="border: 1px solid grey;" type="date" id="start_date" name="start_date" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="category">Kategorie</label>
-                            <select id="category" name="category" required>
-                                <option value="">Bitte wählen</option>
-                                <option value="training">Training</option>
-                                <option value="turnier">Turnier</option>
-                                <option value="sonstiges">Sonstiges</option>
-                            </select>
+                            <label for="end_date">Enddatum (optional)</label>
+                            <input style="border: 1px solid grey;" type="date" id="end_date" name="end_date">
                         </div>
                     </div>
                     
-                    <div class="form-row">
+                    <div class="form-group">
+                        <label for="is_all_day" style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="is_all_day" name="is_all_day" value="true">
+                            <span>Ganztägig</span>
+                        </label>
+                    </div>
+                    
+                    <div id="time-fields" class="form-row">
                         <div class="form-group">
                             <label for="start_time">Startzeit</label>
                             <input style="border: 1px solid grey;" type="time" id="start_time" name="start_time" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="end_time">Endzeit</label>
-                            <input style="border: 1px solid grey;" type="time" id="end_time" name="end_time" required>
+                            <label for="end_time">Endzeit (optional)</label>
+                            <input style="border: 1px solid grey;" type="time" id="end_time" name="end_time">
                         </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Kategorie</label>
+                        <select id="category" name="category" required>
+                            <option value="">Bitte wählen</option>
+                            <option value="training">Training</option>
+                            <option value="turnier">Turnier</option>
+                            <option value="sonstiges">Sonstiges</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
@@ -1227,6 +1239,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const eventForm = document.getElementById('event-form');
     const formTitle = document.getElementById('form-title');
     const eventIdInput = document.getElementById('event-id');
+    const isAllDayCheckbox = document.getElementById('is_all_day');
+    const timeFields = document.getElementById('time-fields');
 
     // Current date
     let currentDate = new Date();
@@ -1360,6 +1374,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 renderEventsList();
             }
         });
+
+        // Add event listener for the all-day checkbox
+        isAllDayCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                timeFields.style.display = 'none';
+                document.getElementById('start_time').required = false;
+                document.getElementById('end_time').required = false;
+            } else {
+                timeFields.style.display = 'flex';
+                document.getElementById('start_time').required = false;
+                document.getElementById('end_time').required = false;
+            }
+        });
     }
     
     // Fetch events from the server
@@ -1367,10 +1394,43 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('/api/events')
             .then(response => response.json())
             .then(data => {
-                events = data.map(event => ({
-                    ...event,
-                    date: new Date(event.date)
-                }));
+                // Process events for multi-day support
+                let processedEvents = [];
+                
+                data.forEach(event => {
+                    // Check if we have startDate and endDate (for multi-day events)
+                    const startDate = event.startDate ? new Date(event.startDate) : new Date(event.date);
+                    const endDate = event.endDate ? new Date(event.endDate) : null;
+                    
+                    // If it's a multi-day event, create an event for each day
+                    if (endDate && endDate > startDate) {
+                        const currentDate = new Date(startDate);
+                        
+                        while (currentDate <= endDate) {
+                            processedEvents.push({
+                                ...event,
+                                date: new Date(currentDate),
+                                isMultiDay: true,
+                                startDate: startDate,
+                                endDate: endDate
+                            });
+                            
+                            // Move to next day
+                            currentDate.setDate(currentDate.getDate() + 1);
+                        }
+                    } else {
+                        // Single day event
+                        processedEvents.push({
+                            ...event,
+                            date: startDate,
+                            isMultiDay: false,
+                            startDate: startDate,
+                            endDate: null
+                        });
+                    }
+                });
+                
+                events = processedEvents;
                 renderCalendar();
                 renderEventsList();
             })
@@ -1383,6 +1443,16 @@ document.addEventListener('DOMContentLoaded', function() {
     function saveEvent() {
         const formData = new FormData(eventForm);
         const eventId = formData.get('event_id');
+        
+        // Handle all-day checkbox
+        if (isAllDayCheckbox.checked) {
+            formData.set('is_all_day', 'true');
+            // If all-day is checked, we don't need times
+            formData.delete('start_time');
+            formData.delete('end_time');
+        } else {
+            formData.set('is_all_day', 'false');
+        }
         
         let url = '/api/events';
         let method = 'POST';
@@ -1444,7 +1514,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Set default date to today
         const today = new Date();
         const dateStr = today.toISOString().split('T')[0];
-        document.getElementById('date').value = dateStr;
+        document.getElementById('start_date').value = dateStr;
+        
+        // Show time fields by default
+        timeFields.style.display = 'flex';
+        document.getElementById('start_time').required = false;
+        document.getElementById('end_time').required = false;
         
         eventFormModal.style.display = 'block';
     }
@@ -1457,9 +1532,36 @@ document.addEventListener('DOMContentLoaded', function() {
         eventIdInput.value = event.id;
         document.getElementById('title').value = event.title;
         document.getElementById('short_title').value = event.shortTitle;
-        document.getElementById('date').value = event.date.toISOString().split('T')[0];
-        document.getElementById('start_time').value = event.startTime;
-        document.getElementById('end_time').value = event.endTime;
+        
+        // Set dates
+        if (event.startDate) {
+            document.getElementById('start_date').value = formatDateForInput(event.startDate);
+        } else {
+            document.getElementById('start_date').value = formatDateForInput(event.date);
+        }
+        
+        if (event.endDate) {
+            document.getElementById('end_date').value = formatDateForInput(event.endDate);
+        } else {
+            document.getElementById('end_date').value = '';
+        }
+        
+        // Set all-day checkbox
+        isAllDayCheckbox.checked = event.isAllDay;
+        
+        // Show/hide time fields based on all-day status
+        if (event.isAllDay) {
+            timeFields.style.display = 'none';
+            document.getElementById('start_time').required = false;
+            document.getElementById('end_time').required = false;
+        } else {
+            timeFields.style.display = 'flex';
+            document.getElementById('start_time').required = false;
+            document.getElementById('end_time').required = false;
+            document.getElementById('start_time').value = event.startTime;
+            document.getElementById('end_time').value = event.endTime;
+        }
+        
         document.getElementById('location').value = event.location;
         document.getElementById('description').value = event.description || '';
         document.getElementById('category').value = event.category;
@@ -1467,6 +1569,23 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hide event details modal and show form modal
         modal.style.display = 'none';
         eventFormModal.style.display = 'block';
+    }
+    
+    // Format date for input field (YYYY-MM-DD)
+    function formatDateForInput(date) {
+        if (typeof date === 'string') {
+            return date;
+        }
+        
+        const d = new Date(date);
+        let month = '' + (d.getMonth() + 1);
+        let day = '' + d.getDate();
+        const year = d.getFullYear();
+        
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+        
+        return [year, month, day].join('-');
     }
     
     // Check screen size for responsive adjustments
@@ -1537,10 +1656,12 @@ document.addEventListener('DOMContentLoaded', function() {
             dayElement.appendChild(dayNumber);
             
             // Add events for this day
+            const currentDateObj = new Date(currentYear, currentMonth, i);
             const dayEvents = events.filter(event => {
-                return event.date.getDate() === i && 
-                       event.date.getMonth() === currentMonth && 
-                       event.date.getFullYear() === currentYear;
+                const eventDate = new Date(event.date);
+                return eventDate.getDate() === i && 
+                       eventDate.getMonth() === currentMonth && 
+                       eventDate.getFullYear() === currentYear;
             });
             
             dayEvents.forEach(event => {
@@ -1560,10 +1681,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     eventElement.appendChild(eventText);
                 } else if (isMobile) {
                     // For mobile screens, use the short title
-                    eventElement.textContent = `${event.startTime.substring(0, 2)} ${event.shortTitle}`;
+                    if (event.isAllDay) {
+                        eventElement.textContent = event.shortTitle;
+                    } else {
+                        eventElement.textContent = `${event.startTime.substring(0, 2)} ${event.shortTitle}`;
+                    }
+                    
+                    // Add multi-day indicator
+                    if (event.isMultiDay) {
+                        eventElement.style.borderLeft = '3px solid #ff9800';
+                    }
                 } else {
                     // For larger screens, use the full title
-                    eventElement.textContent = `${event.startTime} ${event.title}`;
+                    if (event.isAllDay) {
+                        eventElement.textContent = event.title;
+                    } else {
+                        eventElement.textContent = `${event.startTime} ${event.title}`;
+                    }
+                    
+                    // Add multi-day indicator
+                    if (event.isMultiDay) {
+                        eventElement.style.borderLeft = '3px solid #ff9800';
+                    }
                 }
                 
                 eventElement.addEventListener('click', () => showEventDetails(event));
@@ -1616,16 +1755,28 @@ document.addEventListener('DOMContentLoaded', function() {
             filteredEvents = events.filter(event => event.category === selectedCategory);
         }
         
+        // For list view, we want to show each event only once, even if it spans multiple days
+        // So we need to deduplicate multi-day events
+        const uniqueEvents = [];
+        const eventIds = new Set();
+        
+        filteredEvents.forEach(event => {
+            if (!eventIds.has(event.id)) {
+                eventIds.add(event.id);
+                uniqueEvents.push(event);
+            }
+        });
+        
         // Sort events by date
-        filteredEvents.sort((a, b) => a.date - b.date);
+        uniqueEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
         
         // Create event items
-        if (filteredEvents.length === 0) {
+        if (uniqueEvents.length === 0) {
             const noEvents = document.createElement('p');
             noEvents.textContent = 'Keine Termine gefunden.';
             eventsList.appendChild(noEvents);
         } else {
-            filteredEvents.forEach(event => {
+            uniqueEvents.forEach(event => {
                 const eventItem = document.createElement('div');
                 eventItem.classList.add('event-item');
                 eventItem.addEventListener('click', () => showEventDetails(event));
@@ -1635,16 +1786,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const eventDay = document.createElement('div');
                 eventDay.classList.add('event-day');
-                eventDay.textContent = event.date.getDate();
+                eventDay.textContent = new Date(event.date).getDate();
                 
                 const eventMonth = document.createElement('div');
                 eventMonth.classList.add('event-month');
                 
                 // Use short month names on mobile
                 if (isMobile) {
-                    eventMonth.textContent = shortMonthNames[event.date.getMonth()];
+                    eventMonth.textContent = shortMonthNames[new Date(event.date).getMonth()];
                 } else {
-                    eventMonth.textContent = monthNames[event.date.getMonth()].substring(0, 3);
+                    eventMonth.textContent = monthNames[new Date(event.date).getMonth()].substring(0, 3);
                 }
                 
                 eventDate.appendChild(eventDay);
@@ -1663,9 +1814,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     eventTitle.textContent = event.title;
                 }
                 
+                // Add multi-day indicator if applicable
+                if (event.isMultiDay) {
+                    const multiDayBadge = document.createElement('span');
+                    multiDayBadge.textContent = ' (Mehrtägig)';
+                    multiDayBadge.style.fontSize = '0.8rem';
+                    multiDayBadge.style.color = 'var(--light-text)';
+                    eventTitle.appendChild(multiDayBadge);
+                }
+                
                 const eventTime = document.createElement('div');
                 eventTime.classList.add('event-time');
-                eventTime.textContent = `${event.startTime} - ${event.endTime} Uhr`;
+                
+                // Display time information based on whether it's an all-day event
+                if (event.isAllDay) {
+                    eventTime.textContent = 'Ganztägig';
+                } else {
+                    eventTime.textContent = `${event.startTime} - ${event.endTime} Uhr`;
+                }
                 
                 const eventLocation = document.createElement('div');
                 eventLocation.classList.add('event-location');
@@ -1734,16 +1900,35 @@ document.addEventListener('DOMContentLoaded', function() {
         
         eventTitle.textContent = event.title;
         
-        // Format date based on screen size
+        // Format date based on screen size and whether it's a multi-day event
         let formattedDate;
-        if (isMobile) {
-            formattedDate = `${shortDayNames[event.date.getDay()]}, ${event.date.getDate()}. ${shortMonthNames[event.date.getMonth()]} ${event.date.getFullYear()}`;
+        if (event.isMultiDay) {
+            const startDate = new Date(event.startDate);
+            const endDate = new Date(event.endDate);
+            
+            if (isMobile) {
+                formattedDate = `${startDate.getDate()}. ${shortMonthNames[startDate.getMonth()]} - ${endDate.getDate()}. ${shortMonthNames[endDate.getMonth()]} ${endDate.getFullYear()}`;
+            } else {
+                formattedDate = `${startDate.getDate()}. ${monthNames[startDate.getMonth()]} - ${endDate.getDate()}. ${monthNames[endDate.getMonth()]} ${endDate.getFullYear()}`;
+            }
         } else {
-            formattedDate = `${dayNames[event.date.getDay()]}, ${event.date.getDate()}. ${monthNames[event.date.getMonth()]} ${event.date.getFullYear()}`;
+            const eventDateObj = new Date(event.date);
+            if (isMobile) {
+                formattedDate = `${shortDayNames[eventDateObj.getDay()]}, ${eventDateObj.getDate()}. ${shortMonthNames[eventDateObj.getMonth()]} ${eventDateObj.getFullYear()}`;
+            } else {
+                formattedDate = `${dayNames[eventDateObj.getDay()]}, ${eventDateObj.getDate()}. ${monthNames[eventDateObj.getMonth()]} ${eventDateObj.getFullYear()}`;
+            }
         }
+        
         eventDate.textContent = formattedDate;
         
-        eventTime.textContent = `Zeit: ${event.startTime} - ${event.endTime} Uhr`;
+        // Display time information based on whether it's an all-day event
+        if (event.isAllDay) {
+            eventTime.textContent = 'Ganztägig';
+        } else {
+            eventTime.textContent = `Zeit: ${event.startTime} - ${event.endTime} Uhr`;
+        }
+        
         eventLocation.textContent = `Ort: ${event.location}`;
         eventDescription.textContent = event.description || '';
         
@@ -1758,29 +1943,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the calendar
     initCalendar();
 });
-</script>
-<script>
-    const hamburger = document.getElementById("hamburger");
-        const menu = document.getElementById("menu");
-        const menuToggle = document.getElementById("menuToggle");
-        const menuLinks = document.querySelectorAll("#menu a");
-
-        // Öffnet oder schließt das Menü basierend auf dem Zustand der Checkbox
-        menuToggle.addEventListener("change", () => {
-          if (menuToggle.checked) {
-            menu.classList.add("open");
-          } else {
-            menu.classList.remove("open");
-          }
-        });
-
-        // Schließt das Menü, wenn ein Link angeklickt wird
-        menuLinks.forEach((link) => {
-          link.addEventListener("click", () => {
-            menuToggle.checked = false; // Deaktiviert die Checkbox
-            menu.classList.remove("open"); // Schließt das Menü
-          });
-        });
 </script>
 </body>
 </html>
