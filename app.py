@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_ojow_user:I6AtrUWddI9vJvL8druQO1h0OPEo46hL@dpg-cvap0etumphs73agl43g-a.oregon-postgres.render.com/database_ojow'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_zg33_user:1FZHHYmbChYcZwuDmLbxuhT2qEuRfisI@dpg-cvbabkrtq21c73dt8d10-a.oregon-postgres.render.com/database_zg33'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -229,6 +229,32 @@ class AboutSection(db.Model):
     text_training_2 = db.Column(db.Text, nullable=False)
     text_training_3 = db.Column(db.Text, nullable=False)
     text_training_4 = db.Column(db.Text, nullable=False)
+    news_card1_date = db.Column(db.String(255), nullable=False, default="4. Oktober 2024")
+    news_card1_title = db.Column(db.String(255), nullable=False, default="Saisonabschlussfest 2024")
+    news_card1_excerpt = db.Column(db.Text, nullable=False, default="Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam …")
+    news_card1_full_text = db.Column(db.Text, nullable=False, default="Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam auf die schönsten Momente angestoßen, die Tanzfläche unsicher gemacht und die Saison noch einmal Revue passieren lassen.")
+    news_card1_image = db.Column(db.String(255), nullable=False, default="/static/images/tennis.jpg")
+    
+    # News card 2
+    news_card2_date = db.Column(db.String(255), nullable=False, default="4. Oktober 2024")
+    news_card2_title = db.Column(db.String(255), nullable=False, default="Jahresrückblick 2024")
+    news_card2_excerpt = db.Column(db.Text, nullable=False, default="Jahresrückblick 2024 – Danke für eine unvergessliche Saison! Das Jahr 2024 neigt sich dem Ende zu, und wir blicken auf eine großartige Saison voller schöner Momente zurück! Von der …")
+    news_card2_full_text = db.Column(db.Text, nullable=False, default="Jahresrückblick 2024 – Danke für eine unvergessliche Saison! Das Jahr 2024 neigt sich dem Ende zu, und wir blicken auf eine großartige Saison voller schöner Momente zurück! Von der Saisoneröffnung bis zum Abschlussfest – es war ein Jahr voller Tennis, Freundschaft und gemeinsamer Erfolge.")
+    news_card2_image = db.Column(db.String(255), nullable=False, default="/static/images/wilson-2259352_960_720.jpg")
+    
+    # News card 3
+    news_card3_date = db.Column(db.String(255), nullable=False, default="News")
+    news_card3_title = db.Column(db.String(255), nullable=False, default="Saisonabschluss 2024 – ein Abend voller Highlights!")
+    news_card3_excerpt = db.Column(db.Text, nullable=False, default="Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam auf die schönsten Momente angestoßen, die Tanzfläche unsicher")
+    news_card3_full_text = db.Column(db.Text, nullable=False, default="Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam auf die schönsten Momente angestoßen, die Tanzfläche unsicher gemacht und die Saison noch einmal Revue passieren lassen. Ein besonderes Highlight des Abends war das fantastische Buffet, das unsere Küchenfee Petra für uns gezaubert hat – ein Genuss für alle! Ein perfekter Abschluss für eine großartige Saison! Auf viele weitere gemeinsame Erlebnisse und unvergessliche Tennis-Momente im nächsten Jahr!")
+    news_card3_image = db.Column(db.String(255), nullable=False, default="/static/images/Sasionabschluss 2024.jpg")
+    
+    # News card 4
+    news_card4_date = db.Column(db.String(255), nullable=False, default="News")
+    news_card4_title = db.Column(db.String(255), nullable=False, default="Unsere eigene Vereinskollektion ist da!")
+    news_card4_excerpt = db.Column(db.Text, nullable=False, default="Endlich ist es soweit – ab sofort könnt ihr unsere brandneue Vereinskleidung bekommen! Ob für …")
+    news_card4_full_text = db.Column(db.Text, nullable=False, default="Endlich ist es soweit – ab sofort könnt ihr unsere brandneue Vereinskleidung bekommen! Ob für Training, Wettkampf oder Freizeit – mit unserer Vereinskleidung zeigt ihr, dass ihr Teil unserer Tennis-Familie seid!")
+    news_card4_image = db.Column(db.String(255), nullable=False, default="/static/images/tennis-court-1671852_960_720.jpg")
 
 
     def to_dict(self):
@@ -258,7 +284,30 @@ class AboutSection(db.Model):
             'text_training_1': self.text_training_1,
             'text_training_2': self.text_training_2,
             'text_training_3': self.text_training_3,
-            'text_training_4': self.text_training_4
+            'text_training_4': self.text_training_4,
+            'news_card1_date': self.news_card1_date,
+            'news_card1_title': self.news_card1_title,
+            'news_card1_excerpt': self.news_card1_excerpt,
+            'news_card1_full_text': self.news_card1_full_text,
+            'news_card1_image': self.news_card1_image,
+            
+            'news_card2_date': self.news_card2_date,
+            'news_card2_title': self.news_card2_title,
+            'news_card2_excerpt': self.news_card2_excerpt,
+            'news_card2_full_text': self.news_card2_full_text,
+            'news_card2_image': self.news_card2_image,
+            
+            'news_card3_date': self.news_card3_date,
+            'news_card3_title': self.news_card3_title,
+            'news_card3_excerpt': self.news_card3_excerpt,
+            'news_card3_full_text': self.news_card3_full_text,
+            'news_card3_image': self.news_card3_image,
+            
+            'news_card4_date': self.news_card4_date,
+            'news_card4_title': self.news_card4_title,
+            'news_card4_excerpt': self.news_card4_excerpt,
+            'news_card4_full_text': self.news_card4_full_text,
+            'news_card4_image': self.news_card4_image,
 
         }
     
@@ -844,6 +893,76 @@ def update_about_data():
         about_data.goals_text = data['goals_text']
     if 'membership_text' in data:
         about_data.membership_text = data['membership_text']
+    if 'news_card1_date' in data:
+        about_data.news_card1_date = data['news_card1_date']
+    if 'news_card1_title' in data:
+        about_data.news_card1_title = data['news_card1_title']
+    if 'news_card1_excerpt' in data:
+        about_data.news_card1_excerpt = data['news_card1_excerpt']
+    if 'news_card1_full_text' in data:
+        about_data.news_card1_full_text = data['news_card1_full_text']
+    
+    # News card 2
+    if 'news_card2_date' in data:
+        about_data.news_card2_date = data['news_card2_date']
+    if 'news_card2_title' in data:
+        about_data.news_card2_title = data['news_card2_title']
+    if 'news_card2_excerpt' in data:
+        about_data.news_card2_excerpt = data['news_card2_excerpt']
+    if 'news_card2_full_text' in data:
+        about_data.news_card2_full_text = data['news_card2_full_text']
+    
+    # News card 3
+    if 'news_card3_date' in data:
+        about_data.news_card3_date = data['news_card3_date']
+    if 'news_card3_title' in data:
+        about_data.news_card3_title = data['news_card3_title']
+    if 'news_card3_excerpt' in data:
+        about_data.news_card3_excerpt = data['news_card3_excerpt']
+    if 'news_card3_full_text' in data:
+        about_data.news_card3_full_text = data['news_card3_full_text']
+    
+    # News card 4
+    if 'news_card4_date' in data:
+        about_data.news_card4_date = data['news_card4_date']
+    if 'news_card4_title' in data:
+        about_data.news_card4_title = data['news_card4_title']
+    if 'news_card4_excerpt' in data:
+        about_data.news_card4_excerpt = data['news_card4_excerpt']
+    if 'news_card4_full_text' in data:
+        about_data.news_card4_full_text = data['news_card4_full_text']
+
+    if 'news_card1_image_file' in request.files:
+        image = request.files['news_card1_image_file']
+        if image.filename:
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.news_card1_image = image_path
+    
+    if 'news_card2_image_file' in request.files:
+        image = request.files['news_card2_image_file']
+        if image.filename:
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.news_card2_image = image_path
+    
+    if 'news_card3_image_file' in request.files:
+        image = request.files['news_card3_image_file']
+        if image.filename:
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.news_card3_image = image_path
+    
+    if 'news_card4_image_file' in request.files:
+        image = request.files['news_card4_image_file']
+        if image.filename:
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.news_card4_image = image_path
     
     # Handle image upload if provided
     if 'image' in request.files:
@@ -1796,7 +1915,7 @@ def home():
 
     is_admin_active = session.get('is_admin_active', True)
 
-
+    about_data = AboutSection.query.first() 
 
     return render_template(f'{design}/index.html',
                            logged_in=current_user.is_authenticated,
@@ -1808,7 +1927,8 @@ def home():
                            images=images,
                            content_items=content_items,
                            cookie_consent=cookie_consent,
-                           image=image)
+                           image=image,
+                           about_data=about_data)
 
 
 

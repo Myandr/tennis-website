@@ -18,7 +18,7 @@
   }
 
   .edit-mode .editable {
-    border: 1px dashed #ccc;
+    border: 1px dashed #8d8d8d;
     padding: 5px;
     position: relative;
 }
