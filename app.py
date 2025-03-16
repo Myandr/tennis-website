@@ -15,12 +15,13 @@ from io import BytesIO
 import base64
 from functools import wraps
 from flask_bcrypt import Bcrypt
-
+from sqlalchemy import desc
+import uuid
 
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_9g87_user:uGQVlVxJWddrY8ZODGFLO28rPvkI0uAv@dpg-cvbatitds78s73aicsa0-a.oregon-postgres.render.com/database_9g87'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_4udv_user:YICtfHDViMRY0PnR6AwYncJ0WKYnfjZF@dpg-cvbhlbtds78s73akquog-a.oregon-postgres.render.com/database_4udv'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -354,7 +355,27 @@ class AboutSection(db.Model):
 
         }
 
+class GalleryImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    image_path = db.Column(db.String(255), nullable=False)
+    category = db.Column(db.String(100), nullable=True)
+    display_order = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'image_path': self.image_path,
+            'category': self.category,
+            'display_order': self.display_order,
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
 
 # Erstellen Sie die Tabellen in der Datenbank
 with app.app_context():
@@ -576,16 +597,6 @@ def training():
     is_admin_active = session.get('is_admin_active', True)
 
     return render_template("design1/training.html",
-                           logged_in=current_user.is_authenticated,
-                           username=current_user.get_id() if current_user.is_authenticated else None,
-                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
-                           is_verified=current_user.is_authenticated and current_user.is_verified)
-
-@app.route('/galerie')
-def gallery():
-    is_admin_active = session.get('is_admin_active', True)
-    
-    return render_template('design1/gallery.html',
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
                            is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
@@ -1087,7 +1098,349 @@ def update_about_data():
 
 
 
+
+
+
+
+
+def create_default_gallery_images():
+    if GalleryImage.query.count() == 0:
+        # Standardbilder erstellen
+        default_images = [
+            {
+                'title': 'Jahresrückblick 2024',
+                'description': 'Rückblick auf ein erfolgreiches Tennisjahr',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_1.jpg',
+                'category': 'Rückblick'
+            },
+            {
+                'title': 'Flutlicht Spaß',
+                'description': 'Abendliches Tennisspiel unter Flutlicht',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_10.jpg',
+                'category': 'Rückblick'
+            },
+            {
+                'title': 'Abend mit kulinarischen Genüssen',
+                'description': 'Gemeinsames Essen nach dem Training',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_11.jpg',
+                'category': 'Events'
+            },
+            {
+                'title': 'Petras kulinarischen Überraschungen',
+                'description': 'Köstlichkeiten von unserer Vereinsköchin',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_12.jpg',
+                'category': 'Events'
+            },
+            {
+                'title': 'HTV-Momente',
+                'description': 'Besondere Momente im Vereinsleben',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_13.jpg',
+                'category': 'Vereinsleben'
+            },
+            {
+                'title': 'Herbstputz',
+                'description': 'Gemeinsame Pflege unserer Anlage',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_14.jpg',
+                'category': 'Vereinsleben'
+            },
+            {
+                'title': 'Saisonabschluss',
+                'description': 'Feier zum Ende der Sommersaison',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_15.jpg',
+                'category': 'Events'
+            },
+            {
+                'title': 'Winterfest Pestalozzi Park',
+                'description': 'Gemeinsame Winteraktivitäten',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_16.jpg',
+                'category': 'Events'
+            },
+            {
+                'title': 'Weihnachtliches Frühstück der Senioren',
+                'description': 'Gemütliches Beisammensein in der Weihnachtszeit',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_17.jpg',
+                'category': 'Senioren'
+            },
+            {
+                'title': 'HTV Eisstock WM',
+                'description': 'Winterliche Aktivitäten abseits des Tennisplatzes',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_2.jpg',
+                'category': 'Events'
+            },
+            {
+                'title': 'Eisstock WM Teams',
+                'description': 'Teamwettbewerb beim Eisstockschießen',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_3.jpg',
+                'category': 'Events'
+            },
+            {
+                'title': 'Frühjahrsputz',
+                'description': 'Gemeinsame Vorbereitung der Anlage auf die neue Saison',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_4.jpg',
+                'category': 'Vereinsleben'
+            },
+            {
+                'title': 'Saisoneröffnung',
+                'description': 'Start in die neue Tennissaison',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_5.jpg',
+                'category': 'Events'
+            },
+            {
+                'title': 'Mannschaften',
+                'description': 'Unsere Mannschaften in der Saison 2024',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_6.jpg',
+                'category': 'Mannschaften'
+            },
+            {
+                'title': 'Hobbytreff jeden Montag',
+                'description': 'Regelmäßiges Treffen für Hobbyspieler',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_7.jpg',
+                'category': 'Training'
+            },
+            {
+                'title': 'Hobbytreff',
+                'description': 'Spaß am Tennis für alle Altersklassen',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_8.jpg',
+                'category': 'Training'
+            },
+            {
+                'title': 'Ladies Day',
+                'description': 'Besonderer Tag für unsere Tennisdamen',
+                'image_path': '/static/images/Rückblick 2024/Rückblick 2024_9.jpg',
+                'category': 'Events'
+            }
+        ]
+        
+        for img_data in default_images:
+            image = GalleryImage(
+                title=img_data['title'],
+                description=img_data['description'],
+                image_path=img_data['image_path'],
+                category=img_data['category'],
+                display_order=0
+            )
+            db.session.add(image)
+        
+        db.session.commit()
+        print("Standardbilder für die Galerie wurden erstellt.")
+
+# Beim Starten der Anwendung Standarddaten erstellen
+@app.before_first_request
+def initialize_data():
+    create_default_gallery_images()
+
+# Galerie-Seite anzeigen
+@app.route('/galerie')
+def gallery():
+    is_admin_active = session.get('is_admin_active', True)
+    
+    # Bilder aus der Datenbank abrufen
+    gallery_images = GalleryImage.query.order_by(GalleryImage.display_order, GalleryImage.created_at.desc()).all()
+    
+    return render_template('design1/gallery.html',
+                           gallery_images=gallery_images,
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
+
+# API-Route zum Abrufen aller Galeriebilder
+@app.route('/api/gallery', methods=['GET'])
+def get_gallery_images():
+    category = request.args.get('category')
+    
+    if category:
+        gallery_images = GalleryImage.query.filter_by(category=category).order_by(GalleryImage.display_order, GalleryImage.created_at.desc()).all()
+    else:
+        gallery_images = GalleryImage.query.order_by(GalleryImage.display_order, GalleryImage.created_at.desc()).all()
+    
+    return jsonify([image.to_dict() for image in gallery_images])
+
+# API-Route zum Abrufen eines einzelnen Galeriebildes
+@app.route('/api/gallery/<int:image_id>', methods=['GET'])
+def get_gallery_image(image_id):
+    gallery_image = GalleryImage.query.get(image_id)
+    
+    if not gallery_image:
+        return jsonify({'error': 'Bild nicht gefunden'}), 404
+    
+    return jsonify(gallery_image.to_dict())
+
+# API-Route zum Hinzufügen eines neuen Galeriebildes
+@app.route('/api/gallery', methods=['POST'])
+@login_required
+def add_gallery_image():
+    if not current_user.role == 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    if 'image' not in request.files:
+        return jsonify({'error': 'Kein Bild hochgeladen'}), 400
+    
+    image = request.files['image']
+    
+    if image.filename == '':
+        return jsonify({'error': 'Kein Bild ausgewählt'}), 400
+    
+    if image:
+        # Eindeutigen Dateinamen generieren
+        filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+        image_path = f"/static/images/gallery/{filename}"
+        
+        # Stellen Sie sicher, dass das Verzeichnis existiert
+        os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+        
+        # Bild speichern
+        image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+        
+        # Neues Galeriebild erstellen
+        new_image = GalleryImage(
+            title=request.form.get('title', 'Neues Bild'),
+            description=request.form.get('description', ''),
+            image_path=image_path,
+            category=request.form.get('category', ''),
+            display_order=request.form.get('display_order', 0)
+        )
+        
+        db.session.add(new_image)
+        db.session.commit()
+        
+        return jsonify(new_image.to_dict()), 201
+    
+    return jsonify({'error': 'Fehler beim Hochladen des Bildes'}), 500
+
+# API-Route zum Aktualisieren eines Galeriebildes
+@app.route('/api/gallery/<int:image_id>', methods=['PUT'])
+@login_required
+def update_gallery_image(image_id):
+    if not current_user.role == 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    gallery_image = GalleryImage.query.get(image_id)
+    
+    if not gallery_image:
+        return jsonify({'error': 'Bild nicht gefunden'}), 404
+    
+    # Textfelder aktualisieren
+    if 'title' in request.form:
+        gallery_image.title = request.form['title']
+    
+    if 'description' in request.form:
+        gallery_image.description = request.form['description']
+    
+    if 'category' in request.form:
+        gallery_image.category = request.form['category']
+    
+    if 'display_order' in request.form:
+        gallery_image.display_order = int(request.form['display_order'])
+    
+    # Bild aktualisieren, falls vorhanden
+    if 'image' in request.files and request.files['image'].filename != '':
+        image = request.files['image']
+        
+        # Altes Bild löschen (optional)
+        if gallery_image.image_path.startswith('/static/images/gallery/'):
+            old_image_path = os.path.join(app.root_path, gallery_image.image_path.lstrip('/'))
+            if os.path.exists(old_image_path):
+                try:
+                    os.remove(old_image_path)
+                except:
+                    pass  # Fehler beim Löschen ignorieren
+        
+        # Neues Bild speichern
+        filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+        image_path = f"/static/images/gallery/{filename}"
+        
+        # Stellen Sie sicher, dass das Verzeichnis existiert
+        os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+        
+        image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+        gallery_image.image_path = image_path
+    
+    db.session.commit()
+    
+    return jsonify(gallery_image.to_dict())
+
+# API-Route zum Löschen eines Galeriebildes
+@app.route('/api/gallery/<int:image_id>', methods=['DELETE'])
+@login_required
+def delete_gallery_image(image_id):
+    if not current_user.role == 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    gallery_image = GalleryImage.query.get(image_id)
+    
+    if not gallery_image:
+        return jsonify({'error': 'Bild nicht gefunden'}), 404
+    
+    # Bild von der Festplatte löschen
+    if gallery_image.image_path.startswith('/static/images/gallery/'):
+        image_path = os.path.join(app.root_path, gallery_image.image_path.lstrip('/'))
+        if os.path.exists(image_path):
+            try:
+                os.remove(image_path)
+            except:
+                pass  # Fehler beim Löschen ignorieren
+    
+    # Bild aus der Datenbank löschen
+    db.session.delete(gallery_image)
+    db.session.commit()
+    
+    return jsonify({'success': True, 'message': 'Bild erfolgreich gelöscht'})
+
+# API-Route zum Hochladen mehrerer Bilder
+@app.route('/api/gallery/bulk-upload', methods=['POST'])
+@login_required
+def bulk_upload_images():
+    if not current_user.role == 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    if 'images[]' not in request.files:
+        return jsonify({'error': 'Keine Bilder hochgeladen'}), 400
+    
+    images = request.files.getlist('images[]')
+    category = request.form.get('category', '')
+    
+    if not images:
+        return jsonify({'error': 'Keine Bilder ausgewählt'}), 400
+    
+    uploaded_images = []
+    
+    for image in images:
+        if image.filename:
+            # Eindeutigen Dateinamen generieren
+            filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+            image_path = f"/static/images/gallery/{filename}"
+            
+            # Stellen Sie sicher, dass das Verzeichnis existiert
+            os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+            
+            # Bild speichern
+            image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+            
+            # Neues Galeriebild erstellen
+            new_image = GalleryImage(
+                title=os.path.splitext(image.filename)[0],  # Dateiname ohne Erweiterung als Titel
+                description='',
+                image_path=image_path,
+                category=category,
+                display_order=0
+            )
+            
+            db.session.add(new_image)
+            uploaded_images.append(new_image)
+    
+    db.session.commit()
+    
+    return jsonify({
+        'success': True,
+        'message': f'{len(uploaded_images)} Bilder erfolgreich hochgeladen',
+        'images': [image.to_dict() for image in uploaded_images]
+    }), 201
+
+
+
 #kalender
+
 
 
 
