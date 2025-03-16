@@ -760,66 +760,78 @@
     -->
 
     <section class="locations-section" id="one">
-      <div class="locations-header"  data-aos="fade-right">
+      <div class="locations-header" data-aos="fade-right">
         <h2 class="editable" data-field="title_location" id="location-title">Besuche unseren Verein</h2>
         <p class="editable" data-field="welcome_text_location" id="location-welcome-text">Besuche uns jeden Sonntag an einem unserer Standorte!</p>
         <a href="/downloads" class="learn-more">Downloads →</a>
       </div>
       <div class="locations-grid">
+        <!-- Location Card 1 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
-          <img  src="/static/images/image copy 4.png" alt="Tennisplatz" />
+          <div class="editable-image" data-field="location_card1_image">
+            <img id="location-card1-image" src="/static/images/image copy 4.png"  alt="Tennisplatz" />
+          </div>
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3>6 Ascheplätze</h3>
-            <div class="location-times">Zwei mit Flutlichtanlage</div>
-            <div class="location-address">
+            <h3 class="editable" data-field="location_card1_title" id="location-card1-title">6 Ascheplätze</h3>
+            <div class="location-times editable" data-field="location_card1_subtitle" id="location-card1-subtitle">Zwei mit Flutlichtanlage</div>
+            <div class="location-address editable" data-field="location_card1_address" id="location-card1-address">
               Gahlener Str. 204
-46284 Dorsten
-
+    46284 Dorsten
             </div>
           </div>
         </div>
+        
+        <!-- Location Card 2 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location2';">
-          <img  src="/static/images/image copy 2.png" alt="Tennis Club" />
+          <div class="editable-image" data-field="location_card2_image">
+            <img id="location-card2-image" src="/static/images/image copy 2.png"  alt="Tennis Club" />
+          </div>
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3>Clubheim Hardt</h3>
-            <div class="location-times">Vermietung nur an Mitglieder<br>Gastronomie</div>
-            <div class="location-address">
+            <h3 class="editable" data-field="location_card2_title" id="location-card2-title">Clubheim Hardt</h3>
+            <div class="location-times editable" data-field="location_card2_subtitle" id="location-card2-subtitle">Vermietung nur an Mitglieder<br>Gastronomie</div>
+            <div class="location-address editable" data-field="location_card2_address" id="location-card2-address">
               Gahlener Str. 204
-46284 Dorsten
-
+    46284 Dorsten
             </div>
           </div>
         </div>
+        
+        <!-- Location Card 3 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location3';">
-          <img src="/static/images/image copy 3.png" alt="Tennis im Park" />
+          <div class="editable-image" data-field="location_card3_image">
+            <img id="location-card3-image" src="/static/images/image copy 3.png" alt="Tennis im Park" />
+          </div>
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3>Kletter- und Spielgerüst</h3>
-            <div class="location-times"></div>
-            <div class="location-address">
+            <h3 class="editable" data-field="location_card3_title" id="location-card3-title">Kletter- und Spielgerüst</h3>
+            <div class="location-times editable" data-field="location_card3_subtitle" id="location-card3-subtitle"></div>
+            <div class="location-address editable" data-field="location_card3_address" id="location-card3-address">
               Gahlener Str. 204
-46284 Dorsten
-
+    46284 Dorsten
             </div>
           </div>
         </div>
+        
+        <!-- Location Card 4 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location4';">
-          <img src="/static/images/image.png" alt="Tennis im Garten" />
+          <div class="editable-image" data-field="location_card4_image">
+            <img id="location-card4-image" src="/static/images/image.png" alt="Tennis im Garten" />
+          </div>
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3>Kleinfeldplatz inkl. Tenniswand</h3>
-            <div class="location-times"></div>
-            <div class="location-address">
+            <h3 class="editable" data-field="location_card4_title" id="location-card4-title">Kleinfeldplatz inkl. Tenniswand</h3>
+            <div class="location-times editable" data-field="location_card4_subtitle" id="location-card4-subtitle"></div>
+            <div class="location-address editable" data-field="location_card4_address" id="location-card4-address">
               Gahlener Str. 204
-46284 Dorsten
-
+    46284 Dorsten
             </div>
           </div>
         </div>
+        
         {% for item in content_items %}
-        <div class="location-card"  data-aos="flip-up" onclick="expandCard(this)">
+        <div class="location-card" data-aos="flip-up" onclick="expandCard(this)">
           {% if item.image_data_base64 %}
           <img 
             src="data:image/jpeg;base64,{{ item.image_data_base64 }}"
@@ -845,6 +857,7 @@
         </div>
         {% endfor %}
       </div>
+    </section>
 
       <!--
  ___                  
@@ -907,13 +920,11 @@
       </form>
       {% endif %}
 
-      <!--
                                              
  ___  ___  ___  ___  ___  ___  ___  ___  ___ 
 |___||___||___||___||___||___||___||___||___|
                                             
    -->
-    </section>
 
 
 
@@ -1591,6 +1602,12 @@ document.addEventListener('DOMContentLoaded', function() {
         updateNewsCard(2, data);
         updateNewsCard(3, data);
         updateNewsCard(4, data);
+        
+        // Update location cards
+        updateLocationCard(1, data);
+        updateLocationCard(2, data);
+        updateLocationCard(3, data);
+        updateLocationCard(4, data);
     }
     
     function updateNewsCard(cardNumber, data) {
@@ -1606,6 +1623,19 @@ document.addEventListener('DOMContentLoaded', function() {
         if (excerptElement) excerptElement.textContent = data[`news_card${cardNumber}_excerpt`] || '';
         if (fullTextElement) fullTextElement.textContent = data[`news_card${cardNumber}_full_text`] || '';
         if (imageElement) imageElement.src = data[`news_card${cardNumber}_image`] || '';
+    }
+    
+    function updateLocationCard(cardNumber, data) {
+        // Update text content
+        const titleElement = document.getElementById(`location-card${cardNumber}-title`);
+        const subtitleElement = document.getElementById(`location-card${cardNumber}-subtitle`);
+        const addressElement = document.getElementById(`location-card${cardNumber}-address`);
+        const imageElement = document.getElementById(`location-card${cardNumber}-image`);
+        
+        if (titleElement) titleElement.textContent = data[`location_card${cardNumber}_title`] || '';
+        if (subtitleElement) subtitleElement.textContent = data[`location_card${cardNumber}_subtitle`] || '';
+        if (addressElement) addressElement.textContent = data[`location_card${cardNumber}_address`] || '';
+        if (imageElement) imageElement.src = data[`location_card${cardNumber}_image`] || '';
     }
     
     // Toggle edit mode
@@ -1635,6 +1665,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const field = element.dataset.field || (element.classList.contains('about-image') ? 'image_path' : null);
         
         if (!field) return;
+        
+        // Prevent the onclick event of the parent location-card
+        event.stopPropagation();
         
         editField.value = field;
         
@@ -1670,8 +1703,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (field.startsWith('news_card')) {
                     const imageFieldName = `${field}_file`;
                     formData.append(imageFieldName, editImage.files[0]);
-                } else {
-                    // For main about image
+                } 
+                // For location card images
+                else if (field.startsWith('location_card')) {
+                    const imageFieldName = `${field}_file`;
+                    formData.append(imageFieldName, editImage.files[0]);
+                }
+                // For main about image
+                else {
                     formData.append('image', editImage.files[0]);
                 }
             } else {
@@ -1723,6 +1762,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 hiddenText.style.display = 'inline';
                 this.textContent = 'Weniger anzeigen';
                 excerpt.style.display = hiddenText.textContent.trim() ? 'none' : 'inline';
+            }
+        });
+    });
+    
+    // Prevent location card click when in edit mode
+    document.querySelectorAll('.location-card').forEach(card => {
+        const originalOnClick = card.getAttribute('onclick');
+        
+        card.addEventListener('click', function(e) {
+            if (isEditMode) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             }
         });
     });

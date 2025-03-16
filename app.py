@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_zg33_user:1FZHHYmbChYcZwuDmLbxuhT2qEuRfisI@dpg-cvbabkrtq21c73dt8d10-a.oregon-postgres.render.com/database_zg33'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_9g87_user:uGQVlVxJWddrY8ZODGFLO28rPvkI0uAv@dpg-cvbatitds78s73aicsa0-a.oregon-postgres.render.com/database_9g87'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -256,6 +256,29 @@ class AboutSection(db.Model):
     news_card4_full_text = db.Column(db.Text, nullable=False, default="Endlich ist es soweit – ab sofort könnt ihr unsere brandneue Vereinskleidung bekommen! Ob für Training, Wettkampf oder Freizeit – mit unserer Vereinskleidung zeigt ihr, dass ihr Teil unserer Tennis-Familie seid!")
     news_card4_image = db.Column(db.String(255), nullable=False, default="/static/images/tennis-court-1671852_960_720.jpg")
 
+    location_card1_title = db.Column(db.String(255), nullable=False, default="6 Ascheplätze")
+    location_card1_subtitle = db.Column(db.Text, nullable=False, default="Zwei mit Flutlichtanlage")
+    location_card1_address = db.Column(db.Text, nullable=False, default="Gahlener Str. 204\n46284 Dorsten")
+    location_card1_image = db.Column(db.String(255), nullable=False, default="/static/images/image copy 4.png")
+    
+    # Location card 2
+    location_card2_title = db.Column(db.String(255), nullable=False, default="Clubheim Hardt")
+    location_card2_subtitle = db.Column(db.Text, nullable=False, default="Vermietung nur an Mitglieder\nGastronomie")
+    location_card2_address = db.Column(db.Text, nullable=False, default="Gahlener Str. 204\n46284 Dorsten")
+    location_card2_image = db.Column(db.String(255), nullable=False, default="/static/images/image copy 2.png")
+    
+    # Location card 3
+    location_card3_title = db.Column(db.String(255), nullable=False, default="Kletter- und Spielgerüst")
+    location_card3_subtitle = db.Column(db.Text, nullable=False, default="")
+    location_card3_address = db.Column(db.Text, nullable=False, default="Gahlener Str. 204\n46284 Dorsten")
+    location_card3_image = db.Column(db.String(255), nullable=False, default="/static/images/image copy 3.png")
+    
+    # Location card 4
+    location_card4_title = db.Column(db.String(255), nullable=False, default="Kleinfeldplatz inkl. Tenniswand")
+    location_card4_subtitle = db.Column(db.Text, nullable=False, default="")
+    location_card4_address = db.Column(db.Text, nullable=False, default="Gahlener Str. 204\n46284 Dorsten")
+    location_card4_image = db.Column(db.String(255), nullable=False, default="/static/images/image.png")
+
 
     def to_dict(self):
         return {
@@ -309,8 +332,28 @@ class AboutSection(db.Model):
             'news_card4_full_text': self.news_card4_full_text,
             'news_card4_image': self.news_card4_image,
 
+            'location_card1_title': self.location_card1_title,
+            'location_card1_subtitle': self.location_card1_subtitle,
+            'location_card1_address': self.location_card1_address,
+            'location_card1_image': self.location_card1_image,
+            
+            'location_card2_title': self.location_card2_title,
+            'location_card2_subtitle': self.location_card2_subtitle,
+            'location_card2_address': self.location_card2_address,
+            'location_card2_image': self.location_card2_image,
+            
+            'location_card3_title': self.location_card3_title,
+            'location_card3_subtitle': self.location_card3_subtitle,
+            'location_card3_address': self.location_card3_address,
+            'location_card3_image': self.location_card3_image,
+            
+            'location_card4_title': self.location_card4_title,
+            'location_card4_subtitle': self.location_card4_subtitle,
+            'location_card4_address': self.location_card4_address,
+            'location_card4_image': self.location_card4_image,
+
         }
-    
+
 
 
 # Erstellen Sie die Tabellen in der Datenbank
@@ -973,11 +1016,74 @@ def update_about_data():
             image_path = f"/static/images/{filename}"
             image.save(os.path.join(app.root_path, 'static/images', filename))
             about_data.image_path = image_path
+
+
+    if 'location_card1_title' in data:
+        about_data.location_card1_title = data['location_card1_title']
+    if 'location_card1_subtitle' in data:
+        about_data.location_card1_subtitle = data['location_card1_subtitle']
+    if 'location_card1_address' in data:
+        about_data.location_card1_address = data['location_card1_address']
+    
+    # Location card 2
+    if 'location_card2_title' in data:
+        about_data.location_card2_title = data['location_card2_title']
+    if 'location_card2_subtitle' in data:
+        about_data.location_card2_subtitle = data['location_card2_subtitle']
+    if 'location_card2_address' in data:
+        about_data.location_card2_address = data['location_card2_address']
+    
+    # Location card 3
+    if 'location_card3_title' in data:
+        about_data.location_card3_title = data['location_card3_title']
+    if 'location_card3_subtitle' in data:
+        about_data.location_card3_subtitle = data['location_card3_subtitle']
+    if 'location_card3_address' in data:
+        about_data.location_card3_address = data['location_card3_address']
+    
+    # Location card 4
+    if 'location_card4_title' in data:
+        about_data.location_card4_title = data['location_card4_title']
+    if 'location_card4_subtitle' in data:
+        about_data.location_card4_subtitle = data['location_card4_subtitle']
+    if 'location_card4_address' in data:
+        about_data.location_card4_address = data['location_card4_address']
+    
+    # Bildupload für Location-Karten
+    if 'location_card1_image_file' in request.files:
+        image = request.files['location_card1_image_file']
+        if image.filename:
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.location_card1_image = image_path
+    
+    if 'location_card2_image_file' in request.files:
+        image = request.files['location_card2_image_file']
+        if image.filename:
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.location_card2_image = image_path
+    
+    if 'location_card3_image_file' in request.files:
+        image = request.files['location_card3_image_file']
+        if image.filename:
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.location_card3_image = image_path
+    
+    if 'location_card4_image_file' in request.files:
+        image = request.files['location_card4_image_file']
+        if image.filename:
+            filename = secure_filename(image.filename)
+            image_path = f"/static/images/{filename}"
+            image.save(os.path.join(app.root_path, 'static/images', filename))
+            about_data.location_card4_image = image_path
     
     db.session.commit()
     return jsonify(about_data.to_dict())
-
-
 
 
 
