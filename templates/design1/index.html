@@ -282,6 +282,7 @@
                     <a href="/#contact" class="dropdown-item">Kontakt</a>
                 </div>
             </div>
+            <!--
             <div class="nav-item">
                 <div class="nav-link">
                     <a href="/news">News</a>
@@ -293,6 +294,7 @@
                     <a href="/news#berichte" class="dropdown-item">Spielberichte</a>
                 </div>
             </div>
+          -->
             <a href="/training" class="nav-link">Training</a>
             <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
             <a href="/galerie" class="nav-link">Galerie</a>
@@ -331,61 +333,50 @@
           </label>
         </div>
         <script>
-          // Alle Navigationslinks mit Dropdown abrufen
-     const navLinks = document.querySelectorAll('.nav-item .nav-link');
-     
-     // Funktion zum Schließen aller Dropdowns
-     function closeAllDropdowns() {
-         navLinks.forEach(link => {
-             link.classList.remove('active');
-             link.nextElementSibling?.classList.remove('active');
-         });
-     }
-     
-     // Öffnen bei Hover oder Klick
-     navLinks.forEach(link => {
-         const dropdown = link.nextElementSibling;
-     
-         if (dropdown && dropdown.classList.contains('dropdown-menu')) {
-             // Öffnen beim Hover
-             link.addEventListener('mouseover', () => {
-                 closeAllDropdowns();
-                 link.classList.add('active');
-                 dropdown.classList.add('active');
-             });
-     
-             // Öffnen beim Klick
-             link.addEventListener('click', (e) => {
-                 e.preventDefault(); // Verhindert das Springen des Links
-                 e.stopPropagation(); // Verhindert das Schließen durch das Dokument-Event
-                 closeAllDropdowns();
-                 link.classList.add('active');
-                 dropdown.classList.add('active');
-             });
-     
-             // Schließen, wenn Maus den Bereich verlässt
-             link.parentElement.addEventListener('mouseleave', () => {
-                 setTimeout(() => {
-                     if (!dropdown.matches(':hover')) {
-                         link.classList.remove('active');
-                         dropdown.classList.remove('active');
-                     }
-                 }, 300); // Verzögerung für besseres Nutzererlebnis
-             });
-         }
-     });
-     
-     // Schließen beim Klicken außerhalb des Menüs
-     document.addEventListener('click', () => {
-         closeAllDropdowns();
-     });
-     
-     // Escape-Taste zum Schließen
-     document.addEventListener('keydown', (e) => {
-         if (e.key === 'Escape') {
-             closeAllDropdowns();
-         }
-     });
+// Alle Navigationslinks mit Dropdown abrufen
+const navLinks = document.querySelectorAll('.nav-item .nav-link');
+
+// Funktion zum Schließen aller Dropdowns
+function closeAllDropdowns() {
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        link.nextElementSibling?.classList.remove('active');
+    });
+}
+
+// Öffnen nur bei Klick (Hover entfernt)
+navLinks.forEach(link => {
+    const dropdown = link.nextElementSibling;
+
+    if (dropdown && dropdown.classList.contains('dropdown-menu')) {
+        link.addEventListener('click', (e) => {
+            e.preventDefault(); // Verhindert das Springen des Links
+            e.stopPropagation(); // Verhindert das Schließen durch das Dokument-Event
+            
+            // Überprüfen, ob das Dropdown bereits offen ist
+            const isActive = dropdown.classList.contains('active');
+            closeAllDropdowns(); // Erstmal alles schließen
+
+            if (!isActive) { // Falls es nicht aktiv war, jetzt aktivieren
+                link.classList.add('active');
+                dropdown.classList.add('active');
+            }
+        });
+    }
+});
+
+// Schließen beim Klicken außerhalb des Menüs
+document.addEventListener('click', () => {
+    closeAllDropdowns();
+});
+
+// Escape-Taste zum Schließen
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeAllDropdowns();
+    }
+});
+
      
        </script>
   
@@ -425,7 +416,7 @@
                 </ul>
               </li>
               
-              <!-- Über Uns mit Dropdown -->
+              <!-- Über Uns mit Dropdown 
               <li class="nav-item1">
                 <input type="checkbox" id="dropdown2" class="dropdown-toggle1">
                 <label for="dropdown2" class="nav-link1 has-dropdown1">News</label>
