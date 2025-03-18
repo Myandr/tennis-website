@@ -144,7 +144,7 @@
   font-weight: 500;
   font-size: 14px;
   padding: 0.8em 0.9em 0.8em 0.9em;
-  color: var(--white);
+  color: white;
   background: #ad5389;
   background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
   border: none;
