@@ -1097,10 +1097,10 @@ document.addEventListener('keydown', (e) => {
             <tbody>
               {% for termin in termine %}
               <tr>
-                <td style="color: rgb(211, 211, 211)">{{ termin.datum }}</td>
+                <td style="color: rgb(59, 59, 59)">{{ termin.datum }}</td>
                 <td><strong>{{ termin.veranstaltung }}</strong></td>
-                <td style="color: rgb(211, 211, 211)">{{ termin.uhrzeit }}</td>
-                <td  style="color: rgb(211, 211, 211)">{{ termin.ort }}</td>
+                <td style="color: rgb(59, 59, 59)">{{ termin.uhrzeit }}</td>
+                <td  style="color: rgb(59, 59, 59)">{{ termin.ort }}</td>
                 {% if is_admin %}
                 <td>
                   <form
@@ -1224,7 +1224,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Create and append cells
                     const dateCell = document.createElement('td');
-                    dateCell.style.color = 'rgb(211, 211, 211)';
                     dateCell.textContent = dateText;
                     row.appendChild(dateCell);
 
@@ -1236,7 +1235,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     row.appendChild(titleCell);
                     
                     const timeCell = document.createElement('td');
-                    timeCell.style.color = 'rgb(211, 211, 211)';
                     
                     // Check if startTime and endTime are null, then display 'Ganztägig'
                     if (event.startTime === null && event.endTime === null) {
@@ -1253,7 +1251,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     row.appendChild(timeCell);
                     
                     const locationCell = document.createElement('td');
-                    locationCell.style.color = 'rgb(211, 211, 211)';
                     locationCell.textContent = event.location;
                     row.appendChild(locationCell);
                     
@@ -1991,6 +1988,10 @@ document.addEventListener('DOMContentLoaded', function() {
   ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
  (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 -->
+{% if is_admin %}
+<script src="../../static/js/theme-toggle.js"></script>
+{% endif %}
+
 
     <!--
   ____   ____  __ __   ____   _____    __  ____   ____  ____   ______ 
