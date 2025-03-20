@@ -111,7 +111,7 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: var(--hero-text);
+  color: var(--background-text);
 }
 .form-group input,
 .form-group textarea {
