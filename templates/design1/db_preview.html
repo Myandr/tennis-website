@@ -372,7 +372,20 @@
                                 <td>{{ event.id }}</td>
                                 <td>{{ event.title }}</td>
                                 <td>{{ event.short_title }}</td>
-                                <td>{{ event.date.strftime('%d.%m.%Y') }}</td>
+                                <td>
+                                    {% if event.start_date %}
+                                        {% set formatted_start = event.start_date.strftime('%d.%m.%Y') %}
+                                        
+                                        {% if event.end_date %}
+                                            {% set formatted_end = event.end_date.strftime('%d.%m.%Y') %}
+                                            {{ formatted_start }} - {{ formatted_end }}
+                                        {% else %}
+                                            {{ formatted_start }}
+                                        {% endif %}
+                                    {% else %}
+                                        No date available
+                                    {% endif %}
+                                </td>
                                 <td>{{ event.start_time }} - {{ event.end_time }}</td>
                                 <td>{{ event.location }}</td>
                                 <td>
@@ -400,7 +413,7 @@
 
         <div class="section-card">
             <div class="section-header">
-                <h2>About Section</h2>
+                <h2>Section Title</h2>
             </div>
             <div class="section-body">
                 <div class="table-container">
@@ -482,7 +495,7 @@
 
         <div class="section-card">
             <div class="section-header">
-                <h2>About Section Details</h2>
+                <h2>Section Details</h2>
             </div>
             <div class="section-body">
                 <div class="table-container">

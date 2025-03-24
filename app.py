@@ -2132,6 +2132,7 @@ def dashboard():
 
 
 
+
 #     __     __    ___   __   _  _  ____ 
 #    (  )   /  \  / __) /  \ / )( \(_  _)
 #    / (_/\(  O )( (_ \(  O )) \/ (  )(  
@@ -2330,13 +2331,18 @@ def edit_account():
 @app.route('/toggle_admin', methods=['POST'])
 @login_required
 def toggle_admin():
-    if current_user.role == 'admin':  # Überprüfen, ob der Nutzer ein Admin ist
-        session['is_admin_active'] = not session.get('is_admin_active', True)
-        status = 'aktiviert' if session['is_admin_active'] else 'deaktiviert'
-        flash(f'Admin-Rechte wurden {status}.', 'success')
-    else:
-        flash('Sie haben keine Berechtigung, diese Aktion auszuführen.', 'error')
-    return redirect(url_for('dashboard'))
+    if current_user.role != 'admin':
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    
+    # Toggle the admin active state
+    is_admin_active = not session.get('is_admin_active', True)
+    session['is_admin_active'] = is_admin_active
+    
+    # Return JSON response
+    return jsonify({
+        'success': True, 
+        'is_admin_active': is_admin_active
+    })
 
 
 
