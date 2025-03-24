@@ -31,54 +31,56 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            line-height: 1.5;
             color: var(--text-color);
             background-color: var(--background-color);
-            padding: 20px;
+            padding: 10px;
+            font-size: 14px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
         }
         
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
         }
         
         .header-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             transition: all 0.2s;
             text-decoration: none;
+            white-space: nowrap;
         }
         
         .btn:hover {
             background-color: #3a56d4;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             box-shadow: var(--shadow);
         }
         
@@ -107,13 +109,14 @@
             background-color: var(--card-bg);
             border-radius: 8px;
             box-shadow: var(--shadow);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             overflow: hidden;
+            border: 1px solid var(--border-color);
         }
         
         .section-header {
             background-color: var(--primary-light);
-            padding: 16px 20px;
+            padding: 12px 15px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -130,43 +133,44 @@
         }
         
         h1 {
-            font-size: 2.2em;
+            font-size: 1.6em;
             font-weight: 700;
             letter-spacing: -0.5px;
         }
         
         h2 {
-            font-size: 1.6em;
+            font-size: 1.3em;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             margin: 0;
         }
         
         h2::before {
             content: '';
             display: block;
-            width: 4px;
-            height: 24px;
+            width: 3px;
+            height: 18px;
             background-color: var(--primary-color);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         .table-container {
             width: 100%;
             overflow-x: auto;
             margin-bottom: 0;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background-color: var(--card-bg);
-            min-width: 600px;
+            font-size: 13px;
         }
 
         th, td {
-            padding: 14px 16px;
+            padding: 10px 12px;
             text-align: left;
         }
         
@@ -174,7 +178,7 @@
             background-color: var(--table-header);
             color: var(--secondary-color);
             font-weight: 600;
-            font-size: 0.9em;
+            font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-bottom: 2px solid var(--border-color);
@@ -198,7 +202,7 @@
         
         .badge {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 4px;
             font-size: 0.75em;
             font-weight: 600;
@@ -223,7 +227,7 @@
         .admin-role {
             background-color: rgba(239, 35, 60, 0.2);
             color: #ef233c;
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 4px;
             font-weight: 600;
             text-transform: uppercase;
@@ -233,7 +237,7 @@
         .user-role {
             background-color: rgba(6, 214, 160, 0.2);
             color: #06d6a0;
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 4px;
             font-weight: 600;
             text-transform: uppercase;
@@ -241,24 +245,24 @@
         }
         
         .footer {
-            margin-top: 40px;
-            padding-top: 20px;
+            margin-top: 20px;
+            padding-top: 15px;
             border-top: 1px solid var(--border-color);
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
         
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         
         .action-buttons .btn {
             flex: 1;
-            min-width: 150px;
+            min-width: 120px;
             justify-content: center;
         }
         
@@ -266,14 +270,14 @@
         .toggle-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .switch {
             position: relative;
             display: inline-block;
-            width: 50px;
-            height: 25px;
+            width: 40px;
+            height: 22px;
         }
         
         .switch input {
@@ -289,14 +293,14 @@
             bottom: 0;
             background-color: #ccc;
             transition: 0.4s;
-            border-radius: 25px;
+            border-radius: 22px;
         }
         
         .slider:before {
             position: absolute;
             content: "";
-            height: 19px;
-            width: 19px;
+            height: 16px;
+            width: 16px;
             left: 3px;
             bottom: 3px;
             background-color: white;
@@ -309,17 +313,18 @@
         }
         
         input:checked + .slider:before {
-            transform: translateX(25px);
+            transform: translateX(18px);
         }
         
         /* Alert Messages */
         .alert {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            font-size: 13px;
         }
         
         .alert-success {
@@ -349,149 +354,196 @@
         }
         
         .action-cell .btn {
-            padding: 6px 10px;
+            padding: 5px 8px;
             min-width: auto;
         }
 
+        /* Improved Mobile Styles */
         @media screen and (max-width: 768px) {
             .container {
-                padding: 20px 15px;
+                padding: 12px 10px;
+                margin: 0;
+                width: 100%;
             }
             
             .header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
+                gap: 12px;
+                margin-bottom: 15px;
+                padding-bottom: 12px;
             }
             
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .action-buttons .btn {
+            .header-actions {
                 width: 100%;
+                justify-content: space-between;
+            }
+            
+            .header-actions .btn {
+                font-size: 12px;
+                padding: 6px 10px;
             }
             
             h1 {
-                font-size: 1.8em;
-            }
-            
-            h2 {
                 font-size: 1.4em;
             }
             
-            th, td {
-                padding: 10px 12px;
+            h2 {
+                font-size: 1.2em;
             }
             
             .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+                padding: 10px;
             }
             
-            table, thead, tbody, th, td, tr {
+            /* Improved mobile table styles */
+            .table-container {
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: none;
+            }
+            
+            /* Card-based table layout for mobile */
+            .mobile-card-table tr {
                 display: block;
-            }
-            
-            thead tr {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
-            }
-            
-            tr {
-                margin-bottom: 10px;
+                margin-bottom: 8px;
+                background-color: var(--card-bg);
                 border: 1px solid var(--border-color);
-                border-radius: 8px;
+                border-radius: 6px;
                 overflow: hidden;
             }
             
-            td {
-                border: none;
-                border-bottom: 1px solid var(--border-color);
-                position: relative;
-                padding-left: 50%;
-                min-height: 45px;
+            .mobile-card-table td {
                 display: flex;
-                align-items: center;
+                padding: 8px 10px;
+                border-bottom: 1px solid var(--border-color);
+                font-size: 13px;
             }
             
-            td:before {
-                position: absolute;
-                left: 12px;
-                width: 45%;
-                padding-right: 10px;
-                white-space: nowrap;
-                content: attr(data-label);
-                font-weight: 600;
-                color: var(--secondary-color);
-            }
-            
-            td:last-child {
+            .mobile-card-table td:last-child {
                 border-bottom: none;
+            }
+            
+            .mobile-card-table td::before {
+                content: attr(data-label);
+                width: 40%;
+                font-weight: 600;
+                margin-right: 10px;
+            }
+            
+            /* Hide table headers on mobile */
+            .mobile-card-table thead {
+                display: none;
+            }
+            
+            /* Admin table specific styles */
+            #adminSection .table-container {
+                padding: 0;
+            }
+            
+            #adminSection table {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            #adminSection tr {
+                margin-bottom: 10px;
+            }
+            
+            #adminSection td {
+                padding: 8px 10px;
+            }
+            
+            /* Action buttons in mobile */
+            .action-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+            
+            .action-buttons .btn {
+                flex: 1 0 calc(50% - 5px);
+                min-width: 0;
+                font-size: 12px;
+                padding: 8px 5px;
+            }
+            
+            /* Admin toggle in mobile */
+            .toggle-container {
+                margin-top: 8px;
+                font-size: 12px;
+            }
+            
+            #adminStatus {
+                font-size: 12px;
             }
         }
     </style>
-    <!-- Add this to the head section of your dashboard.html -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      // Get the admin toggle checkbox if it exists
-      const adminToggle = document.getElementById('adminToggle');
-      if (adminToggle) {
-          adminToggle.addEventListener('change', function() {
-              toggleAdminView();
-          });
-      }
-  });
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the admin toggle checkbox if it exists
+            const adminToggle = document.getElementById('adminToggle');
+            if (adminToggle) {
+                adminToggle.addEventListener('change', function() {
+                    toggleAdminView();
+                });
+            }
+            
+            // Add mobile-card-table class to tables on small screens
+            if (window.innerWidth <= 768) {
+                document.querySelectorAll('table').forEach(table => {
+                    table.classList.add('mobile-card-table');
+                });
+            }
+        });
 
-  function toggleAdminView() {
-      // Show loading state
-      const adminStatus = document.getElementById('adminStatus');
-      const originalText = adminStatus.textContent;
-      adminStatus.textContent = 'Wird aktualisiert...';
-      
-      // Make fetch request to toggle admin view
-      fetch('/toggle_admin', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'X-Requested-With': 'XMLHttpRequest'
-          },
-          credentials: 'same-origin'
-      })
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.json();
-      })
-      .then(data => {
-          if (data.success) {
-              // Update the status text
-              adminStatus.textContent = 'Adminansicht: ' + (data.is_admin_active ? 'aktiviert' : 'deaktiviert');
-              
-              // Toggle the admin section visibility
-              const adminSection = document.getElementById('adminSection');
-              if (adminSection) {
-                  adminSection.style.display = data.is_admin_active ? 'block' : 'none';
-              }
-          } else {
-              // Reset the checkbox state if there was an error
-              document.getElementById('adminToggle').checked = !document.getElementById('adminToggle').checked;
-              adminStatus.textContent = originalText;
-              alert('Fehler beim Umschalten der Adminansicht');
-          }
-      })
-      .catch(error => {
-          console.error('Error:', error);
-          // Reset the checkbox state
-          document.getElementById('adminToggle').checked = !document.getElementById('adminToggle').checked;
-          adminStatus.textContent = originalText;
-          alert('Fehler beim Umschalten der Adminansicht');
-      });
-  }
-</script>
+        function toggleAdminView() {
+            // Show loading state
+            const adminStatus = document.getElementById('adminStatus');
+            const originalText = adminStatus.textContent;
+            adminStatus.textContent = 'Wird aktualisiert...';
+            
+            // Make fetch request to toggle admin view
+            fetch('/toggle_admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Update the status text
+                    adminStatus.textContent = 'Adminansicht: ' + (data.is_admin_active ? 'aktiviert' : 'deaktiviert');
+                    
+                    // Toggle the admin section visibility
+                    const adminSection = document.getElementById('adminSection');
+                    if (adminSection) {
+                        adminSection.style.display = data.is_admin_active ? 'block' : 'none';
+                    }
+                } else {
+                    // Reset the checkbox state if there was an error
+                    document.getElementById('adminToggle').checked = !document.getElementById('adminToggle').checked;
+                    adminStatus.textContent = originalText;
+                    alert('Fehler beim Umschalten der Adminansicht');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Reset the checkbox state
+                document.getElementById('adminToggle').checked = !document.getElementById('adminToggle').checked;
+                adminStatus.textContent = originalText;
+                alert('Fehler beim Umschalten der Adminansicht');
+            });
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -499,14 +551,14 @@
             <h1>Benutzerdashboard</h1>
             <div class="header-actions">
                 <a href="/" class="btn btn-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     </svg>
                     Startseite
                 </a>
                 <a href="{{ url_for('logout') }}" class="btn btn-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -521,18 +573,18 @@
                 {% for category, message in messages %}
                     <div class="alert alert-{{ category }}">
                         {% if category == 'success' %}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                             </svg>
                         {% elif category == 'info' %}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="12" y1="16" x2="12" y2="12"></line>
                                 <line x1="12" y1="8" x2="12.01" y2="8"></line>
                             </svg>
                         {% elif category == 'error' %}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="15" y1="9" x2="9" y2="15"></line>
                                 <line x1="9" y1="9" x2="15" y2="15"></line>
@@ -545,40 +597,36 @@
         {% endwith %}
 
         <div class="section-card">
-          <div class="section-header">
-            <h2>Profil von {{ user.firstname }}</h2>
-            {% if is_admin %}
-            <div class="toggle-container">
-                <label class="switch">
-                    <input type="checkbox" id="adminToggle" {% if session.get('is_admin_active', True) %} checked {% endif %}>
-                    <span class="slider"></span>
-                </label>
-                <span id="adminStatus">
-                    Adminansicht: {% if session.get('is_admin_active', True) %} aktiviert {% else %} deaktiviert {% endif %}
-                </span>
+            <div class="section-header">
+                <h2>Profil von {{ user.firstname }}</h2>
+                {% if is_admin %}
+                <div class="toggle-container">
+                    <label class="switch">
+                        <input type="checkbox" id="adminToggle" {% if session.get('is_admin_active', True) %} checked {% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                    <span id="adminStatus">
+                        Adminansicht: {% if session.get('is_admin_active', True) %} aktiviert {% else %} deaktiviert {% endif %}
+                    </span>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-          </div>
 
             <div class="section-body">
                 <div class="table-container">
                     <table>
                         <tbody>
                             <tr>
-                                <th>Vorname</th>
-                                <td>{{ current_user.firstname }}</td>
+                                <td data-label="Vorname">{{ current_user.firstname }}</td>
                             </tr>
                             <tr>
-                                <th>Nachname</th>
-                                <td>{{ current_user.lastname }}</td>
+                                <td data-label="Nachname">{{ current_user.lastname }}</td>
                             </tr>
                             <tr>
-                                <th>E-Mail</th>
-                                <td>{{ current_user.email }}</td>
+                                <td data-label="E-Mail">{{ current_user.email }}</td>
                             </tr>
                             <tr>
-                                <th>Rolle</th>
-                                <td>
+                                <td data-label="Rolle">
                                     {% if current_user.role == 'admin' %}
                                     <span class="badge badge-danger">{{ current_user.role }}</span>
                                     {% else %}
@@ -590,34 +638,32 @@
                     </table>
                 </div>
                 
-                <div style="padding: 20px;">
-                    <div class="action-buttons">
-                        <a href="{{ url_for('forgot_password') }}" class="btn btn-secondary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                <div class="action-buttons">
+                    <a href="{{ url_for('forgot_password') }}" class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Passwort ändern
+                    </a>
+                    <a href="{{ url_for('edit_account') }}" class="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        Account bearbeiten
+                    </a>
+                    <form action="{{ url_for('delete_account') }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
+                        <button type="submit" class="btn btn-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
                             </svg>
-                            Passwort ändern
-                        </a>
-                        <a href="{{ url_for('edit_account') }}" class="btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                            </svg>
-                            Account bearbeiten
-                        </a>
-                        <form action="{{ url_for('delete_account') }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
-                            <button type="submit" class="btn btn-danger">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                                </svg>
-                                Konto löschen
-                            </button>
-                        </form>
-                    </div>
+                            Konto löschen
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -655,7 +701,7 @@
                                 <td data-label="Aktionen" class="action-cell">
                                     <form action="{{ url_for('delete_user', user_id=i.id) }}" method="POST" onsubmit="return confirm('Bist du sicher, dass du diesen Account löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')">
                                         <button type="submit" class="btn btn-danger">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <polyline points="3 6 5 6 21 6"></polyline>
                                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                                 <line x1="10" y1="11" x2="10" y2="17"></line>
@@ -672,13 +718,6 @@
             </div>
         </div>
         {% endif %}
-
     </div>
-
-    <script>
-        function toggleAdmin() {
-            document.getElementById("toggleAdminForm").submit();
-        }
-    </script>
 </body>
 </html>
