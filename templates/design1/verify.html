@@ -271,39 +271,50 @@ body {
     </div>
 
     <script>
-      const codeInputs = document.querySelectorAll(".code-input");
-      const hiddenCodeInput = document.getElementById("code");
+     const codeInputs = document.querySelectorAll(".code-input");
+const hiddenCodeInput = document.getElementById("code");
 
-      codeInputs.forEach((input, index) => {
-        input.addEventListener("input", (e) => {
-          if (e.target.value.length === 1) {
-            if (index < codeInputs.length - 1) {
-              codeInputs[index + 1].focus();
-            }
-          }
-          updateHiddenCodeInput();
-        });
+codeInputs.forEach((input, index) => {
+  input.addEventListener("input", (e) => {
+    if (e.target.value.length === 1 && index < codeInputs.length - 1) {
+      codeInputs[index + 1].focus();
+    }
+    updateHiddenCodeInput();
+  });
 
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Backspace" && !e.target.value && index > 0) {
-            codeInputs[index - 1].focus();
-          }
-        });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Backspace" && !e.target.value && index > 0) {
+      codeInputs[index - 1].focus();
+    }
+  });
+
+  input.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData("text").trim();
+    if (/^\d{6}$/.test(pasteData)) {
+      pasteData.split("").forEach((num, i) => {
+        if (codeInputs[i]) codeInputs[i].value = num;
       });
+      updateHiddenCodeInput();
+      codeInputs[codeInputs.length - 1].focus();
+    }
+  });
+});
 
-      function updateHiddenCodeInput() {
-        hiddenCodeInput.value = Array.from(codeInputs)
-          .map((input) => input.value)
-          .join("");
-      }
+function updateHiddenCodeInput() {
+  hiddenCodeInput.value = Array.from(codeInputs)
+    .map((input) => input.value)
+    .join("");
+}
 
-      document.querySelector(".form").addEventListener("submit", (e) => {
-        updateHiddenCodeInput();
-        if (hiddenCodeInput.value.length !== 6) {
-          e.preventDefault();
-          alert("Bitte geben Sie einen 6-stelligen Code ein.");
-        }
-      });
+document.querySelector(".form").addEventListener("submit", (e) => {
+  updateHiddenCodeInput();
+  if (hiddenCodeInput.value.length !== 6) {
+    e.preventDefault();
+    alert("Bitte geben Sie einen 6-stelligen Code ein.");
+  }
+});
+
     </script>
   </body>
 </html>
