@@ -542,13 +542,13 @@ footer i {
   display: inline-block;
   padding: 2px;
   transform: rotate(45deg);
-  margin-top: -2px;
+  margin-top: 0px;
   transition: transform 0.2s ease;
 }
 
 .nav-link.active .chevron-down {
   transform: rotate(-135deg);
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .dropdown-menu {
