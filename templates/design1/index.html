@@ -730,10 +730,10 @@ document.addEventListener('keydown', (e) => {
           </form>
       </div>
   </div>
+  {% endif %}
   
   <!-- Loading spinner -->
   <div id="loading-spinner" class="loading-spinner"></div>
-  {% endif %}
   
   
 
@@ -1561,7 +1561,6 @@ document.addEventListener('DOMContentLoaded', function() {
           once: true
       });
       
-      {% if is_admin %}
 // Admin edit functionality
 document.addEventListener('DOMContentLoaded', function() {
     const toggleEditModeButton = document.getElementById('toggle-edit-mode');
@@ -1582,18 +1581,15 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchAboutData();
     
     function fetchAboutData() {
-        loadingSpinner.style.display = 'block';
         
         fetch('/api/about')
             .then(response => response.json())
             .then(data => {
                 aboutData = data;
                 updateUI(data);
-                loadingSpinner.style.display = 'none';
             })
             .catch(error => {
                 console.error('Error fetching about data:', error);
-                loadingSpinner.style.display = 'none';
                 alert('Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.');
             });
     }
@@ -1801,7 +1797,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-{% endif %}
   </script>
 
     <!--
