@@ -155,11 +155,16 @@
             border-radius: 3px;
         }
 
+        /* Modified table styles to ensure horizontal scrolling */
         .table-container {
             width: 100%;
             overflow-x: auto;
             margin-bottom: 0;
             -webkit-overflow-scrolling: touch;
+            /* Ensure the table container has a minimum width */
+            min-height: 0.01%;
+            /* Prevent table from breaking layout on small screens */
+            white-space: nowrap;
         }
 
         table {
@@ -167,11 +172,15 @@
             border-collapse: collapse;
             background-color: var(--card-bg);
             font-size: 13px;
+            /* Set a minimum width to ensure horizontal scrolling */
+            min-width: 650px;
         }
 
         th, td {
             padding: 10px 12px;
             text-align: left;
+            /* Prevent text wrapping to maintain row structure */
+            white-space: nowrap;
         }
         
         th {
@@ -182,6 +191,10 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-bottom: 2px solid var(--border-color);
+            /* Sticky header for better usability when scrolling */
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         tr {
@@ -396,62 +409,15 @@
                 padding: 10px;
             }
             
-            /* Improved mobile table styles */
-            .table-container {
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: none;
-            }
-            
-            /* Card-based table layout for mobile */
-            .mobile-card-table tr {
+            /* Remove card-based table layout for mobile to keep rows intact */
+            .mobile-card-table {
                 display: block;
-                margin-bottom: 8px;
-                background-color: var(--card-bg);
-                border: 1px solid var(--border-color);
-                border-radius: 6px;
-                overflow: hidden;
             }
             
-            .mobile-card-table td {
-                display: flex;
-                padding: 8px 10px;
-                border-bottom: 1px solid var(--border-color);
-                font-size: 13px;
-            }
-            
-            .mobile-card-table td:last-child {
-                border-bottom: none;
-            }
-            
-            .mobile-card-table td::before {
-                content: attr(data-label);
-                width: 40%;
-                font-weight: 600;
-                margin-right: 10px;
-            }
-            
-            /* Hide table headers on mobile */
-            .mobile-card-table thead {
-                display: none;
-            }
-            
-            /* Admin table specific styles */
+            /* Admin table specific styles - ensure horizontal scrolling */
             #adminSection .table-container {
                 padding: 0;
-            }
-            
-            #adminSection table {
-                min-width: auto;
-                width: 100%;
-            }
-            
-            #adminSection tr {
-                margin-bottom: 10px;
-            }
-            
-            #adminSection td {
-                padding: 8px 10px;
+                overflow-x: auto;
             }
             
             /* Action buttons in mobile */
@@ -477,6 +443,30 @@
             #adminStatus {
                 font-size: 12px;
             }
+            
+            /* Add scroll indicator for tables */
+            .table-container::after {
+                content: '⟷';
+                position: absolute;
+                right: 10px;
+                bottom: 10px;
+                background: var(--primary-color);
+                color: white;
+                padding: 5px 8px;
+                border-radius: 50%;
+                font-size: 12px;
+                opacity: 0.7;
+                animation: pulse 2s infinite;
+                display: none;
+            }
+            
+            @keyframes pulse {
+                0% { opacity: 0.7; }
+                50% { opacity: 0.3; }
+                100% { opacity: 0.7; }
+            }
+            
+
         }
     </style>
     <script>
@@ -489,13 +479,25 @@
                 });
             }
             
-            // Add mobile-card-table class to tables on small screens
-            if (window.innerWidth <= 768) {
-                document.querySelectorAll('table').forEach(table => {
-                    table.classList.add('mobile-card-table');
-                });
-            }
+            // Check if tables need horizontal scrolling and add indicator
+            checkTableScrollability();
+            
+            // Recheck on window resize
+            window.addEventListener('resize', checkTableScrollability);
         });
+        
+        // Function to check if tables need horizontal scrolling
+        function checkTableScrollability() {
+            const tableContainers = document.querySelectorAll('.table-container');
+            tableContainers.forEach(container => {
+                const table = container.querySelector('table');
+                if (table && table.offsetWidth > container.offsetWidth) {
+                    container.classList.add('scrollable');
+                } else {
+                    container.classList.remove('scrollable');
+                }
+            });
+        }
 
         function toggleAdminView() {
             // Show loading state
@@ -528,6 +530,9 @@
                     if (adminSection) {
                         adminSection.style.display = data.is_admin_active ? 'block' : 'none';
                     }
+                    
+                    // Check if tables need horizontal scrolling after toggling
+                    setTimeout(checkTableScrollability, 100);
                 } else {
                     // Reset the checkbox state if there was an error
                     document.getElementById('adminToggle').checked = !document.getElementById('adminToggle').checked;
@@ -613,7 +618,7 @@
             </div>
 
             <div class="section-body">
-                <div class="table-container">
+                <div class="table-container" style="overflow: hidden;">
                     <table>
                         <tbody>
                             <tr>
