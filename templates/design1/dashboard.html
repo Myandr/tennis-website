@@ -171,7 +171,7 @@
             width: 100%;
             border-collapse: collapse;
             background-color: var(--card-bg);
-            font-size: 13px;
+            font-size: 12px;
             /* Set a minimum width to ensure horizontal scrolling */
             min-width: 650px;
         }
@@ -373,6 +373,11 @@
 
         /* Improved Mobile Styles */
         @media screen and (max-width: 768px) {
+            .td-profile {
+                font-size: 1em;
+            }
+
+
             .container {
                 padding: 12px 10px;
                 margin: 0;
@@ -622,13 +627,13 @@
                     <table>
                         <tbody>
                             <tr>
-                                <td style="font-size: 12px" data-label="Vorname">{{ current_user.firstname }}</td>
+                                <td class="td-profile" data-label="Vorname">{{ current_user.firstname }}</td>
                             </tr>
                             <tr>
-                                <td  style="font-size: 12px" data-label="Nachname">{{ current_user.lastname }}</td>
+                                <td class="td-profile" data-label="Nachname">{{ current_user.lastname }}</td>
                             </tr>
                             <tr>
-                                <td  style="font-size: 12px" data-label="E-Mail">{{ current_user.email }}</td>
+                                <td class="td-profile" data-label="E-Mail">{{ current_user.email }}</td>
                             </tr>
                             <tr>
                                 <td data-label="Rolle">
