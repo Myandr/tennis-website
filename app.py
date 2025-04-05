@@ -359,6 +359,30 @@ class AboutSection(db.Model):
 
         }
 
+class Gallery(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    slug = db.Column(db.String(100), unique=True, nullable=False)
+    cover_image = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Beziehung zu den Bildern
+    images = db.relationship('GalleryImage', backref='gallery', lazy=True)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'slug': self.slug,
+            'cover_image': self.cover_image,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            'image_count': len(self.images) if self.images else 0
+        }
+
 class GalleryImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
@@ -368,6 +392,8 @@ class GalleryImage(db.Model):
     display_order = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    gallery_id = db.Column(db.Integer, db.ForeignKey('gallery.id'), nullable=True)
+
 
     def to_dict(self):
         return {
@@ -378,7 +404,8 @@ class GalleryImage(db.Model):
             'category': self.category,
             'display_order': self.display_order,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'gallery_id': self.gallery_id
         }
 
 # Erstellen Sie die Tabellen in der Datenbank
@@ -1233,15 +1260,43 @@ def create_default_gallery_images():
 def initialize_data():
     create_default_gallery_images()
 
-# Galerie-Seite anzeigen
-@app.route('/galerie')
-def gallery():
+@app.route('/galerien')
+def galleries():
     is_admin_active = session.get('is_admin_active', True)
     
+    # Get all galleries
+    all_galleries = Gallery.query.order_by(Gallery.created_at.desc()).all()
+
+    if GalleryImage.query.count() == 0:
+        create_default_gallery_images()
+    
     # Bilder aus der Datenbank abrufen
-    gallery_images = GalleryImage.query.order_by(GalleryImage.display_order, GalleryImage.created_at.desc()).all()
+    gallery_images = GalleryImage.query.filter_by(gallery_id=None).order_by(
+        GalleryImage.display_order, GalleryImage.created_at.desc()).all()
+    
+    return render_template('design1/galleries.html',
+                           galleries=all_galleries,
+                           gallery_images=gallery_images,
+                           logged_in=current_user.is_authenticated,
+                           username=current_user.get_id() if current_user.is_authenticated else None,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
+
+
+# Galerie-Seite anzeigen
+@app.route('/galerie/<slug>')
+def view_gallery(slug):
+    is_admin_active = session.get('is_admin_active', True)
+    
+    # Find the gallery by slug
+    gallery = Gallery.query.filter_by(slug=slug).first_or_404()
+    
+    # Get images for this gallery
+    gallery_images = GalleryImage.query.filter_by(gallery_id=gallery.id).order_by(
+        GalleryImage.display_order, GalleryImage.created_at.desc()).all()
     
     return render_template('design1/gallery.html',
+                           gallery=gallery,
                            gallery_images=gallery_images,
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
@@ -1260,6 +1315,153 @@ def get_gallery_images():
     
     return jsonify([image.to_dict() for image in gallery_images])
 
+@app.route('/api/galleries/<int:gallery_id>', methods=['GET'])
+def get_gallery(gallery_id):
+    try:
+        gallery = Gallery.query.get_or_404(gallery_id)
+        return jsonify(gallery.to_dict())
+    except Exception as e:
+        print(f"Error fetching gallery: {str(e)}")
+        return jsonify({'error': f'Fehler beim Abrufen der Galerie: {str(e)}'}), 500
+
+# Korrigierte Version der create_gallery-Funktion
+
+@app.route('/api/galleries', methods=['POST'])
+@login_required
+def create_gallery():
+    if not current_user.role == 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    # Get form data
+    name = request.form.get('name')
+    description = request.form.get('description', '')
+    
+    if not name:
+        return jsonify({'error': 'Gallery name is required'}), 400
+    
+    # Create a slug from the name
+    slug = secure_filename(name.lower().replace(' ', '-'))
+    
+    # Check if slug already exists
+    existing_gallery = Gallery.query.filter_by(slug=slug).first()
+    if existing_gallery:
+        # Make slug unique by adding a timestamp
+        slug = f"{slug}-{int(datetime.utcnow().timestamp())}"
+    
+    # Handle cover image if provided
+    cover_image = None
+    if 'cover_image' in request.files and request.files['cover_image'].filename:
+        image = request.files['cover_image']
+        filename = secure_filename(f"gallery-cover-{slug}-{uuid.uuid4()}.{image.filename.rsplit('.', 1)[1].lower()}")
+        image_path = f"/static/images/gallery/{filename}"
+        
+        # Ensure directory exists
+        os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+        
+        # Save the image
+        image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+        cover_image = image_path
+    
+    # Create new gallery
+    new_gallery = Gallery(
+        name=name,
+        description=description,
+        slug=slug,
+        cover_image=cover_image
+    )
+    
+    try:
+        db.session.add(new_gallery)
+        db.session.commit()
+        return jsonify(new_gallery.to_dict()), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creating gallery: {str(e)}")
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
+
+@app.route('/api/galleries/<int:gallery_id>', methods=['PUT'])
+@login_required
+def update_gallery(gallery_id):
+    if not current_user.role == 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    gallery = Gallery.query.get_or_404(gallery_id)
+    
+    try:
+        # Textfelder aktualisieren
+        if 'name' in request.form:
+            gallery.name = request.form['name']
+        
+        if 'description' in request.form:
+            gallery.description = request.form['description']
+        
+        # Titelbild aktualisieren, falls vorhanden
+        if 'cover_image' in request.files and request.files['cover_image'].filename != '':
+            image = request.files['cover_image']
+            
+            # Altes Bild löschen (optional)
+            if gallery.cover_image and gallery.cover_image.startswith('/static/images/gallery/'):
+                old_image_path = os.path.join(app.root_path, gallery.cover_image.lstrip('/'))
+                if os.path.exists(old_image_path):
+                    try:
+                        os.remove(old_image_path)
+                    except:
+                        pass  # Fehler beim Löschen ignorieren
+            
+            # Neues Bild speichern
+            filename = secure_filename(f"gallery-cover-{gallery.slug}-{uuid.uuid4()}.{image.filename.rsplit('.', 1)[1].lower()}")
+            image_path = f"/static/images/gallery/{filename}"
+            
+            # Stellen Sie sicher, dass das Verzeichnis existiert
+            os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+            
+            image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+            gallery.cover_image = image_path
+        
+        db.session.commit()
+        
+        return jsonify(gallery.to_dict())
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating gallery: {str(e)}")
+        return jsonify({'error': f'Fehler beim Aktualisieren der Galerie: {str(e)}'}), 500
+
+# API-Route zum Löschen einer Galerie
+@app.route('/api/galleries/<int:gallery_id>', methods=['DELETE'])
+@login_required
+def delete_gallery(gallery_id):
+    if not current_user.role == 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    gallery = Gallery.query.get_or_404(gallery_id)
+    
+    try:
+        # Alle zugehörigen Bilder auf gallery_id = NULL setzen
+        # oder alternativ löschen, je nach Anforderung
+        gallery_images = GalleryImage.query.filter_by(gallery_id=gallery_id).all()
+        for image in gallery_images:
+            image.gallery_id = None  # Bilder behalten, aber von der Galerie trennen
+            # Alternativ: db.session.delete(image)  # Bilder löschen
+        
+        # Titelbild löschen (optional)
+        if gallery.cover_image and gallery.cover_image.startswith('/static/images/gallery/'):
+            cover_path = os.path.join(app.root_path, gallery.cover_image.lstrip('/'))
+            if os.path.exists(cover_path):
+                try:
+                    os.remove(cover_path)
+                except:
+                    pass  # Fehler beim Löschen ignorieren
+        
+        # Galerie löschen
+        db.session.delete(gallery)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Galerie erfolgreich gelöscht'})
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error deleting gallery: {str(e)}")
+        return jsonify({'error': f'Fehler beim Löschen der Galerie: {str(e)}'}), 500
+
 # API-Route zum Abrufen eines einzelnen Galeriebildes
 @app.route('/api/gallery/<int:image_id>', methods=['GET'])
 def get_gallery_image(image_id):
@@ -1271,6 +1473,7 @@ def get_gallery_image(image_id):
     return jsonify(gallery_image.to_dict())
 
 # API-Route zum Hinzufügen eines neuen Galeriebildes
+# Aktualisiere die bestehende add_gallery_image-Funktion
 @app.route('/api/gallery', methods=['POST'])
 @login_required
 def add_gallery_image():
@@ -1286,29 +1489,42 @@ def add_gallery_image():
         return jsonify({'error': 'Kein Bild ausgewählt'}), 400
     
     if image:
-        # Eindeutigen Dateinamen generieren
-        filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
-        image_path = f"/static/images/gallery/{filename}"
-        
-        # Stellen Sie sicher, dass das Verzeichnis existiert
-        os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
-        
-        # Bild speichern
-        image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
-        
-        # Neues Galeriebild erstellen
-        new_image = GalleryImage(
-            title=request.form.get('title', 'Neues Bild'),
-            description=request.form.get('description', ''),
-            image_path=image_path,
-            category=request.form.get('category', ''),
-            display_order=request.form.get('display_order', 0)
-        )
-        
-        db.session.add(new_image)
-        db.session.commit()
-        
-        return jsonify(new_image.to_dict()), 201
+        try:
+            # Eindeutigen Dateinamen generieren
+            filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+            image_path = f"/static/images/gallery/{filename}"
+            
+            # Stellen Sie sicher, dass das Verzeichnis existiert
+            os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+            
+            # Bild speichern
+            image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+            
+            # Galerie-ID verarbeiten (kann None sein)
+            gallery_id = request.form.get('gallery_id')
+            if gallery_id == '':
+                gallery_id = None
+            elif gallery_id is not None:
+                gallery_id = int(gallery_id)
+            
+            # Neues Galeriebild erstellen
+            new_image = GalleryImage(
+                title=request.form.get('title', 'Neues Bild'),
+                description=request.form.get('description', ''),
+                image_path=image_path,
+                category=request.form.get('category', ''),
+                display_order=int(request.form.get('display_order', 0)),
+                gallery_id=gallery_id
+            )
+            
+            db.session.add(new_image)
+            db.session.commit()
+            
+            return jsonify(new_image.to_dict()), 201
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error adding gallery image: {str(e)}")
+            return jsonify({'error': f'Fehler beim Hochladen des Bildes: {str(e)}'}), 500
     
     return jsonify({'error': 'Fehler beim Hochladen des Bildes'}), 500
 
@@ -1319,50 +1535,60 @@ def update_gallery_image(image_id):
     if not current_user.role == 'admin':
         return jsonify({'error': 'Unauthorized'}), 403
     
-    gallery_image = GalleryImage.query.get(image_id)
+    gallery_image = GalleryImage.query.get_or_404(image_id)
     
-    if not gallery_image:
-        return jsonify({'error': 'Bild nicht gefunden'}), 404
-    
-    # Textfelder aktualisieren
-    if 'title' in request.form:
-        gallery_image.title = request.form['title']
-    
-    if 'description' in request.form:
-        gallery_image.description = request.form['description']
-    
-    if 'category' in request.form:
-        gallery_image.category = request.form['category']
-    
-    if 'display_order' in request.form:
-        gallery_image.display_order = int(request.form['display_order'])
-    
-    # Bild aktualisieren, falls vorhanden
-    if 'image' in request.files and request.files['image'].filename != '':
-        image = request.files['image']
+    try:
+        # Textfelder aktualisieren
+        if 'title' in request.form:
+            gallery_image.title = request.form['title']
         
-        # Altes Bild löschen (optional)
-        if gallery_image.image_path.startswith('/static/images/gallery/'):
-            old_image_path = os.path.join(app.root_path, gallery_image.image_path.lstrip('/'))
-            if os.path.exists(old_image_path):
-                try:
-                    os.remove(old_image_path)
-                except:
-                    pass  # Fehler beim Löschen ignorieren
+        if 'description' in request.form:
+            gallery_image.description = request.form['description']
         
-        # Neues Bild speichern
-        filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
-        image_path = f"/static/images/gallery/{filename}"
+        if 'category' in request.form:
+            gallery_image.category = request.form['category']
         
-        # Stellen Sie sicher, dass das Verzeichnis existiert
-        os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+        if 'display_order' in request.form:
+            gallery_image.display_order = int(request.form['display_order'])
         
-        image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
-        gallery_image.image_path = image_path
-    
-    db.session.commit()
-    
-    return jsonify(gallery_image.to_dict())
+        # Galerie-ID verarbeiten (kann None sein)
+        if 'gallery_id' in request.form:
+            gallery_id = request.form.get('gallery_id')
+            if gallery_id == '':
+                gallery_image.gallery_id = None
+            else:
+                gallery_image.gallery_id = int(gallery_id)
+        
+        # Bild aktualisieren, falls vorhanden
+        if 'image' in request.files and request.files['image'].filename != '':
+            image = request.files['image']
+            
+            # Altes Bild löschen (optional)
+            if gallery_image.image_path.startswith('/static/images/gallery/'):
+                old_image_path = os.path.join(app.root_path, gallery_image.image_path.lstrip('/'))
+                if os.path.exists(old_image_path):
+                    try:
+                        os.remove(old_image_path)
+                    except:
+                        pass  # Fehler beim Löschen ignorieren
+            
+            # Neues Bild speichern
+            filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+            image_path = f"/static/images/gallery/{filename}"
+            
+            # Stellen Sie sicher, dass das Verzeichnis existiert
+            os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+            
+            image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+            gallery_image.image_path = image_path
+        
+        db.session.commit()
+        
+        return jsonify(gallery_image.to_dict())
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating gallery image: {str(e)}")
+        return jsonify({'error': f'Fehler beim Aktualisieren des Bildes: {str(e)}'}), 500
 
 # API-Route zum Löschen eines Galeriebildes
 @app.route('/api/gallery/<int:image_id>', methods=['DELETE'])
@@ -1404,42 +1630,55 @@ def bulk_upload_images():
     images = request.files.getlist('images[]')
     category = request.form.get('category', '')
     
+    # Galerie-ID verarbeiten (kann None sein)
+    gallery_id = request.form.get('gallery_id')
+    if gallery_id == '':
+        gallery_id = None
+    elif gallery_id is not None:
+        gallery_id = int(gallery_id)
+    
     if not images:
         return jsonify({'error': 'Keine Bilder ausgewählt'}), 400
     
     uploaded_images = []
     
-    for image in images:
-        if image.filename:
-            # Eindeutigen Dateinamen generieren
-            filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
-            image_path = f"/static/images/gallery/{filename}"
-            
-            # Stellen Sie sicher, dass das Verzeichnis existiert
-            os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
-            
-            # Bild speichern
-            image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
-            
-            # Neues Galeriebild erstellen
-            new_image = GalleryImage(
-                title=os.path.splitext(image.filename)[0],  # Dateiname ohne Erweiterung als Titel
-                description='',
-                image_path=image_path,
-                category=category,
-                display_order=0
-            )
-            
-            db.session.add(new_image)
-            uploaded_images.append(new_image)
-    
-    db.session.commit()
-    
-    return jsonify({
-        'success': True,
-        'message': f'{len(uploaded_images)} Bilder erfolgreich hochgeladen',
-        'images': [image.to_dict() for image in uploaded_images]
-    }), 201
+    try:
+        for image in images:
+            if image.filename:
+                # Eindeutigen Dateinamen generieren
+                filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+                image_path = f"/static/images/gallery/{filename}"
+                
+                # Stellen Sie sicher, dass das Verzeichnis existiert
+                os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
+                
+                # Bild speichern
+                image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+                
+                # Neues Galeriebild erstellen
+                new_image = GalleryImage(
+                    title=os.path.splitext(image.filename)[0],  # Dateiname ohne Erweiterung als Titel
+                    description='',
+                    image_path=image_path,
+                    category=category,
+                    display_order=0,
+                    gallery_id=gallery_id
+                )
+                
+                db.session.add(new_image)
+                uploaded_images.append(new_image)
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': f'{len(uploaded_images)} Bilder erfolgreich hochgeladen',
+            'images': [image.to_dict() for image in uploaded_images]
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error in bulk upload: {str(e)}")
+        return jsonify({'error': f'Fehler beim Hochladen der Bilder: {str(e)}'}), 500
 
 
 

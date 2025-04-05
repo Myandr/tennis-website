@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ gallery.name }} - Hardter Tennisverein</title>
+  <title>Galerie - Hardter Tennisverein</title>
   <link rel="stylesheet" type="text/css" href="../../static/css/index2.css" />
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
   <style>
@@ -14,38 +14,76 @@
       padding: 20px;
     }
 
-    .gallery-header {
-      margin-bottom: 30px;
+    .page-title {
+      text-align: center;
+      margin: 30px 0;
     }
 
-    .gallery-title {
+    .page-title h1 {
       font-size: 2.5rem;
       color: #333;
-      margin-bottom: 10px;
+      position: relative;
+      display: inline-block;
     }
 
-    .gallery-description {
-      color: #666;
-      font-size: 1.1rem;
-      margin-bottom: 20px;
+    .page-title h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background-color: #8cc63f;
     }
 
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      color: #8cc63f;
-      text-decoration: none;
+    /* Tabs */
+    .gallery-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .gallery-tab {
+      padding: 12px 24px;
+      font-size: 16px;
       font-weight: 500;
-      margin-bottom: 20px;
-      transition: color 0.2s;
+      color: #666;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s;
     }
 
-    .back-link:hover {
-      color: #7ab52f;
+    .gallery-tab:hover {
+      color: #8cc63f;
     }
 
-    .back-icon {
-      margin-right: 8px;
+    .gallery-tab.active {
+      color: #8cc63f;
+      border-bottom-color: #8cc63f;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 1.8rem;
+      color: #333;
+      margin: 40px 0 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background-color: #8cc63f;
     }
 
     /* Gallery styles */
@@ -81,6 +119,77 @@
       background-color: #fff;
       text-align: center;
       font-weight: 500;
+    }
+
+    /* Galleries grid */
+    .galleries-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .gallery-card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background-color: white;
+      position: relative;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .gallery-cover {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-info {
+      padding: 20px;
+    }
+
+    .gallery-name {
+      font-size: 1.5rem;
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+
+    .gallery-description {
+      color: #666;
+      margin-bottom: 15px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .gallery-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .gallery-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #8cc63f;
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .gallery-btn:hover {
+      background-color: #7ab52f;
     }
 
     /* Lightbox styles */
@@ -193,9 +302,9 @@
       color: #2196F3;
     }
 
-    .admin-btn.bulk-upload {
+    .admin-btn.add-gallery {
       background-color: white;
-      color: #8cc63f;
+      color: #ff9800;
     }
 
     /* Image controls in edit mode */
@@ -205,11 +314,12 @@
       right: 10px;
       display: none;
       gap: 8px;
-      opacity: ß;
+      opacity: 0;
       transition: opacity 0.3s ease;
     }
 
-    .edit-mode .gallery-item:hover .image-controls {
+    .edit-mode .gallery-item:hover .image-controls,
+    .edit-mode .gallery-card:hover .gallery-controls {
       display: flex;
       opacity: 1;
     }
@@ -240,6 +350,45 @@
 
     .delete-btn {
       color: #f44336;
+    }
+
+    /* Gallery controls */
+    .gallery-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: none;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-card:hover .gallery-controls {
+      display: flex;
+      opacity: 1;
+    }
+
+    /* Category filter */
+    .category-filter {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .category-btn {
+      padding: 8px 16px;
+      background-color: #f1f1f1;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .category-btn:hover, .category-btn.active {
+      background-color: #8cc63f;
+      color: white;
     }
 
     /* Empty state */
@@ -388,30 +537,124 @@
       display: none;
     }
 
-    .category-filter {
-      display: flex;
-      justify-content: center;
+    /* Bulk upload styles */
+    .bulk-upload-container {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
       margin-bottom: 30px;
-      flex-wrap: wrap;
-      gap: 10px;
+      display: none;
     }
 
-    .category-btn {
-      padding: 8px 16px;
-      background-color: #f1f1f1;
-      border: none;
-      border-radius: 20px;
+    .drop-zone {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
       cursor: pointer;
       transition: all 0.3s;
     }
 
-    .category-btn:hover, .category-btn.active {
-      background-color: #8cc63f;
+    .drop-zone:hover {
+      border-color: #8cc63f;
+      background-color: #f0f8e6;
+    }
+
+    .drop-zone.active {
+      border-color: #8cc63f;
+      background-color: #f0f8e6;
+    }
+
+    .drop-zone-text {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .drop-zone-icon {
+      font-size: 30px;
+      color: #8cc63f;
+      margin-bottom: 10px;
+    }
+
+    .preview-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .preview-item {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+
+    .preview-remove {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: rgba(0, 0, 0, 0.7);
       color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-remove:hover {
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .alert {
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .alert-close {
+      float: right;
+      font-size: 20px;
+      font-weight: bold;
+      line-height: 20px;
+      cursor: pointer;
+    }
+
+    /* Content sections */
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
     }
 
     @media (max-width: 1308px) {
-      .gallery-container {
+      .gallery-container, .galleries-container {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       }
 
@@ -436,8 +679,17 @@
     }
 
     @media (max-width: 768px) {
-      .gallery-container {
+      .gallery-container, .galleries-container {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+
+      .gallery-tabs {
+        flex-wrap: wrap;
+      }
+
+      .gallery-tab {
+        padding: 10px 16px;
+        font-size: 14px;
       }
     }
 
@@ -464,17 +716,20 @@
     }
 
     /* Verbessere die Galerie-Items im Bearbeitungsmodus */
-    .edit-mode .gallery-item {
+    .edit-mode .gallery-item,
+    .edit-mode .gallery-card {
       position: relative;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .edit-mode .gallery-item:hover {
+    .edit-mode .gallery-item:hover,
+    .edit-mode .gallery-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     }
 
-    .edit-mode .gallery-item::before {
+    .edit-mode .gallery-item::before,
+    .edit-mode .gallery-card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -488,7 +743,8 @@
       transition: opacity 0.3s ease;
     }
 
-    .edit-mode .gallery-item:hover::before {
+    .edit-mode .gallery-item:hover::before,
+    .edit-mode .gallery-card:hover::before {
       opacity: 1;
     }
   </style>
@@ -499,23 +755,28 @@
 
   <section class="locations-section" style="background-color: white; color: black; " id="about1">
     <div class="locations-header">
-      <h2>{{ gallery.name }}</h2>
-      <p>{{ gallery.description or 'Entdecken Sie die schönsten Momente aus unserem Vereinsleben' }}</p>
+      <h2>🎾✨ Galerie - Unsere Tennismomente ✨🎾</h2>
+      <p>Entdecken Sie die schönsten Momente aus unserem Vereinsleben</p>
     </div>
   </section>
 
   <main class="locations-section" style="background-color: white; color: black; margin-top: -200px; ">
-    <a href="{{ url_for('galleries') }}" class="back-link"><span class="back-icon">←</span> Zurück zu allen Galerien</a>
-    
-    <!-- Kategorie-Filter -->
-    <div class="category-filter" id="category-filter">
-      <button class="category-btn active" data-category="all">Alle</button>
-      <!-- Kategorien werden dynamisch hinzugefügt -->
+    <!-- Tabs für die Navigation zwischen Bildern und Galerien -->
+    <div class="gallery-tabs">
+      <button class="gallery-tab active" data-tab="images">Alle Bilder</button>
+      <button class="gallery-tab" data-tab="galleries">Fotogalerien</button>
     </div>
 
-    <div class="gallery-container" id="gallery-container">
-      <!-- Bilder werden dynamisch geladen -->
-      {% if gallery_images %}
+    <!-- Bereich für alle Bilder -->
+    <div id="images-section" class="content-section active">
+      <!-- Kategorie-Filter -->
+      <div class="category-filter" id="category-filter">
+        <button class="category-btn active" data-category="all">Alle</button>
+        <!-- Kategorien werden dynamisch hinzugefügt -->
+      </div>
+
+      <div class="gallery-container" id="gallery-container">
+        <!-- Bilder werden dynamisch geladen -->
         {% for image in gallery_images %}
         <div class="gallery-item" data-category="{{ image.category }}">
           <img src="{{ image.image_path }}" alt="{{ image.title }}" class="gallery-img">
@@ -526,16 +787,47 @@
           </div>
         </div>
         {% endfor %}
-      {% else %}
-        <div class="empty-state" style="grid-column: 1 / -1;">
-          <div class="empty-state-icon">📷</div>
-          <h3 class="empty-state-title">Keine Bilder gefunden</h3>
-          <p class="empty-state-text">Diese Galerie enthält noch keine Bilder.</p>
-          {% if is_admin %}
-          <button id="add-first-image" class="btn btn-primary">Erstes Bild hinzufügen</button>
-          {% endif %}
-        </div>
-      {% endif %}
+      </div>
+    </div>
+
+    <!-- Bereich für Galerien -->
+    <div id="galleries-section" class="content-section">
+      <h3 class="section-title">Unsere Fotogalerien</h3>
+      
+      <div class="galleries-container" id="galleries-container">
+        {% if galleries %}
+          {% for gallery in galleries %}
+          <div class="gallery-card">
+            <a href="{{ url_for('view_gallery', slug=gallery.slug) }}">
+              <img src="{{ gallery.cover_image or '/static/images/placeholder-gallery.jpg' }}" alt="{{ gallery.name }}" class="gallery-cover">
+            </a>
+            <div class="gallery-info">
+              <h3 class="gallery-name">{{ gallery.name }}</h3>
+              <p class="gallery-description">{{ gallery.description or 'Keine Beschreibung verfügbar' }}</p>
+              <div class="gallery-meta">
+                <span>{{ gallery.images|length }} Bilder</span>
+                <a href="{{ url_for('view_gallery', slug=gallery.slug) }}" class="gallery-btn">Ansehen</a>
+              </div>
+            </div>
+            {% if is_admin %}
+            <div class="gallery-controls">
+              <button class="image-control-btn edit-btn" data-id="{{ gallery.id }}" title="Bearbeiten">✏️</button>
+              <button class="image-control-btn delete-btn" data-id="{{ gallery.id }}" title="Löschen">🗑️</button>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-state-icon">📷</div>
+            <h3 class="empty-state-title">Keine Galerien gefunden</h3>
+            <p class="empty-state-text">Es wurden noch keine Fotogalerien erstellt.</p>
+            {% if is_admin %}
+            <button id="create-first-gallery" class="btn btn-primary">Erste Galerie erstellen</button>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
     </div>
   </main>
 
@@ -555,7 +847,11 @@
   <div class="admin-controls">
     <button id="toggle-edit-mode" class="admin-btn" title="Bearbeitungsmodus">✏️</button>
     <button id="add-image-btn" class="admin-btn add-image" title="Bild hinzufügen">+</button>
-    <button id="bulk-upload-btn" class="admin-btn add-image" title="Mehrere Bilder hochladen">📁</button>
+    <button id="add-gallery-btn" class="admin-btn add-gallery" title="Neue Galerie erstellen">📁</button>
+  </div>
+
+  <div class="edit-mode-indicator">
+    <span>Bearbeitungsmodus</span>
   </div>
   {% endif %}
 
@@ -563,30 +859,29 @@
   <div class="modal" id="image-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="modal-title">Bild bearbeiten</h3>
+        <h3 class="modal-title" id="modal-title" style="color: black;">Bild bearbeiten</h3>
         <button class="modal-close">&times;</button>
       </div>
       <form id="image-form">
         <input type="hidden" id="image-id">
-        <input type="hidden" id="gallery-id" value="{{ gallery.id }}">
         <div class="form-group">
-          <label for="image-title">Titel</label>
+          <label for="image-title" style="color: black;">Titel</label>
           <input type="text" id="image-title" class="form-control" required>
         </div>
         <div class="form-group">
-          <label for="image-description">Beschreibung</label>
+          <label for="image-description" style="color: black;">Beschreibung</label>
           <textarea id="image-description" class="form-control" rows="3"></textarea>
         </div>
         <div class="form-group">
-          <label for="image-category">Kategorie</label>
+          <label for="image-category" style="color: black;">Kategorie</label>
           <input type="text" id="image-category" class="form-control" placeholder="z.B. Turniere, Training, Events">
         </div>
         <div class="form-group">
-          <label for="image-order">Anzeigereihenfolge</label>
+          <label for="image-order" style="color: black;">Anzeigereihenfolge</label>
           <input type="number" id="image-order" class="form-control" min="0" value="0">
         </div>
         <div class="form-group">
-          <label for="image-file">Bild</label>
+          <label for="image-file" style="color: black;">Bild</label>
           <input type="file" id="image-file" class="form-control" accept="image/*">
           <img id="image-preview" class="image-preview" src="/placeholder.svg" alt="Vorschau">
         </div>
@@ -598,33 +893,31 @@
     </div>
   </div>
 
-  <!-- Modal für Bulk-Upload -->
-  <div class="modal" id="bulk-upload-modal">
+  <!-- Modal für Galerie erstellen/bearbeiten -->
+  <div class="modal" id="gallery-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Mehrere Bilder hochladen</h3>
+        <h3 class="modal-title" id="gallery-modal-title">Neue Galerie erstellen</h3>
         <button class="modal-close">&times;</button>
       </div>
-      <div id="alert-container"></div>
-      <form id="bulk-upload-form">
-        <input type="hidden" id="bulk-gallery-id" value="{{ gallery.id }}">
+      <form id="gallery-form">
+        <input type="hidden" id="gallery-id">
         <div class="form-group">
-          <label for="bulk-category">Kategorie</label>
-          <input type="text" id="bulk-category" class="form-control" placeholder="z.B. Turniere, Training, Events">
+          <label for="gallery-name" style="color: black;">Name der Galerie</label>
+          <input type="text" id="gallery-name" class="form-control" required>
         </div>
         <div class="form-group">
-          <label>Bilder</label>
-          <div class="drop-zone" id="drop-zone">
-            <div class="drop-zone-icon">📷</div>
-            <div class="drop-zone-text">Ziehen Sie Bilder hierher oder klicken Sie zum Auswählen</div>
-            <div class="drop-zone-text" style="font-size: 14px; color: #999;">Unterstützte Formate: JPG, PNG, GIF</div>
-            <input type="file" id="bulk-file-input" style="display: none;" multiple accept="image/*">
-          </div>
-          <div class="preview-container" id="preview-container"></div>
+          <label for="gallery-description" style="color: black;">Beschreibung</label>
+          <textarea id="gallery-description" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="gallery-cover" style="color: black;">Titelbild</label>
+          <input type="file" id="gallery-cover" class="form-control" accept="image/*">
+          <img id="cover-preview" class="image-preview" src="/placeholder.svg" alt="Vorschau">
         </div>
         <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-          <button type="button" class="btn btn-danger" id="cancel-bulk-btn">Abbrechen</button>
-          <button type="submit" class="btn btn-primary" id="upload-bulk-btn">Bilder hochladen</button>
+          <button type="button" class="btn btn-danger" id="gallery-cancel-btn">Abbrechen</button>
+          <button type="submit" class="btn btn-primary">Speichern</button>
         </div>
       </form>
     </div>
@@ -634,10 +927,10 @@
   <div class="modal" id="confirm-modal">
     <div class="modal-content" style="max-width: 400px;">
       <div class="modal-header">
-        <h3 class="modal-title">Bild löschen</h3>
+        <h3 class="modal-title" id="confirm-title">Löschen</h3>
         <button class="modal-close">&times;</button>
       </div>
-      <p>Sind Sie sicher, dass Sie dieses Bild löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+      <p id="confirm-message">Sind Sie sicher, dass Sie dieses Element löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</p>
       <div style="display: flex; justify-content: space-between; margin-top: 20px;">
         <button type="button" class="btn btn-primary" id="cancel-delete-btn">Abbrechen</button>
         <button type="button" class="btn btn-danger" id="confirm-delete-btn">Löschen</button>
@@ -647,8 +940,28 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Tabs
+      const tabs = document.querySelectorAll('.gallery-tab');
+      const contentSections = document.querySelectorAll('.content-section');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Aktiven Tab markieren
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Entsprechenden Inhaltsbereich anzeigen
+          const tabId = this.dataset.tab;
+          contentSections.forEach(section => {
+            section.classList.remove('active');
+          });
+          document.getElementById(`${tabId}-section`).classList.add('active');
+        });
+      });
+      
       // Elemente
       const galleryContainer = document.getElementById('gallery-container');
+      const galleriesContainer = document.getElementById('galleries-container');
       const lightbox = document.getElementById('lightbox');
       const lightboxImg = document.getElementById('lightbox-img');
       const lightboxCaption = document.querySelector('.lightbox-caption');
@@ -661,38 +974,39 @@
       {% if is_admin %}
       const toggleEditModeBtn = document.getElementById('toggle-edit-mode');
       const addImageBtn = document.getElementById('add-image-btn');
-      const bulkUploadBtn = document.getElementById('bulk-upload-btn');
-      const addFirstImageBtn = document.getElementById('add-first-image');
+      const addGalleryBtn = document.getElementById('add-gallery-btn');
+      const createFirstGalleryBtn = document.getElementById('create-first-gallery');
       const imageModal = document.getElementById('image-modal');
-      const bulkUploadModal = document.getElementById('bulk-upload-modal');
+      const galleryModal = document.getElementById('gallery-modal');
       const confirmModal = document.getElementById('confirm-modal');
       const imageForm = document.getElementById('image-form');
-      const bulkUploadForm = document.getElementById('bulk-upload-form');
+      const galleryForm = document.getElementById('gallery-form');
       const imageIdInput = document.getElementById('image-id');
       const galleryIdInput = document.getElementById('gallery-id');
-      const bulkGalleryIdInput = document.getElementById('bulk-gallery-id');
       const imageTitleInput = document.getElementById('image-title');
       const imageDescriptionInput = document.getElementById('image-description');
       const imageCategoryInput = document.getElementById('image-category');
       const imageOrderInput = document.getElementById('image-order');
       const imageFileInput = document.getElementById('image-file');
-      const bulkCategoryInput = document.getElementById('bulk-category');
-      const bulkFileInput = document.getElementById('bulk-file-input');
-      const dropZone = document.getElementById('drop-zone');
-      const previewContainer = document.getElementById('preview-container');
+      const galleryNameInput = document.getElementById('gallery-name');
+      const galleryDescriptionInput = document.getElementById('gallery-description');
+      const galleryCoverInput = document.getElementById('gallery-cover');
       const imagePreview = document.getElementById('image-preview');
+      const coverPreview = document.getElementById('cover-preview');
       const modalTitle = document.getElementById('modal-title');
+      const galleryModalTitle = document.getElementById('gallery-modal-title');
+      const confirmTitle = document.getElementById('confirm-title');
+      const confirmMessage = document.getElementById('confirm-message');
       const cancelBtn = document.getElementById('cancel-btn');
-      const cancelBulkBtn = document.getElementById('cancel-bulk-btn');
-      const uploadBulkBtn = document.getElementById('upload-bulk-btn');
+      const galleryCancelBtn = document.getElementById('gallery-cancel-btn');
       const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
       const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
       const modalCloseButtons = document.querySelectorAll('.modal-close');
-      const alertContainer = document.getElementById('alert-container');
       
       let isEditMode = false;
       let currentImageId = null;
-      let bulkFiles = [];
+      let currentGalleryId = null;
+      let deleteType = 'image'; // 'image' oder 'gallery'
       {% endif %}
       
       // Lightbox-Variablen
@@ -732,8 +1046,6 @@
         currentIndex = index;
         lightboxImg.src = images[currentIndex];
         lightboxCaption.textContent = descriptions[currentIndex] || captions[currentIndex];
-        lightbox.style.display = 'flex';
-        document.body.style  || captions[currentIndex];
         lightbox.style.display = 'flex';
         document.body.style.overflow = 'hidden';
       }
@@ -847,12 +1159,6 @@
         openAddImageModal();
       });
       
-      if (addFirstImageBtn) {
-        addFirstImageBtn.addEventListener('click', function() {
-          openAddImageModal();
-        });
-      }
-      
       function openAddImageModal() {
         // Formular zurücksetzen
         imageForm.reset();
@@ -864,16 +1170,54 @@
         imageModal.style.display = 'flex';
       }
       
-      // Mehrere Bilder hochladen
-      bulkUploadBtn.addEventListener('click', function() {
+      // Galerie hinzufügen
+      addGalleryBtn.addEventListener('click', function() {
+        openAddGalleryModal();
+      });
+      
+      if (createFirstGalleryBtn) {
+        createFirstGalleryBtn.addEventListener('click', function() {
+          openAddGalleryModal();
+        });
+      }
+      
+      function openAddGalleryModal(galleryId = null) {
         // Formular zurücksetzen
-        bulkUploadForm.reset();
-        previewContainer.innerHTML = '';
-        bulkFiles = [];
+        galleryForm.reset();
+        galleryIdInput.value = '';
+        coverPreview.style.display = 'none';
+        
+        if (galleryId) {
+          // Galerie bearbeiten
+          currentGalleryId = galleryId;
+          galleryModalTitle.textContent = 'Galerie bearbeiten';
+          
+          // Galerie-Daten laden
+          fetch(`/api/galleries/${galleryId}`)
+            .then(response => response.json())
+            .then(gallery => {
+              galleryIdInput.value = gallery.id;
+              galleryNameInput.value = gallery.name;
+              galleryDescriptionInput.value = gallery.description || '';
+              
+              if (gallery.cover_image) {
+                coverPreview.src = gallery.cover_image;
+                coverPreview.style.display = 'block';
+              }
+            })
+            .catch(error => {
+              console.error('Fehler beim Laden der Galerie-Daten:', error);
+              alert('Fehler beim Laden der Galerie-Daten. Bitte versuchen Sie es später erneut.');
+            });
+        } else {
+          // Neue Galerie erstellen
+          currentGalleryId = null;
+          galleryModalTitle.textContent = 'Neue Galerie erstellen';
+        }
         
         // Modal öffnen
-        bulkUploadModal.style.display = 'flex';
-      });
+        galleryModal.style.display = 'flex';
+      }
       
       // Bearbeitungsmodal öffnen
       function openEditModal(imageId) {
@@ -903,40 +1247,71 @@
       }
       
       // Löschbestätigung öffnen
-      function openDeleteConfirmation(imageId) {
-        currentImageId = imageId;
+      function openDeleteConfirmation(id, type) {
+        if (type === 'image') {
+          currentImageId = id;
+          currentGalleryId = null;
+          confirmTitle.textContent = 'Bild löschen';
+          confirmMessage.textContent = 'Sind Sie sicher, dass Sie dieses Bild löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.';
+        } else {
+          currentGalleryId = id;
+          currentImageId = null;
+          confirmTitle.textContent = 'Galerie löschen';
+          confirmMessage.textContent = 'Sind Sie sicher, dass Sie diese Galerie löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.';
+        }
+        
+        deleteType = type;
         confirmModal.style.display = 'flex';
       }
       
-      // Bild löschen
+      // Element löschen
       confirmDeleteBtn.addEventListener('click', function() {
-        if (!currentImageId) return;
-        
-        fetch(`/api/gallery/${currentImageId}`, {
-          method: 'DELETE'
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              // Bild aus der Galerie entfernen
-              const galleryItem = document.querySelector(`.gallery-item .delete-btn[data-id="${currentImageId}"]`).closest('.gallery-item');
-              galleryItem.remove();
-              
-              // Kategorien neu laden
-              loadCategories();
-              
-              // Bilder für Lightbox neu sammeln
-              collectGalleryItems();
-              
-              confirmModal.style.display = 'none';
-            } else {
-              throw new Error(data.error || 'Unbekannter Fehler');
-            }
+        if (deleteType === 'image' && currentImageId) {
+          // Bild löschen
+          fetch(`/api/gallery/${currentImageId}`, {
+            method: 'DELETE'
           })
-          .catch(error => {
-            console.error('Fehler beim Löschen des Bildes:', error);
-            alert('Fehler beim Löschen des Bildes. Bitte versuchen Sie es später erneut.');
-          });
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Bild aus der Galerie entfernen
+                const galleryItem = document.querySelector(`.gallery-item .delete-btn[data-id="${currentImageId}"]`).closest('.gallery-item');
+                galleryItem.remove();
+                
+                // Kategorien neu laden
+                loadCategories();
+                
+                // Bilder für Lightbox neu sammeln
+                collectGalleryItems();
+                
+                confirmModal.style.display = 'none';
+              } else {
+                throw new Error(data.error || 'Unbekannter Fehler');
+              }
+            })
+            .catch(error => {
+              console.error('Fehler beim Löschen des Bildes:', error);
+              alert('Fehler beim Löschen des Bildes. Bitte versuchen Sie es später erneut.');
+            });
+        } else if (deleteType === 'gallery' && currentGalleryId) {
+          // Galerie löschen
+          fetch(`/api/galleries/${currentGalleryId}`, {
+            method: 'DELETE'
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Seite neu laden, um die Änderungen anzuzeigen
+                window.location.reload();
+              } else {
+                throw new Error(data.error || 'Unbekannter Fehler');
+              }
+            })
+            .catch(error => {
+              console.error('Fehler beim Löschen der Galerie:', error);
+              alert('Fehler beim Löschen der Galerie. Bitte versuchen Sie es später erneut.');
+            });
+        }
       });
       
       // Bildvorschau anzeigen
@@ -953,7 +1328,21 @@
         }
       });
       
-      // Formular absenden
+      // Galerie-Titelbild-Vorschau anzeigen
+      galleryCoverInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            coverPreview.src = e.target.result;
+            coverPreview.style.display = 'block';
+          };
+          
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+      
+      // Bild-Formular absenden
       imageForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -962,7 +1351,6 @@
         formData.append('description', imageDescriptionInput.value);
         formData.append('category', imageCategoryInput.value);
         formData.append('display_order', imageOrderInput.value);
-        formData.append('gallery_id', galleryIdInput.value);
         
         if (imageFileInput.files.length > 0) {
           formData.append('image', imageFileInput.files[0]);
@@ -987,163 +1375,73 @@
           });
       });
       
-      // Drop-Zone-Ereignisse
-      dropZone.addEventListener('click', function() {
-        bulkFileInput.click();
-      });
-      
-      dropZone.addEventListener('dragover', function(e) {
+      // Galerie-Formular absenden
+      galleryForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        dropZone.classList.add('active');
-      });
-      
-      dropZone.addEventListener('dragleave', function() {
-        dropZone.classList.remove('active');
-      });
-      
-      dropZone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        dropZone.classList.remove('active');
-        
-        if (e.dataTransfer.files.length) {
-          handleFiles(e.dataTransfer.files);
-        }
-      });
-      
-      bulkFileInput.addEventListener('change', function() {
-        if (this.files.length) {
-          handleFiles(this.files);
-        }
-      });
-      
-      // Dateien verarbeiten
-      function handleFiles(newFiles) {
-        for (let i = 0; i < newFiles.length; i++) {
-          const file = newFiles[i];
-          
-          // Nur Bilder akzeptieren
-          if (!file.type.startsWith('image/')) {
-            showAlert('Nur Bilddateien werden unterstützt.', 'danger');
-            continue;
-          }
-          
-          // Datei zur Liste hinzufügen
-          bulkFiles.push(file);
-          
-          // Vorschau erstellen
-          const reader = new FileReader();
-          
-          reader.onload = function(e) {
-            const previewItem = document.createElement('div');
-            previewItem.className = 'preview-item';
-            
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.className = 'preview-img';
-            img.alt = file.name;
-            
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'preview-remove';
-            removeBtn.innerHTML = '&times;';
-            removeBtn.dataset.index = bulkFiles.length - 1;
-            removeBtn.addEventListener('click', function() {
-              const index = parseInt(this.dataset.index);
-              bulkFiles.splice(index, 1);
-              previewItem.remove();
-              
-              // Indizes aktualisieren
-              document.querySelectorAll('.preview-remove').forEach((btn, i) => {
-                btn.dataset.index = i;
-              });
-            });
-            
-            previewItem.appendChild(img);
-            previewItem.appendChild(removeBtn);
-            previewContainer.appendChild(previewItem);
-          };
-          
-          reader.readAsDataURL(file);
-        }
-      }
-      
-      // Bulk-Upload-Formular absenden
-      bulkUploadForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (bulkFiles.length === 0) {
-          showAlert('Bitte wählen Sie mindestens ein Bild aus.', 'danger');
-          return;
-        }
         
         const formData = new FormData();
-        formData.append('category', bulkCategoryInput.value);
-        formData.append('gallery_id', bulkGalleryIdInput.value);
+        formData.append('name', galleryNameInput.value);
+        formData.append('description', galleryDescriptionInput.value);
         
-        for (let i = 0; i < bulkFiles.length; i++) {
-          formData.append('images[]', bulkFiles[i]);
+        if (galleryCoverInput.files.length > 0) {
+          formData.append('cover_image', galleryCoverInput.files[0]);
         }
         
-        uploadBulkBtn.disabled = true;
+        // Neue Galerie erstellen oder bestehende aktualisieren
+        const url = galleryIdInput.value ? `/api/galleries/${galleryIdInput.value}` : '/api/galleries';
+        const method = galleryIdInput.value ? 'PUT' : 'POST';
         
-        fetch('/api/gallery/bulk-upload', {
-          method: 'POST',
+        fetch(url, {
+          method: method,
           body: formData
         })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              showAlert(`${data.message}`, 'success');
-              
-              // Seite neu laden, um die Änderungen anzuzeigen
-              window.location.reload();
-            } else {
-              throw new Error(data.error || 'Unbekannter Fehler');
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(data => {
+                throw new Error(data.error || 'Fehler beim Speichern der Galerie');
+              });
             }
-            
-            uploadBulkBtn.disabled = false;
+            return response.json();
+          })
+          .then(data => {
+            // Seite neu laden, um die Änderungen anzuzeigen
+            window.location.reload();
           })
           .catch(error => {
-            console.error('Fehler beim Hochladen der Bilder:', error);
-            showAlert('Fehler beim Hochladen der Bilder. Bitte versuchen Sie es später erneut.', 'danger');
-            uploadBulkBtn.disabled = false;
+            console.error('Fehler beim Speichern der Galerie:', error);
+            alert('Fehler beim Speichern der Galerie: ' + error.message);
           });
       });
       
-      // Benachrichtigung anzeigen
-      function showAlert(message, type) {
-        const alert = document.createElement('div');
-        alert.className = `alert alert-${type}`;
-        alert.innerHTML = `
-          <span class="alert-close">&times;</span>
-          ${message}
-        `;
-        
-        alert.querySelector('.alert-close').addEventListener('click', function() {
-          alert.remove();
-        });
-        
-        alertContainer.innerHTML = '';
-        alertContainer.appendChild(alert);
-        
-        // Automatisch ausblenden nach 5 Sekunden
-        setTimeout(function() {
-          alert.remove();
-        }, 5000);
-      }
-      
-      // Bearbeiten-Buttons
-      document.querySelectorAll('.edit-btn').forEach(btn => {
+      // Bearbeiten-Buttons für Bilder
+      document.querySelectorAll('.gallery-item .edit-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
           openEditModal(this.dataset.id);
         });
       });
       
-      // Löschen-Buttons
-      document.querySelectorAll('.delete-btn').forEach(btn => {
+      // Löschen-Buttons für Bilder
+      document.querySelectorAll('.gallery-item .delete-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
-          openDeleteConfirmation(this.dataset.id);
+          openDeleteConfirmation(this.dataset.id, 'image');
+        });
+      });
+      
+      // Bearbeiten-Buttons für Galerien
+      document.querySelectorAll('.gallery-card .edit-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openAddGalleryModal(this.dataset.id);
+        });
+      });
+      
+      // Löschen-Buttons für Galerien
+      document.querySelectorAll('.gallery-card .delete-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openDeleteConfirmation(this.dataset.id, 'gallery');
         });
       });
       
@@ -1151,7 +1449,7 @@
       modalCloseButtons.forEach(btn => {
         btn.addEventListener('click', function() {
           imageModal.style.display = 'none';
-          bulkUploadModal.style.display = 'none';
+          galleryModal.style.display = 'none';
           confirmModal.style.display = 'none';
         });
       });
@@ -1160,8 +1458,8 @@
         imageModal.style.display = 'none';
       });
       
-      cancelBulkBtn.addEventListener('click', function() {
-        bulkUploadModal.style.display = 'none';
+      galleryCancelBtn.addEventListener('click', function() {
+        galleryModal.style.display = 'none';
       });
       
       cancelDeleteBtn.addEventListener('click', function() {
@@ -1173,8 +1471,8 @@
         if (e.target === imageModal) {
           imageModal.style.display = 'none';
         }
-        if (e.target === bulkUploadModal) {
-          bulkUploadModal.style.display = 'none';
+        if (e.target === galleryModal) {
+          galleryModal.style.display = 'none';
         }
         if (e.target === confirmModal) {
           confirmModal.style.display = 'none';
