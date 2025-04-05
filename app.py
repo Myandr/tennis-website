@@ -5,6 +5,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import random
+import uuid
 import string
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
@@ -176,6 +177,16 @@ class Box(db.Model):
 class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.LargeBinary)
+
+class News(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    excerpt = db.Column(db.Text, nullable=False)
+    full_text = db.Column(db.Text, nullable=True)
+    image_url = db.Column(db.String(255), nullable=False)
+    archived = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -1617,6 +1628,44 @@ def delete_gallery_image(image_id):
     
     return jsonify({'success': True, 'message': 'Bild erfolgreich gelöscht'})
 
+# API-Route zum Verschieben von Bildern in eine Galerie
+
+@app.route('/api/gallery/move', methods=['POST'])
+@login_required
+def move_images_to_gallery():
+    if not current_user.role == 'admin':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    try:
+        data = request.json
+        image_ids = data.get('image_ids', [])
+        gallery_id = data.get('gallery_id')
+        
+        # Überprüfen, ob die Galerie existiert (wenn eine Galerie angegeben wurde)
+        if gallery_id is not None:
+            gallery = Gallery.query.get(gallery_id)
+            if not gallery:
+                return jsonify({'error': 'Galerie nicht gefunden'}), 404
+        
+        # Bilder aktualisieren
+        for image_id in image_ids:
+            image = GalleryImage.query.get(image_id)
+            if image:
+                image.gallery_id = gallery_id
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True, 
+            'message': f'{len(image_ids)} Bilder wurden erfolgreich verschoben'
+        })
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error moving images: {str(e)}")
+        return jsonify({'error': f'Fehler beim Verschieben der Bilder: {str(e)}'}), 500
+
+
+
 # API-Route zum Hochladen mehrerer Bilder
 @app.route('/api/gallery/bulk-upload', methods=['POST'])
 @login_required
@@ -1797,46 +1846,271 @@ def update_event(event_id):
     return jsonify(event.to_dict())
 
 
-@app.route('/news', methods=['GET', 'POST'])
-def news():
-    design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/api/news', methods=['GET'])
+def get_news():
+    # Get query parameters
+    archived = request.args.get('archived', 'false').lower() == 'true'
     
-    if request.method == 'POST':
-        image = request.files['image']
-        date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
-        heading = request.form['heading']
-        info = request.form['info']
-        span = request.form['span']
+    # Query news based on archived status
+    news_items = News.query.filter_by(archived=archived).order_by(News.date.desc()).all()
+    
+    # Convert to JSON
+    result = []
+    for news in news_items:
+        result.append({
+            'id': news.id,
+            'title': news.title,
+            'date': news.date.strftime('%d.%m.%Y'),
+            'excerpt': news.excerpt,
+            'full_text': news.full_text,
+            'image_url': news.image_url,
+            'archived': news.archived,
+            'created_at': news.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        })
+    
+    return jsonify(result)
 
-        if image and allowed_file(image.filename):
-            # Bild in Binärdaten umwandeln
-            image_data = image.read()
-
-        # Box in der Datenbank speichern
-        new_box = Box(
-            image_data=image_data,  # Binärdaten des Bildes
-            date=date,
-            heading=heading,
-            info=info, 
-            span=span
+@app.route('/add_news', methods=['POST'])
+@login_required
+def add_news():
+    # Check if user is admin
+    if current_user.role != 'admin':
+        flash('Nur Administratoren können News hinzufügen.', 'error')
+        return redirect(url_for('home'))
+    
+    # Get form data
+    title = request.form.get('title')
+    date_str = request.form.get('date')
+    excerpt = request.form.get('excerpt')
+    full_text = request.form.get('full_text')
+    
+    # Format date
+    try:
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+    except:
+        date_obj = datetime.now()
+    
+    # Handle image upload
+    if 'image' not in request.files:
+        flash('Kein Bild ausgewählt', 'error')
+        return redirect(url_for('home'))
+    
+    image = request.files['image']
+    
+    if image.filename == '':
+        flash('Kein Bild ausgewählt', 'error')
+        return redirect(url_for('home'))
+    
+    if image and allowed_file(image.filename):
+        # Generate unique filename
+        filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+        image_path = f"/static/images/news/{filename}"
+        
+        # Ensure directory exists
+        os.makedirs(os.path.join(app.root_path, 'static/images/news'), exist_ok=True)
+        
+        # Save the image
+        image.save(os.path.join(app.root_path, 'static/images/news', filename))
+        
+        # Create new news item
+        new_news = News(
+            title=title,
+            date=date_obj,
+            excerpt=excerpt,
+            full_text=full_text,
+            image_url=image_path,
+            archived=False
         )
-        db.session.add(new_box)
+        
+        db.session.add(new_news)
         db.session.commit()
-
-        return redirect(url_for('news'))
+        
+        flash('News erfolgreich hinzugefügt!', 'success')
+    else:
+        flash('Ungültiger Dateityp', 'error')
     
-    # Abrufen der Boxen
-    boxes = Box.query.all()
+    return redirect(url_for('home') + '#news')
+
+@app.route('/delete_news/<int:news_id>', methods=['POST'])
+@login_required
+def delete_news(news_id):
+    # Check if user is admin
+    if current_user.role != 'admin':
+        flash('Nur Administratoren können News löschen.', 'error')
+        return redirect(url_for('home'))
+    
+    news = News.query.get_or_404(news_id)
+    
+    # Delete image file if it exists
+    if news.image_url and news.image_url.startswith('/static/images/news/'):
+        image_path = os.path.join(app.root_path, news.image_url.lstrip('/'))
+        if os.path.exists(image_path):
+            try:
+                os.remove(image_path)
+            except:
+                pass  # Ignore errors when deleting file
+    
+    # Delete news from database
+    db.session.delete(news)
+    db.session.commit()
+    
+    flash('News erfolgreich gelöscht!', 'success')
+    return redirect(url_for('home') + '#news')
+
+@app.route('/archive_news/<int:news_id>', methods=['POST'])
+@login_required
+def archive_news(news_id):
+    # Check if user is admin
+    if current_user.role != 'admin':
+        flash('Nur Administratoren können News archivieren.', 'error')
+        return redirect(url_for('home'))
+    
+    news = News.query.get_or_404(news_id)
+    
+    # Archive news
+    news.archived = True
+    db.session.commit()
+    
+    flash('News erfolgreich archiviert!', 'success')
+    return redirect(url_for('home') + '#news')
+
+@app.route('/news-archive')
+def news_archive():
+    # Get all archived news
+    archived_news = News.query.filter_by(archived=True).order_by(News.date.desc()).all()
+    
+    # Extract years for filter
+    years = set()
+    for news in archived_news:
+        years.add(news.date.year)
+    
+    years = sorted(list(years), reverse=True)
+    
     is_admin_active = session.get('is_admin_active', True)
+    
+    return render_template('design1/news-archive.html',
+                           archived_news=archived_news,
+                           years=years,
+                           logged_in=current_user.is_authenticated,
+                           is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
+                           is_verified=current_user.is_authenticated and current_user.is_verified)
+
+@app.route('/edit_news/<int:news_id>', methods=['POST'])
+@login_required
+def edit_news(news_id):
+    # Check if user is admin
+    if current_user.role != 'admin':
+        flash('Nur Administratoren können News bearbeiten.', 'error')
+        return redirect(url_for('home'))
+    
+    news = News.query.get_or_404(news_id)
+    
+    # Get form data
+    title = request.form.get('title')
+    date_str = request.form.get('date')
+    excerpt = request.form.get('excerpt')
+    full_text = request.form.get('full_text')
+    
+    # Format date
+    try:
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+    except:
+        date_obj = news.date  # Keep existing date if format is invalid
+    
+    # Update news data
+    news.title = title
+    news.date = date_obj
+    news.excerpt = excerpt
+    news.full_text = full_text
+    
+    # Handle image upload if a new image was provided
+    if 'image' in request.files and request.files['image'].filename != '':
+        image = request.files['image']
+        
+        if allowed_file(image.filename):
+            # Delete old image if it exists
+            if news.image_url and news.image_url.startswith('/static/images/news/'):
+                old_image_path = os.path.join(app.root_path, news.image_url.lstrip('/'))
+                if os.path.exists(old_image_path):
+                    try:
+                        os.remove(old_image_path)
+                    except:
+                        pass  # Ignore errors when deleting file
+            
+            # Generate unique filename
+            filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+            image_path = f"/static/images/news/{filename}"
+            
+            # Ensure directory exists
+            os.makedirs(os.path.join(app.root_path, 'static/images/news'), exist_ok=True)
+            
+            # Save the image
+            image.save(os.path.join(app.root_path, 'static/images/news', filename))
+            
+            # Update image URL
+            news.image_url = image_path
+        else:
+            flash('Ungültiger Dateityp', 'error')
+            return redirect(url_for('home') + '#news')
+    
+    # Save changes
+    db.session.commit()
+    
+    flash('News erfolgreich aktualisiert!', 'success')
+    return redirect(url_for('home') + '#news')
 
 
-    # Base64-Umwandlung für jedes Bild
-    for box in boxes:
-        if box.image_data:
-            box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
+# @app.route('/news', methods=['GET', 'POST'])
+# def news():
+#     design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
+    
+#     if request.method == 'POST':
+#         image = request.files['image']
+#         date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+#         heading = request.form['heading']
+#         info = request.form['info']
+#         span = request.form['span']
+
+#         if image and allowed_file(image.filename):
+#             # Bild in Binärdaten umwandeln
+#             image_data = image.read()
+
+#         # Box in der Datenbank speichern
+#         new_box = Box(
+#             image_data=image_data,  # Binärdaten des Bildes
+#             date=date,
+#             heading=heading,
+#             info=info, 
+#             span=span
+#         )
+#         db.session.add(new_box)
+#         db.session.commit()
+
+#         return redirect(url_for('news'))
+    
+#     # Abrufen der Boxen
+#     boxes = Box.query.all()
+#     is_admin_active = session.get('is_admin_active', True)
 
 
-    return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active, boxes=boxes)
+#     # Base64-Umwandlung für jedes Bild
+#     for box in boxes:
+#         if box.image_data:
+#             box.image_data_base64 = base64.b64encode(box.image_data).decode('utf-8')
+
+
+#     return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active, boxes=boxes)
 
 
 #     ____  ____  __    ____  ____  ____ 
@@ -2625,7 +2899,7 @@ def toggle_admin():
 @app.route('/')
 def home():
     design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
-#design
+    #design
     images = Image.query.all()
     image = Img.query.all()
     about_texts = AboutText.query.all()
@@ -2648,7 +2922,15 @@ def home():
 
     is_admin_active = session.get('is_admin_active', True)
 
-    about_data = AboutSection.query.first() 
+    about_data = AboutSection.query.first()
+    
+    # Get the 4 most recent non-archived news items
+    news_items = []
+    try:
+        news_items = News.query.filter_by(archived=False).order_by(News.date.desc()).limit(4).all()
+    except:
+        # If there's an error (e.g., table doesn't exist yet), just use an empty list
+        pass
 
     return render_template(f'{design}/index.html',
                            logged_in=current_user.is_authenticated,
@@ -2661,7 +2943,8 @@ def home():
                            content_items=content_items,
                            cookie_consent=cookie_consent,
                            image=image,
-                           about_data=about_data)
+                           about_data=about_data,
+                           news_items=news_items)  # Pass news items to the template
 
 
 

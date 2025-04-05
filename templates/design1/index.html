@@ -167,6 +167,18 @@
     </ul>
     {% endif %} {% endwith %}
 
+    <script>
+      // Nach 3 Sekunden alle Flash-Nachrichten ausblenden
+      setTimeout(() => {
+        document.querySelectorAll('.flash').forEach(msg => {
+          msg.style.transition = 'opacity 0.5s ease';
+          msg.style.opacity = '0';
+          setTimeout(() => msg.remove(), 500); // danach entfernen
+        });
+      }, 3000);
+    </script>
+    
+
     <!--
   ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
  (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
@@ -297,7 +309,7 @@
           -->
             <a href="/training" class="nav-link">Training</a>
             <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link">Shop</a>
-            <a href="{{ url_for('galleries') }}" class="nav-link">Galerie</a>
+            <a href="/galerien" class="nav-link">Galerie</a>
             <a href="/mannschaften" class="nav-link">Mannschaften</a>
         </div>
 
@@ -498,7 +510,7 @@ document.addEventListener('keydown', (e) => {
                 <a href="https://matchpoint24.de/collections/tennisclub-hardter-tv" target="_blank" class="nav-link1">Shop</a>
               </li>
               <li class="nav-item1">
-                <a href="{{ url_for('galleries') }}" class="nav-link1">Galerie</a>
+                <a href="/galerien" class="nav-link1">Galerie</a>
               </li>
               <li class="nav-item1">
                 <a href="/mannschaften" class="nav-link1">Mannschaften</a>
@@ -1381,7 +1393,7 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </section>
 
-    <!--
+<!--
  __ _  ____  _  _  ____ 
 (  ( \(  __)/ )( \/ ___)
 /    / ) _) \ /\ /\___ \
@@ -1395,86 +1407,183 @@ document.addEventListener('DOMContentLoaded', function() {
       Bleiben Sie auf dem Laufenden über die neuesten Entwicklungen in
       unserem Verein
     </p>
-    <a href="/news" class="learn-more">Alle Neuigkeiten ansehen →</a>
+    <a href="/news-archive" class="learn-more">News-Archiv ansehen →</a>
   </div>
+  
+  
+{% if is_admin %}
+<!-- Simplified toggle button with inline JavaScript -->
+<div style="max-width: 1200px; margin: 0 auto 30px; text-align: right;">
+  <button type="button" onclick="document.getElementById('news-form-container').style.display = document.getElementById('news-form-container').style.display === 'block' ? 'none' : 'block'; this.innerHTML = document.getElementById('news-form-container').style.display === 'block' ? '<i class=\'fas fa-times\'></i> Abbrechen' : '<i class=\'fas fa-plus\'></i> News hinzufügen';" 
+    style="padding: 10px 20px; background: #4a7aff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    <i class="fas fa-plus" style="color: white;"></i> News hinzufügen
+  </button>
+</div>
+
+<!-- Form container with explicit initial display style -->
+<div id="news-form-container" style="max-width: 600px; margin: 0 auto 30px; display: none; background: #f9f9f9; padding: 20px; border-radius: 8px; color: black;">
+  <h3 style="margin-bottom: 20px; color: black;">Neue News hinzufügen</h3>
+  <form id="add-news-form" action="/add_news" method="POST" enctype="multipart/form-data">
+    <div style="margin-bottom: 15px;">
+      <label for="title" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Titel:</label>
+      <input type="text" id="title" name="title" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; color: black;">
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label for="date" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;;">Datum:</label>
+      <input type="date" id="date" name="date" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; color: black;">
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label for="excerpt" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Kurzbeschreibung:</label>
+      <textarea id="excerpt" name="excerpt" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; color: black;"></textarea>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label for="full_text" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Vollständiger Text:</label>
+      <textarea id="full_text" name="full_text" rows="6" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; color: black;"></textarea>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label for="image" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Bild:</label>
+      <input type="file" id="image" name="image" accept="image/*" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; color: black;">
+    </div>
+    
+    <div style="display: flex; justify-content: space-between;">
+      <button type="button" onclick="document.getElementById('news-form-container').style.display = 'none'; document.getElementById('toggle-news-form').innerHTML = '<i class=\'fas fa-plus\'></i> News hinzufügen';" 
+        style="padding: 10px 20px; background: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">
+        Abbrechen
+      </button>
+      <button type="submit" style="padding: 10px 20px; background: #4a7aff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        News hinzufügen
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Edit News Form (hidden by default) -->
+<div id="edit-news-container" style="max-width: 600px; margin: 0 auto 30px; display: none; background: #f9f9f9; padding: 20px; border-radius: 8px; color: black;">
+  <h3 style="margin-bottom: 20px; color: black;" >News bearbeiten</h3>
+  <form id="edit-news-form" action="" method="POST" enctype="multipart/form-data">
+    <div style="margin-bottom: 15px;">
+      <label for="edit-title" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Titel:</label>
+      <input type="text" id="edit-title" name="title" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label for="edit-date" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Datum:</label>
+      <input type="date" id="edit-date" name="date" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label for="edit-excerpt" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Kurzbeschreibung:</label>
+      <textarea id="edit-excerpt" name="excerpt" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label for="edit-full_text" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Vollständiger Text:</label>
+      <textarea id="edit-full_text" name="full_text" rows="6" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; margin-bottom: 5px; font-weight: bold; color: black; ">Aktuelles Bild:</label>
+      <div style="width: 200px; height: 150px; overflow: hidden; border-radius: 6px; margin-bottom: 15px;">
+        <img id="edit-current-image" src="/placeholder.svg" alt="Aktuelles Bild" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      
+      <label for="edit-image" style="display: block; margin-bottom: 5px; font-weight: bold; color: black;">Neues Bild (optional):</label>
+      <input type="file" id="edit-image" name="image" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; color: black;">
+      <p style="margin-top: 5px; color: #666; font-size: 14px; color: black;">Lassen Sie dieses Feld leer, um das aktuelle Bild beizubehalten.</p>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between;">
+      <button type="button" onclick="hideEditForm()" style="padding: 10px 20px; background: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">
+        Abbrechen
+      </button>
+      <button type="submit" style="padding: 10px 20px; background: #4a7aff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Änderungen speichern
+      </button>
+    </div>
+  </form>
+</div>
+{% endif %}
+
+<!-- Add a simple script to set today's date -->
+<script>
+  // Set today's date as default when the page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      dateInput.value = `${year}-${month}-${day}`;
+    }
+  });
+</script>
+  
   <div class="locations-grid">
-    <!-- News Card 1 -->
-    <div class="news-card" data-aos="flip-up">
-      <div class="news-image editable-image" data-field="news_card1_image">
-        <img id="news-card1-image" src="/static/images/tennis.jpg" alt="Neuer Tennisplatz" />
+      {% for news in news_items %}
+      <div class="news-card" data-aos="flip-up">
+        <div class="news-image">
+          <img src="{{ news.image_url }}" alt="{{ news.title }}" />
+        </div>
+        <div class="news-content">
+          <div class="news-date">{{ news.date.strftime('%d.%m.%Y') }}</div>
+          <h3 class="news-title">{{ news.title }}</h3>
+          <p class="news-excerpt">
+            <span>{{ news.excerpt }}</span>
+            <span class="hidden-text" style="display: none;">{{ news.full_text }}</span>
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="#" class="read-more" >Weiterlesen</a>
+          </div>
+          {% if is_admin %}
+          <div class="admin-actions" style="display: flex; gap: 10px; margin-top: 10px;">
+            <form action="/archive_news/{{ news.id }}" method="POST" style="display: inline;" onsubmit="return confirm('Möchten Sie diese News ins Archiv verschieben?');">
+              <button type="submit" style="padding: 5px 10px; background: #ffa94a; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                 Archivieren
+              </button>
+            </form>
+            <form action="/delete_news/{{ news.id }}" method="POST" style="display: inline;" onsubmit="return confirm('Möchten Sie diese News wirklich löschen?');">
+              <button type="submit" style="padding: 5px 10px; background: #ff4a4a; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                 Löschen
+              </button>
+            </form>
+          </div>
+           <button type="button" onclick="showEditForm({{ news.id }}, '{{ news.title }}', '{{ news.date.strftime('%Y-%m-%d') }}', '{{ news.excerpt|replace('\n', ' ')|replace('\'', '\\\'')|replace('\"', '\\\"') }}', '{{ news.full_text|replace('\n', ' ')|replace('\'', '\\\'')|replace('\"', '\\\"') }}', '{{ news.image_url }}')" 
+              style="padding: 5px 10px; background: #4a7aff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; font-size: 12px;">
+               Bearbeiten
+            </button>
+          {% endif %}
+        </div>
       </div>
-      <div class="news-content">
-        <div class="news-date editable" data-field="news_card1_date" id="news-card1-date">4. Oktober 2024</div>
-        <h3 class="news-title editable" data-field="news_card1_title" id="news-card1-title">Saisonabschlussfest 2024</h3>
-        <p class="news-excerpt">
-          <span class="editable" data-field="news_card1_excerpt" id="news-card1-excerpt">
-            Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam …
-          </span>
-          <span class="hidden-text editable" data-field="news_card1_full_text" id="news-card1-full-text"></span>
-        </p>
-        <a href="#" class="read-more">Weiterlesen</a>
-      </div>
-    </div>
-    
-    <!-- News Card 2 -->
-    <div class="news-card" data-aos="flip-up">
-      <div class="news-image editable-image" data-field="news_card2_image">
-        <img id="news-card2-image" src="/static/images/wilson-2259352_960_720.jpg" alt="Jugendturnier" />
-      </div>
-      <div class="news-content">
-        <div class="news-date editable" data-field="news_card2_date" id="news-card2-date">4. Oktober 2024</div>
-        <h3 class="news-title editable" data-field="news_card2_title" id="news-card2-title">Jahresrückblick 2024</h3>
-        <p class="news-excerpt">
-          <span class="editable" data-field="news_card2_excerpt" id="news-card2-excerpt">
-            Jahresrückblick 2024 – Danke für eine unvergessliche Saison!
-            Das Jahr 2024 neigt sich dem Ende zu, und wir blicken auf eine großartige Saison voller schöner Momente zurück! Von der …
-          </span>
-          <span class="hidden-text editable" data-field="news_card2_full_text" id="news-card2-full-text"></span>
-        </p>
-        <a href="#" class="read-more">Weiterlesen</a>
-      </div>
-    </div>
-    
-    <!-- News Card 3 -->
-    <div class="news-card" data-aos="flip-up">
-      <div class="news-image editable-image" data-field="news_card3_image">
-        <img id="news-card3-image" src="/static/images/Sasionabschluss 2024.jpg" alt="Jugendturnier" />
-      </div>
-      <div class="news-content">
-        <div class="news-date editable" data-field="news_card3_date" id="news-card3-date">News</div>
-        <h3 class="news-title editable" data-field="news_card3_title" id="news-card3-title">Saisonabschluss 2024 – ein Abend voller Highlights!</h3>
-        <p class="news-excerpt">
-          <span class="editable" data-field="news_card3_excerpt" id="news-card3-excerpt">
-            Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam auf die schönsten Momente angestoßen, die Tanzfläche unsicher
-          </span>
-          <span class="hidden-text editable" data-field="news_card3_full_text" id="news-card3-full-text">
-            gemacht und die Saison noch einmal Revue passieren lassen. Ein besonderes Highlight des Abends war das fantastische Buffet, das unsere Küchenfee Petra für uns gezaubert hat – ein Genuss für alle!
-            Ein perfekter Abschluss für eine großartige Saison! Auf viele weitere gemeinsame Erlebnisse und unvergessliche Tennis-Momente im nächsten Jahr!
-          </span>
-        </p>
-        <a href="#" class="read-more">Weiterlesen</a>
-      </div>
-    </div>
-    
-    <!-- News Card 4 -->
-    <div class="news-card" data-aos="flip-up">
-      <div class="news-image editable-image" data-field="news_card4_image">
-        <img id="news-card4-image" src="/static/images/tennis-court-1671852_960_720.jpg" alt="Neue Trainingszeiten" />
-      </div>
-      <div class="news-content">
-        <div class="news-date editable" data-field="news_card4_date" id="news-card4-date">News</div>
-        <h3 class="news-title editable" data-field="news_card4_title" id="news-card4-title">Unsere eigene Vereinskollektion ist da!</h3>
-        <p class="news-excerpt">
-          <span class="editable" data-field="news_card4_excerpt" id="news-card4-excerpt">
-            Endlich ist es soweit – ab sofort könnt ihr unsere brandneue Vereinskleidung bekommen! Ob für …
-          </span>
-          <span class="hidden-text editable" data-field="news_card4_full_text" id="news-card4-full-text"></span>
-        </p>
-        <a href="#" class="read-more">Weiterlesen</a>
-      </div>
-    </div>
+      {% endfor %}
   </div>
 </section>
+
+<script>
+    document.querySelectorAll('.read-more').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const newsCard = this.closest('.news-card');
+            const hiddenText = newsCard.querySelector('.hidden-text');
+            const excerpt = newsCard.querySelector('.news-excerpt span:first-child');
+            
+            if (hiddenText.style.display === 'inline') {
+                hiddenText.style.display = 'none';
+                this.textContent = 'Weiterlesen';
+                excerpt.style.display = 'inline';
+            } else {
+                hiddenText.style.display = 'inline';
+                this.textContent = 'Weniger anzeigen';
+                excerpt.style.display = hiddenText.textContent.trim() ? 'none' : 'inline';
+            }
+        });
+    });
+</script>
+
 
     <!--
  __     __   __ _  __ _  ____ 
@@ -1765,24 +1874,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Read more functionality for news cards
-    document.querySelectorAll('.read-more').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const newsCard = this.closest('.news-card');
-            const hiddenText = newsCard.querySelector('.hidden-text');
-            const excerpt = newsCard.querySelector('.news-excerpt span:first-child');
-            
-            if (hiddenText.style.display === 'inline') {
-                hiddenText.style.display = 'none';
-                this.textContent = 'Weiterlesen';
-                excerpt.style.display = 'inline';
-            } else {
-                hiddenText.style.display = 'inline';
-                this.textContent = 'Weniger anzeigen';
-                excerpt.style.display = hiddenText.textContent.trim() ? 'none' : 'inline';
-            }
-        });
-    });
+
     
     // Prevent location card click when in edit mode
     document.querySelectorAll('.location-card').forEach(card => {
@@ -2100,6 +2192,30 @@ document.addEventListener('DOMContentLoaded', function() {
           });
       }
 
+      function showEditForm(newsId, title, date, excerpt, fullText, imageUrl) {
+            // Show edit form
+            const editContainer = document.getElementById('edit-news-container');
+            editContainer.style.display = 'block';
+            
+            // Scroll to the edit form
+            editContainer.scrollIntoView({ behavior: 'smooth' });
+            
+            // Set form action
+            document.getElementById('edit-news-form').action = `/edit_news/${newsId}`;
+            
+            // Populate form fields
+            document.getElementById('edit-title').value = title;
+            document.getElementById('edit-date').value = date;
+            document.getElementById('edit-excerpt').value = excerpt;
+            document.getElementById('edit-full_text').value = fullText;
+            document.getElementById('edit-current-image').src = imageUrl;
+        }
+        
+        // Hide edit form
+        function hideEditForm() {
+            document.getElementById('edit-news-container').style.display = 'none';
+        }
+
 
 
       function initMap() {
@@ -2181,23 +2297,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
 
-        document.addEventListener("DOMContentLoaded", () => {
-          const readMoreButtons = document.querySelectorAll(".read-more");
 
-          readMoreButtons.forEach((button) => {
-            button.addEventListener("click", (e) => {
-              e.preventDefault();
-              const newsCard = button.closest(".news-card");
-              newsCard.classList.toggle("expanded");
-
-              // Button-Text ändern
-              const isExpanded = newsCard.classList.contains("expanded");
-              button.textContent = isExpanded
-                ? "Weniger anzeigen"
-                : "Weiterlesen";
-            });
-          });
-        });
 
 
 

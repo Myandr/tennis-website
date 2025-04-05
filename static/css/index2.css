@@ -1993,12 +1993,12 @@ iframe {
   overflow: hidden;
   box-shadow: 0 4px 6px var(--shadow-color);
   transition: all 0.3s ease;
-  max-height: 500px;
+  max-height: 1500px;
 }
 
 .news-card.expanded {
   transition: all 0.3s ease;
-  max-height: 2000px; /* Erhöhte Höhe */
+  max-height: 3000px; /* Erhöhte Höhe */
 }
 
 .hidden-text {

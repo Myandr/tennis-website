@@ -482,17 +482,19 @@
       color: #555;
     }
 
+   
+
     .form-control {
       width: 100%;
       padding: 12px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid #666666;
       border-radius: 8px;
       font-size: 16px;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .form-control:focus {
-      border-color: #8cc63f;
+      border-color: #0e0e0e;
       outline: none;
       box-shadow: 0 0 0 3px rgba(140, 198, 63, 0.1);
     }
@@ -747,6 +749,90 @@
     .edit-mode .gallery-card:hover::before {
       opacity: 1;
     }
+
+    .selection-mode .gallery-item {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .selection-mode .gallery-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    
+    .selection-mode .gallery-item:hover::before {
+      opacity: 1;
+    }
+    
+    .selection-mode .gallery-item.selected::before {
+      opacity: 0;
+    }
+    
+    .selection-mode .gallery-item.selected {
+      box-shadow: 0 0 0 3px #8cc63f, 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .selection-mode .gallery-item.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background-color: #8cc63f;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      z-index: 6;
+    }
+    
+    .selection-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    
+    .selection-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    #selected-count {
+      font-weight: 600;
+      color: #8cc63f;
+    }
+    
+    .selection-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    #gallery-select {
+      min-width: 200px;
+    }
+    
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
   </style>
 </head>
 
@@ -774,6 +860,21 @@
         <button class="category-btn active" data-category="all">Alle</button>
         <!-- Kategorien werden dynamisch hinzugefügt -->
       </div>
+      <div class="selection-controls" style="display: none;">
+        <div class="selection-info">
+          <span id="selected-count">0</span> Bilder ausgewählt
+          <button id="cancel-selection" class="btn btn-sm">Abbrechen</button>
+        </div>
+        <div class="selection-actions">
+          <select id="gallery-select" class="form-control">
+            <option value="">-- Galerie auswählen --</option>
+            {% for gallery in galleries %}
+            <option value="{{ gallery.id }}">{{ gallery.name }}</option>
+            {% endfor %}
+          </select>
+          <button id="move-to-gallery" class="btn btn-primary btn-sm" disabled>In Galerie verschieben</button>
+        </div>
+      </div>
 
       <div class="gallery-container" id="gallery-container">
         <!-- Bilder werden dynamisch geladen -->
@@ -793,6 +894,7 @@
     <!-- Bereich für Galerien -->
     <div id="galleries-section" class="content-section">
       <h3 class="section-title">Unsere Fotogalerien</h3>
+
       
       <div class="galleries-container" id="galleries-container">
         {% if galleries %}
@@ -848,6 +950,7 @@
     <button id="toggle-edit-mode" class="admin-btn" title="Bearbeitungsmodus">✏️</button>
     <button id="add-image-btn" class="admin-btn add-image" title="Bild hinzufügen">+</button>
     <button id="add-gallery-btn" class="admin-btn add-gallery" title="Neue Galerie erstellen">📁</button>
+    <button id="select-images-btn" class="admin-btn select-images" title="Bilder auswählen">☑️</button>
   </div>
 
   <div class="edit-mode-indicator">
@@ -1478,6 +1581,140 @@
           confirmModal.style.display = 'none';
         }
       });
+
+      // Bilder auswählen und in Galerie verschieben
+    const selectImagesBtn = document.getElementById('select-images-btn');
+    const selectionControls = document.querySelector('.selection-controls');
+    const selectedCountEl = document.getElementById('selected-count');
+    const cancelSelectionBtn = document.getElementById('cancel-selection');
+    const gallerySelect = document.getElementById('gallery-select');
+    const moveToGalleryBtn = document.getElementById('move-to-gallery');
+    
+    let isSelectionMode = false;
+    let selectedImages = [];
+    
+    // Auswahlmodus umschalten
+    selectImagesBtn.addEventListener('click', function() {
+      isSelectionMode = !isSelectionMode;
+      document.body.classList.toggle('selection-mode', isSelectionMode);
+      selectImagesBtn.classList.toggle('selection-mode', isSelectionMode);
+      
+      if (isSelectionMode) {
+        // Auswahlmodus aktivieren
+        selectionControls.style.display = 'flex';
+        
+        // Bearbeitungsmodus deaktivieren, falls aktiv
+        if (isEditMode) {
+          isEditMode = false;
+          document.body.classList.remove('edit-mode');
+          toggleEditModeBtn.innerHTML = '✏️';
+          toggleEditModeBtn.classList.remove('edit-mode');
+        }
+        
+        // Event-Listener für Bildauswahl hinzufügen
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
+          item.addEventListener('click', toggleImageSelection);
+        });
+      } else {
+        // Auswahlmodus deaktivieren
+        selectionControls.style.display = 'none';
+        clearSelection();
+        
+        // Event-Listener für Bildauswahl entfernen
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
+          item.removeEventListener('click', toggleImageSelection);
+        });
+      }
+    });
+    
+    // Bildauswahl umschalten
+    function toggleImageSelection(e) {
+      // Nicht auswählen, wenn auf einen Kontrollbutton geklickt wurde
+      if (e.target.closest('.image-control-btn')) {
+        return;
+      }
+      
+      const galleryItem = this;
+      const imageId = galleryItem.querySelector('.image-control-btn').dataset.id;
+      
+      if (galleryItem.classList.contains('selected')) {
+        // Auswahl aufheben
+        galleryItem.classList.remove('selected');
+        selectedImages = selectedImages.filter(id => id !== imageId);
+      } else {
+        // Bild auswählen
+        galleryItem.classList.add('selected');
+        selectedImages.push(imageId);
+      }
+      
+      // Ausgewählte Anzahl aktualisieren
+      selectedCountEl.textContent = selectedImages.length;
+      
+      // "In Galerie verschieben"-Button aktivieren/deaktivieren
+      moveToGalleryBtn.disabled = selectedImages.length === 0 || gallerySelect.value === '';
+    }
+    
+    // Auswahl abbrechen
+    cancelSelectionBtn.addEventListener('click', function() {
+      clearSelection();
+    });
+    
+    // Auswahl zurücksetzen
+    function clearSelection() {
+      selectedImages = [];
+      selectedCountEl.textContent = '0';
+      
+      const selectedItems = document.querySelectorAll('.gallery-item.selected');
+      selectedItems.forEach(item => {
+        item.classList.remove('selected');
+      });
+      
+      moveToGalleryBtn.disabled = true;
+    }
+    
+    // Galerie-Auswahl ändern
+    gallerySelect.addEventListener('change', function() {
+      moveToGalleryBtn.disabled = selectedImages.length === 0 || this.value === '';
+    });
+    
+    // Bilder in Galerie verschieben
+    moveToGalleryBtn.addEventListener('click', function() {
+      const galleryId = gallerySelect.value;
+      
+      if (selectedImages.length === 0 || galleryId === '') {
+        return;
+      }
+      
+      // API-Anfrage zum Verschieben der Bilder
+      fetch('/api/gallery/move', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image_ids: selectedImages,
+          gallery_id: galleryId
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Erfolgsmeldung anzeigen
+          alert(data.message);
+          
+          // Seite neu laden, um die Änderungen anzuzeigen
+          window.location.reload();
+        } else {
+          throw new Error(data.error || 'Unbekannter Fehler');
+        }
+      })
+      .catch(error => {
+        console.error('Fehler beim Verschieben der Bilder:', error);
+        alert('Fehler beim Verschieben der Bilder: ' + error.message);
+      });
+    });
       {% endif %}
     });
   </script>
