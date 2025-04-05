@@ -601,7 +601,6 @@ document.addEventListener('keydown', (e) => {
         {% else %}
         <a href="{{ url_for('login') }}" class="learn-more">Oder login →</a>
         {% endif %}
-        <img src="../../static/images/mockuuups-iphone-13-pro-mockup-perspective-right.png" style="max-width: 600px; position: absolute; z-index: -1; top: 0px; right: -60%;">
 
       </div>
     </section>
@@ -1416,9 +1415,9 @@ document.addEventListener('DOMContentLoaded', function() {
 {% if is_admin %}
 <!-- Simplified toggle button with inline JavaScript -->
 <div style="max-width: 1200px; margin: 0 auto 30px; text-align: right;">
-  <button type="button" onclick="document.getElementById('news-form-container').style.display = document.getElementById('news-form-container').style.display === 'block' ? 'none' : 'block'; this.innerHTML = document.getElementById('news-form-container').style.display === 'block' ? '<i class=\'fas fa-times\'></i> Abbrechen' : '<i class=\'fas fa-plus\'></i> News hinzufügen';" 
-    style="padding: 10px 20px; background: #4a7aff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-    <i class="fas fa-plus" style="color: white;"></i> News hinzufügen
+  <button type="button" onclick="document.getElementById('news-form-container').style.display = document.getElementById('news-form-container').style.display === 'block' ? 'none' : 'block'; this.innerHTML = document.getElementById('news-form-container').style.display === 'block' ? '<i style=\'color:white;\' class=\'fas fa-times\'></i> Abbrechen' : '<i style=\'color:white;\' class=\'fas fa-plus\'></i> News hinzufügen';" 
+    style="padding: 10px 20px; background: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    <i class="fas fa-plus" style="color: rgb(255, 255, 255);"></i> News hinzufügen
   </button>
 </div>
 
@@ -2077,9 +2076,7 @@ document.addEventListener('DOMContentLoaded', function() {
   ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
  (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 -->
-{% if is_admin %}
-<script src="../../static/js/theme-toggle.js"></script>
-{% endif %}
+
 
 
     <!--
