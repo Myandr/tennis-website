@@ -3,88 +3,2833 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
-<title>Damen 2 - Hardter Tennisverein</title>
-    <link rel="stylesheet" type="text/css" href="../../../static/css/mannschaften.css" />    <link
-    rel="shortcut icon"
-    href="{{ url_for('static', filename='favicon.ico') }}"
-  />
+    <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+    <title>Damen 1 - Hardter Tennisverein</title>
+    <style>
+        /* Hauptcontainer */
+        .container {
+            max-width: 1200px;
+            position: relative;
+            top: 110px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        /* Zurück-Button */
+        .back-button {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-bottom: 1px solid #000;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background-color: #f5f5f5;
+            transform: translateX(-5px);
+        }
+        
+        /* Team Header Bereich */
+        .team-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 40px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Oberer Bereich mit Bild und Grundinfo */
+        .team-hero {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .team-image-container {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .team-image-container:hover .team-image {
+            transform: scale(1.05);
+        }
+        
+        .team-info {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .team-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        
+        .team-info p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        /* Statistik-Karten */
+        .team-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 120px;
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .stat-card p {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #000;
+            margin: 0;
+        }
+        
+        /* Tabs für verschiedene Inhalte */
+        .team-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: #000;
+            border-bottom-color: #000;
+        }
+        
+        .tab:hover:not(.active) {
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Content-Bereich */
+        .content-section {
+            margin-bottom: 40px;
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Spielplan-Tabelle */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .schedule-table th, 
+        .schedule-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .schedule-table th {
+            background-color: #f8f8f8;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .schedule-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* Spielerinnen-Karten */
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .player-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .player-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .player-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .player-info {
+            padding: 15px;
+        }
+        
+        .player-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .player-info p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        /* iframe Container */
+        .iframe-container {
+            position: relative;
+            overflow: hidden;
+            padding-top: 20px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            display: none;
+        }
+        
+        .iframe-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .iframe-header {
+            padding: 15px 20px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .iframe-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        
+        .iframe-source {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .iframe-wrapper {
+            padding: 0 20px 20px;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 1000px;
+            border: none;
+            background-color: #fff;
+        }
+        
+        /* Bildergalerie */
+        .gallery-container {
+            margin-bottom: 40px;
+        }
+        
+        .gallery-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 400px;
+        }
+        
+        .gallery-slider {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+        
+        .gallery-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            font-size: 0.9rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-slide:hover .gallery-caption {
+            transform: translateY(0);
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .gallery-nav:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .gallery-nav.prev {
+            left: 10px;
+        }
+        
+        .gallery-nav.next {
+            right: 10px;
+        }
+        
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .gallery-dot.active {
+            background-color: #000;
+        }
+        
+        /* Modal für Spielerdetails */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .player-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .player-profile {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .player-profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .player-profile-info {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .player-stat-card {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .player-stat-card h4 {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .player-stat-card p {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        /* Suchfeld */
+        .search-container {
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #000;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+        
+        /* Share Buttons */
+        .share-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .share-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .share-button:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-3px);
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Responsive Anpassungen */
+        @media (max-width: 768px) {
+            .team-hero {
+                flex-direction: column;
+            }
+            
+            .team-image-container {
+                height: 300px;
+            }
+            
+            .team-stats {
+                flex-direction: row;
+            }
+            
+            .stat-card {
+                min-width: 80px;
+            }
+            
+            .team-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            iframe {
+                height: 800px;
+            }
+            
+            .gallery-wrapper {
+                height: 300px;
+            }
+        }
 
+/* Verbesserte Mannschaftsübersicht */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.overview-card {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.overview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.overview-card-header {
+    background-color: #f8f8f8;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.overview-card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.overview-card-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+.overview-card-body {
+    padding: 20px;
+}
+
+.overview-card-body p {
+    margin: 0 0 15px;
+    line-height: 1.6;
+}
+
+.overview-card-body p:last-child {
+    margin-bottom: 0;
+}
+
+.team-description {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-left: 4px solid #000;
+}
+
+.team-description p {
+    margin: 0 0 15px;
+    line-height: 1.7;
+    font-size: 1.05rem;
+}
+
+.team-description p:last-child {
+    margin-bottom: 0;
+}
+
+.highlight-text {
+    font-weight: 500;
+    color: #000;
+}
+
+.next-match-card {
+    background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.next-match-header {
+    background-color: #000;
+    color: #fff;
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.next-match-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.next-match-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.next-match-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.next-match-info-item span:first-child {
+    font-weight: 500;
+    min-width: 80px;
+}
+
+.next-match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+.next-match-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.next-match-team-logo {
+    width: 60px;
+    height: 60px;
+    background-color: #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.next-match-vs {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.team-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.team-stat-item {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.team-stat-item:hover {
+    transform: translateY(-5px);
+}
+
+.team-stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #000;
+}
+
+.team-stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.progress-container {
+    margin-top: 10px;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: #eee;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #000;
+    border-radius: 3px;
+    transition: width 1s ease;
+}
+
+.team-achievements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.achievement-badge {
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.achievement-badge span:first-child {
+    font-weight: bold;
+}
+
+/* Verbesserter Spielplan */
+.schedule-container {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.schedule-header {
+    background-color: #f8f8f8;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.schedule-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.schedule-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.schedule-filter {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.schedule-filter.active {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.schedule-body {
+    padding: 20px;
+}
+
+.match-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.match-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.match-header {
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.match-date {
+    font-weight: 500;
+}
+
+.match-status {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.match-status.upcoming {
+    background-color: #e6f7ff;
+    color: #0070f3;
+}
+
+.match-status.completed {
+    background-color: #f6ffed;
+    color: #52c41a;
+}
+
+.match-content {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.match-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 40%;
+}
+
+.match-team-logo {
+    width: 50px;
+    height: 50px;
+    background-color: #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.match-team-name {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.match-location {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.match-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+}
+
+.match-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.match-time {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.match-details-button {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.match-details-button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Verbesserte Spielerinnen */
+.players-container {
+    margin-bottom: 30px;
+}
+
+.players-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.players-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.players-filter {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.players-filter.active {
+    background-color: #000;
+    color: #fff;
+}
+
+.player-card-enhanced {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.player-card-enhanced:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.player-card-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.player-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.player-card-enhanced:hover .player-card-image img {
+    transform: scale(1.05);
+}
+
+.player-card-position {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.player-card-content {
+    padding: 15px;
+}
+
+.player-card-name {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.player-card-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.player-card-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.player-card-info-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.player-card-info-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.player-card-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.player-card-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 33.33%;
+}
+
+.player-card-stat-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.player-card-stat-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.player-card-view {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.player-card-enhanced:hover .player-card-view {
+    transform: translateY(0);
+}
+
+/* Verbesserte Galerie */
+.gallery-enhanced {
+    margin-bottom: 40px;
+}
+
+.gallery-categories {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.gallery-category {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.gallery-category.active {
+    background-color: #000;
+    color: #fff;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    height: 200px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+.gallery-item-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: #fff;
+    padding: 15px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-item-overlay {
+    transform: translateY(0);
+}
+
+.gallery-item-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.gallery-item-date {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.gallery-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-lightbox.show {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.lightbox-image {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 8px;
+}
+
+.lightbox-caption {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.lightbox-close:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.lightbox-nav:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-prev {
+    left: 20px;
+}
+
+.lightbox-next {
+    right: 20px;
+}
+
+/* Verbesserte Tabelle */
+.table-container {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.table-header {
+    background-color: #f8f8f8;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.table-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.table-control {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.table-control:hover {
+    background-color: #f0f0f0;
+}
+
+.table-body {
+    padding: 20px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.league-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.league-table th,
+.league-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.league-table th {
+    background-color: #f8f8f8;
+    font-weight: 500;
+    color: #666;
+    position: sticky;
+    top: 0;
+}
+
+.league-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.league-table tr.highlighted {
+    background-color: #fffde7;
+}
+
+.team-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.team-logo {
+    width: 30px;
+    height: 30px;
+    background-color: #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.rank-cell {
+    font-weight: bold;
+}
+
+.stats-cell {
+    text-align: center;
+}
+
+.iframe-enhanced {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.iframe-tabs {
+    display: flex;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #eee;
+}
+
+.iframe-tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #666;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.iframe-tab.active {
+    color: #000;
+    border-bottom-color: #000;
+}
+
+.iframe-tab:hover:not(.active) {
+    color: #333;
+    background-color: #f0f0f0;
+}
+
+.iframe-content {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.iframe-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+.iframe-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .team-hero {
+        flex-direction: column;
+    }
+    
+    .team-image-container {
+        height: 300px;
+    }
+    
+    .team-stats {
+        flex-direction: row;
+    }
+    
+    .stat-card {
+        min-width: 80px;
+    }
+    
+    .team-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    iframe {
+        height: 800px;
+    }
+    
+    .gallery-wrapper {
+        height: 300px;
+    }
+    
+    .next-match-body {
+        grid-template-columns: 1fr;
+    }
+    
+    .next-match-teams {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .next-match-vs {
+        transform: rotate(90deg);
+    }
+    
+    .match-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .match-team {
+        width: 100%;
+    }
+    
+    .match-result {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+    </style>
 </head>
 <body>
-  {% include 'design1/navbar.html' %}
+    {% include 'design1/navbar.html' %}
+    
     <div class="container">
-        <a href="/mannschaften" style="background-color: white; color: black; border-bottom: 1px solid black; margin-bottom: 40px;" class="learn-more">← Zurück</a>
+        <a href="/mannschaften" class="back-button">← Zurück zur Übersicht</a>
+        
         <div class="team-header">
-            <img src="../../../static/images/damen-1.jpg" alt="Damen 2 Mannschaftsfoto" class="team-image">
-            <div class="team-info">
-                <h1>Damen 1</h1>
-                <p>Bezirksklasse A</p>
-                <div class="team-stats">
-                    <div class="stat-card">
-                        <h3>Tabellenplatz</h3>
-                        <p>3.</p>
+            <div class="team-hero">
+                <div class="team-image-container">
+                    <img src="../../../static/images/damen-1.jpg" alt="Damen 1 Mannschaftsfoto" class="team-image">
+                </div>
+                <div class="team-info">
+                    <h1>Damen 1</h1>
+                    <p>Bezirksklasse A</p>
+                    <p>Saison 2024/2025</p>
+                    
+                    <div class="team-stats">
+                        <div class="stat-card" id="rank-card">
+                            <h3>Tabellenplatz</h3>
+                            <p>3.</p>
+                        </div>
+                        <div class="stat-card" id="wins-card">
+                            <h3>Siege</h3>
+                            <p>6</p>
+                        </div>
+                        <div class="stat-card" id="points-card">
+                            <h3>Punkte</h3>
+                            <p>12</p>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <h3>Siege</h3>
-                        <p>6</p>
+                    
+                    <div class="share-container">
+                        <div class="tooltip">
+                            <button class="share-button" id="share-whatsapp">
+                                <span>W</span>
+                                <span class="tooltip-text">WhatsApp</span>
+                            </button>
+                        </div>
+                        <div class="tooltip">
+                            <button class="share-button" id="share-facebook">
+                                <span>F</span>
+                                <span class="tooltip-text">Facebook</span>
+                            </button>
+                        </div>
+                        <div class="tooltip">
+                            <button class="share-button" id="share-email">
+                                <span>E</span>
+                                <span class="tooltip-text">E-Mail</span>
+                            </button>
+                        </div>
+                        <div class="tooltip">
+                            <button class="share-button" id="share-link">
+                                <span>L</span>
+                                <span class="tooltip-text">Link kopieren</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <h3>Punkte</h3>
-                        <p>12</p>
+                </div>
+            </div>
+            
+            <div class="team-tabs">
+                <div class="tab" data-tab="overview">Übersicht</div>
+                <div class="tab" data-tab="schedule">Spielplan</div>
+                <div class="tab" data-tab="players">Spielerinnen</div>
+                <div class="tab" data-tab="table">Tabelle</div>
+                <div class="tab" data-tab="gallery">Galerie</div>
+            </div>
+        </div>
+        
+        <!-- Übersicht Tab -->
+        <div class="content-section" id="overview-content">
+            <h2 class="section-title">Mannschaftsübersicht</h2>
+            
+            <div class="team-description">
+                <p>Die <span class="highlight-text">Damen 1</span> des Hardter Tennisvereins spielt in der <span class="highlight-text">Bezirksklasse A</span> und hat sich in den letzten Jahren kontinuierlich verbessert. Mit einer Mischung aus erfahrenen Spielerinnen und jungen Talenten ist das Team auf einem guten Weg, in die nächsthöhere Liga aufzusteigen.</p>
+                <p>Die Mannschaft trainiert zweimal wöchentlich und nimmt regelmäßig an regionalen Turnieren teil, um sich auf die Meisterschaftsspiele vorzubereiten.</p>
+            </div>
+            
+            <div class="next-match-card">
+                <div class="next-match-header">
+                    Nächstes Spiel
+                </div>
+                <div class="next-match-body">
+                    <div class="next-match-info">
+                        <div class="next-match-info-item">
+                            <span>Datum:</span>
+                            <span id="next-match-date">15.06.2024</span>
+                        </div>
+                        <div class="next-match-info-item">
+                            <span>Uhrzeit:</span>
+                            <span id="next-match-time">14:00 Uhr</span>
+                        </div>
+                        <div class="next-match-info-item">
+                            <span>Ort:</span>
+                            <span id="next-match-location">Heim</span>
+                        </div>
                     </div>
+                    
+                    <div class="next-match-teams">
+                        <div class="next-match-team">
+                            <div class="next-match-team-logo">HTV</div>
+                            <div>Hardter TV</div>
+                        </div>
+                        <div class="next-match-vs">VS</div>
+                        <div class="next-match-team">
+                            <div class="next-match-team-logo">BW</div>
+                            <div id="next-match-opponent">TC Blau-Weiß</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="overview-card-header">
+                        <div class="overview-card-icon">T</div>
+                        <h3>Teamstatistik</h3>
+                    </div>
+                    <div class="overview-card-body">
+                        <div class="team-stats-grid">
+                            <div class="team-stat-item">
+                                <div class="team-stat-value" id="stat-wins">6</div>
+                                <div class="team-stat-label">Siege</div>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="team-stat-item">
+                                <div class="team-stat-value" id="stat-losses">2</div>
+                                <div class="team-stat-label">Niederlagen</div>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="team-stat-item">
+                                <div class="team-stat-value" id="stat-points">12</div>
+                                <div class="team-stat-label">Punkte</div>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="team-stat-item">
+                                <div class="team-stat-value" id="stat-rank">3</div>
+                                <div class="team-stat-label">Tabellenplatz</div>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="overview-card-header">
+                        <div class="overview-card-icon">E</div>
+                        <h3>Erfolge</h3>
+                    </div>
+                    <div class="overview-card-body">
+                        <p>Die Damen 1 hat in den letzten Jahren folgende Erfolge erzielt:</p>
+                        
+                        <div class="team-achievements">
+                            <div class="achievement-badge">
+                                <span>🏆</span>
+                                <span>Stadtmeister 2023</span>
+                            </div>
+                            <div class="achievement-badge">
+                                <span>🥈</span>
+                                <span>Vizemeister Bezirksklasse 2022</span>
+                            </div>
+                            <div class="achievement-badge">
+                                <span>🏆</span>
+                                <span>Pokalsieger 2021</span>
+                            </div>
+                            <div class="achievement-badge">
+                                <span>🥉</span>
+                                <span>3. Platz Winterrunde 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon">I</div>
+                    <h3>Trainingszeiten</h3>
+                </div>
+                <div class="overview-card-body">
+                    <p><strong>Dienstag:</strong> 18:00 - 20:00 Uhr (Plätze 1-3)</p>
+                    <p><strong>Donnerstag:</strong> 19:00 - 21:00 Uhr (Plätze 4-6)</p>
+                    <p>Trainer: Michael Becker</p>
                 </div>
             </div>
         </div>
-
-        <h2 class="section-title">Spielerinnen</h2>
-        <div class="player-grid">
-            <div class="player-card">
-                <img src="../../../static/images/damen-1.jpg" alt="Spielerin" class="player-image">
-                <div class="player-info">
-                    <h3>Sarah Müller</h3>
-                    <p>LK: 15</p>
-                    <p>Position: 1</p>
-                </div>
+        
+        <!-- Spielplan Tab -->
+        <div class="content-section" id="schedule-content">
+            <h2 class="section-title">Spielplan</h2>
+            
+            <div class="search-container">
+                <input type="text" id="schedule-search" class="search-input" placeholder="Suche nach Gegner oder Datum...">
             </div>
-            <div class="player-card">
-                <img src="../../../static/images/damen-1.jpg" alt="Spielerin" class="player-image">
-                <div class="player-info">
-                    <h3>Laura Klein</h3>
-                    <p>LK: 16</p>
-                    <p>Position: 2</p>
+            
+            <div class="schedule-container">
+                <div class="schedule-header">
+                    <h3>Saisonspiele 2024/2025</h3>
+                    <div class="schedule-filters">
+                        <div class="schedule-filter active" data-filter="all">Alle</div>
+                        <div class="schedule-filter" data-filter="upcoming">Kommende</div>
+                        <div class="schedule-filter" data-filter="completed">Gespielte</div>
+                    </div>
                 </div>
-            </div>
-            <div class="player-card">
-                <img src="../../../static/images/damen-1.jpg" alt="Spielerin" class="player-image">
-                <div class="player-info">
-                    <h3>Marie Schmidt</h3>
-                    <p>LK: 17</p>
-                    <p>Position: 3</p>
+                <div class="schedule-body" id="schedule-matches">
+                    <!-- Spiele werden per JavaScript geladen -->
                 </div>
             </div>
         </div>
-
-        <h2 class="section-title">Nächste Spiele</h2>
-        <div class="matches-list">
-            <div class="match-item">
-                <div>TC Schwarz-Weiß</div>
-                <div>vs</div>
-                <div>Hardter TV</div>
+        
+        <!-- Spielerinnen Tab -->
+        <div class="content-section" id="players-content">
+            <h2 class="section-title">Spielerinnen</h2>
+            
+            <div class="players-header">
+                <div class="search-container">
+                    <input type="text" id="players-search" class="search-input" placeholder="Spielerin suchen...">
+                </div>
+                <div class="players-filters">
+                    <div class="players-filter active" data-filter="all">Alle</div>
+                    <div class="players-filter" data-filter="singles">Einzel</div>
+                    <div class="players-filter" data-filter="doubles">Doppel</div>
+                </div>
             </div>
-            <div class="match-item">
-                <div>Hardter TV</div>
-                <div>vs</div>
-                <div>TC Gold-Weiß</div>
+            
+            <div class="players-grid" id="players-grid-enhanced">
+                <!-- Spielerinnen werden per JavaScript geladen -->
             </div>
-            <div class="match-item">
-                <div>TC Silber</div>
-                <div>vs</div>
-                <div>Hardter TV</div>
+        </div>
+        
+        <!-- Tabelle Tab -->
+        <div class="content-section" id="table-content">
+            <h2 class="section-title">Tabelle</h2>
+            
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Bezirksklasse A - Saison 2024/2025</h3>
+                    <div class="table-controls">
+                        <button class="table-control" id="table-print">Drucken</button>
+                        <button class="table-control" id="table-export">Exportieren</button>
+                    </div>
+                </div>
+                <div class="table-body">
+                    <div class="table-responsive">
+                        <table class="league-table" id="league-table">
+                            <thead>
+                                <tr>
+                                    <th>Platz</th>
+                                    <th>Mannschaft</th>
+                                    <th>Spiele</th>
+                                    <th>S</th>
+                                    <th>U</th>
+                                    <th>N</th>
+                                    <th>Matches</th>
+                                    <th>Punkte</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Tabellendaten werden per JavaScript geladen -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="iframe-enhanced">
+                <div class="iframe-tabs">
+                    <div class="iframe-tab active" data-iframe-tab="table">Tabelle</div>
+                    <div class="iframe-tab" data-iframe-tab="matches">Begegnungen</div>
+                    <div class="iframe-tab" data-iframe-tab="players">Spielerinnen</div>
+                </div>
+                <div class="iframe-content">
+                    <div class="iframe-loading" id="iframe-loading">
+                        <div class="iframe-spinner"></div>
+                        <p>Daten werden geladen...</p>
+                    </div>
+                    <iframe 
+                        src="https://wtv.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/teamPortrait?team=3248706&championship=MS+Winter+24%2F25" 
+                        title="Damen 1 - Ligadaten"
+                        loading="lazy"
+                        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                        id="league-iframe"
+                        style="display: none;"
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Galerie Tab -->
+        <div class="content-section" id="gallery-content">
+            <h2 class="section-title">Bildergalerie</h2>
+            
+            <div class="gallery-enhanced">
+                <div class="gallery-categories">
+                    <div class="gallery-category active" data-category="all">Alle Bilder</div>
+                    <div class="gallery-category" data-category="team">Mannschaft</div>
+                    <div class="gallery-category" data-category="matches">Spiele</div>
+                    <div class="gallery-category" data-category="events">Events</div>
+                    <div class="gallery-category" data-category="training">Training</div>
+                </div>
+                
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- Galerie-Elemente werden per JavaScript geladen -->
+                </div>
+            </div>
+            
+            <div class="gallery-container">
+                <h3 class="section-title">Slideshow</h3>
+                <div class="gallery-wrapper">
+                    <div class="gallery-slider" id="gallery-slider">
+                        <!-- Bilder werden per JavaScript geladen -->
+                    </div>
+                    
+                    <button class="gallery-nav prev" id="gallery-prev" aria-label="Vorheriges Bild">&#10094;</button>
+                    <button class="gallery-nav next" id="gallery-next" aria-label="Nächstes Bild">&#10095;</button>
+                </div>
+                
+                <div class="gallery-dots" id="gallery-dots"></div>
+            </div>
+        </div>
+        
+        <!-- Lightbox für Galerie -->
+        <div class="gallery-lightbox" id="gallery-lightbox">
+            <button class="lightbox-close" id="lightbox-close">&times;</button>
+            <button class="lightbox-nav lightbox-prev" id="lightbox-prev">&#10094;</button>
+            <div class="lightbox-content">
+                <img src="/placeholder.svg" alt="Großes Bild" class="lightbox-image" id="lightbox-image">
+                <div class="lightbox-caption" id="lightbox-caption"></div>
+            </div>
+            <button class="lightbox-nav lightbox-next" id="lightbox-next">&#10095;</button>
+        </div>
+        
+        <!-- Modal für Spielerdetails -->
+        <div class="modal" id="player-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-player-name">Spielerin</h2>
+                    <button class="modal-close" id="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="player-details" id="player-details">
+                        <!-- Spielerdetails werden per JavaScript geladen -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ===== Daten =====
+            
+            // Spielerinnen-Daten
+            const players = [
+                {
+                    id: 1,
+                    name: "Anna Schmidt",
+                    position: 1,
+                    lk: 12,
+                    image: "/static/images/tennis.jpg",
+                    age: 24,
+                    since: 2018,
+                    wins: 15,
+                    losses: 3,
+                    bio: "Anna ist seit 6 Jahren im Verein und hat sich zur Nummer 1 der Mannschaft entwickelt. Sie hat einen starken Aufschlag und eine präzise Vorhand.",
+                    type: "singles"
+                },
+                {
+                    id: 2,
+                    name: "Laura Müller",
+                    position: 2,
+                    lk: 14,
+                    image: "/static/images/tennis1.jpg",
+                    age: 22,
+                    since: 2019,
+                    wins: 12,
+                    losses: 5,
+                    bio: "Laura ist bekannt für ihr taktisches Spiel und ihre Ausdauer. Sie hat in den letzten zwei Jahren große Fortschritte gemacht.",
+                    type: "singles"
+                },
+                {
+                    id: 3,
+                    name: "Sophie Weber",
+                    position: 3,
+                    lk: 15,
+                    image: "/static/images/girl.jpg",
+                    age: 20,
+                    since: 2020,
+                    wins: 10,
+                    losses: 6,
+                    bio: "Sophie ist das jüngste Mitglied der Mannschaft und hat ein großes Potenzial. Ihre Rückhand ist ihre stärkste Waffe.",
+                    type: "singles"
+                },
+                {
+                    id: 4,
+                    name: "Julia Becker",
+                    position: 4,
+                    lk: 16,
+                    image: "/static/images/tennis.jpg",
+                    age: 26,
+                    since: 2017,
+                    wins: 14,
+                    losses: 4,
+                    bio: "Julia ist eine erfahrene Spielerin mit einem ausgewogenen Spiel. Sie ist besonders stark im Doppel.",
+                    type: "doubles"
+                },
+                {
+                    id: 5,
+                    name: "Lena Fischer",
+                    position: 5,
+                    lk: 18,
+                    image: "/static/images/tennis1.jpg",
+                    age: 23,
+                    since: 2019,
+                    wins: 8,
+                    losses: 7,
+                    bio: "Lena hat einen aggressiven Spielstil und ist bekannt für ihre starken Volleys am Netz.",
+                    type: "doubles"
+                },
+                {
+                    id: 6,
+                    name: "Marie Hoffmann",
+                    position: 6,
+                    lk: 19,
+                    image: "/static/images/girl.jpg",
+                    age: 25,
+                    since: 2018,
+                    wins: 9,
+                    losses: 6,
+                    bio: "Marie ist eine vielseitige Spielerin, die sowohl im Einzel als auch im Doppel eingesetzt werden kann.",
+                    type: "doubles"
+                }
+            ];
+            
+            // Spielplan-Daten
+            const matches = [
+                {
+                    id: 1,
+                    date: "15.05.2024",
+                    time: "14:00 Uhr",
+                    opponent: "TC Rot-Weiß",
+                    location: "Auswärts",
+                    result: "4:2",
+                    status: "completed"
+                },
+                {
+                    id: 2,
+                    date: "22.05.2024",
+                    time: "10:00 Uhr",
+                    opponent: "SV Grün-Gelb",
+                    location: "Heim",
+                    result: "5:1",
+                    status: "completed"
+                },
+                {
+                    id: 3,
+                    date: "29.05.2024",
+                    time: "14:00 Uhr",
+                    opponent: "TC Schwarz-Weiß",
+                    location: "Auswärts",
+                    result: "3:3",
+                    status: "completed"
+                },
+                {
+                    id: 4,
+                    date: "15.06.2024",
+                    time: "14:00 Uhr",
+                    opponent: "TC Blau-Weiß",
+                    location: "Heim",
+                    result: "-",
+                    status: "upcoming"
+                },
+                {
+                    id: 5,
+                    date: "22.06.2024",
+                    time: "10:00 Uhr",
+                    opponent: "SV Grün-Rot",
+                    location: "Auswärts",
+                    result: "-",
+                    status: "upcoming"
+                },
+                {
+                    id: 6,
+                    date: "29.06.2024",
+                    time: "14:00 Uhr",
+                    opponent: "TC Schwarz-Gelb",
+                    location: "Heim",
+                    result: "-",
+                    status: "upcoming"
+                }
+            ];
+            
+            // Tabellendaten
+            const tableData = [
+                {
+                    rank: 1,
+                    team: "TC Rot-Weiß",
+                    played: 6,
+                    wins: 5,
+                    draws: 1,
+                    losses: 0,
+                    matches: "25:11",
+                    points: 11
+                },
+                {
+                    rank: 2,
+                    team: "SV Grün-Gelb",
+                    played: 6,
+                    wins: 4,
+                    draws: 1,
+                    losses: 1,
+                    matches: "22:14",
+                    points: 9
+                },
+                {
+                    rank: 3,
+                    team: "Hardter TV",
+                    played: 6,
+                    wins: 3,
+                    draws: 1,
+                    losses: 2,
+                    matches: "20:16",
+                    points: 7
+                },
+                {
+                    rank: 4,
+                    team: "TC Blau-Weiß",
+                    played: 6,
+                    wins: 2,
+                    draws: 2,
+                    losses: 2,
+                    matches: "18:18",
+                    points: 6
+                },
+                {
+                    rank: 5,
+                    team: "TC Schwarz-Weiß",
+                    played: 6,
+                    wins: 1,
+                    draws: 3,
+                    losses: 2,
+                    matches: "16:20",
+                    points: 5
+                },
+                {
+                    rank: 6,
+                    team: "SV Grün-Rot",
+                    played: 6,
+                    wins: 1,
+                    draws: 1,
+                    losses: 4,
+                    matches: "14:22",
+                    points: 3
+                },
+                {
+                    rank: 7,
+                    team: "TC Schwarz-Gelb",
+                    played: 6,
+                    wins: 0,
+                    draws: 1,
+                    losses: 5,
+                    matches: "11:25",
+                    points: 1
+                }
+            ];
+            
+            // Galerie-Daten
+            const galleryImages = [
+                {
+                    id: 1,
+                    src: "../../../static/images/damen-1.jpg",
+                    caption: "Damen 1 Mannschaftsfoto 2024",
+                    category: "team",
+                    date: "01.04.2024"
+                },
+                {
+                    id: 2,
+                    src: "/static/images/tennis.jpg",
+                    caption: "Meisterschaftsspiel gegen TC Rot-Weiß",
+                    category: "matches",
+                    date: "15.05.2024"
+                },
+                {
+                    id: 3,
+                    src: "/static/images/tennis1.jpg",
+                    caption: "Training auf der Anlage",
+                    category: "training",
+                    date: "10.05.2024"
+                },
+                {
+                    id: 4,
+                    src: "/static/images/girl.jpg",
+                    caption: "Saisonabschlussfeier 2023",
+                    category: "events",
+                    date: "30.09.2023"
+                },
+                {
+                    id: 5,
+                    src: "/static/images/image.png",
+                    caption: "Turniersieg beim Stadtpokal",
+                    category: "matches",
+                    date: "15.07.2023"
+                },
+                {
+                    id: 6,
+                    src: "/static/images/tennis.jpg",
+                    caption: "Doppeltraining",
+                    category: "training",
+                    date: "20.05.2024"
+                },
+                {
+                    id: 7,
+                    src: "/static/images/tennis1.jpg",
+                    caption: "Mannschaftsessen",
+                    category: "events",
+                    date: "05.06.2024"
+                },
+                {
+                    id: 8,
+                    src: "/static/images/girl.jpg",
+                    caption: "Heimspiel gegen SV Grün-Gelb",
+                    category: "matches",
+                    date: "22.05.2024"
+                }
+            ];
+            
+            // ===== Tab-Funktionalität =====
+            const tabs = document.querySelectorAll('.tab');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            // Standardmäßig den ersten Tab aktivieren
+            activateTab('overview');
+            
+            // Event-Listener für Tabs
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    activateTab(tabId);
+                });
+            });
+            
+            function activateTab(tabId) {
+                // Alle Tabs und Inhalte deaktivieren
+                tabs.forEach(tab => tab.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+                
+                // Ausgewählten Tab und Inhalt aktivieren
+                document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+                
+                // Spezielle Aktionen für bestimmte Tabs
+                if (tabId === 'players' && document.getElementById('players-grid-enhanced').children.length === 0) {
+                    renderEnhancedPlayers(players);
+                }
+                
+                if (tabId === 'schedule' && document.getElementById('schedule-matches').children.length === 0) {
+                    renderMatches(matches);
+                }
+                
+                if (tabId === 'table' && document.getElementById('league-table').querySelector('tbody').children.length === 0) {
+                    renderTable(tableData);
+                    setupIframe();
+                }
+                
+                if (tabId === 'gallery') {
+                    if (document.getElementById('gallery-grid').children.length === 0) {
+                        renderGalleryGrid(galleryImages);
+                    }
+                    if (document.getElementById('gallery-slider').children.length === 0) {
+                        renderGallery(galleryImages);
+                    }
+                }
+            }
+            
+            // ===== Spielerinnen-Funktionalität =====
+            function renderEnhancedPlayers(playersData) {
+                const playersGrid = document.getElementById('players-grid-enhanced');
+                playersGrid.innerHTML = '';
+                
+                playersData.forEach(player => {
+                    const playerCard = document.createElement('div');
+                    playerCard.className = 'player-card-enhanced';
+                    playerCard.dataset.playerId = player.id;
+                    playerCard.dataset.playerType = player.type;
+                    
+                    const winRate = Math.round(player.wins / (player.wins + player.losses) * 100);
+                    
+                    playerCard.innerHTML = `
+                        <div class="player-card-image">
+                            <img src="${player.image}" alt="${player.name}">
+                            <div class="player-card-position">${player.position}</div>
+                        </div>
+                        <div class="player-card-content">
+                            <div class="player-card-name">${player.name}</div>
+                            <div class="player-card-info">
+                                <div class="player-card-info-item">
+                                    <div class="player-card-info-value">${player.lk}</div>
+                                    <div class="player-card-info-label">LK</div>
+                                </div>
+                                <div class="player-card-info-item">
+                                    <div class="player-card-info-value">${player.age}</div>
+                                    <div class="player-card-info-label">Alter</div>
+                                </div>
+                                <div class="player-card-info-item">
+                                    <div class="player-card-info-value">${player.since}</div>
+                                    <div class="player-card-info-label">Seit</div>
+                                </div>
+                            </div>
+                            <div class="player-card-stats">
+                                <div class="player-card-stat">
+                                    <div class="player-card-stat-value">${player.wins}</div>
+                                    <div class="player-card-stat-label">Siege</div>
+                                </div>
+                                <div class="player-card-stat">
+                                    <div class="player-card-stat-value">${player.losses}</div>
+                                    <div class="player-card-stat-label">Niederlagen</div>
+                                </div>
+                                <div class="player-card-stat">
+                                    <div class="player-card-stat-value">${winRate}%</div>
+                                    <div class="player-card-stat-label">Quote</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="player-card-view">Profil anzeigen</div>
+                    `;
+                    
+                    playerCard.addEventListener('click', () => showPlayerDetails(player));
+                    playersGrid.appendChild(playerCard);
+                });
+            }
+            
+            // Spielerinnen filtern
+            document.querySelectorAll('.players-filter').forEach(filter => {
+                filter.addEventListener('click', function() {
+                    const filterType = this.getAttribute('data-filter');
+                    
+                    // Filter-Button aktivieren
+                    document.querySelectorAll('.players-filter').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Spielerinnen filtern
+                    const playerCards = document.querySelectorAll('.player-card-enhanced');
+                    playerCards.forEach(card => {
+                        if (filterType === 'all' || card.dataset.playerType === filterType) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Spielerinnen suchen
+            document.getElementById('players-search').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const playerCards = document.querySelectorAll('.player-card-enhanced');
+                
+                playerCards.forEach(card => {
+                    const playerName = card.querySelector('.player-card-name').textContent.toLowerCase();
+                    
+                    if (playerName.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            function showPlayerDetails(player) {
+                const modal = document.getElementById('player-modal');
+                const modalPlayerName = document.getElementById('modal-player-name');
+                const playerDetails = document.getElementById('player-details');
+                
+                modalPlayerName.textContent = player.name;
+                
+                const winRate = Math.round(player.wins / (player.wins + player.losses) * 100);
+                
+                playerDetails.innerHTML = `
+                    <div class="player-profile">
+                        <img src="${player.image}" alt="${player.name}" class="player-profile-image">
+                        <div class="player-profile-info">
+                            <p><strong>Position:</strong> ${player.position}</p>
+                            <p><strong>Leistungsklasse:</strong> ${player.lk}</p>
+                            <p><strong>Alter:</strong> ${player.age} Jahre</p>
+                            <p><strong>Im Verein seit:</strong> ${player.since}</p>
+                            <p><strong>Spielertyp:</strong> ${player.type === 'singles' ? 'Einzel' : 'Doppel'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="player-bio">
+                        <h3>Über ${player.name}</h3>
+                        <p>${player.bio}</p>
+                    </div>
+                    
+                    <div class="player-stats">
+                        <div class="player-stat-card">
+                            <h4>Siege</h4>
+                            <p>${player.wins}</p>
+                        </div>
+                        <div class="player-stat-card">
+                            <h4>Niederlagen</h4>
+                            <p>${player.losses}</p>
+                        </div>
+                        <div class="player-stat-card">
+                            <h4>Siegquote</h4>
+                            <p>${winRate}%</p>
+                        </div>
+                    </div>
+                `;
+                
+                modal.classList.add('show');
+            }
+            
+            // Modal schließen
+            document.getElementById('modal-close').addEventListener('click', () => {
+                document.getElementById('player-modal').classList.remove('show');
+            });
+            
+            // Klick außerhalb des Modals schließt es
+            window.addEventListener('click', (e) => {
+                const modal = document.getElementById('player-modal');
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+            
+            // ===== Spielplan-Funktionalität =====
+            function renderMatches(matchesData) {
+                const matchesContainer = document.getElementById('schedule-matches');
+                matchesContainer.innerHTML = '';
+                
+                matchesData.forEach(match => {
+                    const matchCard = document.createElement('div');
+                    matchCard.className = 'match-card';
+                    matchCard.dataset.matchStatus = match.status;
+                    
+                    const isCompleted = match.status === 'completed';
+                    const statusText = isCompleted ? 'Abgeschlossen' : 'Bevorstehend';
+                    const statusClass = isCompleted ? 'completed' : 'upcoming';
+                    
+                    matchCard.innerHTML = `
+                        <div class="match-header">
+                            <div class="match-date">${match.date}</div>
+                            <div class="match-status ${statusClass}">${statusText}</div>
+                        </div>
+                        <div class="match-content">
+                            <div class="match-team">
+                                <div class="match-team-logo">HTV</div>
+                                <div class="match-team-name">Hardter TV</div>
+                                <div class="match-location">${match.location === 'Heim' ? 'Heimspiel' : ''}</div>
+                            </div>
+                            <div class="match-result">
+                                <div class="match-score">${match.result}</div>
+                                <div class="match-time">${match.time}</div>
+                                <button class="match-details-button">Details</button>
+                            </div>
+                            <div class="match-team">
+                                <div class="match-team-logo">${match.opponent.substring(0, 2)}</div>
+                                <div class="match-team-name">${match.opponent}</div>
+                                <div class="match-location">${match.location === 'Auswärts' ? 'Auswärtsspiel' : ''}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    matchesContainer.appendChild(matchCard);
+                });
+            }
+            
+            // Spielplan filtern
+            document.querySelectorAll('.schedule-filter').forEach(filter => {
+                filter.addEventListener('click', function() {
+                    const filterType = this.getAttribute('data-filter');
+                    
+                    // Filter-Button aktivieren
+                    document.querySelectorAll('.schedule-filter').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Spiele filtern
+                    const matchCards = document.querySelectorAll('.match-card');
+                    matchCards.forEach(card => {
+                        if (filterType === 'all' || card.dataset.matchStatus === filterType) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Spielplan suchen
+            document.getElementById('schedule-search').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const matchCards = document.querySelectorAll('.match-card');
+                
+                matchCards.forEach(card => {
+                    const matchText = card.textContent.toLowerCase();
+                    
+                    if (matchText.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // ===== Tabelle-Funktionalität =====
+            function renderTable(tableData) {
+                const tableBody = document.getElementById('league-table').querySelector('tbody');
+                tableBody.innerHTML = '';
+                
+                tableData.forEach(row => {
+                    const tableRow = document.createElement('tr');
+                    if (row.team === 'Hardter TV') {
+                        tableRow.classList.add('highlighted');
+                    }
+                    
+                    tableRow.innerHTML = `
+                        <td class="rank-cell">${row.rank}</td>
+                        <td>
+                            <div class="team-cell">
+                                <div class="team-logo">${row.team.substring(0, 2)}</div>
+                                ${row.team}
+                            </div>
+                        </td>
+                        <td class="stats-cell">${row.played}</td>
+                        <td class="stats-cell">${row.wins}</td>
+                        <td class="stats-cell">${row.draws}</td>
+                        <td class="stats-cell">${row.losses}</td>
+                        <td class="stats-cell">${row.matches}</td>
+                        <td class="stats-cell">${row.points}</td>
+                    `;
+                    
+                    tableBody.appendChild(tableRow);
+                });
+            }
+            
+            // Tabelle drucken
+            document.getElementById('table-print').addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Tabelle exportieren
+            document.getElementById('table-export').addEventListener('click', function() {
+                let csv = 'Platz,Mannschaft,Spiele,S,U,N,Matches,Punkte\n';
+                
+                tableData.forEach(row => {
+                    csv += `${row.rank},"${row.team}",${row.played},${row.wins},${row.draws},${row.losses},"${row.matches}",${row.points}\n`;
+                });
+                
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'tabelle_damen1.csv');
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+            
+            // iframe Funktionalität
+            function setupIframe() {
+                const iframe = document.getElementById('league-iframe');
+                const loading = document.getElementById('iframe-loading');
+                
+                iframe.addEventListener('load', function() {
+                    loading.style.display = 'none';
+                    iframe.style.display = 'block';
+                });
+                
+                // iframe Tabs
+                document.querySelectorAll('.iframe-tab').forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabId = this.getAttribute('data-iframe-tab');
+                        
+                        // Tab aktivieren
+                        document.querySelectorAll('.iframe-tab').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // iframe URL ändern
+                        loading.style.display = 'flex';
+                        iframe.style.display = 'none';
+                        
+                        let url = 'https://wtv.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/teamPortrait?team=3248706&championship=MS+Winter+24%2F25';
+                        
+                        if (tabId === 'matches') {
+                            url = 'https://wtv.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/groupPage?championship=MS+Winter+24%2F25&group=1';
+                        } else if (tabId === 'players') {
+                            url = 'https://wtv.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/teamPlayers?team=3248706&championship=MS+Winter+24%2F25';
+                        }
+                        
+                        iframe.src = url;
+                    });
+                });
+            }
+            
+            // ===== Galerie-Funktionalität =====
+            function renderGalleryGrid(images) {
+                const galleryGrid = document.getElementById('gallery-grid');
+                galleryGrid.innerHTML = '';
+                
+                images.forEach((image, index) => {
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    galleryItem.dataset.category = image.category;
+                    galleryItem.dataset.index = index;
+                    
+                    galleryItem.innerHTML = `
+                        <img src="${image.src}" alt="${image.caption}">
+                        <div class="gallery-item-overlay">
+                            <div class="gallery-item-title">${image.caption}</div>
+                            <div class="gallery-item-date">${image.date}</div>
+                        </div>
+                    `;
+                    
+                    galleryItem.addEventListener('click', () => openLightbox(index));
+                    galleryGrid.appendChild(galleryItem);
+                });
+            }
+            
+            // Galerie filtern
+            document.querySelectorAll('.gallery-category').forEach(category => {
+                category.addEventListener('click', function() {
+                    const categoryType = this.getAttribute('data-category');
+                    
+                    // Kategorie-Button aktivieren
+                    document.querySelectorAll('.gallery-category').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Galerie-Elemente filtern
+                    const galleryItems = document.querySelectorAll('.gallery-item');
+                    galleryItems.forEach(item => {
+                        if (categoryType === 'all' || item.dataset.category === categoryType) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Lightbox Funktionalität
+            let currentLightboxIndex = 0;
+            
+            function openLightbox(index) {
+                const lightbox = document.getElementById('gallery-lightbox');
+                const lightboxImage = document.getElementById('lightbox-image');
+                const lightboxCaption = document.getElementById('lightbox-caption');
+                
+                currentLightboxIndex = index;
+                updateLightboxContent();
+                
+                lightbox.classList.add('show');
+            }
+            
+            function updateLightboxContent() {
+                const lightboxImage = document.getElementById('lightbox-image');
+                const lightboxCaption = document.getElementById('lightbox-caption');
+                const image = galleryImages[currentLightboxIndex];
+                
+                lightboxImage.src = image.src;
+                lightboxCaption.textContent = image.caption;
+            }
+            
+            // Lightbox schließen
+            document.getElementById('lightbox-close').addEventListener('click', function() {
+                document.getElementById('gallery-lightbox').classList.remove('show');
+            });
+            
+            // Lightbox Navigation
+            document.getElementById('lightbox-prev').addEventListener('click', function() {
+                currentLightboxIndex = (currentLightboxIndex - 1 + galleryImages.length) % galleryImages.length;
+                updateLightboxContent();
+            });
+            
+            document.getElementById('lightbox-next').addEventListener('click', function() {
+                currentLightboxIndex = (currentLightboxIndex + 1) % galleryImages.length;
+                updateLightboxContent();
+            });
+            
+            // Escape-Taste schließt Lightbox
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.getElementById('gallery-lightbox').classList.remove('show');
+                }
+            });
+            
+            // Slideshow Funktionalität
+            let currentSlide = 0;
+            
+            function renderGallery(images) {
+                const gallerySlider = document.getElementById('gallery-slider');
+                const galleryDots = document.getElementById('gallery-dots');
+                
+                gallerySlider.innerHTML = '';
+                galleryDots.innerHTML = '';
+                
+                images.forEach((image, index) => {
+                    // Slide erstellen
+                    const slide = document.createElement('div');
+                    slide.className = 'gallery-slide';
+                    slide.innerHTML = `
+                        <img src="${image.src}" alt="Galeriebild ${index + 1}">
+                        <div class="gallery-caption">${image.caption}</div>
+                    `;
+                    gallerySlider.appendChild(slide);
+                    
+                    // Dot erstellen
+                    const dot = document.createElement('div');
+                    dot.className = 'gallery-dot';
+                    if (index === 0) dot.classList.add('active');
+                    dot.dataset.index = index;
+                    dot.addEventListener('click', () => goToSlide(index));
+                    galleryDots.appendChild(dot);
+                });
+                
+                // Event-Listener für Navigationspfeile
+                document.getElementById('gallery-prev').addEventListener('click', () => goToSlide(currentSlide - 1));
+                document.getElementById('gallery-next').addEventListener('click', () => goToSlide(currentSlide + 1));
+                
+                // Automatischer Bildwechsel alle 5 Sekunden
+                setInterval(() => {
+                    goToSlide(currentSlide + 1);
+                }, 5000);
+            }
+            
+            function goToSlide(index) {
+                const gallerySlider = document.getElementById('gallery-slider');
+                const dots = document.querySelectorAll('.gallery-dot');
+                const slideCount = galleryImages.length;
+                
+                if (index < 0) index = slideCount - 1;
+                if (index >= slideCount) index = 0;
+                
+                gallerySlider.style.transform = `translateX(-${index * 100}%)`;
+                
+                // Aktualisiere aktiven Punkt
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[index].classList.add('active');
+                
+                currentSlide = index;
+            }
+            
+            // ===== Share-Funktionalität =====
+            document.getElementById('share-whatsapp').addEventListener('click', function() {
+                const url = encodeURIComponent(window.location.href);
+                const text = encodeURIComponent('Schau dir die Damen 1 Mannschaft des Hardter Tennisvereins an!');
+                window.open(`https://wa.me/?text=${text} ${url}`, '_blank');
+            });
+            
+            document.getElementById('share-facebook').addEventListener('click', function() {
+                const url = encodeURIComponent(window.location.href);
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+            });
+            
+            document.getElementById('share-email').addEventListener('click', function() {
+                const subject = encodeURIComponent('Damen 1 - Hardter Tennisverein');
+                const body = encodeURIComponent(`Schau dir die Damen 1 Mannschaft des Hardter Tennisvereins an: ${window.location.href}`);
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            });
+            
+            document.getElementById('share-link').addEventListener('click', function() {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Link in die Zwischenablage kopiert!');
+                });
+            });
+            
+            // ===== Statistik-Animation =====
+            function animateStats() {
+                const statCards = document.querySelectorAll('.stat-card');
+                
+                statCards.forEach(card => {
+                    const value = parseInt(card.querySelector('p').textContent);
+                    let startValue = 0;
+                    
+                    const interval = setInterval(() => {
+                        startValue++;
+                        card.querySelector('p').textContent = startValue + (card.id === 'rank-card' ? '.' : '');
+                        
+                        if (startValue >= value) {
+                            clearInterval(interval);
+                        }
+                    }, 50);
+                });
+            }
+            
+            // Animiere die Fortschrittsbalken in der Übersicht
+            function animateProgressBars() {
+                const progressFills = document.querySelectorAll('.progress-fill');
+                const statWins = document.getElementById('stat-wins');
+                const statLosses = document.getElementById('stat-losses');
+                const statPoints = document.getElementById('stat-points');
+                const statRank = document.getElementById('stat-rank');
+                
+                // Setze die Breiten basierend auf den Werten
+                setTimeout(() => {
+                    progressFills[0].style.width = (parseInt(statWins.textContent) / 8 * 100) + '%';
+                    progressFills[1].style.width = (parseInt(statLosses.textContent) / 8 * 100) + '%';
+                    progressFills[2].style.width = (parseInt(statPoints.textContent) / 16 * 100) + '%';
+                    progressFills[3].style.width = (100 - parseInt(statRank.textContent) / 8 * 100) + '%';
+                }, 500);
+            }
+            
+            // Animiere die Statistiken in der Übersicht
+            function animateOverviewStats() {
+                const statElements = [
+                    document.getElementById('stat-wins'),
+                    document.getElementById('stat-losses'),
+                    document.getElementById('stat-points'),
+                    document.getElementById('stat-rank')
+                ];
+                
+                const targetValues = [6, 2, 12, 3];
+                
+                statElements.forEach((element, index) => {
+                    let startValue = 0;
+                    const targetValue = targetValues[index];
+                    
+                    const interval = setInterval(() => {
+                        startValue++;
+                        element.textContent = startValue;
+                        
+                        if (startValue >= targetValue) {
+                            clearInterval(interval);
+                            
+                            // Wenn alle Animationen abgeschlossen sind, animiere die Fortschrittsbalken
+                            if (index === statElements.length - 1) {
+                                animateProgressBars();
+                            }
+                        }
+                    }, 100);
+                });
+            }
+            
+            // Aktiviere die Übersichtsanimationen, wenn der Tab angezeigt wird
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    if (tabId === 'overview') {
+                        setTimeout(animateOverviewStats, 300);
+                    }
+                });
+            });
+            
+            // Starte die Animationen, wenn die Seite geladen wird (da Übersicht standardmäßig aktiv ist)
+            setTimeout(animateOverviewStats, 500);
+        });
+    </script>
 </body>
 </html>
+
