@@ -5,6 +5,10 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+body {
+  overflow: hidden;
+}
+
 :root {
   /* Light Theme Colors (Default) */
   --light-hero: rgb(255, 255, 255);
