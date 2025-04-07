@@ -2067,6 +2067,24 @@ def edit_news(news_id):
     return redirect(url_for('home') + '#news')
 
 
+@app.route('/unarchive_news/<int:news_id>', methods=['POST'])
+@login_required
+def unarchive_news(news_id):
+    # Check if user is admin
+    if current_user.role != 'admin':
+        flash('Nur Administratoren können News zurück auf die Hauptseite verschieben.', 'error')
+        return redirect(url_for('news_archive'))
+    
+    news = News.query.get_or_404(news_id)
+    
+    # Unarchive news
+    news.archived = False
+    db.session.commit()
+    
+    flash('News erfolgreich zurück auf die Hauptseite verschoben!', 'success')
+    return redirect(url_for('news_archive'))
+
+
 # @app.route('/news', methods=['GET', 'POST'])
 # def news():
 #     design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session

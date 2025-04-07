@@ -16,14 +16,73 @@
 </head>
 <body>
     {% include 'design1/navbar.html' %}
-<section>
+
     <div class="container" style="max-width: 1200px; margin: 120px auto 60px; padding: 0 20px;">
         <div class="header" style="text-align: center; margin-bottom: 40px;">
             <h1 style="font-size: 2.5rem; margin-bottom: 15px;">News Archiv</h1>
             <p style="color: #666; max-width: 700px; margin: 0 auto 20px;">Hier finden Sie alle archivierten Neuigkeiten und Ereignisse des Hardter Tennisvereins.</p>
-            <a href="/#news" class="back-button" style="display: inline-block; padding: 10px 20px; background: #000000; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px;"><i class="fas fa-arrow-left" style="color: white;"></i> Zurück zu aktuellen News</a>
+            <a href="/#news" class="back-button" style="display: inline-block; padding: 10px 20px; background: #000000; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px;"><i style="color: white;" class="fas fa-arrow-left"></i> Zurück zu aktuellen News</a>
         </div>
-    
+        
+
+        
+        {% if is_admin %}
+        <!-- Edit News Modal Overlay -->
+        <div id="edit-news-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 1000; justify-content: center; align-items: center;">
+          <div class="modal-content" style="background-color: white; border-radius: 8px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 30px; position: relative; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+            <span class="close-modal" onclick="hideEditForm()" style="position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #666;">&times;</span>
+            
+            <h2 style="margin-bottom: 25px; color: #333; text-align: center;">News bearbeiten</h2>
+            
+            <form id="edit-news-form" action="" method="POST" enctype="multipart/form-data">
+              <div style="margin-bottom: 20px;">
+                <label for="edit-title" style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Titel:</label>
+                <input type="text" id="edit-title" name="title" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+              </div>
+              
+              <div style="margin-bottom: 20px;">
+                <label for="edit-date" style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Datum:</label>
+                <input type="date" id="edit-date" name="date" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+              </div>
+              
+              <div style="margin-bottom: 20px;">
+                <label for="edit-excerpt" style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Kurzbeschreibung:</label>
+                <textarea id="edit-excerpt" name="excerpt" rows="3" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; resize: vertical; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"></textarea>
+              </div>
+              
+              <div style="margin-bottom: 20px;">
+                <label for="edit-full_text" style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Vollständiger Text:</label>
+                <textarea id="edit-full_text" name="full_text" rows="6" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; resize: vertical; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"></textarea>
+              </div>
+              
+              <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Aktuelles Bild:</label>
+                <div style="width: 100%; max-height: 200px; overflow: hidden; border-radius: 6px; margin-bottom: 15px; text-align: center; background-color: #f5f5f5; padding: 10px;">
+                  <img id="edit-current-image" src="/placeholder.svg" alt="Aktuelles Bild" style="max-width: 100%; max-height: 180px; object-fit: contain;">
+                </div>
+                
+                <label for="edit-image" style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Neues Bild (optional):</label>
+                <input type="file" id="edit-image" name="image" accept="image/*" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; background-color: white;">
+                <p style="margin-top: 5px; color: #666; font-size: 14px;">Lassen Sie dieses Feld leer, um das aktuelle Bild beizubehalten.</p>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                <button type="button" onclick="hideEditForm()" style="padding: 12px 25px; background: #ccc; color: #333; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                  Abbrechen
+                </button>
+                <button type="submit" style="padding: 12px 25px; background: #4a7aff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                  Änderungen speichern
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Remove the old edit form container -->
+        <!-- <div id="edit-news-container" style="margin-bottom: 30px; display: none; background: #f9f9f9; padding: 20px; border-radius: 8px;">
+          ...
+        </div> -->
+        {% endif %}
         
         <div class="archive-grid" id="archive-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px;">
             {% if archived_news|length > 0 %}
@@ -35,20 +94,41 @@
                     <div class="archive-card-content" style="padding: 20px;">
                         <div class="archive-card-date" style="display: inline-block; padding: 5px 10px; background: #f0f0f0; border-radius: 4px; font-size: 14px; margin-bottom: 10px;">{{ news.date.strftime('%d.%m.%Y') }}</div>
                         <h3 class="archive-card-title" style="font-size: 1.3rem; margin-bottom: 10px;">{{ news.title }}</h3>
-                        <p id="excerpt-{{ news.id }}" class="archive-card-excerpt" style="color: #666; margin-bottom: 15px;">{{ news.excerpt }}</p>
+                        <p id="excerpt-{{ news.id }}" class="archive-card-excerpt" style="color: #666; margin-bottom: 15px;">
+                            {{ news.excerpt }}
+                        </p>
                         <div id="full-text-{{ news.id }}" style="display: none;">
                             {{ news.full_text|safe }}
-                        </div>                        
+                        </div>
                         <div class="archive-card-actions" style="display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid #eee;">
-                            <button class="read-more" onclick="showFullText('{{ news.id }}')" style="display: inline-block; padding: 8px 15px; background: #4a7aff; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer;">Weiterlesen</button>
-                            {% if is_admin %}
+                            <button class="read-more" onclick="showFullText('{{ news.id }}')" style="display: inline-block; margin-bottom: 10px; padding: 8px 15px; background: #4a7aff; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer;">Weiterlesen</button>
+                           
+                        </div>
+                        {% if is_admin %}
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button"
+                            class="edit-button"
+                            data-id="{{ news.id }}"
+                            data-title="{{ news.title }}"
+                            data-date="{{ news.date.strftime('%Y-%m-%d') }}"
+                            data-excerpt="{{ news.excerpt | escape }}"
+                            data-full_text="{{ news.full_text | escape }}"
+                            data-image="{{ news.image_url }}"
+                            style="padding: 8px 15px; background: #4a7aff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                        Bearbeiten
+                    </button>
+                    
+                            <form action="/unarchive_news/{{ news.id }}" method="POST" onsubmit="return confirm('Möchten Sie diese News zurück auf die Hauptseite verschieben?');">
+                                <button type="submit" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                                     Zurück
+                                </button>
+                            </form>
                             <form action="/delete_news/{{ news.id }}" method="POST" onsubmit="return confirm('Möchten Sie diese archivierte News wirklich löschen?');">
                                 <button type="submit" class="delete-btn" style="padding: 8px 15px; background: #ff4a4a; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Löschen</button>
                             </form>
-                            {% endif %}
                         </div>
+                        {% endif %}
                     </div>
-
                 </div>
                 {% endfor %}
             {% else %}
@@ -62,7 +142,6 @@
         </div>
         {% endif %}
     </div>
-</section>
     
     {% include 'design1/footer.html' %}
     
@@ -85,16 +164,95 @@
     
         // Beim Laden speichern wir das ursprüngliche Excerpt im Dataset
         document.addEventListener('DOMContentLoaded', () => {
-            {% for news in archived_news %}
-                const excerptEl{{ news.id }} = document.getElementById('excerpt-{{ news.id }}');
-                if (excerptEl{{ news.id }}) {
-                    document.getElementById('full-text-{{ news.id }}').dataset.excerpt = excerptEl{{ news.id }}.innerHTML;
+            const excerptElements = document.querySelectorAll('[id^="excerpt-"]');
+
+            excerptElements.forEach(excerptEl => {
+                const newsId = excerptEl.id.replace('excerpt-', '');
+                const fullTextEl = document.getElementById(`full-text-${newsId}`);
+                if (fullTextEl) {
+                    fullTextEl.dataset.excerpt = excerptEl.innerHTML;
                 }
-            {% endfor %}
+            });
         });
+
+        </script>
+        <script>
+
+        
+        // Show edit form and populate with news data
+        function showEditForm(newsId, title, date, excerpt, fullText, imageUrl) {
+            // Show edit modal
+            const editModal = document.getElementById('edit-news-modal');
+            editModal.style.display = 'flex';
+            
+            // Disable scrolling on the body
+            document.body.style.overflow = 'hidden';
+            
+            // Set form action
+            document.getElementById('edit-news-form').action = `/edit_news/${newsId}`;
+            
+            // Populate form fields
+            document.getElementById('edit-title').value = title;
+            document.getElementById('edit-date').value = date;
+            document.getElementById('edit-excerpt').value = excerpt;
+            document.getElementById('edit-full_text').value = fullText;
+            document.getElementById('edit-current-image').src = imageUrl;
+            
+            // Add escape key listener
+            document.addEventListener('keydown', closeModalOnEscape);
+        }
+        
+        // Hide edit form
+        function hideEditForm() {
+            const editModal = document.getElementById('edit-news-modal');
+            editModal.style.display = 'none';
+            
+            // Re-enable scrolling
+            document.body.style.overflow = 'auto';
+            
+            // Remove escape key listener
+            document.removeEventListener('keydown', closeModalOnEscape);
+        }
+        
+        // Close modal when escape key is pressed
+        function closeModalOnEscape(e) {
+            if (e.key === 'Escape') {
+                hideEditForm();
+            }
+        }
+        
+        // Close modal when clicking outside the content
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('edit-news-modal');
+            if (modal) {
+                const modalContent = modal.querySelector('.modal-content');
+                
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        hideEditForm();
+                    }
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.edit-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    showEditForm(
+                        button.dataset.id,
+                        button.dataset.title,
+                        button.dataset.date,
+                        button.dataset.excerpt,
+                        button.dataset.full_text,
+                        button.dataset.image
+                    );
+                });
+            });
+        });
+
+
         
     </script>
-    
 </body>
 </html>
 
