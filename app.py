@@ -19,7 +19,6 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy import desc
 import uuid
 
-
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_4udv_user:YICtfHDViMRY0PnR6AwYncJ0WKYnfjZF@dpg-cvbhlbtds78s73akquog-a.oregon-postgres.render.com/database_4udv'
@@ -720,18 +719,11 @@ website_content = {
         "url": "/#trainer",
         "description": "Unsere qualifizierten Tennistrainer"
     },
-    "Tennistraining": {
-        "url": "/#trainer",
-        "description": "Professionelles Training für alle Altersgruppen"
-    },
     "Trainingsgruppen": {
         "url": "/#trainer",
         "description": "Jugend-, Erwachsenen- und Leistungstraining"
     },
-    "Trainingszeiten": {
-        "url": "/#trainer",
-        "description": "Aktuelle Trainingszeiten und Platzbelegung"
-    },
+
     
     # News Section
     "Neuigkeiten": {
@@ -781,7 +773,7 @@ website_content = {
     
     # Additional Club Information
     "Mitgliedschaft": {
-        "url": "/#about",
+        "url": "/mitgliedschaft",
         "description": "Informationen zur Vereinsmitgliedschaft"
     },
     "Platzreservierung": {
@@ -792,18 +784,15 @@ website_content = {
         "url": "/#trainer",
         "description": "Jugendtraining und Nachwuchsförderung"
     },
-    "Tenniskurse": {
-        "url": "/#trainer",
-        "description": "Anfänger- und Fortgeschrittenenkurse"
-    },
+
     
     # Events & Activities
     "Vereinsturniere": {
-        "url": "/#termine",
+        "url": "/kalender",
         "description": "Interne Turniere und Wettkämpfe"
     },
     "Mannschaften": {
-        "url": "/news",
+        "url": "/mannschaften",
         "description": "Unsere Mannschaften und Spielergebnisse"
     },
     "Veranstaltungen": {
