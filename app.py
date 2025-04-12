@@ -798,6 +798,10 @@ website_content = {
     "Veranstaltungen": {
         "url": "/#termine",
         "description": "Soziale Events und Clubveranstaltungen"
+    },
+    "Kalender": {
+        "url": "/kalender",
+        "description": "Im Kalender finden Sie alle Termine"
     }
 }                              
 
