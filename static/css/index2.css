@@ -1284,7 +1284,7 @@ footer i {
   height: 20px;
   display: inline-block;
   transform: translateY(20%) rotate(-90deg);
-  background-color: var(--background);
+  background-color: black;
   margin: 0 10px;
 }
 
