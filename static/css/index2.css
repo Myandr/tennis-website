@@ -1,8 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+h1 {
+  font-family: "Sora";
+}
+
+h2 {
+  font-family: "Sora";
 }
 
 
