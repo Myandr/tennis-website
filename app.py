@@ -21,7 +21,7 @@ import uuid
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_4udv_user:YICtfHDViMRY0PnR6AwYncJ0WKYnfjZF@dpg-cvbhlbtds78s73akquog-a.oregon-postgres.render.com/database_4udv'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hardt_tennis_datenbank_user:VUlLWxv3Whg4vyT4K3galn9ppelR6YYp@dpg-d06djibuibrs73efs0rg-a.oregon-postgres.render.com/hardt_tennis_datenbank'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
