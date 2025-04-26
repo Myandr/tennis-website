@@ -1692,17 +1692,22 @@ document.addEventListener('DOMContentLoaded', function() {
                         eventElement.style.borderLeft = '3px solid #ff9800';
                     }
                 } else {
-                    // For larger screens, use the full title
+                    // For larger screens, truncate title to max 15 characters
+                    const truncatedTitle = event.title.length > 15 ? event.title.substring(0, 15) + '...' : event.title;
+                    
                     if (event.isAllDay) {
-                        eventElement.textContent = event.title;
+                        eventElement.textContent = truncatedTitle;
                     } else {
-                        eventElement.textContent = `${event.startTime} ${event.title}`;
+                        eventElement.textContent = `${event.startTime} ${truncatedTitle}`;
                     }
                     
                     // Add multi-day indicator
                     if (event.isMultiDay) {
                         eventElement.style.borderLeft = '3px solid #ff9800';
                     }
+                    
+                    // Add title attribute to show full title on hover
+                    eventElement.title = event.title;
                 }
                 
                 eventElement.addEventListener('click', () => showEventDetails(event));
