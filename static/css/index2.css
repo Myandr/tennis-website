@@ -209,7 +209,7 @@ h2 {
   justify-content: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
-  opacity: 0.9;
+  opacity: 1;
   z-index: 1000;
   position: absolute;
   top: 1rem;
@@ -220,36 +220,6 @@ h2 {
   transform: scale(1.1);
   opacity: 1;
   background-color: #f8f8f8;
-}
-
-.admin-image-controls {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.edit-mode .admin-image-controls,
-.gallery-item:hover .admin-image-controls,
-.gallery-card:hover .admin-image-controls,
-.news-card:hover .admin-image-controls,
-.location-card:hover .admin-image-controls,
-.about-image:hover .admin-image-controls {
-  opacity: 1;
-}
-
-/* Position adjustments for different sections */
-.about-image .admin-image-controls {
-  top: 15px;
-  right: 15px;
-}
-
-.news-card .admin-image-controls {
-  top: 15px;
-  right: 15px;
-}
-
-.location-card .admin-image-controls {
-  top: 15px;
-  right: 15px;
 }
 
 .loading-spinner::after {
