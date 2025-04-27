@@ -1231,7 +1231,7 @@ footer i {
 /* Video Container */
 .video-container {
   position: relative;
-  background-image: url("../images/tennis.jpg");
+  background-image: url("../images/tennis.webp");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
