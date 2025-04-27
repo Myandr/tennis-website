@@ -18,10 +18,11 @@ from functools import wraps
 from flask_bcrypt import Bcrypt
 from sqlalchemy import desc
 import uuid
+from PIL import Image as PILImage
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hardt_tennis_datenbank_user:VUlLWxv3Whg4vyT4K3galn9ppelR6YYp@dpg-d06djibuibrs73efs0rg-a.oregon-postgres.render.com/hardt_tennis_datenbank'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hardt_tennis_datenbank_3lzj_user:iwHJvVoG2MQJpa5904rjtnZ57P03Fg4i@dpg-d072jf49c44c739kohu0-a.oregon-postgres.render.com/hardt_tennis_datenbank_3lzj'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
@@ -126,6 +127,8 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(20), default='user')
     is_verified = db.Column(db.Boolean, default=False)
     verification_code = db.Column(db.String(6))
+    profile_image_path = db.Column(db.String(255), nullable=True)
+    profile_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
 
 class PasswordResetToken(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -155,6 +158,7 @@ class Testimonial(db.Model):
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(100), nullable=False)
+    image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
 
 class ContentItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -184,6 +188,7 @@ class News(db.Model):
     excerpt = db.Column(db.Text, nullable=False)
     full_text = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(255), nullable=False)
+    image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     archived = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -236,6 +241,7 @@ class AboutSection(db.Model):
     goals_text = db.Column(db.Text, nullable=False)
     membership_text = db.Column(db.Text, nullable=False)
     image_path = db.Column(db.String(255), nullable=False)
+    image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     title_training = db.Column(db.Text, nullable=False)
@@ -249,6 +255,7 @@ class AboutSection(db.Model):
     news_card1_excerpt = db.Column(db.Text, nullable=False, default="Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam …")
     news_card1_full_text = db.Column(db.Text, nullable=False, default="Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam auf die schönsten Momente angestoßen, die Tanzfläche unsicher gemacht und die Saison noch einmal Revue passieren lassen.")
     news_card1_image = db.Column(db.String(255), nullable=False, default="/static/images/tennis.jpg")
+    news_card1_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     
     # News card 2
     news_card2_date = db.Column(db.String(255), nullable=False, default="4. Oktober 2024")
@@ -256,6 +263,7 @@ class AboutSection(db.Model):
     news_card2_excerpt = db.Column(db.Text, nullable=False, default="Jahresrückblick 2024 – Danke für eine unvergessliche Saison! Das Jahr 2024 neigt sich dem Ende zu, und wir blicken auf eine großartige Saison voller schöner Momente zurück! Von der …")
     news_card2_full_text = db.Column(db.Text, nullable=False, default="Jahresrückblick 2024 – Danke für eine unvergessliche Saison! Das Jahr 2024 neigt sich dem Ende zu, und wir blicken auf eine großartige Saison voller schöner Momente zurück! Von der Saisoneröffnung bis zum Abschlussfest – es war ein Jahr voller Tennis, Freundschaft und gemeinsamer Erfolge.")
     news_card2_image = db.Column(db.String(255), nullable=False, default="/static/images/wilson-2259352_960_720.jpg")
+    news_card2_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     
     # News card 3
     news_card3_date = db.Column(db.String(255), nullable=False, default="News")
@@ -263,6 +271,7 @@ class AboutSection(db.Model):
     news_card3_excerpt = db.Column(db.Text, nullable=False, default="Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam auf die schönsten Momente angestoßen, die Tanzfläche unsicher")
     news_card3_full_text = db.Column(db.Text, nullable=False, default="Am vergangenen Samstag haben wir in geselliger Runde die Sommersaison verabschiedet: Wir haben gemeinsam auf die schönsten Momente angestoßen, die Tanzfläche unsicher gemacht und die Saison noch einmal Revue passieren lassen. Ein besonderes Highlight des Abends war das fantastische Buffet, das unsere Küchenfee Petra für uns gezaubert hat – ein Genuss für alle! Ein perfekter Abschluss für eine großartige Saison! Auf viele weitere gemeinsame Erlebnisse und unvergessliche Tennis-Momente im nächsten Jahr!")
     news_card3_image = db.Column(db.String(255), nullable=False, default="/static/images/Sasionabschluss 2024.jpg")
+    news_card3_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     
     # News card 4
     news_card4_date = db.Column(db.String(255), nullable=False, default="News")
@@ -270,29 +279,34 @@ class AboutSection(db.Model):
     news_card4_excerpt = db.Column(db.Text, nullable=False, default="Endlich ist es soweit – ab sofort könnt ihr unsere brandneue Vereinskleidung bekommen! Ob für …")
     news_card4_full_text = db.Column(db.Text, nullable=False, default="Endlich ist es soweit – ab sofort könnt ihr unsere brandneue Vereinskleidung bekommen! Ob für Training, Wettkampf oder Freizeit – mit unserer Vereinskleidung zeigt ihr, dass ihr Teil unserer Tennis-Familie seid!")
     news_card4_image = db.Column(db.String(255), nullable=False, default="/static/images/tennis-court-1671852_960_720.jpg")
+    news_card4_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
 
     location_card1_title = db.Column(db.String(255), nullable=False, default="6 Ascheplätze")
     location_card1_subtitle = db.Column(db.Text, nullable=False, default="Zwei mit Flutlichtanlage")
     location_card1_address = db.Column(db.Text, nullable=False, default="Gahlener Str. 204\n46284 Dorsten")
     location_card1_image = db.Column(db.String(255), nullable=False, default="/static/images/image copy 4.png")
+    location_card1_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     
     # Location card 2
     location_card2_title = db.Column(db.String(255), nullable=False, default="Clubheim Hardt")
     location_card2_subtitle = db.Column(db.Text, nullable=False, default="Vermietung nur an Mitglieder\nGastronomie")
     location_card2_address = db.Column(db.Text, nullable=False, default="Gahlener Str. 204\n46284 Dorsten")
     location_card2_image = db.Column(db.String(255), nullable=False, default="/static/images/image copy 2.png")
+    location_card2_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     
     # Location card 3
     location_card3_title = db.Column(db.String(255), nullable=False, default="Kletter- und Spielgerüst")
     location_card3_subtitle = db.Column(db.Text, nullable=False, default="")
     location_card3_address = db.Column(db.Text, nullable=False, default="Gahlener Str. 204\n46284 Dorsten")
     location_card3_image = db.Column(db.String(255), nullable=False, default="/static/images/image copy 3.png")
+    location_card3_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     
     # Location card 4
     location_card4_title = db.Column(db.String(255), nullable=False, default="Kleinfeldplatz inkl. Tenniswand")
     location_card4_subtitle = db.Column(db.Text, nullable=False, default="")
     location_card4_address = db.Column(db.Text, nullable=False, default="Gahlener Str. 204\n46284 Dorsten")
     location_card4_image = db.Column(db.String(255), nullable=False, default="/static/images/image.png")
+    location_card4_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
 
 
     def to_dict(self):
@@ -375,6 +389,7 @@ class Gallery(db.Model):
     description = db.Column(db.Text, nullable=True)
     slug = db.Column(db.String(100), unique=True, nullable=False)
     cover_image = db.Column(db.String(255), nullable=True)
+    cover_image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -398,6 +413,7 @@ class GalleryImage(db.Model):
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
     image_path = db.Column(db.String(255), nullable=False)
+    image_data = db.Column(db.LargeBinary, nullable=True)  # Binäre Bilddaten
     category = db.Column(db.String(100), nullable=True)
     display_order = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -414,6 +430,7 @@ class GalleryImage(db.Model):
             'category': self.category,
             'display_order': self.display_order,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'updated_at': self.updated_at.  self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
             'gallery_id': self.gallery_id
         }
@@ -881,6 +898,12 @@ def make_session_permanent():
 def is_admin():
     return current_user.is_authenticated and current_user.role == 'admin' and session.get('is_admin_active', True)
 
+# Hilfsfunktion zum Konvertieren von binären Daten in base64
+def get_image_base64(image_data):
+    if image_data:
+        return base64.b64encode(image_data).decode('utf-8')
+    return None
+
 # API route to get about section data
 @app.route('/api/about', methods=['GET'])
 def get_about_data():
@@ -1017,47 +1040,72 @@ def update_about_data():
     if 'news_card4_full_text' in data:
         about_data.news_card4_full_text = data['news_card4_full_text']
 
+    # Bildupload für News-Karten mit Speicherung als binäre Daten
     if 'news_card1_image_file' in request.files:
         image = request.files['news_card1_image_file']
         if image.filename:
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.news_card1_image = image_path
+            # Binäre Daten speichern
+            about_data.news_card1_image_data = image_data
     
     if 'news_card2_image_file' in request.files:
         image = request.files['news_card2_image_file']
         if image.filename:
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.news_card2_image = image_path
+            # Binäre Daten speichern
+            about_data.news_card2_image_data = image_data
     
     if 'news_card3_image_file' in request.files:
         image = request.files['news_card3_image_file']
         if image.filename:
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.news_card3_image = image_path
+            # Binäre Daten speichern
+            about_data.news_card3_image_data = image_data
     
     if 'news_card4_image_file' in request.files:
         image = request.files['news_card4_image_file']
         if image.filename:
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.news_card4_image = image_path
+            # Binäre Daten speichern
+            about_data.news_card4_image_data = image_data
     
     # Handle image upload if provided
     if 'image' in request.files:
         image = request.files['image']
         if image.filename:
-            # Save the image to the static folder
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.image_path = image_path
+            # Binäre Daten speichern
+            about_data.image_data = image_data
 
 
     if 'location_card1_title' in data:
@@ -1091,38 +1139,58 @@ def update_about_data():
     if 'location_card4_address' in data:
         about_data.location_card4_address = data['location_card4_address']
     
-    # Bildupload für Location-Karten
+    # Bildupload für Location-Karten mit Speicherung als binäre Daten
     if 'location_card1_image_file' in request.files:
         image = request.files['location_card1_image_file']
         if image.filename:
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.location_card1_image = image_path
+            # Binäre Daten speichern
+            about_data.location_card1_image_data = image_data
     
     if 'location_card2_image_file' in request.files:
         image = request.files['location_card2_image_file']
         if image.filename:
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.location_card2_image = image_path
+            # Binäre Daten speichern
+            about_data.location_card2_image_data = image_data
     
     if 'location_card3_image_file' in request.files:
         image = request.files['location_card3_image_file']
         if image.filename:
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.location_card3_image = image_path
+            # Binäre Daten speichern
+            about_data.location_card3_image_data = image_data
     
     if 'location_card4_image_file' in request.files:
         image = request.files['location_card4_image_file']
         if image.filename:
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(image.filename)
             image_path = f"/static/images/{filename}"
-            image.save(os.path.join(app.root_path, 'static/images', filename))
+            # Pfad für Kompatibilität speichern
             about_data.location_card4_image = image_path
+            # Binäre Daten speichern
+            about_data.location_card4_image_data = image_data
     
     db.session.commit()
     return jsonify(about_data.to_dict())
@@ -1243,14 +1311,26 @@ def create_default_gallery_images():
         ]
         
         for img_data in default_images:
-            image = GalleryImage(
-                title=img_data['title'],
-                description=img_data['description'],
-                image_path=img_data['image_path'],
-                category=img_data['category'],
-                display_order=0
-            )
-            db.session.add(image)
+            try:
+                # Versuche, die Bilddatei zu öffnen und als binäre Daten zu lesen
+                file_path = os.path.join(app.root_path, img_data['image_path'].lstrip('/'))
+                image_data = None
+                if os.path.exists(file_path):
+                    with open(file_path, 'rb') as f:
+                        image_data = f.read()
+                
+                # Erstelle das Galeriebild mit binären Daten
+                image = GalleryImage(
+                    title=img_data['title'],
+                    description=img_data['description'],
+                    image_path=img_data['image_path'],
+                    image_data=image_data,  # Binäre Bilddaten
+                    category=img_data['category'],
+                    display_order=0
+                )
+                db.session.add(image)
+            except Exception as e:
+                print(f"Fehler beim Erstellen des Galeriebildes {img_data['title']}: {str(e)}")
         
         db.session.commit()
         print("Standardbilder für die Galerie wurden erstellt.")
@@ -1274,6 +1354,16 @@ def galleries():
     gallery_images = GalleryImage.query.filter_by(gallery_id=None).order_by(
         GalleryImage.display_order, GalleryImage.created_at.desc()).all()
     
+    # Base64-Umwandlung für jedes Bild
+    for image in gallery_images:
+        if image.image_data:
+            image.image_data_base64 = get_image_base64(image.image_data)
+    
+    # Base64-Umwandlung für jedes Cover-Bild der Galerien
+    for gallery in all_galleries:
+        if gallery.cover_image_data:
+            gallery.cover_image_data_base64 = get_image_base64(gallery.cover_image_data)
+    
     return render_template('design1/galleries.html',
                            galleries=all_galleries,
                            gallery_images=gallery_images,
@@ -1294,6 +1384,15 @@ def view_gallery(slug):
     # Get images for this gallery
     gallery_images = GalleryImage.query.filter_by(gallery_id=gallery.id).order_by(
         GalleryImage.display_order, GalleryImage.created_at.desc()).all()
+    
+    # Base64-Umwandlung für jedes Bild
+    for image in gallery_images:
+        if image.image_data:
+            image.image_data_base64 = get_image_base64(image.image_data)
+    
+    # Base64-Umwandlung für das Cover-Bild der Galerie
+    if gallery.cover_image_data:
+        gallery.cover_image_data_base64 = get_image_base64(gallery.cover_image_data)
     
     return render_template('design1/gallery.html',
                            gallery=gallery,
@@ -1350,16 +1449,14 @@ def create_gallery():
     
     # Handle cover image if provided
     cover_image = None
+    cover_image_data = None
     if 'cover_image' in request.files and request.files['cover_image'].filename:
         image = request.files['cover_image']
+        # Binäre Bilddaten lesen
+        cover_image_data = image.read()
+        # Für Kompatibilität einen Pfad generieren
         filename = secure_filename(f"gallery-cover-{slug}-{uuid.uuid4()}.{image.filename.rsplit('.', 1)[1].lower()}")
         image_path = f"/static/images/gallery/{filename}"
-        
-        # Ensure directory exists
-        os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
-        
-        # Save the image
-        image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
         cover_image = image_path
     
     # Create new gallery
@@ -1367,7 +1464,8 @@ def create_gallery():
         name=name,
         description=description,
         slug=slug,
-        cover_image=cover_image
+        cover_image=cover_image,
+        cover_image_data=cover_image_data  # Binäre Bilddaten
     )
     
     try:
@@ -1399,24 +1497,16 @@ def update_gallery(gallery_id):
         if 'cover_image' in request.files and request.files['cover_image'].filename != '':
             image = request.files['cover_image']
             
-            # Altes Bild löschen (optional)
-            if gallery.cover_image and gallery.cover_image.startswith('/static/images/gallery/'):
-                old_image_path = os.path.join(app.root_path, gallery.cover_image.lstrip('/'))
-                if os.path.exists(old_image_path):
-                    try:
-                        os.remove(old_image_path)
-                    except:
-                        pass  # Fehler beim Löschen ignorieren
+            # Binäre Bilddaten lesen
+            cover_image_data = image.read()
             
-            # Neues Bild speichern
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(f"gallery-cover-{gallery.slug}-{uuid.uuid4()}.{image.filename.rsplit('.', 1)[1].lower()}")
             image_path = f"/static/images/gallery/{filename}"
             
-            # Stellen Sie sicher, dass das Verzeichnis existiert
-            os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
-            
-            image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+            # Pfad und binäre Daten speichern
             gallery.cover_image = image_path
+            gallery.cover_image_data = cover_image_data
         
         db.session.commit()
         
@@ -1442,15 +1532,6 @@ def delete_gallery(gallery_id):
         for image in gallery_images:
             image.gallery_id = None  # Bilder behalten, aber von der Galerie trennen
             # Alternativ: db.session.delete(image)  # Bilder löschen
-        
-        # Titelbild löschen (optional)
-        if gallery.cover_image and gallery.cover_image.startswith('/static/images/gallery/'):
-            cover_path = os.path.join(app.root_path, gallery.cover_image.lstrip('/'))
-            if os.path.exists(cover_path):
-                try:
-                    os.remove(cover_path)
-                except:
-                    pass  # Fehler beim Löschen ignorieren
         
         # Galerie löschen
         db.session.delete(gallery)
@@ -1490,15 +1571,12 @@ def add_gallery_image():
     
     if image:
         try:
-            # Eindeutigen Dateinamen generieren
+            # Binäre Bilddaten lesen
+            image_data = image.read()
+            
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
             image_path = f"/static/images/gallery/{filename}"
-            
-            # Stellen Sie sicher, dass das Verzeichnis existiert
-            os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
-            
-            # Bild speichern
-            image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
             
             # Galerie-ID verarbeiten (kann None sein)
             gallery_id = request.form.get('gallery_id')
@@ -1512,6 +1590,7 @@ def add_gallery_image():
                 title=request.form.get('title', 'Neues Bild'),
                 description=request.form.get('description', ''),
                 image_path=image_path,
+                image_data=image_data,  # Binäre Bilddaten
                 category=request.form.get('category', ''),
                 display_order=int(request.form.get('display_order', 0)),
                 gallery_id=gallery_id
@@ -1563,24 +1642,16 @@ def update_gallery_image(image_id):
         if 'image' in request.files and request.files['image'].filename != '':
             image = request.files['image']
             
-            # Altes Bild löschen (optional)
-            if gallery_image.image_path.startswith('/static/images/gallery/'):
-                old_image_path = os.path.join(app.root_path, gallery_image.image_path.lstrip('/'))
-                if os.path.exists(old_image_path):
-                    try:
-                        os.remove(old_image_path)
-                    except:
-                        pass  # Fehler beim Löschen ignorieren
+            # Binäre Bilddaten lesen
+            image_data = image.read()
             
-            # Neues Bild speichern
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
             image_path = f"/static/images/gallery/{filename}"
             
-            # Stellen Sie sicher, dass das Verzeichnis existiert
-            os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
-            
-            image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
+            # Pfad und binäre Daten aktualisieren
             gallery_image.image_path = image_path
+            gallery_image.image_data = image_data
         
         db.session.commit()
         
@@ -1602,20 +1673,16 @@ def delete_gallery_image(image_id):
     if not gallery_image:
         return jsonify({'error': 'Bild nicht gefunden'}), 404
     
-    # Bild von der Festplatte löschen
-    if gallery_image.image_path.startswith('/static/images/gallery/'):
-        image_path = os.path.join(app.root_path, gallery_image.image_path.lstrip('/'))
-        if os.path.exists(image_path):
-            try:
-                os.remove(image_path)
-            except:
-                pass  # Fehler beim Löschen ignorieren
-    
-    # Bild aus der Datenbank löschen
-    db.session.delete(gallery_image)
-    db.session.commit()
-    
-    return jsonify({'success': True, 'message': 'Bild erfolgreich gelöscht'})
+    try:
+        # Bild aus der Datenbank löschen
+        db.session.delete(gallery_image)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Bild erfolgreich gelöscht'})
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error deleting gallery image: {str(e)}")
+        return jsonify({'error': f'Fehler beim Löschen des Bildes: {str(e)}'}), 500
 
 # API-Route zum Verschieben von Bildern in eine Galerie
 
@@ -1683,21 +1750,19 @@ def bulk_upload_images():
     try:
         for image in images:
             if image.filename:
-                # Eindeutigen Dateinamen generieren
+                # Binäre Bilddaten lesen
+                image_data = image.read()
+                
+                # Für Kompatibilität einen Pfad generieren
                 filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
                 image_path = f"/static/images/gallery/{filename}"
-                
-                # Stellen Sie sicher, dass das Verzeichnis existiert
-                os.makedirs(os.path.join(app.root_path, 'static/images/gallery'), exist_ok=True)
-                
-                # Bild speichern
-                image.save(os.path.join(app.root_path, 'static/images/gallery', filename))
                 
                 # Neues Galeriebild erstellen
                 new_image = GalleryImage(
                     title=os.path.splitext(image.filename)[0],  # Dateiname ohne Erweiterung als Titel
                     description='',
                     image_path=image_path,
+                    image_data=image_data,  # Binäre Bilddaten
                     category=category,
                     display_order=0,
                     gallery_id=gallery_id
@@ -1902,15 +1967,12 @@ def add_news():
         return redirect(url_for('home'))
     
     if image and allowed_file(image.filename):
-        # Generate unique filename
+        # Binäre Bilddaten lesen
+        image_data = image.read()
+        
+        # Für Kompatibilität einen Pfad generieren
         filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
         image_path = f"/static/images/news/{filename}"
-        
-        # Ensure directory exists
-        os.makedirs(os.path.join(app.root_path, 'static/images/news'), exist_ok=True)
-        
-        # Save the image
-        image.save(os.path.join(app.root_path, 'static/images/news', filename))
         
         # Create new news item
         new_news = News(
@@ -1919,6 +1981,7 @@ def add_news():
             excerpt=excerpt,
             full_text=full_text,
             image_url=image_path,
+            image_data=image_data,  # Binäre Bilddaten
             archived=False
         )
         
@@ -1940,15 +2003,6 @@ def delete_news(news_id):
         return redirect(url_for('home'))
     
     news = News.query.get_or_404(news_id)
-    
-    # Delete image file if it exists
-    if news.image_url and news.image_url.startswith('/static/images/news/'):
-        image_path = os.path.join(app.root_path, news.image_url.lstrip('/'))
-        if os.path.exists(image_path):
-            try:
-                os.remove(image_path)
-            except:
-                pass  # Ignore errors when deleting file
     
     # Delete news from database
     db.session.delete(news)
@@ -1978,6 +2032,11 @@ def archive_news(news_id):
 def news_archive():
     # Get all archived news
     archived_news = News.query.filter_by(archived=True).order_by(News.date.desc()).all()
+    
+    # Base64-Umwandlung für jedes Bild
+    for news in archived_news:
+        if news.image_data:
+            news.image_data_base64 = get_image_base64(news.image_data)
     
     # Extract years for filter
     years = set()
@@ -2028,27 +2087,16 @@ def edit_news(news_id):
         image = request.files['image']
         
         if allowed_file(image.filename):
-            # Delete old image if it exists
-            if news.image_url and news.image_url.startswith('/static/images/news/'):
-                old_image_path = os.path.join(app.root_path, news.image_url.lstrip('/'))
-                if os.path.exists(old_image_path):
-                    try:
-                        os.remove(old_image_path)
-                    except:
-                        pass  # Ignore errors when deleting file
+            # Binäre Bilddaten lesen
+            image_data = image.read()
             
-            # Generate unique filename
+            # Für Kompatibilität einen Pfad generieren
             filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
             image_path = f"/static/images/news/{filename}"
             
-            # Ensure directory exists
-            os.makedirs(os.path.join(app.root_path, 'static/images/news'), exist_ok=True)
-            
-            # Save the image
-            image.save(os.path.join(app.root_path, 'static/images/news', filename))
-            
-            # Update image URL
+            # Update image URL and binary data
             news.image_url = image_path
+            news.image_data = image_data
         else:
             flash('Ungültiger Dateityp', 'error')
             return redirect(url_for('home') + '#news')
@@ -2120,27 +2168,23 @@ def unarchive_news(news_id):
 #     return render_template(f'{design}/news.html', logged_in=current_user.is_authenticated, is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active, boxes=boxes)
 
 
-#     ____  ____  __    ____  ____  ____ 
-#    (    \(  __)(  )  (  __)(_  _)(  __)
-#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
-#    (____/(____)\____/(____) (__) (____)
+#    ____  ____  __    ____  ____  ____ 
+#   (    \(  __)(  )  (  __)(_  _)(  __)
+#    ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#   (____/(____)\____/(____) (__) (____)
 
 @app.route('/delete/<int:box_id>', methods=['POST'])
 def delete_box(box_id):
     box = Box.query.get_or_404(box_id)
     
-
-    if box.image_data:
-        box.image_data = None  # Bild aus der Datenbank entfernen
-    
     db.session.delete(box)
     db.session.commit()
     return redirect(url_for('news'))
 
-#     __     __    ___   __   ____   __    __   __ _ 
-#    (  )   /  \  / __) / _\ (_  _) (  )  /  \ (  ( \
-#    / (_/\(  O )( (__ /    \  )(    )(  (  O )/    /
-#    \____/ \__/  \___)\_/\_/ (__)  (__)  \__/ \_)__)
+#    __     __    ___   __   ____   __    __   __ _ 
+#   (  )   /  \  / __) / _\ (_  _) (  )  /  \ (  ( \
+#   / (_/\(  O )( (__ /    \  )(    )(  (  O )/    /
+#   \____/ \__/  \___)\_/\_/ (__)  (__)  \__/ \_)__)
 
 
 def allowed_file(filename):
@@ -2157,7 +2201,6 @@ def add_content():
         return jsonify({'error': 'No selected file'}), 400
     
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
         # Bild in Binärdaten umwandeln
         image_data = file.read()
         new_item = ContentItem(
@@ -2182,10 +2225,10 @@ def add_content():
     # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#one")
 
-#     ____  ____  __    ____  ____  ____ 
-#    (    \(  __)(  )  (  __)(_  _)(  __)
-#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
-#    (____/(____)\____/(____) (__) (____)
+#    ____  ____  __    ____  ____  ____ 
+#   (    \(  __)(  )  (  __)(_  _)(  __)
+#    ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#   (____/(____)\____/(____) (__) (____)
 
 @app.route('/delete_content/<int:item_id>', methods=['GET', 'POST'])
 def delete_content(item_id):
@@ -2215,9 +2258,13 @@ def upload_image():
     if file.filename == '':
         return "No selected file", 400
     if file:
+        # Binäre Bilddaten lesen
+        image_data = file.read()
+        
+        # Für Kompatibilität einen Pfad generieren
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        new_image = Image(filename=filename)
+        
+        new_image = Image(filename=filename, image_data=image_data)
         db.session.add(new_image)
         db.session.commit()
     return redirect(url_for('home') + "#awards")
@@ -2225,10 +2272,6 @@ def upload_image():
 @app.route('/delete_image/<int:image_id>', methods=['POST'])
 def delete_image(image_id):
     image = Image.query.get_or_404(image_id)
-    # Löschen der Datei aus dem Upload-Ordner
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
-    if os.path.exists(file_path):
-        os.remove(file_path)
     # Löschen des Eintrags aus der Datenbank
     db.session.delete(image)
     db.session.commit()
@@ -2241,10 +2284,10 @@ def delete_image(image_id):
 
 
 
-#     ____  ____  ____  _  _   __   __ _  ____ 
-#    (_  _)(  __)(  _ \( \/ ) (  ) (  ( \(  __)
-#      )(   ) _)  )   // \/ \  )(  /    / ) _) 
-#     (__) (____)(__\_)\_)(_/ (__) \_)__)(____)
+#    ____  ____  ____  _  _   __   __ _  ____ 
+#   (_  _)(  __)(  _ \( \/ ) (  ) (  ( \(  __)
+#     )(   ) _)  )   // \/ \  )(  /    / ) _) 
+#    (__) (____)(__\_)\_)(_/ (__) \_)__)(____)
 
 
 @app.route('/add_termin', methods=['POST'])
@@ -2274,10 +2317,10 @@ def add_termin():
     return redirect(url_for('home') + "#termine")
 
 
-#     ____  ____  __    ____  ____  ____ 
-#    (    \(  __)(  )  (  __)(_  _)(  __)
-#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
-#    (____/(____)\____/(____) (__) (____)
+#    ____  ____  __    ____  ____  ____ 
+#   (    \(  __)(  )  (  __)(_  _)(  __)
+#    ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#   (____/(____)\____/(____) (__) (____)
 
 @app.route('/delete_termin/<int:termin_id>', methods=['POST'])
 def delete_termin(termin_id):
@@ -2314,7 +2357,6 @@ def add_img():
         return redirect(url_for('home'))
     
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
         # Bild in Binärdaten umwandeln
         image = file.read()
         new_item = Img(
@@ -2354,10 +2396,10 @@ def delete_img(img_id):
 
 
 
-#      __   ____   __   _  _  ____ 
-#     / _\ (  _ \ /  \ / )( \(_  _)
-#    /    \ ) _ ((  O )) \/ (  )(  
-#    \_/\_/(____/ \__/ \____/ (__)
+#     __   ____   __   _  _  ____ 
+#    / _\ (  _ \ /  \ / )( \(_  _)
+#   /    \ ) _ ((  O )) \/ (  )(  
+#   \_/\_/(____/ \__/ \____/ (__)
 
 
 @app.route("/add_about_text", methods=["POST"])
@@ -2391,10 +2433,10 @@ def add_about_text():
     # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#about")
 
-#     ____  ____  __    ____  ____  ____ 
-#    (    \(  __)(  )  (  __)(_  _)(  __)
-#     ) D ( ) _) / (_/\ ) _)   )(   ) _) 
-#    (____/(____)\____/(____) (__) (____)
+#    ____  ____  __    ____  ____  ____ 
+#   (    \(  __)(  )  (  __)(_  _)(  __)
+#    ) D ( ) _) / (_/\ ) _)   )(   ) _) 
+#   (____/(____)\____/(____) (__) (____)
 
 @app.route("/delete_about_text/<int:id>", methods=["POST"])
 def delete_about_text(id):
@@ -2643,6 +2685,12 @@ def dashboard():
         return redirect(url_for('verify'))
     
     users = User.query.all()
+    
+    # Base64-Umwandlung für Profilbilder
+    for user in users:
+        if user.profile_image_data:
+            user.profile_image_data_base64 = get_image_base64(user.profile_image_data)
+    
     return render_template(f'{design}/dashboard.html', 
                            is_admin=current_user.is_authenticated and current_user.role == 'admin', 
                            user=current_user, 
@@ -2827,6 +2875,22 @@ def edit_account():
         current_user.firstname = firstname
         current_user.lastname = lastname
         current_user.email = email
+        
+        # Profilbild verarbeiten, falls vorhanden
+        if 'profile_image' in request.files and request.files['profile_image'].filename:
+            profile_image = request.files['profile_image']
+            if allowed_file(profile_image.filename):
+                # Binäre Bilddaten lesen
+                profile_image_data = profile_image.read()
+                
+                # Für Kompatibilität einen Pfad generieren
+                filename = secure_filename(f"{uuid.uuid4()}_{profile_image.filename}")
+                profile_image_path = f"/static/images/profiles/{filename}"
+                
+                # Pfad und binäre Daten speichern
+                current_user.profile_image_path = profile_image_path
+                current_user.profile_image_data = profile_image_data
+        
         db.session.commit()
 
         flash('Ihr Konto wurde erfolgreich aktualisiert.', 'success')
@@ -2911,17 +2975,23 @@ def home():
     image = Img.query.all()
     about_texts = AboutText.query.all()
     content_items = ContentItem.query.all()
+    
+    # Base64-Umwandlung für jedes Bild
     for item in content_items:
         if item.image_data:
-            item.image_data_base64 = base64.b64encode(item.image_data).decode('utf-8')
+            item.image_data_base64 = get_image_base64(item.image_data)
         else:
             item.image_data_base64 = None
 
     for img in image:
         if img.image:
-            img.image_data_base64 = base64.b64encode(img.image).decode('utf-8')
+            img.image_data_base64 = get_image_base64(img.image)
         else:
             img.image_data_base64 = None
+    
+    for img in images:
+        if img.image_data:
+            img.image_data_base64 = get_image_base64(img.image_data)
 
     termine = Termin.query.all()
 
@@ -2931,10 +3001,39 @@ def home():
 
     about_data = AboutSection.query.first()
     
+    # Base64-Umwandlung für About-Bilder
+    if about_data:
+        if about_data.image_data:
+            about_data.image_data_base64 = get_image_base64(about_data.image_data)
+        
+        # News-Karten Bilder
+        if about_data.news_card1_image_data:
+            about_data.news_card1_image_data_base64 = get_image_base64(about_data.news_card1_image_data)
+        if about_data.news_card2_image_data:
+            about_data.news_card2_image_data_base64 = get_image_base64(about_data.news_card2_image_data)
+        if about_data.news_card3_image_data:
+            about_data.news_card3_image_data_base64 = get_image_base64(about_data.news_card3_image_data)
+        if about_data.news_card4_image_data:
+            about_data.news_card4_image_data_base64 = get_image_base64(about_data.news_card4_image_data)
+        
+        # Location-Karten Bilder
+        if about_data.location_card1_image_data:
+            about_data.location_card1_image_data_base64 = get_image_base64(about_data.location_card1_image_data)
+        if about_data.location_card2_image_data:
+            about_data.location_card2_image_data_base64 = get_image_base64(about_data.location_card2_image_data)
+        if about_data.location_card3_image_data:
+            about_data.location_card3_image_data_base64 = get_image_base64(about_data.location_card3_image_data)
+        if about_data.location_card4_image_data:
+            about_data.location_card4_image_data_base64 = get_image_base64(about_data.location_card4_image_data)
+    
     # Get the 4 most recent non-archived news items
     news_items = []
     try:
         news_items = News.query.filter_by(archived=False).order_by(News.date.desc()).limit(4).all()
+        # Base64-Umwandlung für News-Bilder
+        for item in news_items:
+            if item.image_data:
+                item.image_data_base64 = get_image_base64(item.image_data)
     except:
         # If there's an error (e.g., table doesn't exist yet), just use an empty list
         pass
@@ -3194,8 +3293,41 @@ def download_form():
     return send_file(file_path, as_attachment=True)
 
 
+# Hilfsfunktion zum Komprimieren von Bildern
+def compress_image(image_data, quality=85, max_size=(800, 800)):
+    try:
+        img = PILImage.open(BytesIO(image_data))
+        
+        # Bild auf maximale Größe skalieren, wenn es größer ist
+        if img.width > max_size[0] or img.height > max_size[1]:
+            img.thumbnail(max_size, PILImage.LANCZOS)
+        
+        # In BytesIO speichern mit Kompression
+        output = BytesIO()
+        img.save(output, format=img.format or 'JPEG', quality=quality, optimize=True)
+        return output.getvalue()
+    except Exception as e:
+        print(f"Fehler bei der Bildkompression: {str(e)}")
+        return image_data  # Originalbild zurückgeben, wenn Kompression fehlschlägt
 
+# Hilfsfunktion zum Erstellen von Thumbnails
+def create_thumbnail(image_data, size=(200, 200)):
+    try:
+        img = PILImage.open(BytesIO(image_data))
+        img.thumbnail(size, PILImage.LANCZOS)
+        output = BytesIO()
+        img.save(output, format=img.format or 'JPEG', quality=85, optimize=True)
+        return output.getvalue()
+    except Exception as e:
+        print(f"Fehler bei der Thumbnail-Erstellung: {str(e)}")
+        return None
 
+# Template-Filter für base64-Kodierung
+@app.template_filter('b64encode')
+def b64encode_filter(data):
+    if data is None:
+        return None
+    return base64.b64encode(data).decode('utf-8')
 
 
 DB_PASSWORD = "1234"  # Ersetze dies durch ein starkes Passwort
@@ -3210,6 +3342,10 @@ def db_preview():
             users = User.query.all()
             events = Event.query.all()
             about_sections = AboutSection.query.all()
+            gallery_images = GalleryImage.query.all()
+            news_items = News.query.all()
+            content_items = ContentItem.query.all()
+            images = Image.query.all()
             
             # Get current time for the footer
             now = datetime.now()
@@ -3220,6 +3356,10 @@ def db_preview():
                 users=users,
                 events=events,
                 about_sections=about_sections,
+                gallery_images=gallery_images,
+                news_items=news_items,
+                content_items=content_items,
+                images=images,
                 now=now
             )
         else:
@@ -3229,6 +3369,114 @@ def db_preview():
     # If it's a GET request, show the password form
     return render_template(f'{design}/passwort.html', error=None)
 
+
+# Migrations-Skript zum Konvertieren von Dateisystem-Bildern zu binären Daten
+@app.route('/run-migration', methods=['GET', 'POST'])
+def run_migration():
+    if request.method == 'POST':
+        if request.form.get('password') == DB_PASSWORD:
+            try:
+                # Migriere Bilder für GalleryImage
+                gallery_images = GalleryImage.query.all()
+                for image in gallery_images:
+                    if image.image_path and not image.image_data:
+                        try:
+                            file_path = os.path.join(app.root_path, image.image_path.lstrip('/'))
+                            if os.path.exists(file_path):
+                                with open(file_path, 'rb') as f:
+                                    image_data = f.read()
+                                    # Komprimiere das Bild
+                                    image.image_data = compress_image(image_data)
+                        except Exception as e:
+                            print(f"Fehler beim Migrieren von GalleryImage {image.id}: {str(e)}")
+                
+                # Migriere Bilder für News
+                news_items = News.query.all()
+                for news in news_items:
+                    if news.image_url and not news.image_data:
+                        try:
+                            file_path = os.path.join(app.root_path, news.image_url.lstrip('/'))
+                            if os.path.exists(file_path):
+                                with open(file_path, 'rb') as f:
+                                    image_data = f.read()
+                                    # Komprimiere das Bild
+                                    news.image_data = compress_image(image_data)
+                        except Exception as e:
+                            print(f"Fehler beim Migrieren von News {news.id}: {str(e)}")
+                
+                # Migriere Bilder für AboutSection
+                about_data = AboutSection.query.first()
+                if about_data:
+                    # Hauptbild
+                    if about_data.image_path and not about_data.image_data:
+                        try:
+                            file_path = os.path.join(app.root_path, about_data.image_path.lstrip('/'))
+                            if os.path.exists(file_path):
+                                with open(file_path, 'rb') as f:
+                                    image_data = f.read()
+                                    # Komprimiere das Bild
+                                    about_data.image_data = compress_image(image_data)
+                        except Exception as e:
+                            print(f"Fehler beim Migrieren des AboutSection-Hauptbildes: {str(e)}")
+                    
+                    # News-Karten Bilder
+                    for i in range(1, 5):
+                        image_path_attr = f'news_card{i}_image'
+                        image_data_attr = f'news_card{i}_image_data'
+                        if hasattr(about_data, image_path_attr) and hasattr(about_data, image_data_attr):
+                            image_path = getattr(about_data, image_path_attr)
+                            if image_path and not getattr(about_data, image_data_attr):
+                                try:
+                                    file_path = os.path.join(app.root_path, image_path.lstrip('/'))
+                                    if os.path.exists(file_path):
+                                        with open(file_path, 'rb') as f:
+                                            image_data = f.read()
+                                            # Komprimiere das Bild
+                                            setattr(about_data, image_data_attr, compress_image(image_data))
+                                except Exception as e:
+                                    print(f"Fehler beim Migrieren des AboutSection-News-Bildes {i}: {str(e)}")
+                    
+                    # Location-Karten Bilder
+                    for i in range(1, 5):
+                        image_path_attr = f'location_card{i}_image'
+                        image_data_attr = f'location_card{i}_image_data'
+                        if hasattr(about_data, image_path_attr) and hasattr(about_data, image_data_attr):
+                            image_path = getattr(about_data, image_path_attr)
+                            if image_path and not getattr(about_data, image_data_attr):
+                                try:
+                                    file_path = os.path.join(app.root_path, image_path.lstrip('/'))
+                                    if os.path.exists(file_path):
+                                        with open(file_path, 'rb') as f:
+                                            image_data = f.read()
+                                            # Komprimiere das Bild
+                                            setattr(about_data, image_data_attr, compress_image(image_data))
+                                except Exception as e:
+                                    print(f"Fehler beim Migrieren des AboutSection-Location-Bildes {i}: {str(e)}")
+                
+                # Migriere Bilder für Image
+                images = Image.query.all()
+                for img in images:
+                    if img.filename and not img.image_data:
+                        try:
+                            file_path = os.path.join(app.config['UPLOAD_FOLDER'], img.filename)
+                            if os.path.exists(file_path):
+                                with open(file_path, 'rb') as f:
+                                    image_data = f.read()
+                                    # Komprimiere das Bild
+                                    img.image_data = compress_image(image_data)
+                        except Exception as e:
+                            print(f"Fehler beim Migrieren von Image {img.id}: {str(e)}")
+                
+                # Speichere alle Änderungen
+                db.session.commit()
+                
+                return render_template(f'{design}/migration_success.html')
+            except Exception as e:
+                return f"Fehler bei der Migration: {str(e)}"
+        else:
+            return render_template(f'{design}/passwort.html', error="Falsches Passwort! Versuche es erneut.")
+    
+    return render_template(f'{design}/passwort.html', error=None)
 
 
 @app.errorhandler(404)
