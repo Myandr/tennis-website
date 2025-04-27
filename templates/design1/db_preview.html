@@ -526,7 +526,6 @@
                     <div class="tab" onclick="openTab(event, 'tab-location-{{ about.id }}')">Standort</div>
                     <div class="tab" onclick="openTab(event, 'tab-termine-{{ about.id }}')">Termine</div>
                     <div class="tab" onclick="openTab(event, 'tab-vorstand-{{ about.id }}')">Vorstand</div>
-                    <div class="tab" onclick="openTab(event, 'tab-news-{{ about.id }}')">News</div>
                     <div class="tab" onclick="openTab(event, 'tab-kontakt-{{ about.id }}')">Kontakt</div>
                     <div class="tab" onclick="openTab(event, 'tab-training-{{ about.id }}')">Training</div>
                 </div>
@@ -742,87 +741,7 @@
                     </div>
                 </div>
 
-                <!-- News Tab -->
-                <div id="tab-news-{{ about.id }}" class="tab-content">
-                    <div class="section-content">
-                        <h3>News Inhalte</h3>
-                        <div class="section-grid">
-                            <div class="section-item">
-                                <h4>Titel</h4>
-                                <p>{{ about.title_news }}</p>
-                            </div>
-                            <div class="section-item">
-                                <h4>Willkommenstext</h4>
-                                <p>{{ about.welcome_text_news }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section-content">
-                        <h3>News Karten</h3>
-                        <div class="section-grid">
-                            <!-- News Card 1 -->
-                            <div class="section-item">
-                                <h4>Karte 1: {{ about.news_card1_title }}</h4>
-                                <p><strong>Datum:</strong> {{ about.news_card1_date }}</p>
-                                <p><strong>Auszug:</strong> {{ about.news_card1_excerpt }}</p>
-                                <p><strong>Volltext:</strong> {{ about.news_card1_full_text }}</p>
-                                {% if about.news_card1_image_data %}
-                                <div class="image-container">
-                                    <img src="data:image/jpeg;base64,{{ about.news_card1_image_data|b64encode }}" alt="News 1" class="image-preview">
-                                </div>
-                                {% else %}
-                                <p>Kein Bild vorhanden</p>
-                                {% endif %}
-                            </div>
-
-                            <!-- News Card 2 -->
-                            <div class="section-item">
-                                <h4>Karte 2: {{ about.news_card2_title }}</h4>
-                                <p><strong>Datum:</strong> {{ about.news_card2_date }}</p>
-                                <p><strong>Auszug:</strong> {{ about.news_card2_excerpt }}</p>
-                                <p><strong>Volltext:</strong> {{ about.news_card2_full_text }}</p>
-                                {% if about.news_card2_image_data %}
-                                <div class="image-container">
-                                    <img src="data:image/jpeg;base64,{{ about.news_card2_image_data|b64encode }}" alt="News 2" class="image-preview">
-                                </div>
-                                {% else %}
-                                <p>Kein Bild vorhanden</p>
-                                {% endif %}
-                            </div>
-
-                            <!-- News Card 3 -->
-                            <div class="section-item">
-                                <h4>Karte 3: {{ about.news_card3_title }}</h4>
-                                <p><strong>Datum:</strong> {{ about.news_card3_date }}</p>
-                                <p><strong>Auszug:</strong> {{ about.news_card3_excerpt }}</p>
-                                <p><strong>Volltext:</strong> {{ about.news_card3_full_text }}</p>
-                                {% if about.news_card3_image_data %}
-                                <div class="image-container">
-                                    <img src="data:image/jpeg;base64,{{ about.news_card3_image_data|b64encode }}" alt="News 3" class="image-preview">
-                                </div>
-                                {% else %}
-                                <p>Kein Bild vorhanden</p>
-                                {% endif %}
-                            </div>
-
-                            <!-- News Card 4 -->
-                            <div class="section-item">
-                                <h4>Karte 4: {{ about.news_card4_title }}</h4>
-                                <p><strong>Datum:</strong> {{ about.news_card4_date }}</p>
-                                <p><strong>Auszug:</strong> {{ about.news_card4_excerpt }}</p>
-                                <p><strong>Volltext:</strong> {{ about.news_card4_full_text }}</p>
-                                {% if about.news_card4_image_data %}
-                                <div class="image-container">
-                                    <img src="data:image/jpeg;base64,{{ about.news_card4_image_data|b64encode }}" alt="News 4" class="image-preview">
-                                </div>
-                                {% else %}
-                                <p>Kein Bild vorhanden</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            
 
                 <!-- Kontakt Tab -->
                 <div id="tab-kontakt-{{ about.id }}" class="tab-content">
