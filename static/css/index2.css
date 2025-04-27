@@ -194,14 +194,72 @@ h2 {
   transform: translate(-50%, -50%);
   z-index: 2000;
 }
+
+.reset-image-btn {
+  background-color: white;
+  color: #333;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  opacity: 0.9;
+  z-index: 1000;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.reset-image-btn:hover {
+  transform: scale(1.1);
+  opacity: 1;
+  background-color: #f8f8f8;
+}
+
+.admin-image-controls {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.edit-mode .admin-image-controls,
+.gallery-item:hover .admin-image-controls,
+.gallery-card:hover .admin-image-controls,
+.news-card:hover .admin-image-controls,
+.location-card:hover .admin-image-controls,
+.about-image:hover .admin-image-controls {
+  opacity: 1;
+}
+
+/* Position adjustments for different sections */
+.about-image .admin-image-controls {
+  top: 15px;
+  right: 15px;
+}
+
+.news-card .admin-image-controls {
+  top: 15px;
+  right: 15px;
+}
+
+.location-card .admin-image-controls {
+  top: 15px;
+  right: 15px;
+}
+
 .loading-spinner::after {
   content: "";
   display: block;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 2px solid var(--border-color);
-  border-color: var(--border-color) transparent var(--border-color) transparent;
+  border: 2px solid black;
+  border-color: black transparent black transparent;
   animation: spinner 1.2s linear infinite;
 }
 @keyframes spinner {
@@ -1347,6 +1405,7 @@ footer i {
   max-width: 1200px;
   margin: 0 auto 4rem;
 }
+
 
 .locations-header h2 {
   font-size: 4rem;

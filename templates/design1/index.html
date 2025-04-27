@@ -689,28 +689,43 @@ document.addEventListener('keydown', (e) => {
 \_/\_/(____/ \__/ \____/ (__)
     -->
 
-    <section class="locations-section" id="about">
-      <div class="locations-header" data-aos="fade-right">
-          <h2 class="editable" data-field="title" id="about-title">Herzlich Willkommen!</h2>
-          <p class="editable" data-field="welcome_text" id="about-welcome-text">Herzlich willkommen auf der neu gestalteten Homepage des Hardter TV. Hier gibt es zukünftig alle wichtigen Infos und Termine rund um unseren Tennisverein.</p>
-          <a href="{{ url_for('mitgliedschaft') }}" class="learn-more">Mitgliedschaft →</a>
-      </div>
-      <div class="locations-grid">
-          <div class="container">
-              <div class="about-content">
-                  <div class="about-image">
-                      <img data-aos="flip-up" id="about-image" src="/static/images/Tennisball an Linie groß.jpg" alt="Tennis Team"  onerror="this.onerror=null; this.src='/static/images/Tennisball an Linie groß.jpg';" />
-                      <div class="edit-indicator" data-field="image_path">📷</div>
+<!-- Example of how to modify your about section to include the reset button -->
+<section class="locations-section" id="about">
+  <div class="locations-header" data-aos="fade-right">
+      <h2 class="editable" data-field="title" id="about-title">{{ about_data.title }}</h2>
+      <p class="editable" data-field="welcome_text" id="about-welcome-text">{{ about_data.welcome_text }}</p>
+      <a href="{{ url_for('mitgliedschaft') }}" class="learn-more">Mitgliedschaft →</a>
+  </div>
+  <div class="locations-grid">
+      <div class="container">
+          <div class="about-content">
+              <div class="about-image" style="position: relative;">
+                  {% if about_data.image_data_base64 %}
+                  <img data-aos="flip-up" id="about-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Tennis Team" />
+                  {% else %}
+                  <img data-aos="flip-up" id="about-image" src="{{ about_data.image_path }}" alt="Tennis Team" onerror="this.onerror=null; this.src='/static/images/Tennisball an Linie groß.jpg';" />
+                  {% endif %}
+                  
+                  {% if is_admin %}
+                  <div class="admin-image-controls">
+                      <form action="{{ url_for('reset_image', section='about', item_id=about_data.id) }}" method="POST" onsubmit="return confirm('Möchten Sie dieses Bild wirklich auf den Standardwert zurücksetzen?');">
+                          <button type="submit" class="reset-image-btn" title="Bild zurücksetzen">
+                              <i class="fas fa-undo"></i>
+                          </button>
+                      </form>
                   </div>
-                  <div class="about-text" data-aos="fade-up">
-                      <p class="editable" data-field="club_text" id="about-club-text">Und los geht es mit einer sehr erfreulichen Nachricht von der Stadt Dorsten. Der Antrag des HTV auf Mittel aus der Sportpauschale 2023 zur Anschaffung einer Flutlichtanlage für zwei Plätze wurde angenommen. Somit wird der HTV der erste Tennisverein in Dorsten sein, der über eine solche Anlage für zwei Tennisfelder verfügen wird.</p><br>
-                      <p class="editable" data-field="goals_text" id="about-goals-text">Neben der dann möglichen Ausweitung der Trainingszeiten auch in die späten Abendstunden (sehr wichtig aufgrund der veränderten Arbeitswelt) sieht der HTV aber auch Chancen mit Nachturnieren eine Bereicherung des Vereinslebens zu erzielen. Und letztendlich mussten in der Vergangenheit auch das ein oder andere Meisterschafts- oder Turnierspiel bei sehr diffusen Lichtverhältnisse zu Ende gespielt. Aber das hat ab der nächsten Saison beim HTV nun ein Ende. Realisiert werden soll die Flutlichtanlage auf unseren Plätzen 5 und 6.</p><br>
-                      <p class="editable" data-field="membership_text" id="about-membership-text"> </p>
-                  </div>
+                  {% endif %}
+              </div>
+              <div class="about-text" data-aos="fade-up">
+                  <p class="editable" data-field="club_text" id="about-club-text">{{ about_data.club_text }}</p><br>
+                  <p class="editable" data-field="goals_text" id="about-goals-text">{{ about_data.goals_text }}</p><br>
+                  <p class="editable" data-field="membership_text" id="about-membership-text">{{ about_data.membership_text }}</p>
               </div>
           </div>
       </div>
-  </section>
+  </div>
+</section>
+
   
   {% if is_admin %}
   <!-- Admin controls -->
@@ -772,66 +787,112 @@ document.addEventListener('keydown', (e) => {
       </div>
       <div class="locations-grid">
         <!-- Location Card 1 -->
+       <!-- Example of how to modify your location card to include the reset button -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
-          <div class="editable-image" data-field="location_card1_image">
-            <img id="location-card1-image" src="/static/images/image copy 4.png"  alt="Tennisplatz" />
+          <div class="editable-image" data-field="location_card1_image" style="position: relative;">
+              {% if about_data.image_data_base64 %}
+              <img id="location-card1-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Location Image" />
+              {% else %}
+              <img id="location-card1-image" src="{{ about_data.image_path }}" alt="Location Image" onerror="this.onerror=null; this.src='/static/images/image copy 4.png';" />
+              {% endif %}
+              
+              {% if is_admin %}
+              <div class="admin-image-controls">
+                  <form action="{{ url_for('reset_image', section='location', item_id=1) }}" method="POST" onsubmit="return confirm('Möchten Sie dieses Bild wirklich auf den Standardwert zurücksetzen?');">
+                      <button type="submit" class="reset-image-btn" title="Bild zurücksetzen">
+                          <i class="fas fa-undo"></i>
+                      </button>
+                  </form>
+              </div>
+              {% endif %}
           </div>
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3 class="editable" data-field="location_card1_title" id="location-card1-title">6 Ascheplätze</h3>
-            <div class="location-times editable" data-field="location_card1_subtitle" id="location-card1-subtitle">Zwei mit Flutlichtanlage</div>
-            <div class="location-address editable" data-field="location_card1_address" id="location-card1-address">
-              Gahlener Str. 204
-    46284 Dorsten
-            </div>
+              <h3 class="editable" data-field="location_card1_title" id="location-card1-title">{{ about_data.location_card1_title }}</h3>
+              <div class="location-times editable" data-field="location_card1_subtitle" id="location-card1-subtitle">{{ about_data.location_card1_subtitle }}</div>
+              <div class="location-address editable" data-field="location_card1_address" id="location-card1-address">{{ about_data.location_card1_address }}</div>
           </div>
         </div>
+
         
         <!-- Location Card 2 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
-          <div class="editable-image" data-field="location_card2_image">
-            <img id="location-card2-image" src="/static/images/image copy 2.png"  alt="Tennis Club" />
+          <div class="editable-image" data-field="location_card2_image" style="position: relative;">
+              {% if about_data.image_data_base64 %}
+              <img id="location-card2-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Location Image" />
+              {% else %}
+              <img id="location-card2-image" src="{{ about_data.image_path }}" alt="Location Image" onerror="this.onerror=null; this.src='/static/images/image copy 2.png';" />
+              {% endif %}
+              
+              {% if is_admin %}
+              <div class="admin-image-controls">
+                  <form action="{{ url_for('reset_image', section='location', item_id=2) }}" method="POST" onsubmit="return confirm('Möchten Sie dieses Bild wirklich auf den Standardwert zurücksetzen?');">
+                      <button type="submit" class="reset-image-btn" title="Bild zurücksetzen">
+                          <i class="fas fa-undo"></i>
+                      </button>
+                  </form>
+              </div>
+              {% endif %}
           </div>
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3 class="editable" data-field="location_card2_title" id="location-card2-title">Clubheim Hardt</h3>
-            <div class="location-times editable" data-field="location_card2_subtitle" id="location-card2-subtitle">Vermietung nur an Mitglieder<br>Gastronomie</div>
-            <div class="location-address editable" data-field="location_card2_address" id="location-card2-address">
-              Gahlener Str. 204
-    46284 Dorsten
-            </div>
+              <h3 class="editable" data-field="location_card2_title" id="location-card2-title">{{ about_data.location_card2_title }}</h3>
+              <div class="location-times editable" data-field="location_card2_subtitle" id="location-card2-subtitle">{{ about_data.location_card2_subtitle }}</div>
+              <div class="location-address editable" data-field="location_card2_address" id="location-card2-address">{{ about_data.location_card2_address }}</div>
           </div>
         </div>
         
         <!-- Location Card 3 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
-          <div class="editable-image" data-field="location_card3_image">
-            <img id="location-card3-image" src="/static/images/image copy 3.png" alt="Tennis im Park" />
+          <div class="editable-image" data-field="location_card3_image" style="position: relative;">
+              {% if about_data.image_data_base64 %}
+              <img id="location-card3-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Location Image" />
+              {% else %}
+              <img id="location-card3-image" src="{{ about_data.image_path }}" alt="Location Image" onerror="this.onerror=null; this.src='/static/images/image copy 3.png';" />
+              {% endif %}
+              
+              {% if is_admin %}
+              <div class="admin-image-controls">
+                  <form action="{{ url_for('reset_image', section='location', item_id=3) }}" method="POST" onsubmit="return confirm('Möchten Sie dieses Bild wirklich auf den Standardwert zurücksetzen?');">
+                      <button type="submit" class="reset-image-btn" title="Bild zurücksetzen">
+                          <i class="fas fa-undo"></i>
+                      </button>
+                  </form>
+              </div>
+              {% endif %}
           </div>
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3 class="editable" data-field="location_card3_title" id="location-card3-title">Kletter- und Spielgerüst</h3>
-            <div class="location-times editable" data-field="location_card3_subtitle" id="location-card3-subtitle"></div>
-            <div class="location-address editable" data-field="location_card3_address" id="location-card3-address">
-              Gahlener Str. 204
-    46284 Dorsten
-            </div>
+              <h3 class="editable" data-field="location_card3_title" id="location-card3-title">{{ about_data.location_card3_title }}</h3>
+              <div class="location-times editable" data-field="location_card3_subtitle" id="location-card3-subtitle">{{ about_data.location_card3_subtitle }}</div>
+              <div class="location-address editable" data-field="location_card3_address" id="location-card3-address">{{ about_data.location_card3_address }}</div>
           </div>
         </div>
         
         <!-- Location Card 4 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
-          <div class="editable-image" data-field="location_card4_image">
-            <img id="location-card4-image" src="/static/images/image.png" alt="Tennis im Garten" />
+          <div class="editable-image" data-field="location_card4_image" style="position: relative;">
+              {% if about_data.image_data_base64 %}
+              <img id="location-card4-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Location Image" />
+              {% else %}
+              <img id="location-card4-image" src="{{ about_data.image_path }}" alt="Location Image" onerror="this.onerror=null; this.src='/static/images/image.png';" />
+              {% endif %}
+              
+              {% if is_admin %}
+              <div class="admin-image-controls">
+                  <form action="{{ url_for('reset_image', section='location', item_id=4) }}" method="POST" onsubmit="return confirm('Möchten Sie dieses Bild wirklich auf den Standardwert zurücksetzen?');">
+                      <button type="submit" class="reset-image-btn" title="Bild zurücksetzen">
+                          <i class="fas fa-undo"></i>
+                      </button>
+                  </form>
+              </div>
+              {% endif %}
           </div>
           <div class="arrow-icon"><i class="fa fa-arrow-right"></i></div>
           <div class="location-info">
-            <h3 class="editable" data-field="location_card4_title" id="location-card4-title">Kleinfeldplatz inkl. Tenniswand</h3>
-            <div class="location-times editable" data-field="location_card4_subtitle" id="location-card4-subtitle"></div>
-            <div class="location-address editable" data-field="location_card4_address" id="location-card4-address">
-              Gahlener Str. 204
-    46284 Dorsten
-            </div>
+              <h3 class="editable" data-field="location_card4_title" id="location-card4-title">{{ about_data.location_card4_title }}</h3>
+              <div class="location-times editable" data-field="location_card4_subtitle" id="location-card4-subtitle">{{ about_data.location_card4_subtitle }}</div>
+              <div class="location-address editable" data-field="location_card4_address" id="location-card4-address">{{ about_data.location_card4_address }}</div>
           </div>
         </div>
         
@@ -1525,12 +1586,16 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 </script>
   
-  <div class="locations-grid">
+    <div class="locations-grid">
       {% for news in news_items %}
       <div class="news-card" data-aos="flip-up">
         <div class="news-image">
-          <img src="{{ news.image_url }}" alt="{{ news.title }}" />
-        </div>
+          {% if news.image_data_base64 %}
+          <img src="data:image/jpeg;base64,{{ news.image_data_base64 }}" alt="{{ news.title }}" />
+          {% else %}
+          <img src="{{ news.image_url }}" alt="{{ news.title }}" onerror="this.onerror=null; this.src='/static/images/tennis.jpg';" />
+          {% endif %}
+      </div>
         <div class="news-content">
           <div class="news-date">{{ news.date.strftime('%d.%m.%Y') }}</div>
           <h3 class="news-title">{{ news.title }}</h3>
@@ -1545,24 +1610,24 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="admin-actions" style="display: flex; gap: 10px; margin-top: 10px;">
             <form action="/archive_news/{{ news.id }}" method="POST" style="display: inline;" onsubmit="return confirm('Möchten Sie diese News ins Archiv verschieben?');">
               <button type="submit" style="padding: 5px 10px; background: #ffa94a; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
-                 Archivieren
+                Archivieren
               </button>
             </form>
             <form action="/delete_news/{{ news.id }}" method="POST" style="display: inline;" onsubmit="return confirm('Möchten Sie diese News wirklich löschen?');">
               <button type="submit" style="padding: 5px 10px; background: #ff4a4a; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
-                 Löschen
+                Löschen
               </button>
             </form>
           </div>
-           <button type="button" onclick="showEditForm({{ news.id }}, '{{ news.title }}', '{{ news.date.strftime('%Y-%m-%d') }}', '{{ news.excerpt|replace('\n', ' ')|replace('\'', '\\\'')|replace('\"', '\\\"') }}', '{{ news.full_text|replace('\n', ' ')|replace('\'', '\\\'')|replace('\"', '\\\"') }}', '{{ news.image_url }}')" 
+          <button type="button" onclick="showEditForm({{ news.id }}, '{{ news.title }}', '{{ news.date.strftime('%Y-%m-%d') }}', '{{ news.excerpt|replace('\n', ' ')|replace('\'', '\\\'')|replace('\"', '\\\"') }}', '{{ news.full_text|replace('\n', ' ')|replace('\'', '\\\'')|replace('\"', '\\\"') }}', '{{ news.image_url }}')" 
               style="padding: 5px 10px; background: #4a7aff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; font-size: 12px;">
-               Bearbeiten
+              Bearbeiten
             </button>
           {% endif %}
         </div>
       </div>
       {% endfor %}
-  </div>
+    </div>
 </section>
 
 <script>

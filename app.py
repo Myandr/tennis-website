@@ -94,7 +94,11 @@ login_manager.refresh_message_category = "error"
 login_manager.needs_refresh_message = "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
 login_manager.needs_refresh_message_category = "error"
 
-
+def get_image_base64(image_data):
+    """Convert binary image data to base64 for display in HTML"""
+    if image_data:
+        return base64.b64encode(image_data).decode('utf-8')
+    return None
 
 
 
@@ -429,9 +433,8 @@ class GalleryImage(db.Model):
             'image_path': self.image_path,
             'category': self.category,
             'display_order': self.display_order,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            'updated_at': self.updated_at.  self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S') if self.created_at else None,
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S') if self.updated_at else None,
             'gallery_id': self.gallery_id
         }
 
@@ -2703,7 +2706,7 @@ def dashboard():
 
 #     __     __    ___   __   _  _  ____ 
 #    (  )   /  \  / __) /  \ / )( \(_  _)
-#    / (_/\(  O )( (_ \(  O )) \/ (  )(  
+#    / (_/\(  O )( (_ \  O )) \/ (  )(  
 #    \____/ \__/  \___/ \__/ \____/ (__)
 
 
@@ -2812,7 +2815,7 @@ def reset_password(token):
 
 
 #     ____  ____  __    ____  ____  ____     _   ____  ____   __   ____ 
-#    (    \(  __)(  )  (  __)(_  _)(  __)   / ) (  __)(    \ (  ) (_  _)
+#    (    \(  __)(  )  (  __)(_  _)(  __)   / ) (  __) (    \ (  ) (_  _)
 #     ) D ( ) _) / (_/\ ) _)   )(   ) _)   / /   ) _)  ) D (  )(    )(  
 #    (____/(____)\____/(____) (__) (____) (_/   (____)(____/ (__)  (__) 
 
@@ -3034,10 +3037,22 @@ def home():
         for item in news_items:
             if item.image_data:
                 item.image_data_base64 = get_image_base64(item.image_data)
-    except:
+            else:
+                # Try to load the image from the file system if binary data is missing
+                try:
+                    file_path = os.path.join(app.root_path, item.image_url.lstrip('/'))
+                    if os.path.exists(file_path):
+                        with open(file_path, 'rb') as f:
+                            item.image_data = f.read()
+                            item.image_data_base64 = get_image_base64(item.image_data)
+                            # Save the binary data to the database
+                            db.session.commit()
+                except Exception as e:
+                    print(f"Error loading image for news {item.id}: {str(e)}")
+    except Exception as e:
         # If there's an error (e.g., table doesn't exist yet), just use an empty list
-        pass
-
+        print(f"Error loading news items: {str(e)}")
+    
     return render_template(f'{design}/index.html',
                            logged_in=current_user.is_authenticated,
                            username=current_user.get_id() if current_user.is_authenticated else None,
@@ -3112,13 +3127,13 @@ def save_cookie_settings():
 
 
 
-#     ___ ___   ____  ____  _       _____
-#    |   |   | /    ||    || |     / ___/
-#    | _   _ ||  o  | |  | | |    (   \_ 
-#    |  \_/  ||     | |  | | |___  \__  |
-#    |   |   ||  _  | |  | |     | /  \ |
-#    |   |   ||  |  | |  | |     | \    |
-#    |___|___||__|__||____||_____|  \___|
+#     _____  ___   ____    _____ ______  ____   ____    ___   _____
+#    / ___/ /   \ |    \  / ___/|      ||    | /    |  /  _] / ___/
+#   (   \_ |     ||  _  |(   \_ |      | |  | |   __| /  [_ (   \_ 
+#    \__  ||  O  ||  |  | \__  ||_|  |_| |  | |  |  ||    _] \__  |
+#    /  \ ||     ||  |  | /  \ |  |  |   |  | |  |_ ||   [_  /  \ |
+#    \    ||     ||  |  | \    |  |  |   |  | |     ||     | \    |
+#      \___| \___/ |__|__|  \___|  |__|  |____||___,_||_____|  \___|
                                    
 
 
@@ -3486,16 +3501,63 @@ def page_not_found(e):
     return render_template(f'{design}/404.html'), 404
 
 
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 
 
-
+@app.route('/reset_image/<section>/<int:item_id>', methods=['POST'])
+def reset_image(section, item_id):
+    """Reset an image to its default"""
+    try:
+        if section == 'about':
+            about_data = AboutSection.query.get_or_404(item_id)
+            # Reset to default image
+            about_data.image_data = None
+            about_data.image_path = "/static/images/Tennisball an Linie groß.jpg"
+            db.session.commit()
+            flash('Bild wurde auf den Standardwert zurückgesetzt.', 'success')
+        elif section == 'news':
+            news = News.query.get_or_404(item_id)
+            # Reset to default image
+            news.image_data = None
+            news.image_url = "/static/images/tennis.jpg"
+            db.session.commit()
+            flash('Bild wurde auf den Standardwert zurückgesetzt.', 'success')
+        elif section == 'location':
+            about_data = AboutSection.query.first()
+            # Reset to default image based on card number
+            if item_id == 1:
+                about_data.location_card1_image_data = None
+                about_data.location_card1_image = "/static/images/image copy 4.png"
+            elif item_id == 2:
+                about_data.location_card2_image_data = None
+                about_data.location_card2_image = "/static/images/image copy 2.png"
+            elif item_id == 3:
+                about_data.location_card3_image_data = None
+                about_data.location_card3_image = "/static/images/image copy 3.png"
+            elif item_id == 4:
+                about_data.location_card4_image_data = None
+                about_data.location_card4_image = "/static/images/image.png"
+            db.session.commit()
+            flash('Bild wurde auf den Standardwert zurückgesetzt.', 'success')
+        elif section == 'content':
+            content = ContentItem.query.get_or_404(item_id)
+            # For content items, we might need to set a default image
+            # This depends on your application's requirements
+            content.image_data = None
+            db.session.commit()
+            flash('Bild wurde auf den Standardwert zurückgesetzt.', 'success')
+        
+        # Redirect back to the referring page
+        return redirect(request.referrer or url_for('home'))
+    except Exception as e:
+        flash(f'Fehler beim Zurücksetzen des Bildes: {str(e)}', 'error')
+        return redirect(request.referrer or url_for('home'))
 
 
 
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+

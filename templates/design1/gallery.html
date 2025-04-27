@@ -518,7 +518,9 @@
       {% if gallery_images %}
         {% for image in gallery_images %}
         <div class="gallery-item" data-category="{{ image.category }}">
-          <img src="{{ image.image_path }}" alt="{{ image.title }}" class="gallery-img">
+          {% if image.image_data_base64 %}
+          <img src="data:image/jpeg;base64,{{ image.image_data_base64 }}" alt="{{ image.title }}" class="gallery-img">
+          {% endif %}
           <div class="gallery-caption">{{ image.title }}</div>
           <div class="image-controls">
             <button class="image-control-btn edit-btn" data-id="{{ image.id }}" title="Bearbeiten">✏️</button>
@@ -1183,6 +1185,8 @@
       {% endif %}
     });
   </script>
+<script src="../../static/js/gallery.js"></script>
+
 
   {% include 'design1/footer.html' %}
 </body>
