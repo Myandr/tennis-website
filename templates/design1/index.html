@@ -700,8 +700,11 @@ document.addEventListener('keydown', (e) => {
       <div class="container">
           <div class="about-content">
               <div class="about-image" style="position: relative;">
-                  {% if about_data.image_data_base64 %}
-                  <img data-aos="flip-up" id="about-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Tennis Team" />
+                <img data-aos="flip-up" id="about-image" src="../../static/images/Tennisball an Linie groß.jpg" alt="Tennis Team"aw/>
+
+                <!--
+                  {% if about_data.image_data %}
+                  <img data-aos="flip-up" id="about-image" src="data:image/jpeg;base64,{{ about_data.image_data|b64encode }}" alt="Hauptbild">
                   {% else %}
                   <img data-aos="flip-up" id="about-image" src="{{ about_data.image_path }}" alt="Tennis Team" onerror="this.onerror=null; this.src='/static/images/Tennisball an Linie groß.jpg';" />
                   {% endif %}
@@ -715,6 +718,7 @@ document.addEventListener('keydown', (e) => {
                       </form>
                   </div>
                   {% endif %}
+                  -->
               </div>
               <div class="about-text" data-aos="fade-up">
                   <p class="editable" data-field="club_text" id="about-club-text">{{ about_data.club_text }}</p><br>
@@ -790,8 +794,8 @@ document.addEventListener('keydown', (e) => {
        <!-- Example of how to modify your location card to include the reset button -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
           <div class="editable-image" data-field="location_card1_image" style="position: relative;">
-              {% if about_data.image_data_base64 %}
-              <img id="location-card1-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Location Image" />
+              {% if about_data.location_card1_image_data %}
+              <img src="data:image/jpeg;base64,{{ about_data.location_card1_image_data|b64encode }}" alt="Standort 1" class="image-preview">
               {% else %}
               <img id="location-card1-image" src="{{ about_data.image_path }}" alt="Location Image" onerror="this.onerror=null; this.src='/static/images/image copy 4.png';" />
               {% endif %}
@@ -818,8 +822,8 @@ document.addEventListener('keydown', (e) => {
         <!-- Location Card 2 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
           <div class="editable-image" data-field="location_card2_image" style="position: relative;">
-              {% if about_data.image_data_base64 %}
-              <img id="location-card2-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Location Image" />
+              {% if about_data.location_card2_image_data %}
+              <img src="data:image/jpeg;base64,{{ about_data.location_card2_image_data|b64encode }}" alt="Standort 1" class="image-preview">
               {% else %}
               <img id="location-card2-image" src="{{ about_data.image_path }}" alt="Location Image" onerror="this.onerror=null; this.src='/static/images/image copy 2.png';" />
               {% endif %}
@@ -845,8 +849,8 @@ document.addEventListener('keydown', (e) => {
         <!-- Location Card 3 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
           <div class="editable-image" data-field="location_card3_image" style="position: relative;">
-              {% if about_data.image_data_base64 %}
-              <img id="location-card3-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Location Image" />
+              {% if about_data.location_card3_image_data %}
+              <img src="data:image/jpeg;base64,{{ about_data.location_card3_image_data|b64encode }}" alt="Standort 1" class="image-preview">
               {% else %}
               <img id="location-card3-image" src="{{ about_data.image_path }}" alt="Location Image" onerror="this.onerror=null; this.src='/static/images/image copy 3.png';" />
               {% endif %}
@@ -872,8 +876,8 @@ document.addEventListener('keydown', (e) => {
         <!-- Location Card 4 -->
         <div class="location-card" data-aos="flip-up" onclick="window.location.href='/location1';">
           <div class="editable-image" data-field="location_card4_image" style="position: relative;">
-              {% if about_data.image_data_base64 %}
-              <img id="location-card4-image" src="data:image/jpeg;base64,{{ about_data.image_data_base64 }}" alt="Location Image" />
+              {% if about_data.location_card4_image_data %}
+              <img src="data:image/jpeg;base64,{{ about_data.location_card4_image_data|b64encode }}" alt="Standort 1" class="image-preview">
               {% else %}
               <img id="location-card4-image" src="{{ about_data.image_path }}" alt="Location Image" onerror="this.onerror=null; this.src='/static/images/image.png';" />
               {% endif %}
