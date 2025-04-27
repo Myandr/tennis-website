@@ -10,3 +10,4 @@ openpyxl==3.1.2
 pandas
 Flask-Bcrypt
 Flask-Login
+Pillow
