@@ -851,51 +851,8 @@
             </div>
         </div>
 
-        <div class="section-card">
-            <div class="section-header">
-                <h2>Content Items</h2>
-            </div>
-            <div class="section-body">
-                <div class="section-grid">
-                    {% for item in content_items %}
-                    <div class="section-item">
-                        <h4>{{ item.heading }}</h4>
-                        <p><strong>Text 1:</strong> {{ item.text1 }}</p>
-                        <p><strong>Text 2:</strong> {{ item.text2 }}</p>
-                        {% if item.image_data %}
-                        <div class="image-container">
-                            <img src="data:image/jpeg;base64,{{ item.image_data|b64encode }}" alt="{{ item.heading }}" class="image-preview">
-                        </div>
-                        {% else %}
-                        <p>Kein Bild vorhanden</p>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
 
-        <div class="section-card">
-            <div class="section-header">
-                <h2>Bilder</h2>
-            </div>
-            <div class="section-body">
-                <div class="section-grid">
-                    {% for img in images %}
-                    <div class="section-item">
-                        <h4>{{ img.filename }}</h4>
-                        {% if img.image_data %}
-                        <div class="image-container">
-                            <img src="data:image/jpeg;base64,{{ img.image_data|b64encode }}" alt="{{ img.filename }}" class="image-preview">
-                        </div>
-                        {% else %}
-                        <p>Kein Bild vorhanden</p>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+     
 
         <div class="footer">
             <p>Datenbank Vorschau • Letzte Aktualisierung: {{ now.strftime('%d.%m.%Y %H:%M') }}</p>
