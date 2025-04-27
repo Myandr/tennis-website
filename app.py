@@ -3032,7 +3032,7 @@ def home():
     # Get the 4 most recent non-archived news items
     news_items = []
     try:
-        news_items = News.query.filter_by(archived=False).order_by(News.date.desc()).limit(4).all()
+        news_items = News.query.filter_by(archived=False).order_by(News.date.desc()).limit(1000).all()
         # Base64-Umwandlung für News-Bilder
         for item in news_items:
             if item.image_data:
