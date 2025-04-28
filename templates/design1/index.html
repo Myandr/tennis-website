@@ -4,22 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="0gx3hyEH12kdsRXAgq1wqLd6Ob4_9hyHqm95lMaqbkw" />
-    <meta
-      name="description"
-      content="Willkommen auf der offiziellen Website unseres Tennisvereins! Entdecke alles über unsere Mitglieder, Turniere und aktuelle Termine"
-    />
 
-    <meta property="og:title" content="Hardter TV – Tennisverein">
-    <meta property="og:description" content="Turniere, Mitgliedschaften & News – Dein Tennisverein in Hardt!">
-    <meta property="og:url" content="https://hardter-tv.onrender.com">
+    <!-- Primary Meta Tags -->
+    <title>Hardter TV Dorsten - Tennisverein in Dorsten | Willkommen</title>
+    <meta name="title" content="Hardter TV Dorsten - Tennisverein in Dorsten | Willkommen">
+    <meta name="description" content="Willkommen beim Hardter Tennisverein in Dorsten. Wir bieten Training für alle Altersklassen, Mannschaftssport und eine freundliche Tennis-Community an der Gahlener Str. 204.">
+    <meta name="keywords" content="Hardter TV Dorsten, Hardt Tennis Dorsten, Tennisverein Dorsten, Tennis Dorsten, Hardter Tennisverein, Tennis Club Dorsten, Tennisplätze Dorsten">
+    <meta name="author" content="Hardter Tennisverein">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://hardt-tennis.de/">
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-
-    <meta
-      name="keywords"
-      content="Tennis, Tennisverein, Turniere, Mitgliedschaft, Tennisplatz, Sport, Tennisclub, Sportverein, Dorsten, Hardt, Hardter Tv, Hardter, Hardt Tv, Hardt Tennis"
-    />
-    <meta name="author" content="Hardter TV Tennis" />
-    <meta name="robots" content="index, follow" />
+    <meta property="og:url" content="https://hardt-tennis.de/">
+    <meta property="og:title" content="Hardter TV Dorsten - Tennisverein in Dorsten">
+    <meta property="og:description" content="Willkommen beim Hardter Tennisverein in Dorsten. Wir bieten Training für alle Altersklassen, Mannschaftssport und eine freundliche Tennis-Community.">
+    <meta property="og:image" content="{{ url_for('static', filename='favicon.ico') }}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://hardt-tennis.de/">
+    <meta property="twitter:title" content="Hardter TV Dorsten - Tennisverein in Dorsten">
+    <meta property="twitter:description" content="Willkommen beim Hardter Tennisverein in Dorsten. Wir bieten Training für alle Altersklassen, Mannschaftssport und eine freundliche Tennis-Community.">
+    <meta property="twitter:image" content="{{ url_for('static', filename='favicon.ico') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    
+    <!-- Structured Data for Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsClub",
+      "name": "Hardter TV Dorsten",
+      "alternateName": "Hardter Tennisverein",
+      "url": "https://hardt-tennis.de",
+      "logo": "{{ url_for('static', filename='favicon.ico') }}",
+      "image": "{{ url_for('static', filename='favicon.ico') }}",
+      "description": "Willkommen beim Hardter Tennisverein in Dorsten. Wir bieten Training für alle Altersklassen, Mannschaftssport und eine freundliche Tennis-Community.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Gahlener Str. 204",
+        "addressLocality": "Dorsten",
+        "postalCode": "46282",
+        "addressCountry": "DE"
+      },
+      "telephone": "0172 25 80 209",
+      "email": "1.vorsitzender@hardt-tennis.de,
+      "sameAs": [
+        "https://www.instagram.com/hardtertv"
+      ]
+    }
+    </script>
 
     <!-- Favicon -->
     <link
@@ -39,7 +76,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/index2.css" />
     <script src="{{ url_for('static', filename='js/ajax-forms.js') }}"></script>
 
-    <title>Hardter TV</title>
+    
 
     <!-- 
          __ __   ____  ____   ___    ______    ___  ____         ______  __ __ 
