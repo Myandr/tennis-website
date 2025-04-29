@@ -461,7 +461,9 @@ with app.app_context():
 #    |__|\_| \___/  \__,_|  |__|  |_____||__|__|
 
 
-
+@app.route('/logo')
+def serve_logo():
+    return send_from_directory('static', 'images/Neues Logo HTV_1.JPG')
 
 @app.route('/mannschaften')
 def mannschaften():
