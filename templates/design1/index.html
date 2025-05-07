@@ -64,9 +64,18 @@
       href="{{ url_for('static', filename='favicon.ico') }}"
     />
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    media="print"
+    onload="this.media='all'; this.onload=null;"
+  >
+  <noscript>
+    <link
       rel="stylesheet"
-    />
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    >
+  </noscript>
+  
 
 <!-- Nicht blockierendes CSS -->
 <link rel="stylesheet"
