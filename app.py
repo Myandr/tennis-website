@@ -31,13 +31,13 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hardt_tennis_datenbank_3lzj_user:iwHJvVoG2MQJpa5904rjtnZ57P03Fg4i@dpg-d072jf49c44c739kohu0-a.oregon-postgres.render.com/hardt_tennis_datenbank_3lzj'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
+app.config['MAIL_SERVER'] = 'smtp.strato.de'  # Gmail SMTP-Server
 app.config['MAIL_PORT'] = 587  # Port für TLS
 app.config['MAIL_USE_TLS'] = True  # TLS aktivieren
 app.config['MAIL_USE_SSL'] = False  # SSL nicht verwenden
-app.config['MAIL_USERNAME'] = 'myandr180709@gmail.com'  # Deine Gmail-Adresse
-app.config['MAIL_DEFAULT_SENDER'] = 'myandr180709@gmail.com'
-app.config['MAIL_PASSWORD'] = 'jcyx ozgy hjll hzyl'  # Dein App-Passwort
+app.config['MAIL_USERNAME'] = 'schatzmeister@hardt-tennis.de'  # Deine Gmail-Adresse
+app.config['MAIL_DEFAULT_SENDER'] = 'schatzmeister@hardt-tennis.de'
+app.config['MAIL_PASSWORD'] = '123456789volker#'  # Dein App-Passwort
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
@@ -3412,8 +3412,8 @@ def send_email():
     formatted_message = message.replace('\n', '<br>')
     
     # Firmenname und Website-URL (anpassbar)
-    company_name = "Deine Firma"
-    website_url = "www.deinewebsite.com"
+    company_name = "Hardter Tv"
+    website_url = "www.hardt-tennis.de"
     
     # E-Mail-Template rendern
     html_email = render_template(
@@ -3427,8 +3427,8 @@ def send_email():
 
     # Nachricht erstellen
     msg = Message('Nachricht von ' + name,
-                  sender=user_email,
-                  recipients=['myandr180709@gmail.com'])
+                  sender='schatzmeister@hardt-tennis.de',
+                  recipients=['schatzmeister@hardt-tennis.de'])
     
     # Plaintext-Version für E-Mail-Clients, die kein HTML unterstützen
     msg.body = f"Nachricht von: {name} ({user_email})\n\n{message}"
