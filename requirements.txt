@@ -11,5 +11,4 @@ pandas
 Flask-Bcrypt
 Flask-Login
 Pillow
-collections
 langdetect
