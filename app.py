@@ -3241,7 +3241,7 @@ def subscribe():
 ip_request_counter = defaultdict(list)
 ip_lock = threading.Lock()
 
-# Erweiterte Spam-Wörter Liste
+# Erweiterte Spam-Wörter Listen
 SPAM_WORDS = [
     # Finanzielle Spam-Wörter
     "viagra", "casino", "lottery", "prize", "winner", "bitcoin", "crypto", 
