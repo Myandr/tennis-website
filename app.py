@@ -19,6 +19,12 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy import desc
 import uuid
 from PIL import Image as PILImage
+from collections import defaultdict
+import threading
+import time
+import re
+import html
+from langdetect import detect, LangDetectException
 
 SAVE_PATH = 'editable_content.html'
 app = Flask(__name__)
@@ -3144,7 +3150,6 @@ def save_cookie_settings():
 
 
 
-
 #     __ _  ____  _  _  ____  __    ____  ____  ____  ____  ____ 
 #    (  ( \(  __)/ )( \/ ___)(  )  (  __)(_  _)(_  _)(  __)(  _ \
 #    /    / ) _) \ /\ /\___ \/ (_/\ ) _)   )(    )(   ) _)  )   /
@@ -3232,18 +3237,204 @@ def subscribe():
 
 
 
+# Rate Limiting - Speichert IP-Adressen und Zeitstempel
+ip_request_counter = defaultdict(list)
+ip_lock = threading.Lock()
+
+# Erweiterte Spam-Wörter Liste
+SPAM_WORDS = [
+    # Finanzielle Spam-Wörter
+    "viagra", "casino", "lottery", "prize", "winner", "bitcoin", "crypto", 
+    "investment opportunity", "million dollar", "earn money fast", "free money",
+    "enlargement", "weight loss", "diet pill", "cheap meds", "replica watches",
+    "forex", "stock tips", "binary options", "quick cash", "work from home",
+    "make money online", "passive income", "get rich", "earn extra cash",
+    
+    # Pharmazeutische Spam-Wörter
+    "pharmacy", "prescription", "medication", "pills", "drugs online",
+    "cheap prescription", "no prescription", "discount meds", "online pharmacy",
+    
+    # Betrügerische Angebote
+    "nigerian prince", "inheritance", "unclaimed money", "bank transfer",
+    "western union", "wire transfer", "money transfer", "paypal account",
+    "verify your account", "account suspended", "security alert",
+    
+    # Deutsche Spam-Wörter
+    "gewinnspiel", "gewonnen", "gratisprobe", "kostenlos", "sonderangebot",
+    "schnell geld", "reich werden", "verdienen sie", "geld verdienen",
+    "kreditangebot", "kredit ohne", "sofortkredit", "finanzierung", "bargeld sofort",
+    "abnehmen", "diätpillen", "schlankheitsmittel", "potenz", "potenzmittel"
+]
+
+# Verdächtige E-Mail-Domains
+SUSPICIOUS_DOMAINS = [
+    "tempmail.com", "guerrillamail.com", "mailinator.com", "10minutemail.com",
+    "throwawaymail.com", "yopmail.com", "getnada.com", "temp-mail.org",
+    "fakeinbox.com", "mailnesia.com", "tempmail.net", "dispostable.com"
+]
+
+def is_spam(text, email):
+    """Erweiterte Spam-Erkennung"""
+    text_lower = text.lower()
+    
+    # Prüfe auf Spam-Wörter
+    for word in SPAM_WORDS:
+        if word.lower() in text_lower:
+            return True, f"Spam-Wort erkannt: {word}"
+    
+    # Prüfe auf verdächtige E-Mail-Domains
+    if email:
+        domain = email.split('@')[-1].lower()
+        if domain in SUSPICIOUS_DOMAINS:
+            return True, f"Verdächtige E-Mail-Domain: {domain}"
+    
+    # Prüfe auf zu viele URLs
+    url_pattern = re.compile(r'https?://\S+|www\.\S+')
+    urls = url_pattern.findall(text_lower)
+    if len(urls) > 3:
+        return True, f"Zu viele URLs: {len(urls)}"
+    
+    # Prüfe auf übermäßige Großbuchstaben (SCHREIEN)
+    if len(text) > 20:
+        uppercase_ratio = sum(1 for c in text if c.isupper()) / len(text)
+        if uppercase_ratio > 0.5:
+            return True, "Zu viele Großbuchstaben"
+    
+    # Prüfe auf zu viele Wiederholungen des gleichen Zeichens
+    for char in set(text_lower):
+        if char * 5 in text_lower:
+            return True, f"Wiederholte Zeichen: '{char}'"
+    
+    # Prüfe auf verdächtige Zeichenkombinationen
+    suspicious_patterns = [
+        r'\$\d+', r'^\d{16}$', r'^\d{3}-\d{2}-\d{4}$',  # Kreditkarten, SSN
+        r'(?i)password', r'(?i)passwort', r'(?i)kennwort'  # Passwörter
+    ]
+    
+    for pattern in suspicious_patterns:
+        if re.search(pattern, text):
+            return True, "Verdächtige Zeichenkombination"
+    
+    return False, ""
+
+def is_supported_language(text):
+    """Prüft, ob der Text auf Deutsch oder Englisch ist"""
+    if not text or len(text.strip()) < 10:
+        return True, ""  # Zu kurz für eine zuverlässige Erkennung
+    
+    try:
+        lang = detect(text)
+        if lang not in ['de', 'en']:
+            return False, f"Nicht unterstützte Sprache erkannt: {lang}"
+        return True, ""
+    except LangDetectException:
+        return True, ""  # Bei Fehlern erlauben wir die Nachricht
+
+def check_rate_limit(ip_address, limit=10, period=60):
+    """
+    Überprüft, ob eine IP-Adresse das Rate-Limit überschritten hat
+    limit: Maximale Anzahl von Anfragen
+    period: Zeitraum in Sekunden (60 = 1 Minute)
+    """
+    current_time = time.time()
+    
+    with ip_lock:
+        # Entferne alte Einträge
+        ip_request_counter[ip_address] = [
+            timestamp for timestamp in ip_request_counter[ip_address] 
+            if current_time - timestamp < period
+        ]
+        
+        # Prüfe, ob das Limit überschritten wurde
+        if len(ip_request_counter[ip_address]) >= limit:
+            return False
+        
+        # Füge den aktuellen Zeitstempel hinzu
+        ip_request_counter[ip_address].append(current_time)
+        
+        return True
+
 @app.route('/send_email', methods=['POST'])
 def send_email():
+    # IP-Adresse des Clients abrufen
+    ip_address = request.remote_addr
+    
+    # Rate-Limit prüfen
+    if not check_rate_limit(ip_address, limit=10, period=60):
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'error': 'Zu viele Anfragen. Bitte versuche es später erneut.'
+            }), 429
+        
+        return 'Zu viele Anfragen. Bitte versuche es später erneut.', 429
+    
     design = session.get('design', 'design1')
-    name = request.form['name']
-    user_email = request.form['email']
-    message = request.form['message']
+    
+    # Formulardaten abrufen und escapen
+    name = html.escape(request.form.get('name', ''))
+    user_email = html.escape(request.form.get('email', ''))
+    message = html.escape(request.form.get('message', ''))
+    
+    # Validierung der E-Mail-Adresse
+    email_pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+    if not email_pattern.match(user_email):
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'error': 'Ungültige E-Mail-Adresse.'
+            }), 400
+        
+        return 'Ungültige E-Mail-Adresse.', 400
+    
+    # Spam-Check
+    combined_text = f"{name} {message}"
+    is_spam_result, spam_reason = is_spam(combined_text, user_email)
+    
+    if is_spam_result:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'error': f'Deine Nachricht wurde als Spam erkannt. Grund: {spam_reason}'
+            }), 400
+        
+        return f'Deine Nachricht wurde als Spam erkannt. Grund: {spam_reason}', 400
+    
+    # Spracherkennung
+    is_supported, language_reason = is_supported_language(message)
+    
+    if not is_supported:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'error': f'Bitte verwende Deutsch oder Englisch für deine Nachricht. {language_reason}'
+            }), 400
+        
+        return f'Bitte verwende Deutsch oder Englisch für deine Nachricht. {language_reason}', 400
+    
+    # Zeilenumbrüche in <br> umwandeln für die HTML-Version
+    formatted_message = message.replace('\n', '<br>')
+    
+    # Firmenname und Website-URL (anpassbar)
+    company_name = "Deine Firma"
+    website_url = "www.deinewebsite.com"
+    
+    # E-Mail-Template rendern
+    html_email = render_template(
+        'design1/email_template.html',
+        name=name,
+        email=user_email,
+        message=formatted_message,
+        company_name=company_name,
+        website_url=website_url
+    )
 
     # Nachricht erstellen
     msg = Message('Nachricht von ' + name,
                   sender=user_email,
                   recipients=['myandr180709@gmail.com'])
+    
+    # Plaintext-Version für E-Mail-Clients, die kein HTML unterstützen
     msg.body = f"Nachricht von: {name} ({user_email})\n\n{message}"
+    
+    # HTML-Version der E-Mail
+    msg.html = html_email
 
     # E-Mail senden
     try:
@@ -3264,9 +3455,6 @@ def send_email():
             }), 500
         
         return f'Fehler beim Senden der E-Mail: {str(e)}'
-
-
-
 
 
 
