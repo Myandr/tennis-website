@@ -2182,6 +2182,24 @@ iframe {
   object-fit: cover;
 }
 
+@supports (-webkit-touch-callout: none) {
+  .news-image {
+    height: 350px; /* Feste Höhe für iOS */
+  }
+  
+  .news-card {
+    height: auto !important; /* Verhindere, dass die Karte zu groß wird */
+  }
+  
+  .news-image img {
+    height: 100%; /* Auf iOS können wir height: 100% verwenden, da der Container jetzt eine feste Höhe hat */
+  }
+
+  .news-card.expanded .news-image {
+    height: 500px; /* Erhöhte Höhe */
+}
+}
+
 .news-content {
   flex: 2;
   padding: 20px;
