@@ -31,13 +31,16 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hardt_tennis_datenbank_3lzj_user:iwHJvVoG2MQJpa5904rjtnZ57P03Fg4i@dpg-d072jf49c44c739kohu0-a.oregon-postgres.render.com/hardt_tennis_datenbank_3lzj'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
-app.config['MAIL_SERVER'] = 'smtp.strato.de'  # Gmail SMTP-Server
+
+# GEÄNDERT: E-Mail-Konfiguration für Gmail (paulspenglerwork@gmail.com)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Gmail SMTP-Server
 app.config['MAIL_PORT'] = 587  # Port für TLS
 app.config['MAIL_USE_TLS'] = True  # TLS aktivieren
 app.config['MAIL_USE_SSL'] = False  # SSL nicht verwenden
-app.config['MAIL_USERNAME'] = 'schatzmeister@hardt-tennis.de'  # Deine Gmail-Adresse
-app.config['MAIL_DEFAULT_SENDER'] = 'schatzmeister@hardt-tennis.de'
-app.config['MAIL_PASSWORD'] = '123456789volker#'  # Dein App-Passwort
+app.config['MAIL_USERNAME'] = 'paulspenglerwork@gmail.com'  # Gmail-Adresse
+app.config['MAIL_DEFAULT_SENDER'] = 'paulspenglerwork@gmail.com'
+app.config['MAIL_PASSWORD'] = 'fkuq pker maae jurm'  # Gmail App-Passwort hier eintragen
+
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
@@ -55,18 +58,8 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'downloads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-
-
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
-
-
-
-
-
-
 
 #     __ __   ____  ____   ____   ____  ____   _        ___  ____  
 #    |  |  | /    ||    \ |    | /    ||    \ | |      /  _]|    \ 
@@ -76,8 +69,6 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 #     \   / |  |  ||  .  \ |  | |  |  ||     ||     ||     ||  |  |
 #      \_/  |__|__||__|\_||____||__|__||_____||_____||_____||__|__|                                                    
                                                                                                                                             
-
-
 
 db = SQLAlchemy(app)
 
@@ -106,16 +97,8 @@ def get_image_base64(image_data):
         return base64.b64encode(image_data).decode('utf-8')
     return None
 
-
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
-
-
-
-
-
 
 #    ___     ____  ______    ___  ____   ____    ____  ____   __  _ 
 #    |   \   /    ||      |  /  _]|    \ |    \  /    ||    \ |  |/ ]
@@ -124,9 +107,6 @@ def get_image_base64(image_data):
 #    |     ||  _  |  |  |  |   [_ |  |  ||  O  ||  _  ||  |  ||     \
 #    |     ||  |  |  |  |  |     ||  |  ||     ||  |  ||  |  ||  .  |
 #    |_____||__|__|  |__|  |_____||__|__||_____||__|__||__|__||__|\_|
-
-
-
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -452,12 +432,6 @@ with app.app_context():
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
 
-
-
-
-
-
-
 #    ____    ___   __ __  ______    ___  ____  
 #    |    \  /   \ |  |  ||      |  /  _]|    \ 
 #    |  D  )|     ||  |  ||      | /  [_ |  _  |
@@ -691,8 +665,6 @@ def location1():
                            is_admin=current_user.is_authenticated and current_user.role == 'admin' and is_admin_active,
                            is_verified=current_user.is_authenticated and current_user.is_verified)
 
-
-
 @app.route('/sitemap')
 def sitemap():
     return send_from_directory('static', 'sitemap.xml')
@@ -862,15 +834,11 @@ def choose_design():
 
     return render_template('choose_design.html')
 
-
-
 @app.route('/newsletter')
 def newsletter():
     design = session.get('design', 'design1')  # Default-Fallback falls nicht in der Session
 #design
     return render_template(f'{design}/newsletter.html')
-
-
 
 @app.before_request
 def before_request():
@@ -890,13 +858,8 @@ def before_request():
 def make_session_permanent():
     session.permanent = True
 
-
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
-
-
 
 #      ____  ___    ___   
 #     /    ||   \  |   \  
@@ -1205,13 +1168,6 @@ def update_about_data():
     
     db.session.commit()
     return jsonify(about_data.to_dict())
-
-
-
-
-
-
-
 
 def create_default_gallery_images():
     if GalleryImage.query.count() == 0:
@@ -1731,8 +1687,6 @@ def move_images_to_gallery():
         print(f"Error moving images: {str(e)}")
         return jsonify({'error': f'Fehler beim Verschieben der Bilder: {str(e)}'}), 500
 
-
-
 # API-Route zum Hochladen mehrerer Bilder
 @app.route('/api/gallery/bulk-upload', methods=['POST'])
 @login_required
@@ -1794,12 +1748,7 @@ def bulk_upload_images():
         print(f"Error in bulk upload: {str(e)}")
         return jsonify({'error': f'Fehler beim Hochladen der Bilder: {str(e)}'}), 500
 
-
-
 #kalender
-
-
-
 
 @app.route('/kalender')
 def kalender():
@@ -1909,18 +1858,6 @@ def update_event(event_id):
     
     db.session.commit()
     return jsonify(event.to_dict())
-
-
-
-
-
-
-
-
-
-
-
-
 
 @app.route('/api/news', methods=['GET'])
 def get_news():
@@ -2288,13 +2225,6 @@ def delete_image(image_id):
     db.session.commit()
     return redirect(url_for('home') + "#awards")
 
-
-
-
-
-
-
-
 #    ____  ____  ____  _  _   __   __ _  ____ 
 #   (_  _)(  __)(  _ \( \/ ) (  ) (  ( \(  __)
 #     )(   ) _)  )   // \/ \  )(  /    / ) _) 
@@ -2349,10 +2279,6 @@ def delete_termin(termin_id):
     # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#termine")
 
-
-
-
-
 @app.route('/add_img', methods=["POST"])
 def add_img():
     if 'image' not in request.files:
@@ -2404,8 +2330,6 @@ def delete_img(img_id):
     
     # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#img")
-
-
 
 #     __   ____   __   _  _  ____ 
 #    / _\ (  _ \ /  \ / )( \(_  _)
@@ -2470,21 +2394,8 @@ def delete_about_text(id):
     # For non-AJAX requests, redirect as before
     return redirect(url_for('home') + "#about")
 
-
-
-
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
-
-
-
-
-
-
-
-
 
 #     _       ___    ____  ____  ____  
 #    | |     /   \  /    ||    ||    \ 
@@ -2495,17 +2406,6 @@ def delete_about_text(id):
 #    |_____| \___/ |___,_||____||__|__|
                                   
 
-
-
-
-
-
-
-
-
-
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -2515,15 +2415,13 @@ def generate_verification_code():
     return ''.join(random.choices('0123456789', k=6))
 
 
+# GEÄNDERT: E-Mail-Versendung für Verifizierung (verwendet Gmail)
 def send_verification_email(email, code):
-    msg = Message('Verify Your Email', sender='your_email@gmail.com', recipients=[email])
+    msg = Message('Verify Your Email', 
+                  sender=app.config['MAIL_DEFAULT_SENDER'], 
+                  recipients=[email])
     msg.body = f'Your verification code is: {code}'
     mail.send(msg)
-
-
-
-
-
 
 #     ____   __    ___  __ _  _  _  ____ 
 #    / ___) (  )  / __)(  ( \/ )( \(  _ \
@@ -2581,17 +2479,10 @@ def signup():
     
     return render_template(f'{design}/signup.html')
 
-
-
-
-
-
 #    _  _  ____  ____   __   ____  _  _ 
 #   / )( \(  __)(  _ \ (  ) (  __)( \/ )
 #   \ \/ / ) _)  )   /  )(   ) _)  )  / 
 #    \__/ (____)(__\_) (__) (__)  (__/
-
-
 
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
@@ -2622,10 +2513,6 @@ def verify():
             flash('Ungültiger Bestätigungscode.', 'error')
     
     return render_template(f'{design}/verify.html', email=email)
-
-
-
-
 
 #     __     __    ___   __   __ _ 
 #    (  )   /  \  / __) (  ) (  ( \
@@ -2660,12 +2547,6 @@ def login():
             flash('Ungültige E-Mail oder Passwort', 'error')
     
     return render_template(f'{design}/login.html')
-
-
-
-
-
-
 
 #     ____   __   ____  _  _  ____   __    __   ____  ____ 
 #    (    \ / _\ / ___)/ )( \(  _ \ /  \  / _\ (  _ \(    \
@@ -2707,17 +2588,10 @@ def dashboard():
                            user=current_user, 
                            users=users)
 
-
-
-
-
-
 #     __     __    ___   __   _  _  ____ 
 #    (  )   /  \  / __) /  \ / )( \(_  _)
 #    / (_/\(  O )( (_ \  O )) \/ (  )(  
 #    \____/ \__/  \___/ \__/ \____/ (__)
-
-
 
 @app.route('/logout')
 @login_required
@@ -2726,18 +2600,10 @@ def logout():
     flash('Sie sind erfolgreich ausgeloggt', 'success')
     return redirect(url_for('login'))
 
-
-
-
-
-
-
 #     ____  ____  ____  ____  __ _  ____     _   ____   __   ____   ___   __   ____ 
 #    (  _ \(  __)/ ___)(  __)(  ( \(    \   / ) (  __) /  \ (  _ \ / __) /  \ (_  _)
 #     )   / ) _) \___ \ ) _) /    / ) D (  / /   ) _) (  O ) )   /( (_ \(  O )  )(  
 #    (__\_)(____)(____/(____)\_)__)(____/ (_/   (__)   \__/ (__\_) \___/ \__/  (__) 
-
-
 
 @app.route('/resend_verification', methods=['GET', 'POST'])
 def resend_verification():
@@ -2757,18 +2623,15 @@ def resend_verification():
             flash('Ungültige E-Mail oder Konto bereits verifiziert', 'error')
     return render_template(f'{design}/resend_verification.html')
 
+# GEÄNDERT: E-Mail-Versendung für Passwort-Reset (verwendet Gmail)
 def send_password_reset_email(user_email):
     token = serializer.dumps(user_email, salt='password-reset-salt')
     reset_url = url_for('reset_password', token=token, _external=True)
     msg = Message('Password Reset Request', 
-                  sender='your_email@gmail.com', 
+                  sender=app.config['MAIL_DEFAULT_SENDER'], 
                   recipients=[user_email])
     msg.body = f'Um das Passwort zurück zu setzen, folge dem Link: {reset_url}'
     mail.send(msg)
-
-
-
-
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
@@ -2784,10 +2647,6 @@ def forgot_password():
             flash('E-Mail-Adresse nicht gefunden', 'error')
         return redirect(url_for('login'))
     return render_template(f'{design}/forgot_password.html')
-
-
-
-
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -2818,16 +2677,10 @@ def reset_password(token):
     
     return render_template(f'{design}/reset_password.html', token=token)
 
-
-
-
-
 #     ____  ____  __    ____  ____  ____     _   ____  ____   __   ____ 
 #    (    \(  __)(  )  (  __)(_  _)(  __)   / ) (  __) (    \ (  ) (_  _)
 #     ) D ( ) _) / (_/\ ) _)   )(   ) _)   / /   ) _)  ) D (  )(    )(  
 #    (____/(____)\____/(____) (__) (____) (_/   (____)(____/ (__)  (__) 
-
-
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
@@ -2838,9 +2691,6 @@ def delete_account():
         flash('Account erfolgreich gelöscht', 'success')
         return redirect(url_for('signup'))
     return redirect(url_for('login'))
-
-
-
 
 @app.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
@@ -2864,10 +2714,6 @@ def delete_user(user_id):
 
     flash('Benutzer erfolgreich gelöscht.', 'success')
     return redirect(url_for('dashboard'))
-
-
-
-
 
 @app.route('/edit_account', methods=['GET', 'POST'])
 @login_required
@@ -2909,13 +2755,6 @@ def edit_account():
 
     return render_template(f'{design}/edit_account.html', user=current_user)
 
-
-
-
-
-
-
-
 #      __   ____  _  _   __   __ _ 
 #     / _\ (    \( \/ ) (  ) (  ( \
 #    /    \ ) D (/ \/ \  )(  /    /
@@ -2939,23 +2778,8 @@ def toggle_admin():
         'is_admin_active': is_admin_active
     })
 
-
-
-
-
-
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
-
-
-
-
-
-
-
-
 
 #     __ __   ___   ___ ___    ___ 
 #    |  |  | /   \ |   |   |  /  _]
@@ -2964,19 +2788,6 @@ def toggle_admin():
 #    |  |  ||     ||   |   ||   [_ 
 #    |  |  ||     ||   |   ||     |
 #    |__|__| \___/ |___|___||_____|
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @app.route('/')
 def home():
@@ -3075,17 +2886,10 @@ def home():
                            about_data=about_data,
                            news_items=news_items)  # Pass news items to the template
 
-
-
-
-
-
 #      ___   __    __   __ _   __   ____  ____ 
 #     / __) /  \  /  \ (  / ) (  ) (  __)/ ___)
 #    ( (__ (  O )(  O ) )  (   )(   ) _) \___ \
 #     \___) \__/  \__/ (__\_) (__) (____)(____/
-
-
 
 @app.route('/api/cookies/accept-all', methods=['POST'])
 def accept_all_cookies():
@@ -3119,21 +2923,8 @@ def save_cookie_settings():
     
     return response
 
-
-
-
-
-
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
-
-
-
-
-
-
 
 #     _____  ___   ____    _____ ______  ____   ____    ___   _____
 #    / ___/ /   \ |    \  / ___/|      ||    | /    |  /  _] / ___/
@@ -3144,26 +2935,18 @@ def save_cookie_settings():
 #      \___| \___/ |__|__|  \___|  |__|  |____||___,_||_____|  \___|
                                    
 
-
-
-
-
-
-
 #     __ _  ____  _  _  ____  __    ____  ____  ____  ____  ____ 
 #    (  ( \(  __)/ )( \/ ___)(  )  (  __)(_  _)(_  _)(  __)(  _ \
 #    /    / ) _) \ /\ /\___ \/ (_/\ ) _)   )(    )(   ) _)  )   /
 #    \_)__)(____)(_/\_)(____/\____/(____) (__)  (__) (____)(__\_)
 
-
-
-
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
     email = request.form['email']
     
-    # E-Mail senden
+    # GEÄNDERT: Newsletter-E-Mail wird von Gmail gesendet
     msg = Message('Danke für deine Anmeldung zum Newsletter!',
+                  sender=app.config['MAIL_DEFAULT_SENDER'],
                   recipients=[email])
     msg.html = '''
     <html>
@@ -3226,16 +3009,10 @@ def subscribe():
     
     return redirect(url_for('home'))
 
-
-
-
-
 #     ____  ____  __ _  ____  ____  __ _ 
 #    / ___)(  __)(  ( \(    \(  __)(  ( \
 #    \___ \ ) _) /    / ) D ( ) _) /    /
 #    (____/(____)\_)__)(____/(____)\_)__)
-
-
 
 # Rate Limiting - Speichert IP-Adressen und Zeitstempel
 ip_request_counter = defaultdict(list)
@@ -3425,7 +3202,7 @@ def send_email():
         website_url=website_url
     )
 
-    # Nachricht erstellen
+    # GEÄNDERT: Kontaktformular-E-Mails gehen weiterhin an schatzmeister@hardt-tennis.de
     msg = Message('Nachricht von ' + name,
                   sender='schatzmeister@hardt-tennis.de',
                   recipients=['schatzmeister@hardt-tennis.de'])
@@ -3456,17 +3233,8 @@ def send_email():
         
         return f'Fehler beim Senden der E-Mail: {str(e)}'
 
-
-
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
-
-
-
-
-
-
-
 
 #     _____  ___   ____    _____ ______  ____   ____    ___   _____
 #    / ___/ /   \ |    \  / ___/|      ||    | /    |  /  _] / ___/
@@ -3475,16 +3243,6 @@ def send_email():
 #    /  \ ||     ||  |  | /  \ |  |  |   |  | |  |_ ||   [_  /  \ |
 #    \    ||     ||  |  | \    |  |  |   |  | |     ||     | \    |
 #      \___| \___/ |__|__|  \___|  |__|  |____||___,_||_____|  \___|
-
-
-
-
-
-
-
-
-
-
 
 @app.route('/downloads')
 def downloads():
@@ -3744,10 +3502,6 @@ def reset_image(section, item_id):
         flash(f'Fehler beim Zurücksetzen des Bildes: {str(e)}', 'error')
         return redirect(request.referrer or url_for('home'))
 
-
-
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-

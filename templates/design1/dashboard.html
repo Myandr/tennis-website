@@ -700,7 +700,7 @@
                             <tr>
                                 <td data-label="Vorname">{{ i.firstname }}</td>
                                 <td data-label="Nachname">{{ i.lastname }}</td>
-                                <td data-label="Email">{{ i.email|mask_email }}</td>
+                                <td data-label="Email">{{ i.email }}</td>
                                 <td data-label="Rolle">
                                     {% if i.role == 'admin' %}
                                     <span class="badge badge-danger">{{ i.role }}</span>
