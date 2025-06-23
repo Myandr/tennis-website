@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Mail erfolgreich weitergeleitet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .success-icon {
+            color: #28a745;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .email-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✓</div>
+        <h1>E-Mail erfolgreich weitergeleitet!</h1>
+        
+        <p>Die Kontaktanfrage wurde erfolgreich an <strong>schatzmeister@hardt-tennis.de</strong> weitergeleitet.</p>
+        
+        <div class="email-details">
+            <p><strong>Von:</strong> {{ name }} ({{ email }})</p>
+            <p><strong>Weitergeleitet am:</strong> {{ moment().format('DD.MM.YYYY um HH:mm') }} Uhr</p>
+        </div>
+        
+        <p>Der Schatzmeister wird sich in Kürze um die Anfrage kümmern.</p>
+        
+        <a href="https://hardt-tennis.de" class="back-link">Zurück zur Website</a>
+    </div>
+</body>
+</html>

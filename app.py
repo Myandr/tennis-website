@@ -3131,6 +3131,7 @@ def check_rate_limit(ip_address, limit=10, period=60):
         
         return True
 
+# GEÄNDERT: Neue E-Mail-Funktion mit Filter-System
 @app.route('/send_email', methods=['POST'])
 def send_email():
     # IP-Adresse des Clients abrufen
@@ -3188,31 +3189,235 @@ def send_email():
     # Zeilenumbrüche in <br> umwandeln für die HTML-Version
     formatted_message = message.replace('\n', '<br>')
     
-    # Firmenname und Website-URL (anpassbar)
-    company_name = "Hardter Tv"
-    website_url = "www.hardt-tennis.de"
+    # Token für die Weiterleitung generieren
+    forward_token = serializer.dumps({
+        'name': name,
+        'email': user_email,
+        'message': message,
+        'formatted_message': formatted_message
+    }, salt='email-forward-salt')
     
-    # E-Mail-Template rendern
-    html_email = render_template(
-        'design1/email_template.html',
-        name=name,
-        email=user_email,
-        message=formatted_message,
-        company_name=company_name,
-        website_url=website_url
-    )
-
-    # GEÄNDERT: Kontaktformular-E-Mails gehen weiterhin an schatzmeister@hardt-tennis.de
-    msg = Message('Nachricht von ' + name,
-                  sender='schatzmeister@hardt-tennis.de',
-                  recipients=['schatzmeister@hardt-tennis.de'])
+    # Weiterleitungs-URL generieren
+    forward_url = url_for('forward_email', token=forward_token, _external=True)
+    
+    # E-Mail-Template mit Weiterleitungs-Button rendern
+    html_email = f'''
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Neue Kontaktanfrage</title>
+        <style type="text/css">
+            body, p, h1, h2, h3, h4, h5, h6, table, td {{
+                margin: 0;
+                padding: 0;
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                line-height: 1.6;
+            }}
+            
+            .email-container {{
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            }}
+            
+            .header {{
+                padding: 25px 30px;
+                text-align: center;
+                background-color: #f8f8f8;
+                border-bottom: 1px solid #eeeeee;
+            }}
+            
+            .title-section {{
+                padding: 25px 30px 15px;
+                text-align: center;
+                border-bottom: 1px solid #eeeeee;
+            }}
+            
+            .title {{
+                font-size: 22px;
+                font-weight: 600;
+                color: #000000;
+                margin-bottom: 5px;
+            }}
+            
+            .subtitle {{
+                font-size: 14px;
+                color: #666666;
+            }}
+            
+            .content {{
+                padding: 30px;
+                color: #333333;
+            }}
+            
+            .form-data {{
+                background-color: #f9f9f9;
+                border-radius: 6px;
+                padding: 25px;
+                margin: 20px 0;
+            }}
+            
+            .data-row {{
+                margin-bottom: 20px;
+            }}
+            
+            .data-row:last-child {{
+                margin-bottom: 0;
+            }}
+            
+            .data-label {{
+                font-weight: bold;
+                font-size: 14px;
+                color: #555555;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }}
+            
+            .data-value {{
+                font-size: 16px;
+                color: #333333;
+                padding: 8px 0;
+                word-break: break-word;
+            }}
+            
+            .message-value {{
+                font-size: 16px;
+                color: #333333;
+                padding: 15px;
+                background-color: #ffffff;
+                border-radius: 4px;
+                border-left: 3px solid #000000;
+            }}
+            
+            .forward-section {{
+                text-align: center;
+                margin: 30px 0;
+                padding: 20px;
+                background-color: #fff3cd;
+                border-radius: 6px;
+                border: 1px solid #ffeaa7;
+            }}
+            
+            .forward-button {{
+                display: inline-block;
+                padding: 12px 30px;
+                background-color: #28a745;
+                color: #ffffff !important;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 16px;
+                margin-top: 10px;
+                transition: background-color 0.3s ease;
+            }}
+            
+            .forward-button:hover {{
+                background-color: #218838;
+            }}
+            
+            .footer {{
+                padding: 20px 30px;
+                text-align: center;
+                background-color: #f8f8f8;
+                border-top: 1px solid #eeeeee;
+                font-size: 12px;
+                color: #999999;
+            }}
+            
+            .warning {{
+                background-color: #fff3cd;
+                color: #856404;
+                padding: 15px;
+                border-radius: 5px;
+                margin: 15px 0;
+                border: 1px solid #ffeaa7;
+                font-size: 14px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <h2 style="color: #333;">Hardter Tennisverein</h2>
+            </div>
+            
+            <div class="title-section">
+                <h1 class="title">Neue Kontaktanfrage</h1>
+                <p class="subtitle">Eingegangen über das Website-Kontaktformular</p>
+            </div>
+            
+            <div class="content">
+                <div class="form-data">
+                    <div class="data-row">
+                        <div class="data-label">Name:</div>
+                        <div class="data-value">{name}</div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">E-Mail:</div>
+                        <div class="data-value">{user_email}</div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">Nachricht:</div>
+                        <div class="message-value">{formatted_message}</div>
+                    </div>
+                </div>
+                
+                <div class="forward-section">
+                    <h3 style="margin-top: 0; color: #856404;">📧 E-Mail weiterleiten</h3>
+                    <p style="margin: 10px 0; color: #856404;">
+                        Klicken Sie auf den Button unten, um diese Anfrage an den Schatzmeister weiterzuleiten:
+                    </p>
+                    <a href="{forward_url}" class="forward-button">
+                        ➤ An Schatzmeister weiterleiten
+                    </a>
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠️ Wichtiger Hinweis:</strong> Dieser Weiterleitungs-Link ist nur 24 Stunden gültig und kann nur einmal verwendet werden.
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Diese E-Mail wurde automatisch vom Kontaktformular der Website generiert.</p>
+                <p>Hardter Tennisverein • www.hardt-tennis.de</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    '''
+    
+    # GEÄNDERT: E-Mail wird an paulspenglerwork@gmail.com gesendet
+    msg = Message('Neue Kontaktanfrage von ' + name,
+                  sender=app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=['paulspenglerwork@gmail.com'])
     
     # Plaintext-Version für E-Mail-Clients, die kein HTML unterstützen
-    msg.body = f"Nachricht von: {name} ({user_email})\n\n{message}"
+    msg.body = f"""Neue Kontaktanfrage von der Website
+
+Name: {name}
+E-Mail: {user_email}
+
+Nachricht:
+{message}
+
+---
+Um diese Anfrage an den Schatzmeister weiterzuleiten, öffnen Sie diesen Link:
+{forward_url}
+
+Hinweis: Dieser Link ist nur 24 Stunden gültig.
+"""
     
     # HTML-Version der E-Mail
     msg.html = html_email
-
+    
     # E-Mail senden
     try:
         mail.send(msg)
@@ -3232,6 +3437,213 @@ def send_email():
             }), 500
         
         return f'Fehler beim Senden der E-Mail: {str(e)}'
+
+# NEUE ROUTE: E-Mail-Weiterleitung
+@app.route('/forward_email/<token>')
+def forward_email(token):
+    try:
+        # Token entschlüsseln (24 Stunden gültig)
+        data = serializer.loads(token, salt='email-forward-salt', max_age=86400)
+        
+        name = data['name']
+        user_email = data['email']
+        message = data['message']
+        formatted_message = data['formatted_message']
+        
+    except Exception as e:
+        return render_template('design1/error.html', 
+                             error_message="Der Weiterleitungs-Link ist ungültig oder abgelaufen.")
+    
+    # E-Mail an Schatzmeister weiterleiten
+    forward_html = f'''
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Weitergeleitete Kontaktanfrage</title>
+        <style type="text/css">
+            body, p, h1, h2, h3, h4, h5, h6, table, td {{
+                margin: 0;
+                padding: 0;
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                line-height: 1.6;
+            }}
+            
+            .email-container {{
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            }}
+            
+            .header {{
+                padding: 25px 30px;
+                text-align: center;
+                background-color: #28a745;
+                color: white;
+            }}
+            
+            .title-section {{
+                padding: 25px 30px 15px;
+                text-align: center;
+                border-bottom: 1px solid #eeeeee;
+            }}
+            
+            .title {{
+                font-size: 22px;
+                font-weight: 600;
+                color: #000000;
+                margin-bottom: 5px;
+            }}
+            
+            .subtitle {{
+                font-size: 14px;
+                color: #666666;
+            }}
+            
+            .content {{
+                padding: 30px;
+                color: #333333;
+            }}
+            
+            .form-data {{
+                background-color: #f9f9f9;
+                border-radius: 6px;
+                padding: 25px;
+                margin: 20px 0;
+            }}
+            
+            .data-row {{
+                margin-bottom: 20px;
+            }}
+            
+            .data-row:last-child {{
+                margin-bottom: 0;
+            }}
+            
+            .data-label {{
+                font-weight: bold;
+                font-size: 14px;
+                color: #555555;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }}
+            
+            .data-value {{
+                font-size: 16px;
+                color: #333333;
+                padding: 8px 0;
+                word-break: break-word;
+            }}
+            
+            .message-value {{
+                font-size: 16px;
+                color: #333333;
+                padding: 15px;
+                background-color: #ffffff;
+                border-radius: 4px;
+                border-left: 3px solid #28a745;
+            }}
+            
+            .footer {{
+                padding: 20px 30px;
+                text-align: center;
+                background-color: #f8f8f8;
+                border-top: 1px solid #eeeeee;
+                font-size: 12px;
+                color: #999999;
+            }}
+            
+            .forwarded-notice {{
+                background-color: #d4edda;
+                color: #155724;
+                padding: 15px;
+                border-radius: 5px;
+                margin: 15px 0;
+                border: 1px solid #c3e6cb;
+                font-size: 14px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <h2>Hardter Tennisverein</h2>
+            </div>
+            
+            <div class="title-section">
+                <h1 class="title">Weitergeleitete Kontaktanfrage</h1>
+                <p class="subtitle">Von Paul Spengler weitergeleitet</p>
+            </div>
+            
+            <div class="content">
+                <div class="forwarded-notice">
+                    <strong>📧 Weitergeleitet:</strong> Diese Anfrage wurde von Paul Spengler geprüft und an Sie weitergeleitet.
+                </div>
+                
+                <div class="form-data">
+                    <div class="data-row">
+                        <div class="data-label">Name:</div>
+                        <div class="data-value">{name}</div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">E-Mail:</div>
+                        <div class="data-value">{user_email}</div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">Nachricht:</div>
+                        <div class="message-value">{formatted_message}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Diese E-Mail wurde über das Website-Kontaktformular eingereicht und von Paul Spengler weitergeleitet.</p>
+                <p>Hardter Tennisverein • www.hardt-tennis.de</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    '''
+    
+    # E-Mail an Schatzmeister senden
+    forward_msg = Message(f'[Weitergeleitet] Kontaktanfrage von {name}',
+                         sender=app.config['MAIL_DEFAULT_SENDER'],
+                         recipients=['schatzmeister@hardt-tennis.de'])
+    
+    forward_msg.body = f"""[WEITERGELEITET VON PAUL SPENGLER]
+
+Kontaktanfrage von der Website:
+
+Name: {name}
+E-Mail: {user_email}
+
+Nachricht:
+{message}
+
+---
+Diese Anfrage wurde von Paul Spengler geprüft und an Sie weitergeleitet.
+"""
+    
+    forward_msg.html = forward_html
+    
+    try:
+        mail.send(forward_msg)
+        
+        # Erfolgsseite anzeigen
+        return render_template('design1/forward-success.html', 
+                             name=name, 
+                             email=user_email)
+        
+    except Exception as e:
+        return render_template('design1/error.html', 
+                             error_message=f"Fehler beim Weiterleiten der E-Mail: {str(e)}")
 
 #  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
 # (____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)(____)
